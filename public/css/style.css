@@ -1,0 +1,105 @@
+header{
+	background:#168614;
+
+	color:#ffffff;
+}
+
+body{
+	background-image: url(../images/fondo.jpg);
+	background-size: cover;
+	color:white;
+}
+
+.icono{  /*para los estilos del los iconos*/
+	font-size: 20px;
+	color: white;
+}
+
+.icono2{ /*para los estilos del icono que abre el menu*/
+	font-size: 25px;
+	color: white;
+}
+
+
+/*INICIO MENU*/
+.menu{
+	list-style: none;  /*sacar los puntos*/
+	line-height: 42px;  /*separar cada elemento*/
+	/*outline: 1px solid red;*/  /*nos permite ver de que tamaño es nuestro elemento*/
+	padding-left: 0; /*eliminar el espacio de la izquierda del menu*/
+	width: 15em; /*achicar el ancho del menu*/
+	margin: 2em auto; /* separar el menu un poco del header y colocarlo en el medio al mismo*/
+
+}
+
+.menu a {    /*estilos de lo escrito en el menú*/
+	color: #eee;  /*cambia color de los enlaces*/
+	text-decoration: none;  /*sacar subrayado*/
+
+	display: block; /*poder seleccionar todo el boton y no solo la palabra*/
+	width: 100%;
+
+	font-family: 'Raleway', sans-serif; /*para cambiar el estilo de la fuente (tipo de letra)*/
+
+	--webkit-transition: all .5s; /*retrazar el tiempo del efecto del mouse*/
+	-o-transition: all .5s;
+	transition: all .5s;
+}
+
+.menu a:hover{/*efectos de movimiento sobre el elemento a*/
+	margin-left: 1em;  /*correr el elemento un poco hacia la derecha cuando pasa el mouse*/
+}
+
+.menu li{   /*estilos de cada parrafo del menú*/
+	/*outline: 1px solid green;*/
+	box-shadow: 3px 0 rgba(255,255,255,.2) inset;  /*linea de la izquierda*/
+	padding-left: 1.5em; /*separar el texto de la linea*/
+	margin-bottom: 5px; /*separar las lineas de la izquierda*/
+
+	--webkit-transition: all .5s; /*retrazar el tiempo del efecto del mouse*/
+	-o-transition: all .5s;
+	transition: all .5s;
+}
+
+.menu li:hover{   /*que va a pasar cuando yo ponga el mouse sobre algun elemento li*/
+	box-shadow: 15em 0 rgba(255,255,255,.2) inset; /*el efecto propio*/
+
+}
+
+@font-face {  /*clase correspondiente para cambiar el estilo de la fuente (tipo de letra)*/
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Raleway ExtraLight'), local('Raleway-ExtraLight'), url(https://fonts.gstatic.com/s/raleway/v12/1Ptrg8zYS_SKggPNwOIpWqZPAA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/*FIN MENU*/
+
+
+/*INICIO POSICION RESPONSIVE MENU*/
+nav{
+	position: absolute;
+	left: -18em;
+	z-index: 20;  /*para poner el menu desplegable por una capa encima del resto*/
+	background: rgba(0, 0, 0, 0.8); /*fondo del menu*/
+	height: 100%; /*ocupar todo el largo de la pagina*/
+	padding-right: .25em;
+	padding-top: 1em;
+	transition: all .6s;/*para que el menu se despliegue mas lento*/
+	box-sizing: border-box; /*para que no me aparezca la barra al costado del navegador (NO ANDUVO)*/
+}
+
+nav.mostrar{
+	left: 0;
+}
+
+#mostrar-nav{
+	position: absolute;
+	top: 6em;
+	left: 1em;
+	width: 30px;
+	height: 30px;
+	z-index: 30;  /*para poner el boton una capa por encima del menu desplegable*/
+	cursor: pointer; /*aparece la manito cuado paso por encima del icono*/
+}
+/*FIN POSICION RESPONSIVE MENU*/
