@@ -25,4 +25,13 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    /**
+     * Show the Main Menu
+     *
+     */
+    public function getMenuPrincipal()
+    {
+      return view('menu.menuPrincipal');
+    }
 }
