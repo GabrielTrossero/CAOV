@@ -29,7 +29,6 @@ body{
 	padding-left: 0; /*eliminar el espacio de la izquierda del menu*/
 	width: 15em; /*achicar el ancho del menu*/
 	margin: 2em auto; /* separar el menu un poco del header y colocarlo en el medio al mismo*/
-
 }
 
 .menu a {    /*estilos de lo escrito en el menú*/
@@ -44,6 +43,8 @@ body{
 	--webkit-transition: all .5s; /*retrazar el tiempo del efecto del mouse*/
 	-o-transition: all .5s;
 	transition: all .5s;
+
+	padding-left: 1.5em;
 }
 
 .menu a:hover{/*efectos de movimiento sobre el elemento a*/
@@ -53,7 +54,7 @@ body{
 .menu li{   /*estilos de cada parrafo del menú*/
 	/*outline: 1px solid green;*/
 	box-shadow: 3px 0 rgba(255,255,255,.2) inset;  /*linea de la izquierda*/
-	padding-left: 1.5em; /*separar el texto de la linea*/
+
 	margin-bottom: 5px; /*separar las lineas de la izquierda*/
 
 	--webkit-transition: all .5s; /*retrazar el tiempo del efecto del mouse*/
@@ -61,9 +62,8 @@ body{
 	transition: all .5s;
 }
 
-.menu li:hover{   /*que va a pasar cuando yo ponga el mouse sobre algun elemento li*/
+.menu li:hover > a{   /*que va a pasar cuando yo ponga el mouse sobre algun elemento li*/
 	box-shadow: 15em 0 rgba(255,255,255,.2) inset; /*el efecto propio*/
-
 }
 
 @font-face {  /*clase correspondiente para cambiar el estilo de la fuente (tipo de letra)*/
@@ -83,7 +83,7 @@ nav{
 	z-index: 20;  /*para poner el menu desplegable por una capa encima del resto*/
 	background: rgba(0, 0, 0, 0.8); /*fondo del menu*/
 	height: 100%; /*ocupar todo el largo de la pagina*/
-	padding-right: .25em;
+	padding-right: 1em;
 	padding-top: 1em;
 	transition: all .6s;/*para que el menu se despliegue mas lento*/
 	box-sizing: border-box; /*para que no me aparezca la barra al costado del navegador (NO ANDUVO)*/
@@ -103,3 +103,12 @@ nav.mostrar{
 	cursor: pointer; /*aparece la manito cuado paso por encima del icono*/
 }
 /*FIN POSICION RESPONSIVE MENU*/
+
+
+/*INICIO SUBMENU*/
+.children{
+	list-style: none;
+	display: none;
+	margin-top: 0.2em;
+}
+/*FIN SUBMENU*/
