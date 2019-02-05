@@ -112,3 +112,11 @@ nav.mostrar{
 	margin-top: 0.2em;
 }
 /*FIN SUBMENU*/
+
+
+/*INICIO LOGIN, REGISTER, RESET PASSWORD*/
+.card{
+	color: black;
+	margin-top: 100px;
+}
+/*FIN LOGIN, REGISTER, RESET PASSWORD*/
