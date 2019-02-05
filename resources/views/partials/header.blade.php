@@ -15,6 +15,10 @@
 				     <a class="dropdown-item" href="#">Salir</a>
 				   </div>
 			</div>
+<<<<<<< HEAD
 			&nbsp; &nbsp; &nbsp; &nbsp;				<!-- Para realizar espacios en blanco -->
+=======
+			&nbsp; &nbsp; &nbsp; &nbsp;		<!-- Para realizar espacios en blanco -->
+>>>>>>> auth
 		@endif
 </div>
