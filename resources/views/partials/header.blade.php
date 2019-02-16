@@ -1,5 +1,5 @@
 <div class="form-inline container-fluid">
-	<img src="{!! asset('images/logo2.png') !!}" width="80px">
+	<a href="/CAOV/public/"><img src="{!! asset('images/logo2.png') !!}" width="80px"> </a>
 	<h2> &nbsp; Club Atlético Oro Verde</h2>
 
     <!--para que solo se muestre en el menú por ej-->
@@ -15,10 +15,8 @@
 				     <a class="dropdown-item" href="#">Salir</a>
 				   </div>
 			</div>
-<<<<<<< HEAD
+
 			&nbsp; &nbsp; &nbsp; &nbsp;				<!-- Para realizar espacios en blanco -->
-=======
-			&nbsp; &nbsp; &nbsp; &nbsp;		<!-- Para realizar espacios en blanco -->
->>>>>>> auth
+
 		@endif
 </div>
