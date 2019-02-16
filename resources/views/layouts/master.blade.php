@@ -26,8 +26,8 @@
     <div class="container">
       @yield('content')     <!--acá es sustituido por el contenido que se le indique -->
     </div>
-
-
+    
+    @include('partials.footer')
 
   </body>
 </html>

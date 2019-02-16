@@ -4,10 +4,25 @@ header{
 	color:#ffffff;
 }
 
+html {
+	min-height: 100%;
+	position: relative;
+}
+
 body{
 	background-image: url(../images/fondo.jpg);
 	background-size: cover;
 	color:white;
+}
+
+footer {
+	background: #242323;
+	color:white;
+	text-align: center;
+	height:50px;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 }
 
 .icono{  /*para los estilos del los iconos*/
@@ -82,7 +97,7 @@ nav{
 	left: -18em;
 	z-index: 20;  /*para poner el menu desplegable por una capa encima del resto*/
 	background: rgba(0, 0, 0, 0.8); /*fondo del menu*/
-	height: 100%; /*ocupar todo el largo de la pagina*/
+	height: 87.8%; /*ocupar todo el largo de la pagina*/
 	padding-right: 1em;
 	padding-top: 1em;
 	transition: all .6s;/*para que el menu se despliegue mas lento*/
