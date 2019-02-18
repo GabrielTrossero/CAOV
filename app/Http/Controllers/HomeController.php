@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        
+
     }
 
     /**
@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('menu.menuPrincipal');
+        return view('menu.home');
     }
 
     /**

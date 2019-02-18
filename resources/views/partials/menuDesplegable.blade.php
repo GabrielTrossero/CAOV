@@ -1,7 +1,3 @@
-@extends('layouts.master')
-
-@section('content')
-
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 
 <div id="mostrar-nav">
@@ -36,5 +32,3 @@
 </nav>
 
 <script src="{!! asset('js/menu-desplegable.js') !!}"></script> <!--conexion a js para boton de despliegue-->
-
-@stop
