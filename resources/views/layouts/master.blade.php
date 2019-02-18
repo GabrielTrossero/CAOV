@@ -24,9 +24,10 @@
   </header>
   <body>
     <div class="container">
+      @include('partials.menuDesplegable')
       @yield('content')     <!--acá es sustituido por el contenido que se le indique -->
     </div>
-    
+
     @include('partials.footer')
 
   </body>
