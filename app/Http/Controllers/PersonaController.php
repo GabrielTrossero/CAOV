@@ -14,7 +14,7 @@ class PersonaController extends Controller
      */
     public function index()
     {
-        //
+        return view('persona.menu');
     }
 
     /**
@@ -24,7 +24,7 @@ class PersonaController extends Controller
      */
     public function create()
     {
-        //
+        return view('persona.agregar');
     }
 
     /**
@@ -45,7 +45,7 @@ class PersonaController extends Controller
      */
     public function getShow()
     {
-
+        return view('persona.listado');
     }
 
     /**
@@ -56,7 +56,7 @@ class PersonaController extends Controller
      */
     public function getShowId($id)
     {
-        //
+        return view('persona.individual');
     }
 
     /**
@@ -67,14 +67,14 @@ class PersonaController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('persona.edit');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)

@@ -13,9 +13,6 @@
 
 Auth::routes();
 
-//Route::get('/', 'HomeController@index')->middleware('auth');
-
-
 //Grupos de Rutas con el Middleware "auth"
 Route::group(['middleware' => 'auth'], function()
 {

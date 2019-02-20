@@ -35,6 +35,11 @@ footer {
 	color: white;
 }
 
+.icono3{ /*para los estilos del icono que abre el menu*/
+	font-size: 30px;
+	color: white;
+}
+
 
 /*INICIO MENU*/
 .menu{
@@ -129,13 +134,42 @@ nav.mostrar{
 /*FIN SUBMENU*/
 
 
-/*INICIO LOGIN, REGISTER, RESET PASSWORD*/
-.card{
+/*INICIO ESTILOS DE FORMULARIOS, LOGIN, REGISTER, ETC*/
+.cuadro{
+	padding-top: 90px;
 	color: black;
-	margin-top: 100px;
 }
-/*FIN LOGIN, REGISTER, RESET PASSWORD*/
+
+.table{
+	text-align: center;
+}
+
+.card-footer{
+	text-align: center;
+}
+/*FIN ESTILOS DE FORMULARIOS, LOGIN, REGISTER, ETC*/
+
 
 a{/*para el estilo de los links*/
   color: white;
 }
+
+
+/*INICIO ESTILOS DE VISTAS "menu.blade.php"*/
+.menu2{
+	text-align: center;
+	padding-top: 70px;
+}
+
+.menu2 a{
+	text-decoration: none;
+	font-size: 20px;
+	padding: 50px;
+}
+
+.menu2 a:hover{
+	color: white;
+	font-size: 21px;
+	padding: 46px;
+}
+/*FIN ESTILOS DE VISTAS "menu.blade.php"*/
