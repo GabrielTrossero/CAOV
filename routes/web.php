@@ -14,8 +14,8 @@
 Auth::routes();
 
 //Grupos de Rutas con el Middleware "auth"
-/*Route::group(['middleware' => 'auth'], function()
-{*/
+Route::group(['middleware' => 'auth'], function()
+{
     //Ruta del Home
     Route::get('/', 'HomeController@index');
 
@@ -157,4 +157,30 @@ Auth::routes();
         Route::post('edit', 'DeporteController@update');
         Route::post('delete', 'DeporteController@destroy');
     });
-//});
+
+    //Rutas de Alquiler de Muebles
+    Route::group(['prefix' => 'alquilermueble'], function()
+    {
+        Route::get('/', 'AlquilerMuebleController@index');
+        Route::get('create', 'AlquilerMuebleController@create');
+        Route::post('create', 'AlquilerMuebleController@store');
+        Route::get('show', 'AlquilerMuebleController@getShow');
+        Route::get('show/{id}', 'AlquilerMuebleController@getShowId');
+        Route::get('edit/{id}', 'AlquilerMuebleController@edit');
+        Route::post('edit', 'AlquilerMuebleController@update');
+        Route::post('delete', 'AlquilerMuebleController@destroy');
+    });
+
+    //Rutas de Alquiler de Inmuebles
+    Route::group(['prefix' => 'alquilerinmueble'], function()
+    {
+        Route::get('/', 'AlquilerInmuebleController@index');
+        Route::get('create', 'AlquilerInmuebleController@create');
+        Route::post('create', 'AlquilerInmuebleController@store');
+        Route::get('show', 'AlquilerInmuebleController@getShow');
+        Route::get('show/{id}', 'AlquilerInmuebleController@getShowId');
+        Route::get('edit/{id}', 'AlquilerInmuebleController@edit');
+        Route::post('edit', 'AlquilerInmuebleController@update');
+        Route::post('delete', 'AlquilerInmuebleController@destroy');
+    });
+});

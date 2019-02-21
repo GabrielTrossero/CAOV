@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AlquilerController extends Controller
+class PagoAlquilerController extends Controller
 {
   /**
    * Display the list of Alquileres to choose which of them will be paid.

@@ -21,8 +21,8 @@
     </li>
     <li class="submenu"><a href="#"> <i class="icono fas fa-warehouse"></i> &nbsp; Alquileres</a>
       <ul class="children">
-        <li><a href="{{ url('')/*cuando tengamos las rutas de AlquilerInmuebleCntroller*/ }}"> Inmueble </a></li>
-        <li><a href="{{ url('')/*^^^^^^^^^^^^ de AlquilerMuebleController*/ }}"> Mueble </a></li>
+        <li><a href="{{ url('/alquilerinmueble') }}"> Inmueble </a></li>
+        <li><a href="{{ url('/alquilermueble') }}"> Mueble </a></li>
       </ul>
     </li>
     <li class="submenu"><a href="#"> <i class="icono fas fa-file-invoice-dollar"></i> &nbsp; Pagos</a>
