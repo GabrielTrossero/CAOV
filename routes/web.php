@@ -14,8 +14,8 @@
 Auth::routes();
 
 //Grupos de Rutas con el Middleware "auth"
-Route::group(['middleware' => 'auth'], function()
-{
+/*Route::group(['middleware' => 'auth'], function()
+{*/
     //Ruta del Home
     Route::get('/', 'HomeController@index');
 
@@ -92,12 +92,12 @@ Route::group(['middleware' => 'auth'], function()
         Route::post('pago', 'CuotaController@postPago');
     });
 
-    //Rutas para Alquiler
-    Route::group(['prefix' => 'alquiler'], function()
+    //Rutas para Pago de Alquiler
+    Route::group(['prefix' => 'pagoalquiler'], function()
     {
-        Route::get('/', 'AlquilerController@index');
-        Route::get('pago/{id}', 'AlquilerController@getPago');
-        Route::post('pago', 'AlquilerController@postPago');
+        Route::get('/', 'PagoAlquilerController@index');
+        Route::get('pago/{id}', 'PagoAlquilerController@getPago');
+        Route::post('pago', 'PagoAlquilerController@postPago');
     });
 
     //Rutas para Registros
@@ -142,18 +142,19 @@ Route::group(['middleware' => 'auth'], function()
         Route::get('/', 'AdministradorController@index');
         Route::post('backup', 'AdministradorController@postBackup');
         Route::get('ingresos', 'AdministradorController@getIngresos');
-
-        //SubRutas de Deportes
-        Route::group(['prefix' => 'deportes'], function()
-        {
-            Route::get('/', 'DeporteController@index');
-            Route::get('create', 'DeporteController@create');
-            Route::post('create', 'DeporteController@store');
-            Route::get('show', 'DeporteController@getShow');
-            Route::get('show/{id}', 'DeporteController@getShowId');
-            Route::get('edit/{id}', 'DeporteController@edit');
-            Route::post('edit', 'DeporteController@update');
-            Route::post('delete', 'DeporteController@destroy');
-        });
     });
-});
+
+
+    //Rutas de Deportes
+    Route::group(['prefix' => 'deportes'], function()
+    {
+        Route::get('/', 'DeporteController@index');
+        Route::get('create', 'DeporteController@create');
+        Route::post('create', 'DeporteController@store');
+        Route::get('show', 'DeporteController@getShow');
+        Route::get('show/{id}', 'DeporteController@getShowId');
+        Route::get('edit/{id}', 'DeporteController@edit');
+        Route::post('edit', 'DeporteController@update');
+        Route::post('delete', 'DeporteController@destroy');
+    });
+//});
