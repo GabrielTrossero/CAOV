@@ -26,18 +26,23 @@
       </table>
 
       <div class="card-footer">
-        <form action="{{action('PersonaController@update')}}" method="post" style="display:inline">
+        <form action="{{url('/persona/edit/'.$persona->id)}}" method="post" style="display:inline">
           {{ csrf_field() }}
           <button type="submit" class="btn btn-outline-warning" style="display:inline">
             Editar Persona
           </button>
         </form>
         &nbsp;&nbsp;
-        <form action="{{action('PersonaController@destroy')}}" method="post" style="display:inline">
+        <form action="{{url('/persona/delete')}}" method="post" style="display:inline">
+
           {{ csrf_field() }}
+
+          <input type="hidden" name="id" value="{{ $persona->id }}">
+
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
             Eliminar Persona
           </button>
+
         </form>
       </div>
 

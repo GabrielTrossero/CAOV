@@ -9,7 +9,7 @@
                 <div class="card-header">{{ __('Agregar Persona') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ action('PersonaController@store') }}">
+                    <form method="POST" action="{{ url('/persona/create') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group row">

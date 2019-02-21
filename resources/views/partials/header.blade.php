@@ -1,5 +1,5 @@
 <div class="form-inline container-fluid">
-	<a href="/CAOV/public/"><img src="{!! asset('images/logo2.png') !!}" width="80px"> </a>
+	<a href="{{ url('/') }}"><img src="{!! asset('images/logo2.png') !!}" width="80px"> </a>
 	<h2> &nbsp; Club Atlético Oro Verde</h2>
 
     <!--para que solo se muestre en el menú por ej-->

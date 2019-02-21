@@ -6,28 +6,29 @@
 
 <nav>
   <ul class="menu">
-    <li class="submenu"><a href="#"> <i class="icono far fa-address-card"></i> &nbsp; Socios</a>
+    <li class="submenu"><a href="#"> <i class="icono far fa-address-card"></i> &nbsp; Personas </a>
       <ul class="children">
-        <li><a href="#"> Socios </a></li>
-        <li><a href="#"> Grupos Familiares </a></li>
+        <li><a href="{{ url('/persona') }}"> Personas </a></li>
+        <li><a href="{{ url('/socio') }}"> Socios </a></li>
+        <li><a href="{{ url('/grupofamiliar') }}"> Grupos Familiares </a></li>
       </ul>
     </li>
     <li class="submenu"><a href="#"> <i class="icono fas fa-warehouse"></i> &nbsp; Alquileres</a>
       <ul class="children">
-        <li><a href="#"> Inmueble </a></li>
-        <li><a href="#"> Mueble </a></li>
+        <li><a href="{{ url('/inmueble') }}"> Inmueble </a></li>
+        <li><a href="{{ url('/mueble') }}"> Mueble </a></li>
       </ul>
     </li>
     <li class="submenu"><a href="#"> <i class="icono fas fa-file-invoice-dollar"></i> &nbsp; Pagos</a>
       <ul class="children">
-        <li><a href="#"> Cuota </a></li>
-        <li><a href="#"> Alquiler </a></li>
+        <li><a href="{{ url('/cuota') }}"> Cuota </a></li>
+        <li><a href="{{ url('/alquiler') }}"> Alquiler </a></li>
       </ul>
     </li>
-    <li><a href="#"> <i class="icono far fa-clipboard"></i> &nbsp; Registros</a></li>
-    <li><a href="#"> <i class="icono fas fa-chart-bar"></i> &nbsp; Informes</a></li>
-    <li><a href="#"> <i class="icono fas fa-users"></i> &nbsp; Empleados</a></li>
-    <li><a href="#"> <i class="icono far fa-user"></i> &nbsp; Administradores</a></li>
+    <li><a href="{{ url('/registros') }}"> <i class="icono far fa-clipboard"></i> &nbsp; Registros</a></li>
+    <li><a href="{{ url('/informes') }}"> <i class="icono fas fa-chart-bar"></i> &nbsp; Informes</a></li>
+    <li><a href="{{ url('/empleado') }}"> <i class="icono fas fa-users"></i> &nbsp; Empleados</a></li>
+    <li><a href="{{ url('/administrador') }}"> <i class="icono far fa-user"></i> &nbsp; Administradores</a></li>
   </ul>
 </nav>
 

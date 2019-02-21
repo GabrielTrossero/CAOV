@@ -9,8 +9,10 @@
                 <div class="card-header">{{ __('Modificar Persona') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ action('PersonaController@store') }}">
+                    <form method="POST" action="{{ url('/persona/edit') }}">
                         {{ csrf_field() }}
+
+                        <input type="hidden" name="id" value="{{ $persona->id }}">
 
                         <div class="form-group row">
                             <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI') }}</label>

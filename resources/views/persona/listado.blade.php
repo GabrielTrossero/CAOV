@@ -17,7 +17,7 @@
           <td>36854715</td>
           <td>asdf</td>
           <td>sdfsdf</td>
-          <td><a href="#" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/persona/show/'.$persona->id) }}" style="color: red;">ver</a> </td>
         </tr>
         <tr>
           <td>544114454</td>
