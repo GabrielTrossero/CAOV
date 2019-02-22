@@ -30,5 +30,7 @@
 
     @include('partials.footer')
 
+    <script src="{{ asset('js/filtrarDNI.js') }}"></script>
+
   </body>
 </html>
