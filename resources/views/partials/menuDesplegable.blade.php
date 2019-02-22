@@ -19,7 +19,7 @@
         <li><a href="{{ url('/mueble') }}"> Mueble </a></li>
       </ul>
     </li>
-    <li class="submenu"><a href="#"> <i class="icono fas fa-warehouse"></i> &nbsp; Alquileres</a>
+    <li class="submenu"><a href="#"> <i class="icono fas fa-handshake"></i></i> &nbsp; Alquileres</a>
       <ul class="children">
         <li><a href="{{ url('/alquilerinmueble') }}"> Inmueble </a></li>
         <li><a href="{{ url('/alquilermueble') }}"> Mueble </a></li>
@@ -34,7 +34,7 @@
     <li><a href="{{ url('/registros') }}"> <i class="icono far fa-clipboard"></i> &nbsp; Registros</a></li>
     <li><a href="{{ url('/informes') }}"> <i class="icono fas fa-chart-bar"></i> &nbsp; Informes</a></li>
     <li><a href="{{ url('/empleado') }}"> <i class="icono fas fa-users"></i> &nbsp; Empleados</a></li>
-    <li><a href="{{ url('/deportes') }}"> <i class="icono far fa-clipboard"></i> &nbsp; Deportes</a></li>
+    <li><a href="{{ url('/deportes') }}"> <i class="icono fas fa-futbol"></i> &nbsp; Deportes</a></li>
     <li><a href="{{ url('/administrador') }}"> <i class="icono far fa-user"></i> &nbsp; Administradores</a></li>
   </ul>
 </nav>
