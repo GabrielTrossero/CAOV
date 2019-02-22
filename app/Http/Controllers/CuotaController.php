@@ -14,7 +14,7 @@ class CuotaController extends Controller
    */
   public function index()
   {
-    //
+    return view('cuota.listarSocios');
   }
 
   /**
@@ -24,7 +24,7 @@ class CuotaController extends Controller
    */
     public function getPago($id)
     {
-      //
+      return view('cuota.ingresarPago');
     }
 
     /**
