@@ -67,7 +67,7 @@ class PersonaController extends Controller
      */
     public function edit($id)
     {
-        return view('persona.edit');
+        return view('persona.editar');
     }
 
     /**

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Filtrar datos de una tabla por numero de DNI que se ubica en la segunda posicion
+ * Filtrar datos de una tabla por numero de DNI que se ubica en la primer posicion
  * de la tabla a filtrar
  *
  * el input debe tener id -> filtroDNI
@@ -29,13 +29,13 @@ input.addEventListener('keyup', function(event) {
   //empiezo desde 1 para no filtrar los nombres de las columnas
   for (i = 1; i < tr.length; i++) {
     //capturo la columna 1 (segundo td) de la fila i
-    td = tr[i].getElementsByTagName("td")[1];
+    td = tr[i].getElementsByTagName("td")[0];
     if (td) {
-      //tomo el valor del elemento de la posicion [i][1]
+      //tomo el valor del elemento de la posicion [i][0]
       txtValue = td.textContent || td.innerText;
 
-      //si existe el input dentro del texto de el elemento de la posicion [i][1] muestra la fila
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      //si existe el input dentro del texto de el elemento de la posicion [i][0] muestra la fila
+      if (txtValue.toUpperCase().indexOf(filter) == 0) {
         tr[i].style.display = "";
       } else {
         //si no existe el input oculta la fila i

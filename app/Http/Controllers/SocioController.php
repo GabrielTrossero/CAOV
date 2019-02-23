@@ -14,7 +14,7 @@ class SocioController extends Controller
      */
     public function index()
     {
-        //
+        return view('socio.menu');
     }
 
     /**
@@ -24,7 +24,7 @@ class SocioController extends Controller
      */
     public function create()
     {
-        //
+        return view('socio.agregar');
     }
 
     /**
@@ -45,7 +45,7 @@ class SocioController extends Controller
      */
     public function getShow()
     {
-
+      return view('socio.listado');
     }
 
     /**
@@ -56,7 +56,7 @@ class SocioController extends Controller
      */
     public function getShowId($id)
     {
-        //
+        return view('socio.individual');
     }
 
     /**
@@ -67,14 +67,14 @@ class SocioController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('socio.editar');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
