@@ -96,8 +96,12 @@ Route::group(['middleware' => 'auth'], function()
     Route::group(['prefix' => 'pagoalquiler'], function()
     {
         Route::get('/', 'PagoAlquilerController@index');
-        Route::get('pago/{id}', 'PagoAlquilerController@getPago');
-        Route::post('pago', 'PagoAlquilerController@postPago');
+        Route::get('listamueble','PagoAlquilerController@getShowMueble');
+        Route::get('listainmueble','PagoAlquilerController@getShowInmueble');
+        Route::get('pagomueble/{id}', 'PagoAlquilerController@getPagoMueble');
+        Route::post('pagomueble', 'PagoAlquilerController@postPagoMueble');
+        Route::get('pagoinmueble/{id}', 'PagoAlquilerController@getPagoInmueble');
+        Route::post('pagoinmueble', 'PagoAlquilerController@postPagoInmueble');
     });
 
     //Rutas para Registros
