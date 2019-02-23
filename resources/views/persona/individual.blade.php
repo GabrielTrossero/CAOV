@@ -27,7 +27,7 @@
 
       <div class="card-footer">
 
-        <a href="{{ url('/persona/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/persona/edit/'.'1') }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Persona
           </button>

@@ -14,7 +14,7 @@ class RegistroController extends Controller
    */
   public function index()
   {
-    //
+    return view('registro.agregar');
   }
 
   /**
@@ -23,7 +23,7 @@ class RegistroController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function postRegustro(Request $request)
+  public function postRegistro(Request $request)
   {
     //
   }

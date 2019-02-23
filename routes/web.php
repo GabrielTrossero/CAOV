@@ -101,14 +101,14 @@ Route::group(['middleware' => 'auth'], function()
     });
 
     //Rutas para Registros
-    Route::group(['prefix' => 'registros'], function()
+    Route::group(['prefix' => 'registro'], function()
     {
         Route::get('/', 'RegistroController@index');
         Route::post('/', 'RegistroController@postRegistro');
     });
 
     //Rutas para Informes
-    Route::group(['prefix' => 'informes'], function()
+    Route::group(['prefix' => 'informe'], function()
     {
         Route::get('/', 'InformeController@index');
         Route::get('deudores', 'InformeController@getDeudores');
@@ -146,7 +146,7 @@ Route::group(['middleware' => 'auth'], function()
 
 
     //Rutas de Deportes
-    Route::group(['prefix' => 'deportes'], function()
+    Route::group(['prefix' => 'deporte'], function()
     {
         Route::get('/', 'DeporteController@index');
         Route::get('create', 'DeporteController@create');

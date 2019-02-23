@@ -33,7 +33,7 @@
 
       <div class="card-footer">
 
-        <a href="{{ url('/socio/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/socio/edit/'.'1') }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Socio
           </button>

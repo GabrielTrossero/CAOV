@@ -138,6 +138,7 @@ nav.mostrar{
 .cuadro{
 	padding-top: 90px;
 	color: black;
+	padding-bottom: 90px;
 }
 
 .table{
@@ -150,10 +151,9 @@ nav.mostrar{
 /*FIN ESTILOS DE FORMULARIOS, LOGIN, REGISTER, ETC*/
 
 
-a{/*para el estilo de los links*/
+.link1{/*estilo de links (elemento <a>) que tienen la clase link1*/
   color: white;
 }
-
 
 /*INICIO ESTILOS DE VISTAS "menu.blade.php"*/
 .menu2{
@@ -162,6 +162,7 @@ a{/*para el estilo de los links*/
 }
 
 .menu2 a{
+	color: white;
 	text-decoration: none;
 	font-size: 20px;
 	padding: 50px;
