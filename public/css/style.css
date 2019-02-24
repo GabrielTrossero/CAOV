@@ -176,6 +176,10 @@ nav.mostrar{
 /*FIN ESTILOS DE VISTAS "menu.blade.php"*/
 
 
-.tam_letra{/*para achicar el tamaño de letra en el cuadro de "alquilerinmueble"*/
+.tam_letra_x-small{/*para achicar el tamaño de letra a x-small*/
 	font-size: x-small;
+}
+
+.tam_letra_xx-small{/*para achicar el tamaño de letra a xx-small*/
+	font-size: xx-small;
 }

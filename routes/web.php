@@ -96,8 +96,8 @@ Route::group(['middleware' => 'auth'], function()
     Route::group(['prefix' => 'pagoalquiler'], function()
     {
         Route::get('/', 'PagoAlquilerController@index');
-        Route::get('listamueble','PagoAlquilerController@getShowMueble');
-        Route::get('listainmueble','PagoAlquilerController@getShowInmueble');
+        Route::get('listamueble', 'PagoAlquilerController@getShowMueble');
+        Route::get('listainmueble', 'PagoAlquilerController@getShowInmueble');
         Route::get('pagomueble/{id}', 'PagoAlquilerController@getPagoMueble');
         Route::post('pagomueble', 'PagoAlquilerController@postPagoMueble');
         Route::get('pagoinmueble/{id}', 'PagoAlquilerController@getPagoInmueble');
@@ -147,7 +147,6 @@ Route::group(['middleware' => 'auth'], function()
         Route::post('backup', 'AdministradorController@postBackup');
         Route::get('ingresos', 'AdministradorController@getIngresos');
     });
-
 
     //Rutas de Deportes
     Route::group(['prefix' => 'deporte'], function()

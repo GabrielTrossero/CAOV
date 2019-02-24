@@ -5,7 +5,7 @@
 <div class="cuadro">
   <div class="card">
     <div class="card-header">Datos del Alquiler Inmueble</div>
-    <div class="card-body border tam_letra_x-small">
+    <div class="card-body border tam_letra_xx-small">
       <table class="table">
         <tr>
           <td><b>N° de Contrato Inmueble</b></td>    <!-- la <b> es para poner en negrita -->
@@ -40,27 +40,39 @@
           <td>Si</td>
           <td>Si</td>
           <td>18</td>
+          <td>
+            <a href="{{ url('/cuota/pago/'.'1') }}">
+              <button type="button" class="btn btn-primary tam_letra_x-small" style="width:50px; height:27px">
+                Pagar
+              </button>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>23654128</td>
+          <td>23/11/2018</td>
+          <td>25/08/2019</td>
+          <td></td>
+          <td>1000</td>
+          <td>4000</td>
+          <td>Tarjeta</td>
+          <td>21 a 23</td>
+          <td>Cumpleaños</td>
+          <td>50</td>
+          <td>No</td>
+          <td>Si</td>
+          <td>Si</td>
+          <td>10</td>
+          <td>
+            <a href="{{ url('/cuota/pago/'.'1') }}">
+              <button type="button" class="btn btn-primary tam_letra_x-small" style="width:50px; height:27px">
+                Pagar
+              </button>
+            </a>
+          </td>
         </tr>
       </table>
-
-      <div class="card-footer">
-
-        <a style="text-decoration:none" href="{{ url('/alquilerinmueble/edit/'.'1') }}">
-          <button type="button" class="btn btn-outline-warning" style="display:inline">
-            Editar Alquiler
-          </button>
-        </a>
-
-        &nbsp;&nbsp;
-        <form action="{{url('/alquilerinmueble/delete')}}" method="post" style="display:inline">
-          {{ csrf_field() }}
-          <input type="hidden" name="id" value="1">
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Eliminar Alquiler
-          </button>
-        </form>
-      </div>
-
     </div>
   </div>
 </div>
