@@ -174,3 +174,8 @@ nav.mostrar{
 	padding: 46px;
 }
 /*FIN ESTILOS DE VISTAS "menu.blade.php"*/
+
+
+.tam_letra{/*para achicar el tamaño de letra en el cuadro de "alquilerinmueble"*/
+	font-size: x-small;
+}

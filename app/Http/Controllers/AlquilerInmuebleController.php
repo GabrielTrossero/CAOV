@@ -14,7 +14,7 @@ class AlquilerInmuebleController extends Controller
      */
     public function index()
     {
-        //
+        return view('alquilerinmueble.menu');
     }
 
     /**
@@ -24,7 +24,7 @@ class AlquilerInmuebleController extends Controller
      */
     public function create()
     {
-        //
+        return view('alquilerinmueble.agregar');
     }
 
     /**
@@ -46,7 +46,7 @@ class AlquilerInmuebleController extends Controller
      */
     public function getShow()
     {
-        //
+        return view('alquilerinmueble.listado');
     }
 
     /**
@@ -57,7 +57,7 @@ class AlquilerInmuebleController extends Controller
      */
     public function getShowId($id)
     {
-        //
+        return view('alquilerinmueble.individual');
     }
 
     /**
@@ -68,14 +68,14 @@ class AlquilerInmuebleController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('alquilerinmueble.editar');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)

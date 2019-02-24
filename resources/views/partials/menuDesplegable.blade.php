@@ -31,10 +31,10 @@
         <li><a href="{{ url('/pagoalquiler') }}"> Alquiler </a></li>
       </ul>
     </li>
-    <li><a href="{{ url('/registros') }}"> <i class="icono far fa-clipboard"></i> &nbsp; Registros</a></li>
-    <li><a href="{{ url('/informes') }}"> <i class="icono fas fa-chart-bar"></i> &nbsp; Informes</a></li>
+    <li><a href="{{ url('/registro') }}"> <i class="icono far fa-clipboard"></i> &nbsp; Registros</a></li>
+    <li><a href="{{ url('/informe') }}"> <i class="icono fas fa-chart-bar"></i> &nbsp; Informes</a></li>
     <li><a href="{{ url('/empleado') }}"> <i class="icono fas fa-users"></i> &nbsp; Empleados</a></li>
-    <li><a href="{{ url('/deportes') }}"> <i class="icono fas fa-futbol"></i> &nbsp; Deportes</a></li>
+    <li><a href="{{ url('/deporte') }}"> <i class="icono fas fa-futbol"></i> &nbsp; Deportes</a></li>
     <li><a href="{{ url('/administrador') }}"> <i class="icono far fa-user"></i> &nbsp; Administradores</a></li>
   </ul>
 </nav>
