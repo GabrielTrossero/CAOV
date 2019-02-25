@@ -14,7 +14,7 @@ class DeporteController extends Controller
      */
     public function index()
     {
-        //
+        return view('deporte.menu');
     }
 
     /**
@@ -24,7 +24,7 @@ class DeporteController extends Controller
      */
     public function create()
     {
-        //
+        return view('deporte.agregar');
     }
 
     /**
@@ -45,7 +45,7 @@ class DeporteController extends Controller
      */
     public function getShow()
     {
-      //
+      return view('deporte.listado');
     }
 
     /**
@@ -56,7 +56,7 @@ class DeporteController extends Controller
      */
     public function getShowId($id)
     {
-        //
+        return view('deporte.individual');
     }
 
     /**
@@ -67,14 +67,14 @@ class DeporteController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('deporte.editar');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
