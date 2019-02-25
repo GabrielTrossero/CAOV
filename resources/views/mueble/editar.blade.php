@@ -23,6 +23,18 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="accionCantidad" class="col-md-4 col-form-label text-md-right">{{ __('Sumar o Restar cantidad del mueble') }}</label>
+
+                            <div class="col-md-6">
+                                <select name="accionCantidad" id="accionCantidad" class="form-control">
+                                  <option value="0">Ninguna</option>
+                                  <option value="1">Sumar cantidad</option>
+                                  <option value="2">Restar cantidad</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="cantidad" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad') }}</label>
 
                             <div class="col-md-6">
