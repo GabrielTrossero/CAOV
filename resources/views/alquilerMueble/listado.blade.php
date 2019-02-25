@@ -18,24 +18,24 @@
     <div class="card-body border">
       <table class="table" id="tablaFiltroDNI">
         <tr>
-          <td><b>N° de Contrato Mueble</b></td>    <!-- la <b> es para poner en negrita -->
-          <td><b>DNI Solicitante</b></td>
+          <td><b>DNI Solicitante</b></td>    <!-- la <b> es para poner en negrita -->
+          <td><b>N° de Contrato Mueble</b></td>
           <td><b>Fecha Realización</b></td>
           <td><b>Costo Total</b></td>
           <td><b>N° Recibo</b></td>
           <td><b>Ver Alquiler</b></td>
         </tr>
         <tr>
-          <td>1</td>
           <td>39842653</td>
+          <td>1</td>
           <td>27/05/2019</td>
           <td>1500</td>
           <td>21</td>
           <td><a href="{{ url('/alquilermueble/show/'.'1') }}" style="color: red;">ver</a> </td>
         </tr>
         <tr>
-          <td>2</td>
           <td>25963214</td>
+          <td>2</td>
           <td>05/05/2019</td>
           <td>1100</td>
           <td>33</td>
