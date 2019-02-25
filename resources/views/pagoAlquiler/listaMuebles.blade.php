@@ -4,12 +4,23 @@
 
 <div class="cuadro">
   <div class="card">
-    <div class="card-header">Lista de los Alquileres de Muebles</div>
+
+    <div class="card-header">
+      <table>
+        <div class="form-group row">
+          <label class="col-md-8 col-form-label"><b>Lista de los Alquileres de Muebles</b></label>
+            <div class="col-md-3">
+              <input type="text" name="buscar" id="filtroDNI" class="form-control" placeholder="Filtrar DNI">
+            </div>
+        </div>
+      </table>
+    </div>
+
     <div class="card-body border tam_letra_x-small">
-      <table class="table">
+      <table class="table" id="tablaFiltroDNI">
         <tr>
-          <td><b>N° de Contrato Mueble</b></td>    <!-- la <b> es para poner en negrita -->
-          <td><b>DNI Solicitante</b></td>
+          <td><b>DNI Solicitante</b></td>    <!-- la <b> es para poner en negrita -->
+          <td><b>N° de Contrato Mueble</b></td>
           <td><b>Fecha Solicitud</b></td>
           <td><b>Cantidad Tablones</b></td>
           <td><b>Cantidad Sillas</b></td>
@@ -21,8 +32,8 @@
           <td><b>Medio de Pago</b></td>
         </tr>
         <tr>
-          <td>1</td>
           <td>40662158</td>
+          <td>1</td>
           <td>09/02/2019</td>
           <td>5</td>
           <td>30</td>
@@ -42,8 +53,8 @@
         </tr>
 
         <tr>
-          <td>2</td>
           <td>32569322</td>
+          <td>2</td>
           <td>17/02/2019</td>
           <td>20</td>
           <td>120</td>
