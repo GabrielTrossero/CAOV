@@ -14,7 +14,7 @@ class AdministradorController extends Controller
    */
   public function index()
   {
-      //
+      return view('administrador.menu');
   }
 
   /**
@@ -34,6 +34,6 @@ class AdministradorController extends Controller
    */
   public function getIngresos()
   {
-    //
+    return view('administrador.ingresos');
   }
 }
