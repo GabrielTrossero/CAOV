@@ -7,7 +7,8 @@
  * el input debe tener id -> filtroDNI
  * la tabla debe tener id -> tablaFiltroDNI
  */
-
+//  CON JavaScript PURO
+/*
 //capturo el elemento con tal id
 var input = document.getElementById("filtroDNI");
 
@@ -44,3 +45,29 @@ input.addEventListener('keyup', function(event) {
     }
   }
 });
+*/
+
+// CON jQuery
+
+var input = $("#filtroDNI");
+    input.keyup(() => {
+        var td, textValue;
+        var filter = input.val();
+        filter.toUpperCase();
+
+        var tr = $("#tablaFiltroDNI tr");
+
+        for (var i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+
+            if (td) {
+                textValue = td.textContent || td.innerText;
+
+                if (textValue.toUpperCase().indexOf(filter) == 0) {
+                    tr[i].style.display = '';
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+    });
