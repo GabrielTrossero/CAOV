@@ -14,7 +14,7 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        //
+        return view('empleado.menu');
     }
 
     /**
@@ -24,7 +24,7 @@ class EmpleadoController extends Controller
      */
     public function create()
     {
-        //
+        return view('empleado.agregar');
     }
 
     /**
@@ -45,7 +45,7 @@ class EmpleadoController extends Controller
      */
     public function getShow()
     {
-      //
+      return view('empleado.listado');
     }
 
     /**
@@ -56,7 +56,7 @@ class EmpleadoController extends Controller
      */
     public function getShowId($id)
     {
-        //
+        return view('empleado.individual');
     }
 
     /**
@@ -67,7 +67,7 @@ class EmpleadoController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('empleado.editar');
     }
 
     /**
