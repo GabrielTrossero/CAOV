@@ -14,7 +14,7 @@ class GrupoFamiliarController extends Controller
      */
     public function index()
     {
-        //
+        return view('grupoFamiliar.menu');
     }
 
     /**
@@ -24,7 +24,7 @@ class GrupoFamiliarController extends Controller
      */
     public function create()
     {
-        //
+        return view('grupoFamiliar.agregar');
     }
 
     /**
@@ -45,7 +45,7 @@ class GrupoFamiliarController extends Controller
      */
     public function getShow()
     {
-
+      return view('grupoFamiliar.listado');
     }
 
     /**
@@ -56,7 +56,7 @@ class GrupoFamiliarController extends Controller
      */
     public function getShowId($id)
     {
-        //
+        return view('grupoFamiliar.individual');
     }
 
     /**
@@ -67,14 +67,14 @@ class GrupoFamiliarController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('grupoFamiliar.editar');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
