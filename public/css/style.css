@@ -157,7 +157,7 @@ nav.mostrar{
 
 /*INICIO ESTILOS DE VISTAS "menu.blade.php"*/
 .menu2{
-	text-align: center;
+	padding-left: 400px;
 	padding-top: 70px;
 }
 
@@ -165,13 +165,16 @@ nav.mostrar{
 	color: white;
 	text-decoration: none;
 	font-size: 20px;
-	padding: 50px;
+	padding-left: 25px;
+	padding-right: 25px;
+	line-height: 80px; //separar elementos
 }
 
 .menu2 a:hover{
 	color: white;
 	font-size: 21px;
-	padding: 46px;
+	padding-left: 23px;
+	padding-right: 23px;
 }
 /*FIN ESTILOS DE VISTAS "menu.blade.php"*/
 

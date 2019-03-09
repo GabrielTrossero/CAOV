@@ -14,7 +14,7 @@ class InformeController extends Controller
    */
   public function index()
   {
-      //
+      return view('informe.menu');
   }
 
   /**
@@ -24,7 +24,7 @@ class InformeController extends Controller
    */
   public function getDeudores()
   {
-    //
+    return view('informe.sociosDeudores');
   }
 
   /**
@@ -44,7 +44,7 @@ class InformeController extends Controller
    */
   public function getCantidadSocios()
   {
-    //
+    return view('informe.cantidadSocios');
   }
 
   /**
@@ -64,7 +64,7 @@ class InformeController extends Controller
    */
   public function getCantidadSociosDeporte()
   {
-    //
+    return view('informe.cantidadSociosDeporte');
   }
 
   /**
@@ -84,7 +84,7 @@ class InformeController extends Controller
    */
   public function getIngresosEgresos()
   {
-    //
+    return view('informe.ingresosEgresos');
   }
 
   /**
