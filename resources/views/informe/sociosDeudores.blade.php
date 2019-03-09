@@ -32,7 +32,7 @@
           <td>Ricle</td>
           <td>Penka</td>
           <td>3800</td>
-          <td><a href="{{ url('/informe/show/'.'1') }}" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/informe/socio_deudor/'.'1') }}" style="color: red;">ver</a> </td>
         </tr>
         <tr>
           <td>38956324</td>
@@ -40,7 +40,7 @@
           <td>Tula</td>
           <td>Tula</td>
           <td>1000</td>
-          <td><a href="{{ url('/informe/show/'.'2') }}" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/informe/socio_deudor/'.'2') }}" style="color: red;">ver</a> </td>
         </tr>
       </table>
     </div>

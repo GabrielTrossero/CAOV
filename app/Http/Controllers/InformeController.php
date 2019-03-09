@@ -38,6 +38,26 @@ class InformeController extends Controller
   }
 
   /**
+   * Show detail of Socio Deudor.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function getSocioDeudor($id)
+  {
+    return view('informe.socioDeudor');
+  }
+
+  /**
+   * Generates a pdf of Socio Deudor.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function postSocioDeudor(Request $request)
+  {
+    //
+  }
+
+  /**
    * Show the Cantidad de Socios.
    *
    * @return \Illuminate\Http\Response

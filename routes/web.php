@@ -117,6 +117,8 @@ Route::group(['middleware' => 'auth'], function()
         Route::get('/', 'InformeController@index');
         Route::get('deudores', 'InformeController@getDeudores');
         Route::post('deudores', 'InformeController@postDeudores');
+        Route::get('socio_deudor/{id}', 'InformeController@getSocioDeudor');
+        Route::post('socio_deudor', 'InformeController@postSocioDeudor');
         Route::get('cantidad_socios', 'InformeController@getCantidadSocios');
         Route::post('cantidad_socios', 'InformeController@postCantidadSocios');
         Route::get('cantidad_socios_deporte', 'InformeController@getCantidadSociosDeporte');
