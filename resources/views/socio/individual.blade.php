@@ -13,6 +13,7 @@
           <td><b>Apellido</b></td>
           <td><b>Nombres</b></td>
           <td><b>Categoria</b></td>
+          <td><b>Oficio</b></td>
           <td><b>Deportes</b></td>
           <td><b>Grupo Familiar</b></td>
         </tr>
@@ -22,6 +23,7 @@
           <td>Zapata</td>
           <td>Juan Bautista</td>
           <td>Honorario</td>
+          <td>Empleado publico</td>
           <td>
             Hockey
             <br>

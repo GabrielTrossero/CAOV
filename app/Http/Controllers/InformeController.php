@@ -124,7 +124,7 @@ class InformeController extends Controller
    */
   public function getPagos()
   {
-    //
+    return view('informe.pagos');
   }
 
   /**
