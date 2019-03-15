@@ -16,22 +16,22 @@
         </tr>
         <tr>
           <td>36854715</td>
-          <td>Pichon</td>
-          <td>Culiao</td>
+          <td>Martinez</td>
+          <td>Martin</td>
           <td>Si</td>
           <td><a href="{{ url('/socio/show/'.'1') }}" style="color: red;">ver</a> </td>
         </tr>
         <tr>
-          <td>36874715</td>
-          <td>Pichona</td>
-          <td>Culiada</td>
+          <td>36876715</td>
+          <td>Martinez</td>
+          <td>Martina</td>
           <td>No</td>
           <td><a href="{{ url('/socio/show/'.'2') }}" style="color: red;">ver</a> </td>
         </tr>
         <tr>
-          <td>36814715</td>
-          <td>Pichon</td>
-          <td>Culiaito</td>
+          <td>36815715</td>
+          <td>Martinez</td>
+          <td>Martin Junior</td>
           <td>No</td>
           <td><a href="{{ url('/socio/show/'.'3') }}" style="color: red;">ver</a> </td>
         </tr>

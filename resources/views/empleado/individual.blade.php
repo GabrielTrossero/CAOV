@@ -16,9 +16,9 @@
         </tr>
         <tr>
           <td>36854715</td>
-          <td>Pichonaso123</td>
-          <td>Pichon</td>
-          <td>Culiao</td>
+          <td>Pichon123</td>
+          <td>Gonzalez</td>
+          <td>Roberto</td>
           <td>Empleado</td>
         </tr>
       </table>

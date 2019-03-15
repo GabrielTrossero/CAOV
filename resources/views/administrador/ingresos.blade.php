@@ -17,21 +17,21 @@
         </tr>
         <tr>
           <td>1</td>
-          <td>Subsidio de la Cristi</td>
+          <td>Subsidio Municipalidad</td>
           <td>25/12/2014</td>
           <td>$5000</td>
         </tr>
         <tr>
           <td>2</td>
-          <td>Donación de los Pro-Aborto</td>
+          <td>Donación Anonima</td>
           <td>12/8/2018</td>
           <td>$2500</td>
         </tr>
         <tr>
           <td>3</td>
-          <td>Venta de paragua venenoso</td>
+          <td>Alquiler sillas</td>
           <td>6/11/2015</td>
-          <td>$10000</td>
+          <td>$1700</td>
         </tr>
       </table>
     </div>

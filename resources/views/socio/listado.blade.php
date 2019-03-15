@@ -30,10 +30,10 @@
         <tr>
           <td>39842653</td>
           <td>1</td>
-          <td>Ricle</td>
-          <td>Penka</td>
+          <td>Dreher</td>
+          <td>Francisco</td>
           <td>Activo</td>
-          <td>Gil Laburante</td>
+          <td>Director Técnico de Patronato</td>
           <td>
             Futbol
             <br>
@@ -44,10 +44,10 @@
         <tr>
           <td>38956324</td>
           <td>2</td>
-          <td>Tula</td>
+          <td>Trillo</td>
           <td>Tula</td>
           <td>Honorario</td>
-          <td>Tombolero</td>
+          <td>Intendente</td>
           <td>
             Volley
           </td>

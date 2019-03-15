@@ -29,8 +29,8 @@
         <tr>
           <td>40566858</td>
           <td>1</td>
-          <td>sdfsdf</td>
-          <td>sdfs dsfdf</td>
+          <td>Ricle</td>
+          <td>Joaquin</td>
           <td>Activo</td>
           <td>Enero</td>
           <td>
@@ -44,8 +44,8 @@
         <tr>
           <td>43568695</td>
           <td>2</td>
-          <td>sdfsdf</td>
-          <td>sdfsdfddf dsfdf</td>
+          <td>Lopez</td>
+          <td>Anibal</td>
           <td>Activo</td>
           <td>Enero</td>
           <td>
@@ -59,8 +59,8 @@
         <tr>
           <td>23568954</td>
           <td>3</td>
-          <td>sdfsdfddfdf</td>
-          <td>sdfsd dsfdf</td>
+          <td>Stallman</td>
+          <td>Richard</td>
           <td>Grupo Familiar</td>
           <td>Julio</td>
           <td>

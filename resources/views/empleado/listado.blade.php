@@ -26,27 +26,27 @@
         <tr>
           <td>36854715</td>
           <td>1</td>
-          <td>Pichonaso123</td>
-          <td>Pichon</td>
-          <td>Culiao</td>
+          <td>Pichon123</td>
+          <td>Gonzalez</td>
+          <td>Roberto</td>
           <td>Empleado</td>
           <td><a href="{{ url('/empleado/show/'.'1') }}" style="color: red;">ver</a> </td>
         </tr>
         <tr>
           <td>37411445</td>
           <td>2</td>
-          <td>Wenka</td>
-          <td>Benka</td>
-          <td>Penka</td>
+          <td>Perez25</td>
+          <td>Perez</td>
+          <td>Juan</td>
           <td>Administrador</td>
           <td><a href="#" style="color: red;">ver</a> </td>
         </tr>
         <tr>
           <td>36411485</td>
           <td>3</td>
-          <td>ElMisio</td>
-          <td>Misio</td>
-          <td>Nero</td>
+          <td>Menga</td>
+          <td>Mengarelli</td>
+          <td>Jose Luis</td>
           <td>Empleado</td>
           <td><a href="#" style="color: red;">ver</a> </td>
         </tr>

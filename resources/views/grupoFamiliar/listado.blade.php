@@ -22,7 +22,7 @@
           <td><b>Ver Grupo Familiar</b></td>
         </tr>
         <tr>
-          <td>39875632 - Penka Ricle</td>
+          <td>39875632 - Joaquin Ricle</td>
           <td><a href="{{ url('/grupofamiliar/show/'.'1') }}" style="color: red;">ver</a> </td>
         </tr>
         <tr>

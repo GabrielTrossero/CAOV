@@ -25,14 +25,14 @@
         </tr>
         <tr>
           <td>36854715</td>
-          <td>Pichon</td>
-          <td>Culiao</td>
+          <td>Moreyra</td>
+          <td>Pedro</td>
           <td><a href="{{ url('/persona/show/'.'1') }}" style="color: red;">ver</a> </td>
         </tr>
         <tr>
           <td>37411445</td>
-          <td>Benka</td>
-          <td>Penka</td>
+          <td>Ricle</td>
+          <td>Nicolas</td>
           <td><a href="#" style="color: red;">ver</a> </td>
         </tr>
         <tr>
