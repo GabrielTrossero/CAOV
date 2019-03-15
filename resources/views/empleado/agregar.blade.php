@@ -21,11 +21,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="persona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="persona" class="col-md-4 col-form-label text-md-right">{{ __('Socio') }}</label>
 
                             <div class="col-md-6">
                                 <select name="persona" id="persona" class="form-control">
-                                  <option value="0">Seleccionar Persona</option>
+                                  <option value="0">Seleccionar Socio</option>
                                   <option value="1">Penkita - 39848956</option>
                                   <option value="2">Misio - 38956842</option>
                                   <option value="3">Tula - 38959655</option>

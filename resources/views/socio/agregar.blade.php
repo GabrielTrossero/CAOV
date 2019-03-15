@@ -66,12 +66,22 @@
                             <label for="deporte" class="col-md-4 col-form-label text-md-right">{{ __('Deporte') }}</label>
 
                             <div class="col-md-6">
-                              <select name="deporte" id="deporte" class="form-control">
-                                <option value="0">Ninguno</option>
-                                <option value="1">Hockey</option>
-                                <option value="2">Futbol</option>
-                                <option value="3">Volley</option>
-                              </select>
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="deporte" id="futbol">
+                                <label class="form-check-label" for="futbol">
+                                  Futbol
+                                </label>
+                                <br>
+                                <input class="form-check-input" type="checkbox" name="deporte" id="volley">
+                                <label class="form-check-label" for="volley">
+                                  Volley
+                                </label>
+                                <br>
+                                <input class="form-check-input" type="checkbox" name="deporte" id="basquet">
+                                <label class="form-check-label" for="basquet">
+                                  Basquet
+                                </label>
+                              </div>
                             </div>
                         </div>
 
