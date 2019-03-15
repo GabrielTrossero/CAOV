@@ -16,6 +16,7 @@
       <table class="table">
         <tr>
           <td><b>DNI</b></td>   <!-- la <b> es para poner en negrita -->
+          <td><b>Numero de Socio</b></td>
           <td><b>Nombre de Usuario</b></td>
           <td><b>Apellido</b></td>
           <td><b>Nombres</b></td>
@@ -24,6 +25,7 @@
         </tr>
         <tr>
           <td>36854715</td>
+          <td>1</td>
           <td>Pichonaso123</td>
           <td>Pichon</td>
           <td>Culiao</td>
@@ -32,6 +34,7 @@
         </tr>
         <tr>
           <td>37411445</td>
+          <td>2</td>
           <td>Wenka</td>
           <td>Benka</td>
           <td>Penka</td>
@@ -40,6 +43,7 @@
         </tr>
         <tr>
           <td>36411485</td>
+          <td>3</td>
           <td>ElMisio</td>
           <td>Misio</td>
           <td>Nero</td>

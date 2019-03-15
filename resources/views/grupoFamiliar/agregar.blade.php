@@ -17,7 +17,7 @@
 
                             <div class="col-md-6">
                                 <select name="titular" id="titular" class="form-control">
-                                  <option value="0">Seleccionar Persona</option>
+                                  <option value="0">Seleccionar Socio</option>
                                   <option value="1">Penkita - 39848956</option>
                                   <option value="2">Misio - 38956842</option>
                                   <option value="3">Tula - 38959655</option>
