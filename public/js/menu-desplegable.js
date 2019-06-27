@@ -1,11 +1,20 @@
+//declaro variable para la etiqueta nav
+var nav = $('nav');
+
+//declaro variable para la etiqueta li
+var li = $('li');
+
+//por defecto el nav activo
+nav.toggleClass('mostrar');
+
 //para el boton de abrir o cerrar el menu
-$('#mostrar-nav').on('click',function(){ //cuando se haga click a mostrar-nav que se ejecute la funcion
-  $('nav').toggleClass('mostrar'); //si no tine la clase mostrar se la asigna, y si la tiene se la saca
+$('#mostrar-nav').click(function() { //cuando se haga click a mostrar-nav que se ejecute la funcion
+  nav.toggleClass('mostrar'); //si no tine la clase mostrar se la asigna, y si la tiene se la saca
 
   //para que el menú se "reinicie" cuado lo cierro
-  if($('li').hasClass('abierto')){ //si algun submenú está abierto que se ejecute lo siguiente
-    $('li').children('.children').slideUp(); //al elmento que tiene la clase children la funcion slideUp le pone style="display: none;" para ocultarla
-    $('li').removeClass('abierto'); //sacarle la clase abierto al submenú
+  if(li.hasClass('abierto')){ //si algun submenú está abierto que se ejecute lo siguiente
+    li.children('.children').slideUp(); //al elmento que tiene la clase children la funcion slideUp le pone style="display: none;" para ocultarla
+    li.removeClass('abierto'); //sacarle la clase abierto al submenú
   }
 });
 
@@ -14,12 +23,12 @@ $('#mostrar-nav').on('click',function(){ //cuando se haga click a mostrar-nav qu
 
 
 //funcion que se llama cuando hago click
-$('.submenu').click(function(){
+$('.submenu').click(function() {
 
   //para cerrar un submenu abierto cuado quiero abrir otro
-  if((!$(this).hasClass('abierto')) && ($('li').hasClass('abierto'))){ //si un submenú está abierto y lo apreto para cerrarlo, que no se ejecute esto. Esta linea dice que si el submenú que selecciono está abierto y hay algun otro submenú que está abierto se ejecute lo siguiente
-    $('li').children('.children').slideUp(); //al elmento que tiene la clase children la funcion slideUp le pone style="display: none;" para ocultarla
-    $('li').removeClass('abierto'); //sacarle la clase abierto al submenú
+  if((!$(this).hasClass('abierto')) && (li.hasClass('abierto'))){ //si un submenú está abierto y lo apreto para cerrarlo, que no se ejecute esto. Esta linea dice que si el submenú que selecciono está abierto y hay algun otro submenú que está abierto se ejecute lo siguiente
+    li.children('.children').slideUp(); //al elmento que tiene la clase children la funcion slideUp le pone style="display: none;" para ocultarla
+    li.removeClass('abierto'); //sacarle la clase abierto al submenú
   }
 
   //para cerrar o abrir un submenu cuando hago click

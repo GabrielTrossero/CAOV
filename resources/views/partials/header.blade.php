@@ -8,8 +8,8 @@
 					Opciones
 				</button>
 				  <div class="dropdown-menu">
-				    <a class="dropdown-item" href="{{ url('/administrador') }}">Mis opciones</a>
-				    <a class="dropdown-item" href="#">Mi Perfil</a>
+				    <!--<a class="dropdown-item" href="{{ url('/administrador') }}">Mis opciones</a>-->
+				    <a class="dropdown-item" href="{{ url('/empleado/show/'/*.$persona->id*/) }}">Mi Perfil</a>
 			     <div class="dropdown-divider"></div>
 				     <a class="dropdown-item" href="#">Salir</a>
 				   </div>

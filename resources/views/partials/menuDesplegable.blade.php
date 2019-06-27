@@ -35,7 +35,7 @@
     <li><a href="{{ url('/informe') }}"> <i class="icono fas fa-chart-bar"></i> &nbsp; Informes</a></li>
     <li><a href="{{ url('/empleado') }}"> <i class="icono fas fa-users"></i> &nbsp; Empleados</a></li>
     <li><a href="{{ url('/deporte') }}"> <i class="icono fas fa-futbol"></i> &nbsp; Deportes</a></li>
-    <li><a href="#"> <i class="icono far fa-user"></i> &nbsp; Administradores</a></li>
+    <li><a href="{{ url('/administrador') }}"> <i class="icono far fa-user"></i> &nbsp; Administradores</a></li>
   </ul>
 </nav>
 
