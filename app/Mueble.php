@@ -12,4 +12,9 @@ class Mueble extends Model
     protected $fillable = [
         'nombre', 'cantidad'
     ];
+
+    //relacion a reservas de muebles
+    public function reservasDeMueble(){
+      return $this->hasMany('App\ReservaMueble', 'idMueble');
+    }
 }

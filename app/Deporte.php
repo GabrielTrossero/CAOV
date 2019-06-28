@@ -12,4 +12,8 @@ class Deporte extends Model
   protected $fillable = [
       'nombre'
   ];
+
+  public function socios(){
+    return $this->belongsToMany('App\Socio' , 'sociodeporte', 'idDeporte', 'idSocio');
+  }
 }

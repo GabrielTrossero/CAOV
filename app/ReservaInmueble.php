@@ -14,4 +14,19 @@ class ReservaInmueble extends Model
         'fechaSolicitud', 'idInmueble', 'idMedioDePago', 'idPersona', 'numRecibo', 'observacion',
         'tieneMusica', 'tieneReglamento', 'tieneServicioLimpieza', 'tipoEvento'
     ];
+
+    //relacion a medio de pago
+    public function medioDePago(){
+      return $this->belongsTo('App\MedioDePago', 'idMedioDePago');
+    }
+
+    //relacion a persona
+    public function persona(){
+      return $this->belongsTo('App\Persona', 'idPersona');
+    }
+
+    //relacion a inmueble
+    public function inmueble(){
+      return $this->belongsTo('App\Inmueble', 'idInmueble');
+    }
 }

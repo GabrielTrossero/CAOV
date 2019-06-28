@@ -12,4 +12,9 @@ class MovExtras extends Model
     protected $fillable = [
         'descripcion', 'fecha', 'idUser', 'monto', 'numRecibo', 'tipo'
     ];
+
+    //relacion a usuario
+    public function user(){
+      return $this->belongsTo('App\User', 'idUser');
+    }
 }
