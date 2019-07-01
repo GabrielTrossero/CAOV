@@ -12,28 +12,28 @@
           <td><b>Apellido</b></td>
           <td><b>Nombres</b></td>
           <td><b>Titular</b></td>
-          <td><b>Ver Socio</b></td>
+          <td><b>Info. Socio</b></td>
         </tr>
         <tr>
           <td>36854715</td>
           <td>Martinez</td>
           <td>Martin</td>
           <td>Si</td>
-          <td><a href="{{ url('/socio/show/'.'1') }}" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/socio/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
         </tr>
         <tr>
           <td>36876715</td>
           <td>Martinez</td>
           <td>Martina</td>
           <td>No</td>
-          <td><a href="{{ url('/socio/show/'.'2') }}" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/socio/show/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
         </tr>
         <tr>
           <td>36815715</td>
           <td>Martinez</td>
           <td>Martin Junior</td>
           <td>No</td>
-          <td><a href="{{ url('/socio/show/'.'3') }}" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/socio/show/'.'3') }}"> <i class="fas fa-plus"></i></a> </td>
         </tr>
       </table>
 

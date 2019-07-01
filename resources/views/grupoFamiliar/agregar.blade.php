@@ -3,39 +3,47 @@
 @section('content')
 
 <div class="cuadro">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Agregar Grupo Familiar') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ url('/empleado/create') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group row">
-                            <label for="titulas" class="col-md-4 col-form-label text-md-right">{{ __('Titular') }}</label>
-
-                            <div class="col-md-6">
-                                <select name="titular" id="titular" class="form-control">
-                                  <option value="0">Seleccionar Socio</option>
-                                  <option value="1">Penkita - 39848956</option>
-                                  <option value="2">Misio - 38956842</option>
-                                  <option value="3">Tula - 38959655</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <br>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Agregar') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+              <div class="card-header">
+                <label class="col-md-8 col-form-label"><b>Agregar Grupo Familiar</b></label>
+              </div>
+              <div class="card-body border">
+                <form method="POST" action="{{ url('/grupofamiliar/create') }}">
+                      {{ csrf_field() }}
+                  <table id="idDataTable" class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>DNI</th>
+                        <th>N° Socio</th>
+                        <th>Apellido</th>
+                        <th>Nombres</th>
+                        <th>Seleccionar Titular</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>40567823</td>
+                        <td>1</td>
+                        <td>Ricle</td>
+                        <td>Anibal</td>
+                        <td><input type="radio" name="titular" value="1"></td>
+                      </tr>
+                      <tr>
+                        <td>35000123</td>
+                        <td>2</td>
+                        <td>Martinez</td>
+                        <td>Carlos Emilio</td>
+                        <td><input type="radio" name="titular" value="2"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="offset-md-5">
+                      <button type="submit" class="btn btn-outline-primary">
+                          {{ __('Agregar') }}
+                      </button>
+                  </div>
+                </form>
+              </div>
             </div>
         </div>
     </div>

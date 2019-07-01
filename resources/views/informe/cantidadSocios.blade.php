@@ -4,19 +4,13 @@
 
 <div class="cuadro">
   <div class="card">
-    
     <div class="card-header">
-      <table>
-        <div class="form-group row">
-          <label class="col-md-8 col-form-label"><b>Cantidad Total de Socios</b></label>
-        </div>
-      </table>
+      <label class="col-md-8 col-form-label"><b>Cantidad Total de Socios</b></label>
     </div>
-
     <div class="card-body border">
       <table class="table">
         <tr>
-          <td><b>Cantidad de Socios</b></td>   <!-- la <b> es para poner en negrita -->
+          <th>Cantidad de Socios</th>
         </tr>
         <tr>
           <td>1200</td>

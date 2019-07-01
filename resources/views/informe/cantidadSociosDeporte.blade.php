@@ -4,20 +4,14 @@
 
 <div class="cuadro">
   <div class="card">
-
     <div class="card-header">
-      <table>
-        <div class="form-group row">
-          <label class="col-md-8 col-form-label"><b>Cantidad de Socios por Deporte</b></label>
-        </div>
-      </table>
+      <label class="col-md-8 col-form-label"><b>Cantidad de Socios por Deporte</b></label>
     </div>
-
     <div class="card-body border">
       <table class="table">
         <tr>
-          <td><b>Deporte</b></td>
-          <td><b>Cantidad de Socios</b></td>   <!-- la <b> es para poner en negrita -->
+          <th>Deporte</th>
+          <th>Cantidad de Socios</th>
         </tr>
         <tr>
           <td>Futbol</td>
