@@ -28,17 +28,17 @@
         <tr>
           <td>Cuota</td>
           <td>250</td>
-          <td><a href="{{ url('/cuota') }}" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/cuota') }}"> <i class="fas fa-plus"></i></a> </td>
         </tr>
         <tr>
           <td>Alquiler Mueble</td>
           <td>1500</td>
-          <td><a href="{{ url('/pagoalquiler/listamueble') }}" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/pagoalquiler/listamueble') }}"> <i class="fas fa-plus"></i></a> </td>
         </tr>
         <tr>
           <td>Alquiler Inmueble</td>
           <td>3000</td>
-          <td><a href="{{ url('/pagoalquiler/listainmueble') }}" style="color: red;">ver</a> </td>
+          <td><a href="{{ url('/pagoalquiler/listainmueble') }}"> <i class="fas fa-plus"></i></a> </td>
         </tr>
         <!-Cuando se aprieta ver se tendría que setear en el input de los listado de cuotas y alquileres el DNI del socio->
       </table>

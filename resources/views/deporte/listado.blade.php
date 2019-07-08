@@ -7,21 +7,24 @@
     <div class="card-header">
       <label><b>Listado de Deportes</b></label>
     </div>
-
     <div class="card-body border">
-      <table class="table">
-        <tr>
-          <td><b>Nombre</b></td>     <!-- la <b> es para poner en negrita -->
-          <td><b>Ver Deporte</b></td>
-        </tr>
-        <tr>
-          <td>Futbol</td>
-          <td><a href="{{ url('/deporte/show/'.'1') }}" style="color: red;">ver</a> </td>
-        </tr>
-        <tr>
-          <td>Basquet</td>
-          <td><a href="{{ url('/deporte/show/'.'2') }}" style="color: red;">ver</a> </td>
-        </tr>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Más Información</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Futbol</td>
+            <td><a href="{{ url('/deporte/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
+          </tr>
+          <tr>
+            <td>Basquet</td>
+            <td><a href="{{ url('/deporte/show/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

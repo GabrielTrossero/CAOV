@@ -5,25 +5,29 @@
 <div class="cuadro">
   <div class="card">
     <div class="card-header">
-          <label class="col-md-8 col-form-label"><b>Listado de Inmuebles</b></label>
+      <label class="col-md-8 col-form-label"><b>Listado de Inmuebles</b></label>
     </div>
     <div class="card-body border">
-      <table class="table">
-        <tr>
-          <td><b>Nombre</b></td>
-          <td><b>Descripción</b></td>   <!-- la <b> es para poner en negrita -->
-          <td><b>Ver Inmueble</b></td>
-        </tr>
-        <tr>
-          <td>Cancha</td>
-          <td>150 X 30 metros</td>
-          <td><a href="{{ url('/inmueble/show/'.'1') }}" style="color: red;">ver</a> </td>
-        </tr>
-        <tr>
-          <td>SUM</td>
-          <td>Capacidad para 100 personas</td>
-          <td><a href="{{ url('/inmueble/show/'.'2') }}" style="color: red;">ver</a> </td>
-        </tr>
+      <table id="idDataTable" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Más Información</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cancha</td>
+            <td>150 X 30 metros</td>
+            <td><a href="{{ url('/inmueble/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
+          </tr>
+          <tr>
+            <td>SUM</td>
+            <td>Capacidad para 100 personas</td>
+            <td><a href="{{ url('/inmueble/show/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
