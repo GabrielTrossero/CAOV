@@ -8,33 +8,88 @@ use App\Http\Controllers\Controller;
 class CuotaController extends Controller
 {
   /**
-   * Display the list of Socios to choose who paids the Cuota.
+   * Display a listing of the resource.
    *
    * @return \Illuminate\Http\Response
    */
   public function index()
   {
-    return view('cuota.listarSocios');
+    return view('cuota.menu');
   }
 
   /**
-   * Display the the form to add the Socios's payment.
-   * @param int $id
+   * Show the form for creating a new resource.
+   *
    * @return \Illuminate\Http\Response
    */
-    public function getPago($id)
-    {
-      return view('cuota.ingresarPago');
-    }
+  public function createMontoCuota()
+  {
+    return view('cuota.agregarMontoCuota');
+  }
 
-    /**
-     * Add the payment and generate a pdf or send it via email.
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-      public function postPago(Request $request)
-      {
-        //
-      }
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function storeMontoCuota(Request $request)
+  {
+    //
+  }
+
+  /**
+   * Display the resource list
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function getShow()
+  {
+    return view('cuota.listado');
+  }
+
+  /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function getShowId($id)
+  {
+    return view('cuota.individual');
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function edit($id)
+  {
+    return view('cuota.editar');
+  }
+
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request)
+  {
+    //
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy($id)
+  {
+    //
+  }
 }

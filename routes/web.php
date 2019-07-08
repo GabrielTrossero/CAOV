@@ -88,8 +88,13 @@ Route::group(['middleware' => 'auth'], function()
     Route::group(['prefix' => 'cuota'], function()
     {
         Route::get('/', 'CuotaController@index');
-        Route::get('pago/{id}', 'CuotaController@getPago');
-        Route::post('pago', 'CuotaController@postPago');
+        Route::get('createMontoCuota', 'CuotaController@createMontoCuota');
+        Route::post('createMontoCuota', 'CuotaController@storeMontoCuota');
+        Route::get('show', 'CuotaController@getShow');
+        Route::get('show/{id}', 'CuotaController@getShowId');
+        Route::get('edit/{id}', 'CuotaController@edit');
+        Route::post('edit', 'CuotaController@update');
+        Route::post('delete', 'CuotaController@destroy');
     });
 
     //Rutas para Pago de Alquiler

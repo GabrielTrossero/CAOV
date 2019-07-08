@@ -19,13 +19,14 @@
         <li><a href="{{ url('/mueble') }}"> Mueble </a></li>
       </ul>
     </li>
+    <li><a href="{{ url('/cuota') }}"> <i class="icono fas fa-hands-helping"></i> &nbsp; Cuotas</a></li>
     <li class="submenu"><a href="#"> <i class="icono fas fa-handshake"></i></i> &nbsp; Alquileres</a>
       <ul class="children">
         <li><a href="{{ url('/alquilerinmueble') }}"> Inmueble </a></li>
         <li><a href="{{ url('/alquilermueble') }}"> Mueble </a></li>
       </ul>
     </li>
-    <li class="submenu"><a href="#"> <i class="icono fas fa-file-invoice-dollar"></i> &nbsp; Pagos</a>
+    <li class="submenu"><a href="#"> <i class="icono fas fa-file-invoice-dollar"></i> &nbsp; Pagar</a>
       <ul class="children">
         <li><a href="{{ url('/cuota') }}"> Cuota </a></li>
         <li><a href="{{ url('/pagoalquiler') }}"> Alquiler </a></li>
