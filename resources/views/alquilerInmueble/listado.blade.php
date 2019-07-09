@@ -8,7 +8,7 @@
       <label class="col-md-8 col-form-label"><b>Listado de Alquileres de Inmuebles</b></label>
     </div>
     <div class="card-body border">
-      <table class="table" id="tablaFiltroDNI">
+      <table id="idDataTable" class="table table-striped">
         <thead>
           <tr>
             <th>DNI Solicitante</th>
