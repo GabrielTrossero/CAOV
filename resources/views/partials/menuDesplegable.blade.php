@@ -28,7 +28,7 @@
     </li>
     <li class="submenu"><a href="#"> <i class="icono fas fa-file-invoice-dollar"></i> &nbsp; Pagar</a>
       <ul class="children">
-        <li><a href="{{ url('/cuota') }}"> Cuota </a></li>
+        <li><a href="{{ url('/pagocuota/show') }}"> Cuota </a></li>
         <li><a href="{{ url('/pagoalquiler') }}"> Alquiler </a></li>
       </ul>
     </li>

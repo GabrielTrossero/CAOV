@@ -29,7 +29,7 @@
             <td>Activo</td>
             <td>Enero</td>
             <td>
-              <a href="{{ url('/cuota/pago/'.'1') }}">
+              <a href="{{ url('/pagocuota/pago/'.'1') }}">
                 <button type="button" class="btn btn-primary tam_letra_small">
                   Pagar
                 </button>
@@ -44,7 +44,7 @@
             <td>Activo</td>
             <td>Enero</td>
             <td>
-              <a href="{{ url('/cuota/pago/'.'1') }}">
+              <a href="{{ url('/pagocuota/pago/'.'1') }}">
                 <button type="button" class="btn btn-primary tam_letra_small">
                   Pagar
                 </button>
@@ -59,7 +59,7 @@
             <td>Grupo Familiar</td>
             <td>Julio</td>
             <td>
-              <a href="{{ url('/cuota/pago/'.'1') }}">
+              <a href="{{ url('/pagocuota/pago/'.'1') }}">
                 <button type="button" class="btn btn-primary tam_letra_small">
                   Pagar
                 </button>

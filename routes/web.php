@@ -97,6 +97,15 @@ Route::group(['middleware' => 'auth'], function()
         Route::post('delete', 'CuotaController@destroy');
     });
 
+    //Rutas para Pago de Cuota
+    Route::group(['prefix' => 'pagocuota'], function()
+    {
+        Route::get('show', 'PagoCuotaController@getShow');
+        Route::get('pago/{id}', 'PagoCuotaController@getPago');
+        Route::post('pago', 'PagoCuotaController@postPago');
+    });
+
+
     //Rutas para Pago de Alquiler
     Route::group(['prefix' => 'pagoalquiler'], function()
     {

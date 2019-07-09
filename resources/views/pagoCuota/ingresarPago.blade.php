@@ -9,7 +9,7 @@
                 <div class="card-header">{{ __('Cobrar Cuota') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ url('/cuota/pago') }}">
+                    <form method="POST" action="{{ url('/pagocuota/pago') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group row">
