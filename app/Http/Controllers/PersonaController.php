@@ -61,7 +61,8 @@ class PersonaController extends Controller
         $personaRetornada = Persona::where('DNI', $request->DNI)->first();
 
         //redirijo para mostrar la persona ingresada
-        return view('persona.individual' , ['persona' => $personaRetornada]);
+        //return view('persona.individual' , ['persona' => $personaRetornada]);
+        return redirect()->action('PersonaController@getShowId', $personaRetornada->id);
     }
 
     /**
