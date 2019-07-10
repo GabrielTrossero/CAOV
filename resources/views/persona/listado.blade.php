@@ -18,25 +18,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>36854715</td>
-            <td>Moreyra</td>
-            <td>Pedro</td>
-            <td><a href="{{ url('/persona/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>37411445</td>
-            <td>Ricle</td>
-            <td>Nicolas</td>
-            <td><a href="#" > <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>36411485</td>
-            <td>Misio</td>
-            <td>Nero</td>
-            <td><a href="#"><i class="fas fa-plus"></i></a> </td>
-          </tr>
-        </thead>
+          @foreach ($personas as $persona)
+
+            <tr>
+              <td>{{ $persona->DNI }}</td>
+              <td>{{ $persona->apellido }}</td>
+              <td>{{ $persona->nombres }}</td>
+              <td><a href="{{ url('/persona/show/'.$persona->id) }}"> <i class="fas fa-plus"></i></a> </td>
+            </tr>
+
+          @endforeach
+        </tbody>
       </table>
     </div>
   </div>

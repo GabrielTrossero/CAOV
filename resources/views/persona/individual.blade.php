@@ -34,7 +34,7 @@
         </a>
 
         &nbsp;&nbsp;
-        <form action="{{url('/persona/delete')}}" method="post" style="display:inline">
+        <form action="{{ url('/persona/delete') }}" method="post" style="display:inline">
           {{ csrf_field() }}
           <input type="hidden" name="id" value="{{ $persona->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">

@@ -26,6 +26,7 @@ class PersonaController extends Controller
      */
     public function create()
     {
+        //redirijo a la vista para agregar una persona
         return view('persona.agregar');
     }
 
@@ -70,7 +71,11 @@ class PersonaController extends Controller
      */
     public function getShow()
     {
-        return view('persona.listado');
+        //busco todas las personas
+        $personas = Persona::all();
+
+        //redirijo a la vista para listar todas las personas pasando el array 'personas'
+        return view('persona.listado' , compact('personas'));
     }
 
     /**
@@ -81,8 +86,10 @@ class PersonaController extends Controller
      */
     public function getShowId($id)
     {
+        //busco la persona
         $persona = Persona::find($id);
 
+        //redirijo a la vista individual con los datos de la persona
         return view('persona.individual' , ['persona' => $persona]);
     }
 
@@ -94,7 +101,11 @@ class PersonaController extends Controller
      */
     public function edit($id)
     {
-        return view('persona.editar');
+        //busco el registro
+        $persona = Persona::find($id);
+
+        //redirijo al formulario de edicion con los datos de la persona
+        return view('persona.editar' , ['persona' => $persona]);
     }
 
     /**
@@ -106,17 +117,51 @@ class PersonaController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        //valido los datos ingresados
+        $validacion = Validator::make($request->all(), [
+          'DNI' => 'required|min:8|max:8',
+          'nombres' => 'required|max:100',
+          'apellido' => 'required|max:100',
+          'domicilio' => 'required|max:100',
+          'telefono' => 'max:25',
+          'email' => 'email|max:75'
+        ]);
+
+        //si la validacion falla vuelvo hacia atras con los errores
+        if($validacion->fails()){
+          return redirect()->back()->withErrors($validacion->errors());
+        }
+
+        //busco el registro
+        $persona = Persona::find($request->id);
+
+        //reemplazo los datos del resgistro con los del request validado
+        $persona->DNI = $request->DNI;
+        $persona->nombres = $request->nombres;
+        $persona->apellido = $request->apellido;
+        $persona->domicilio = $request->domicilio;
+        $persona->telefono = $request->telefono;
+        $persona->email = $request->email;
+
+        //guardo el registro editado
+        $persona->save();
+
+        //redirijo al listado
+        return redirect()->action('PersonaController@getShow');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        //elimino el registro con tal id
+        $persona = Persona::destroy($request->id);
+
+        //redirijo al listado
+        return redirect()->action('PersonaController@getShow');
     }
 }
