@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use App\Persona;
 
 class PersonaController extends Controller
 {
@@ -35,7 +37,30 @@ class PersonaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $persona = new Persona;
+
+        //valido los datos ingresados
+        $validacion = Validator::make($request->all(), [
+          'DNI' => 'required|min:8|max:8|unique:persona',
+          'nombres' => 'required|max:100',
+          'apellido' => 'required|max:100',
+          'domicilio' => 'required|max:100',
+          'telefono' => 'max:25',
+          'email' => 'email|unique:persona|max:75'
+        ]);
+
+        //si la validacion falla vuelvo hacia atras con los errores
+        if($validacion->fails()){
+          return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+        //almaceno la persona
+        $persona->create($request->all());
+
+        $personaRetornada = Persona::where('DNI', $request->DNI)->first();
+
+        //redirijo para mostrar la persona ingresada
+        return view('persona.individual' , ['persona' => $personaRetornada]);
     }
 
     /**
@@ -56,7 +81,9 @@ class PersonaController extends Controller
      */
     public function getShowId($id)
     {
-        return view('persona.individual');
+        $persona = Persona::find($id);
+
+        return view('persona.individual' , ['persona' => $persona]);
     }
 
     /**

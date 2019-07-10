@@ -25,8 +25,8 @@ Route::group(['middleware' => 'auth'], function()
         Route::get('/', 'PersonaController@index');
         Route::get('create', 'PersonaController@create');
         Route::post('create', 'PersonaController@store');
-        Route::get('show', 'PersonaController@getShow');
-        Route::get('show/{id}', 'PersonaController@getShowId');
+        Route::get('show', 'PersonaController@getShow')->name('persona.lista');
+        Route::get('show/{id}', 'PersonaController@getShowId')->name('persona.individual');
         Route::get('edit/{id}', 'PersonaController@edit');
         Route::post('edit', 'PersonaController@update');
         Route::post('delete', 'PersonaController@destroy');

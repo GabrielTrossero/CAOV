@@ -16,18 +16,18 @@
           <td><b>Email</b></td>
         </tr>
         <tr>
-          <td>40662158</td>
-          <td>Zapata</td>
-          <td>Juan Bautista</td>
-          <td>Los Cardenales 448 - Oro Verde</td>
-          <td>3435908231</td>
-          <td>zapa@tilla.com</td>
+          <td>{{ $persona->DNI }}</td>
+          <td>{{ $persona->apellido }}</td>
+          <td>{{ $persona->nombres }}</td>
+          <td>{{ $persona->domicilio }}</td>
+          <td>{{ $persona->telefono }}</td>
+          <td>{{ $persona->email }}</td>
         </tr>
       </table>
 
       <div class="card-footer">
 
-        <a style="text-decoration:none" href="{{ url('/persona/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/persona/edit/'.$persona->id) }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Persona
           </button>
@@ -36,7 +36,7 @@
         &nbsp;&nbsp;
         <form action="{{url('/persona/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
-          <input type="hidden" name="id" value="1">
+          <input type="hidden" name="id" value="{{ $persona->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
             Eliminar Persona
           </button>
