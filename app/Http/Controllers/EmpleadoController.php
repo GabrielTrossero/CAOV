@@ -54,8 +54,7 @@ class EmpleadoController extends Controller
           'email' => 'email|unique:users|max:75',
           'persona' => 'required',
           'password' => 'required|min:8|max:80',
-          'passwordRepeat' => 'required|min:8|max:80|same:password',
-          'telefono' => 'max:25'
+          'passwordRepeat' => 'required|min:8|max:80|same:password'
         ]);
 
         //si la validacion falla vuelvo hacia atras con los errores
@@ -142,8 +141,7 @@ class EmpleadoController extends Controller
           'email' => 'email|max:75',
           'persona' => 'required',
           'password' => 'required|min:8|max:80',
-          'passwordRepeat' => 'required|min:8|max:80|same:password',
-          'telefono' => 'max:25'
+          'passwordRepeat' => 'required|min:8|max:80|same:password'
         ]);
 
         //si la validacion falla vuelvo hacia atras con los errores
