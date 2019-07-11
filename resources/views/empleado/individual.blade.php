@@ -10,22 +10,24 @@
         <tr>
           <td><b>DNI</b></td>   <!-- la <b> es para poner en negrita -->
           <td><b>Nombre de Usuario</b></td>
+          <td><b>Email</b></td>
           <td><b>Apellido</b></td>
           <td><b>Nombres</b></td>
           <td><b>Tipo de Usuario</b></td>
         </tr>
         <tr>
-          <td>36854715</td>
-          <td>Pichon123</td>
-          <td>Gonzalez</td>
-          <td>Roberto</td>
-          <td>Empleado</td>
+          <td>{{ $usuario->persona->DNI }}</td>
+          <td>{{ $usuario->username }}</td>
+          <td>{{ $usuario->email }}</td>
+          <td>{{ $usuario->persona->apellido }}</td>
+          <td>{{ $usuario->persona->nombres }}</td>
+          <td>{{ $usuario->tipoUsuario->nombre }}</td>
         </tr>
       </table>
 
       <div class="card-footer">
 
-        <a style="text-decoration:none" href="{{ url('/empleado/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/empleado/edit/'.$usuario->id) }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Empleado
           </button>
@@ -34,7 +36,7 @@
         &nbsp;&nbsp;
         <form action="{{url('/empleado/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
-          <input type="hidden" name="id" value="1">
+          <input type="hidden" name="id" value="{{ $usuario->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
             Eliminar Empleado
           </button>

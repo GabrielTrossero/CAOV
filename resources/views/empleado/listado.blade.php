@@ -12,7 +12,6 @@
         <thead>
           <tr>
             <th>DNI</th>
-            <th>Numero de Socio</th>
             <th>Nombre de Usuario</th>
             <th>Apellido</th>
             <th>Nombres</th>
@@ -21,33 +20,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>36854715</td>
-            <td>1</td>
-            <td>Pichon123</td>
-            <td>Gonzalez</td>
-            <td>Roberto</td>
-            <td>Empleado</td>
-            <td><a href="{{ url('/empleado/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>37411445</td>
-            <td>2</td>
-            <td>Perez25</td>
-            <td>Perez</td>
-            <td>Juan</td>
-            <td>Administrador</td>
-            <td><a href="#"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>36411485</td>
-            <td>3</td>
-            <td>Menga</td>
-            <td>Mengarelli</td>
-            <td>Jose Luis</td>
-            <td>Empleado</td>
-            <td><a href="#"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
+
+          @foreach ($usuarios as $usuario)
+            <tr>
+              <td>{{ $usuario->persona->DNI }}</td>
+              <td>{{ $usuario->username }}</td>
+              <td>{{ $usuario->persona->apellido }}</td>
+              <td>{{ $usuario->persona->nombres }}</td>
+              <td>{{ $usuario->tipoUsuario->nombre}}</td>
+              <td><a href="{{ url('/empleado/show/'.$usuario->id) }}"> <i class="fas fa-plus"></i></a> </td>
+            </tr>
+          @endforeach
+
+
         </tbody>
       </table>
     </div>
