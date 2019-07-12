@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\Persona;
 use App\TipoUsuario;
+use Illuminate\Validation\Rule;
 
 class EmpleadoController extends Controller
 {
@@ -54,7 +55,8 @@ class EmpleadoController extends Controller
           'email' => 'email|unique:users|max:75',
           'persona' => 'required',
           'password' => 'required|min:8|max:80',
-          'passwordRepeat' => 'required|min:8|max:80|same:password'
+          'passwordRepeat' => 'required|min:8|max:80|same:password',
+          'tipoUsuario' => 'required'
         ]);
 
         //si la validacion falla vuelvo hacia atras con los errores
@@ -137,8 +139,17 @@ class EmpleadoController extends Controller
     {
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
-          'username' => 'required|min:8|max:75',
-          'email' => 'email|max:75',
+          'username' => [
+            'required',
+            'min:8',
+            'max:75',
+            Rule::unique('users')->ignore($request->id)
+          ],
+          'email' => [
+            'email',
+            'max:75',
+            Rule::unique('users')->ignore($request->id)
+          ],
           'persona' => 'required',
           'password' => 'required|min:8|max:80',
           'passwordRepeat' => 'required|min:8|max:80|same:password'

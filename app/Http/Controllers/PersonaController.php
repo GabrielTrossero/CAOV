@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Persona;
+use Illuminate\Validation\Rule;
 
 class PersonaController extends Controller
 {
@@ -119,12 +120,22 @@ class PersonaController extends Controller
     {
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
-          'DNI' => 'required|min:8|max:8|unique:persona',
+          'DNI' => [
+            'required',
+            'min:8',
+            'max:8',
+            Rule::unique('persona')->ignore($request->id),
+          ],
           'nombres' => 'required|max:100',
           'apellido' => 'required|max:100',
           'domicilio' => 'required|max:100',
           'telefono' => 'max:25',
-          'email' => 'email|max:75|unique:persona'
+          'email' => [
+            'required',
+            'email',
+            'max:75',
+            Rule::unique('persona')->ignore($request->id),
+          ]
         ]);
 
         //si la validacion falla vuelvo hacia atras con los errores

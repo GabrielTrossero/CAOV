@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Deporte;
+use Illuminate\Validation\Rule;
 
 class DeporteController extends Controller
 {
@@ -115,7 +116,11 @@ class DeporteController extends Controller
     {
         //valido los datos enviados
         $validacion = Validator::make($request->all(), [
-          'nombre' => 'required|max:75|unique:deporte'
+          'nombre' => [
+            'required',
+            'max:75',
+            Rule::unique('deporte')->ignore($request->id),
+          ]
         ]);
 
         //si la validacion falla vuelvo hacia atras con los errores
