@@ -12,13 +12,16 @@
                     <form method="POST" action="{{ url('/deporte/edit') }}">
                         {{ csrf_field() }}
 
-                        <input type="hidden" name="id" value="1">
+                        <input type="hidden" name="id" value="{{ $deporte->id }}">
 
                         <div class="form-group row">
                             <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="nombre" id="nombre" class="form-control" value="Futbol">
+                                <input type="text" name="nombre" id="nombre" class="form-control" value=" {{ $deporte->nombre }}" required>
+                                @if( $errors->has('nombre'))
+                                  <span class="text-danger"> Ingrese un nombre válido </span>
+                                @endif
                             </div>
                         </div>
 

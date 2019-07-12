@@ -16,14 +16,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Futbol</td>
-            <td><a href="{{ url('/deporte/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>Basquet</td>
-            <td><a href="{{ url('/deporte/show/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
+          @foreach ($deportes as $deporte)
+            <tr>
+              <td>{{ $deporte->nombre }}</td>
+              <td><a href="{{ url('/deporte/show/'.$deporte->id) }}"> <i class="fas fa-plus"></i></a> </td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>

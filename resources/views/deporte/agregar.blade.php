@@ -16,7 +16,10 @@
                             <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="nombre" id="nombre" class="form-control">
+                                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}" required>
+                                @if( $errors->has('nombre'))
+                                  <span class="text-danger">Ingrese un nombre válido</span>
+                                @endif
                             </div>
                         </div>
 

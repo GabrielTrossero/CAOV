@@ -119,12 +119,12 @@ class PersonaController extends Controller
     {
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
-          'DNI' => 'required|min:8|max:8',
+          'DNI' => 'required|min:8|max:8|unique:persona',
           'nombres' => 'required|max:100',
           'apellido' => 'required|max:100',
           'domicilio' => 'required|max:100',
           'telefono' => 'max:25',
-          'email' => 'email|max:75'
+          'email' => 'email|max:75|unique:persona'
         ]);
 
         //si la validacion falla vuelvo hacia atras con los errores
