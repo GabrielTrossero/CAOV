@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Socio;
+use App\GrupoFamiliar;
+use App\Persona;
 
 class SocioController extends Controller
 {
@@ -24,7 +27,9 @@ class SocioController extends Controller
      */
     public function create()
     {
-        return view('socio.agregar');
+        $grupos = GrupoFamiliar::all();
+
+        return view('socio.agregar', compact('grupos'));
     }
 
     /**

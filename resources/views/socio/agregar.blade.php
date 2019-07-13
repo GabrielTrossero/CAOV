@@ -55,10 +55,14 @@
                             <div class="col-md-6">
                               <select name="categoria" id="categoria" class="form-control">
                                 <option value="0">No posee grupo familiar</option>
-                                <option value="1">Titular: Penka - 39840568</option>
-                                <option value="2">Titular: Tula - 39845263</option>
-                                <option value="3">Titular: Sonia Vera - 30568985</option>
+                                @foreach ($grupos as $grupo)
+                                  <option value="{{ $grupo->id }}">Titular: {{$grupo->socioTitular->persona->apellido." ".$grupo->SocioTitular->persona->nombres." - ".$grupo->socioTitular->persona->DNI}}</option>
+                                @endforeach
                               </select>
+
+                              @if ($errors->has('socio'))
+                                <span class="text-danger">Ingrese un Socio Títular válido</span>
+                              @endif
                             </div>
                         </div>
 

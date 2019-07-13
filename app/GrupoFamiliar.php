@@ -14,7 +14,7 @@ class GrupoFamiliar extends Model
     ];
 
     //relacion a titular
-    public function titular(){
+    public function socioTitular(){
       return $this->belongsTo('App\Socio', 'titular');
     }
 
