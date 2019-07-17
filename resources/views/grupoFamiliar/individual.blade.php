@@ -15,31 +15,29 @@
           <td><b>Info. Socio</b></td>
         </tr>
         <tr>
-          <td>36854715</td>
-          <td>Martinez</td>
-          <td>Martin</td>
+          <td>{{ $grupo->socioTitular->persona->DNI }}</td>
+          <td>{{ $grupo->socioTitular->persona->apellido }}</td>
+          <td>{{ $grupo->socioTitular->persona->nombres }}</td>
           <td>Si</td>
-          <td><a href="{{ url('/socio/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
+          <td><a href="{{ url('/socio/show/'.$grupo->socioTitular->id) }}"> <i class="fas fa-plus"></i></a> </td>
         </tr>
-        <tr>
-          <td>36876715</td>
-          <td>Martinez</td>
-          <td>Martina</td>
-          <td>No</td>
-          <td><a href="{{ url('/socio/show/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
-        </tr>
-        <tr>
-          <td>36815715</td>
-          <td>Martinez</td>
-          <td>Martin Junior</td>
-          <td>No</td>
-          <td><a href="{{ url('/socio/show/'.'3') }}"> <i class="fas fa-plus"></i></a> </td>
-        </tr>
+
+        @foreach ($grupo->socios as $socio)
+          <tr>
+            <td>{{ $socio->persona->DNI }}</td>
+            <td>{{ $socio->persona->apellido }}</td>
+            <td>{{ $socio->persona->nombres }}</td>
+            <td>No</td>
+            <td><a href="{{ url('/socio/show/'.$socio->id) }}"> <i class="fas fa-plus"></i></a> </td>
+          </tr>
+        @endforeach
+
+
       </table>
 
       <div class="card-footer">
 
-        <a style="text-decoration:none" href="{{ url('/grupofamiliar/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/grupofamiliar/edit/'.$grupo->id) }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Grupo Familiar
           </button>
@@ -48,7 +46,7 @@
         &nbsp;&nbsp;
         <form action="{{url('/grupofamiliar/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
-          <input type="hidden" name="id" value="1">
+          <input type="hidden" name="id" value="{{ $grupo->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
             Eliminar Grupo Familiar
           </button>

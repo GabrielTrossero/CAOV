@@ -11,6 +11,9 @@
                 <form method="POST" action="{{ url('/grupofamiliar/create') }}">
                       {{ csrf_field() }}
                   <table id="idDataTable" class="table table-striped">
+                    @if ($errors->has('persona'))
+                      <span class="text-danger">Ingrese una Socio válido</span>
+                    @endif
                     <thead>
                       <tr>
                         <th>DNI</th>
@@ -21,20 +24,18 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>40567823</td>
-                        <td>1</td>
-                        <td>Ricle</td>
-                        <td>Anibal</td>
-                        <td><input type="radio" name="titular" value="1"></td>
-                      </tr>
-                      <tr>
-                        <td>35000123</td>
-                        <td>2</td>
-                        <td>Martinez</td>
-                        <td>Carlos Emilio</td>
-                        <td><input type="radio" name="titular" value="2"></td>
-                      </tr>
+
+                      @foreach ($socios as $socio)
+                        <tr>
+                          <td>{{ $socio->persona->DNI }}</td>
+                          <td>{{ $socio->numSocio }}</td>
+                          <td>{{ $socio->persona->apellido }}</td>
+                          <td>{{ $socio->persona->nombres }}</td>
+                          <td><input type="radio" name="titular" value="{{ $socio->id }}"></td>
+                        </tr>
+                      @endforeach
+
+
                     </tbody>
                   </table>
                   <div class="offset-md-5">

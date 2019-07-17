@@ -18,18 +18,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>39875632 - Joaquin Ricle</td>
-            <td><a href="{{ url('/grupofamiliar/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>39875245 - Ema Goette</td>
-            <td><a href="#"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>38752986 - Misio Nero</td>
-            <td><a href="#"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
+
+          @foreach ($grupos as $grupo)
+            <tr>
+              <td>{{ $grupo->socioTitular->persona->DNI." - ".$grupo->socioTitular->persona->nombres." ".$grupo->socioTitular->persona->apellido }}</td>
+              <td><a href="{{ url('/grupofamiliar/show/'.$grupo->id) }}"> <i class="fas fa-plus"></i></a> </td>
+            </tr>
+          @endforeach
+
         <tbody>
       </table>
     </div>

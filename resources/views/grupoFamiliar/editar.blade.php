@@ -12,15 +12,17 @@
                     <form method="POST" action="{{ url('/empleado/create') }}">
                         {{ csrf_field() }}
 
+                        <input type="hidden" name="id" value="{{ $grupo->id }}">
+
                         <div class="form-group row">
                             <label for="titulas" class="col-md-4 col-form-label text-md-right">{{ __('Titular') }}</label>
 
                             <div class="col-md-6">
                                 <select name="titular" id="titular" class="form-control">
                                   <option value="0">Seleccionar Socio</option>
-                                  <option value="1">Penkita - 39848956</option>
-                                  <option value="2">Misio - 38956842</option>
-                                  <option value="3">Tula - 38959655</option>
+                                    @foreach ($grupo->socios as $socio)
+                                      <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -43,9 +45,20 @@
                             <div class="col-md-6">
                                 <select name="miembro" id="miembro" class="form-control">
                                   <option value="0">Seleccionar Socio</option>
-                                  <option value="1">Penkita - 39848956</option>
-                                  <option value="2">Misio - 38956842</option>
-                                  <option value="3">Tula - 38959655</option>
+
+                                  <optgroup id="miembros-actuales" label="Miembros Actuales">
+                                    @foreach ($grupo->socios as $socio)
+                                      <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                    @endforeach
+
+                                  </optgroup>
+
+                                  <optgroup id="socios-sin-grupo" label="Socios sin Grupo Familiar">
+                                    @foreach ($sociosSinGrupo as $socioSinGrupo)
+                                      <option value="{{ $socioSinGrupo->id }}">{{ $socioSinGrupo->persona->DNI." - ".$socioSinGrupo->persona->nombres." ".$socioSinGrupo->persona->apellido }}</option>
+                                    @endforeach
+                                  </optgroup>
+
                                 </select>
                             </div>
                         </div>
