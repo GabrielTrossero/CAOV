@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Socio;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use App\GrupoFamiliar;
+use App\Deporte;
+use App\Socio;
+use App\SocioDeporte;
 use App\Persona;
 
 class SocioController extends Controller
@@ -27,9 +31,14 @@ class SocioController extends Controller
      */
     public function create()
     {
+        //almaceno todos los grupos familiares
         $grupos = GrupoFamiliar::all();
 
-        return view('socio.agregar', compact('grupos'));
+        //almaceno todos deportes
+        $deportes = Deporte::all();
+
+        //los envio a la vista del formulario
+        return view('socio.agregar', compact(['grupos','deportes']));
     }
 
     /**
@@ -40,7 +49,56 @@ class SocioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $socio = new Socio;
+        $persona = new Persona;
+        $socioRetornado = new Socio;
+
+        //valido los datos ingresados
+        $validacion = Validator::make($request->all(),[
+        'numSocio' => 'required|unique:socio',
+        'oficio' => 'max:75',
+        'vitalicio' => 'required|min:1|max:1|in:s,n',
+        'DNIPersona' => 'required|min:8|max:8',
+        'idGrupoFamiliar' => 'required'
+        ]);
+
+        //para que le asigne null si es que no pertenece a ningun grupo familiar
+        if($request->idGrupoFamiliar == 0)
+          $request->idGrupoFamiliar = null;
+
+        //si la validacion falla vuelvo hacia atras con los errores
+        if($validacion->fails()){
+          return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+        //almaceno al socio y el deporte que realiza
+        $socio->numSocio = $request->numSocio;
+        $socio->fechaNac = $request->fechaNac;
+        $socio->oficio = $request->oficio;
+        $socio->vitalicio = $request->vitalicio;
+        $persona = Persona::where('DNI', $request->DNIPersona)->first();
+        $socio->idPersona = $persona->id;
+        $socio->idGrupoFamiliar = $request->idGrupoFamiliar;
+
+        $socio->save();
+
+        //cargo los deportes que realiza, si es que tiene
+        if(isset($request->idDeporte)){
+          $socio = Socio::where('numSocio', $request->numSocio)->first();
+
+          foreach ($request->idDeporte as $value) {
+            $socioDeporte = new SocioDeporte;
+            $socioDeporte->idSocio = $socio->id;
+
+            $socioDeporte->idDeporte = $value;
+            $socioDeporte->save();
+          }
+        }
+
+        $socioRetornado = Socio::where('numSocio', $request->numSocio)->first();
+
+        //redirijo para mostrar el usuario ingresado
+        return redirect()->action('SocioController@getShowId', $socioRetornado->id);
     }
 
     /**
@@ -50,7 +108,11 @@ class SocioController extends Controller
      */
     public function getShow()
     {
-      return view('socio.listado');
+        //tomo todos los socios
+        $socios = Socio::all();
+
+        //los envio a la vista
+        return view('socio.listado', compact('socios'));
     }
 
     /**
@@ -61,7 +123,11 @@ class SocioController extends Controller
      */
     public function getShowId($id)
     {
-        return view('socio.individual');
+        //busco el socio
+        $socio = Socio::find($id);
+
+        //se lo envío a la vista
+        return view('socio.individual', ['socio' => $socio]);
     }
 
     /**
@@ -72,7 +138,20 @@ class SocioController extends Controller
      */
     public function edit($id)
     {
-        return view('socio.editar');
+        //busco el socio
+        $socio = Socio::find($id);
+
+        //almaceno todos los grupos familiares
+        $grupos = GrupoFamiliar::all();
+
+        //almaceno todos deportes
+        $deportes = Deporte::all();
+
+        //almaceno SocioDeporte
+        $socioDeporte = SocioDeporte::all();
+
+        //se lo envío a la vista
+        return view('socio.editar', compact(['socio','grupos','deportes','socioDeporte']));
     }
 
     /**
@@ -84,7 +163,82 @@ class SocioController extends Controller
      */
     public function update(Request $request)
     {
-        //
+      //valido los datos ingresados
+      $validacion = Validator::make($request->all(),[
+      'numSocio' => [
+        'required',
+        Rule::unique('socio')->ignore($request->id)
+      ],
+      'oficio' => 'max:75',
+      'vitalicio' => 'required|min:1|max:1|in:s,n',
+      'DNIPersona' => 'required|min:8|max:8',
+      'idGrupoFamiliar' => 'required'
+      ]);
+
+      //para que le asigne null si es que no pertenece a ningun grupo familiar
+      if($request->idGrupoFamiliar == 0)
+        $request->idGrupoFamiliar = null;
+
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails()){
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      //para cargar el id de la persona a traves del DNI ingresado
+      $persona = new Persona;
+      $persona = Persona::where('DNI', $request->DNIPersona)->first();
+
+      Socio::where('id', $request->id)
+            ->update([
+              'fechaNac' => $request->fechaNac,
+              'idGrupoFamiliar' => $request->idGrupoFamiliar,
+              'idPersona' => $persona->id,
+              'numSocio' => $request->numSocio,
+              'oficio' => $request->oficio,
+              'vitalicio' => $request->vitalicio
+            ]);
+
+      //proceso para AGREGAR un nuevo deporte a dicho socio
+      //si está vacía la variable que contiene los deportes que ahora realiza, que no entre
+      if(isset($request->idDeporte)){
+        foreach ($request->idDeporte as $deporteQueTiene) {
+          $deporteQueTenia = new SocioDeporte;
+          //busco si el socio realiza tal deporte (que ahora si realiza)
+          $deporteQueTenia = SocioDeporte::where('idSocio', $request->id)
+                              ->where('idDeporte', $deporteQueTiene)->first();
+          //si el socio no realizaba dicho deporte, lo agrego
+          if( !isset($deporteQueTenia) ){
+            $deporteNuevo = new SocioDeporte;
+            $deporteNuevo->idSocio = $request->id;
+            $deporteNuevo->idDeporte = $deporteQueTiene;
+            $deporteNuevo->save();
+          }
+        }
+      }
+
+      //proceso para ELIMINAR un deporte que realizaba
+      //almaceno todos los deportes que realizaba y los recorro
+      $deportesQueTenia = SocioDeporte::where('idSocio', $request->id)->get();
+      foreach ($deportesQueTenia as $deporteQueTenia) {
+        $bandera = 0;
+        //si la variable está vacia, que no entre porque no tiene nada que recorrer
+        if(isset($request->idDeporte)){
+          //recorro los deportes que realiza ahora
+          foreach ($request->idDeporte as $deporteQueTiene) {
+            //si son iguales quiere decir que el que hacia lo sigue haciendo
+            if($deporteQueTenia->idDeporte == $deporteQueTiene){
+              $bandera = 1;
+            }
+          }
+        }
+        //en caso de que dicho deporte que realizaba no lo haga más, entra en esta condicion
+        if($bandera == 0){
+          SocioDeporte::destroy($deporteQueTenia->id);
+        }
+      }
+
+      //retorno a la vista el socio actualizado
+      return redirect()->action('SocioController@getShowId', $request->id);
     }
 
     /**
@@ -93,8 +247,12 @@ class SocioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+      //elimino el registro con tal id
+      $socio = Socio::destroy($request->id);
+
+      //redirijo al listado
+      return redirect()->action('SocioController@getShow');
     }
 }

@@ -16,7 +16,11 @@
                             <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Socio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="numSocio" id="numSocio" class="form-control">
+                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') }}" required>
+
+                                @if ($errors->has('nomSocio'))
+                                  <span class="text-danger">Ingrese un Número de Socio válido</span>
+                                @endif
                             </div>
                         </div>
 
@@ -24,7 +28,11 @@
                             <label for="fechaNac" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Nacimiento') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaNac" id="fechaNac" class="form-control">
+                                <input type="date" name="fechaNac" id="fechaNac" class="form-control" value="{{ old('fechaNac') }}">
+
+                                @if ($errors->has('fechaNac'))
+                                  <span class="text-danger">Ingrese una Fecha de Nacimiento válida</span>
+                                @endif
                             </div>
                         </div>
 
@@ -32,59 +40,74 @@
                             <label for="oficio" class="col-md-4 col-form-label text-md-right">{{ __('Oficio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="oficio" id="oficio" class="form-control">
+                                <input type="text" name="oficio" id="oficio" class="form-control" value="{{ old('oficio') }}">
+
+                                @if ($errors->has('oficio'))
+                                  <span class="text-danger">Ingrese un Oficio válido</span>
+                                @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="categoria" class="col-md-4 col-form-label text-md-right">{{ __('Categoria') }}</label>
+                            <label for="vitalicio" class="col-md-4 col-form-label text-md-right">{{ __('Vitalicio') }}</label>
 
                             <div class="col-md-6">
-                                <select name="categoria" id="categoria" class="form-control">
-                                  <option value="1">Cadete</option>
-                                  <option value="2">Activo</option>
-                                  <option value="3">Grupo Familiar</option>
-                                  <option value="4">Honorario</option>
+                                <select name="vitalicio" id="vitalicio" class="form-control">
+                                  <option value="n">No</option>
+                                  <option value="s">Si</option>
                                 </select>
+
+                                @if ($errors->has('vitalicio'))
+                                  <span class="text-danger">Seleccione una opción válida</span>
+                                @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="grupofamiliar" class="col-md-4 col-form-label text-md-right">{{ __('Grupo Familiar') }}</label>
+                            <label for="DNIPersona" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Socio') }}</label>
 
                             <div class="col-md-6">
-                              <select name="categoria" id="categoria" class="form-control">
+                                <input type="number" name="DNIPersona" id="DNIPersona" class="form-control" value="{{ old('DNIPersona') }}" required>
+
+                                @if ($errors->has('DNIPersona'))
+                                  <span class="text-danger">Ingrese un DNI válido de una persona cargada en el sistema</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="idGrupoFamiliar" class="col-md-4 col-form-label text-md-right">{{ __('Grupo Familiar') }}</label>
+
+                            <div class="col-md-6">
+                              <select name="idGrupoFamiliar" id="idGrupoFamiliar" class="form-control">
                                 <option value="0">No posee grupo familiar</option>
                                 @foreach ($grupos as $grupo)
                                   <option value="{{ $grupo->id }}">Titular: {{$grupo->socioTitular->persona->apellido." ".$grupo->SocioTitular->persona->nombres." - ".$grupo->socioTitular->persona->DNI}}</option>
                                 @endforeach
                               </select>
 
-                              @if ($errors->has('socio'))
+                              @if ($errors->has('idGrupoFamiliar'))
                                 <span class="text-danger">Ingrese un Socio Títular válido</span>
                               @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="deporte" class="col-md-4 col-form-label text-md-right">{{ __('Deporte') }}</label>
+                            <label for="idDeporte" class="col-md-4 col-form-label text-md-right">{{ __('Deporte') }}</label>
 
                             <div class="col-md-6">
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="deporte" id="futbol">
-                                <label class="form-check-label" for="futbol">
-                                  Futbol
-                                </label>
-                                <br>
-                                <input class="form-check-input" type="checkbox" name="deporte" id="volley">
-                                <label class="form-check-label" for="volley">
-                                  Volley
-                                </label>
-                                <br>
-                                <input class="form-check-input" type="checkbox" name="deporte" id="basquet">
-                                <label class="form-check-label" for="basquet">
-                                  Basquet
-                                </label>
+                                @foreach ($deportes as $deporte)
+                                  <input class="form-check-input" type="checkbox" name="idDeporte[]" id="{{ $deporte->nombre }}" value="{{ $deporte->id }}">
+                                  <label class="form-check-label" for="{{ $deporte->nombre }}">
+                                    {{ $deporte->nombre }}
+                                  </label>
+                                  <br>
+                                @endforeach
+
+                                @if ($errors->has('idDeporte'))
+                                  <span class="text-danger">Ingrese un Deporte válido</span>
+                                @endif
                               </div>
                             </div>
                         </div>

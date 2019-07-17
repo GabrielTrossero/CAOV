@@ -119,7 +119,7 @@ class DeporteController extends Controller
           'nombre' => [
             'required',
             'max:75',
-            Rule::unique('deporte')->ignore($request->id),
+            Rule::unique('deporte')->ignore($request->id)
           ]
         ]);
 

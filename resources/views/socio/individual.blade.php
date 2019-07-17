@@ -8,34 +8,56 @@
     <div class="card-body border">
       <table class="table">
         <tr>
-          <td><b>DNI</b></td>   <!-- la <b> es para poner en negrita -->
-          <td><b>Numero de Socio</b></td>
-          <td><b>Apellido</b></td>
-          <td><b>Nombres</b></td>
-          <td><b>Categoria</b></td>
-          <td><b>Oficio</b></td>
-          <td><b>Deportes</b></td>
-          <td><b>Grupo Familiar</b></td>
+          <th>DNI</th>
+          <th>Numero de Socio</th>
+          <th>Apellido</th>
+          <th>Nombres</th>
+          <th>Categoria</th>
+          <th>Oficio</th>
+          <th>Deportes</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Titular Grupo Familiar</th>
         </tr>
         <tr>
-          <td>40662158</td>
-          <td>1</td>
-          <td>Zapata</td>
-          <td>Juan Bautista</td>
-          <td>Honorario</td>
-          <td>Empleado publico</td>
+          <td>{{ $socio->persona->DNI }}</td>
+          <td>{{ $socio->numSocio }}</td>
+          <td>{{ $socio->persona->apellido }}</td>
+          <td>{{ $socio->persona->nombres }}</td>
+
+          @if ($socio->vitalicio == 's')
+            <td>{{ 'Vitalicio' }}</td>
+          @elseif ($socio->idGrupoFamiliar)
+            <td>{{ 'Grupo Familiar' }}</td>
+          @else
+            <td>{{ 'Activo' }}</td>
+          @endif
+
+          <td>{{ $socio->oficio }}</td>
           <td>
-            Hockey
-            <br>
-            Futbol
+            @foreach ($socio->deportes as $deporte)
+              {{ $deporte->nombre }}
+              <br>
+            @endforeach
           </td>
-          <td>Titular: Penka 39856235</td>
+          
+          <td>{{ $socio->fechaNac }}</td>
+
+          @if ($socio->grupoFamiliar)
+            <td>{{ $socio->grupoFamiliar->socioTitular->persona->apellido.
+                  ' '.$socio->grupoFamiliar->socioTitular->persona->nombres.
+                  ', '.$socio->grupoFamiliar->socioTitular->persona->DNI
+                }}
+            </td>
+          @else
+            <td></td>
+          @endif
+
         </tr>
       </table>
 
       <div class="card-footer">
 
-        <a style="text-decoration:none" href="{{ url('/socio/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/socio/edit/'.$socio->id) }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Socio
           </button>
@@ -44,7 +66,7 @@
         &nbsp;&nbsp;
         <form action="{{url('/socio/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
-          <input type="hidden" name="id" value="1">
+          <input type="hidden" name="id" value="{{ $socio->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
             Eliminar Socio
           </button>
