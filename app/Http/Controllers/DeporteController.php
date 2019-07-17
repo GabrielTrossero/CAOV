@@ -41,10 +41,17 @@ class DeporteController extends Controller
     {
         $deporte = new Deporte;
 
+        //mensaje de error que se mostrará por pantalla
+        $messages = [
+          'nombre.required' => 'Es necesario ingresar un Nombre.',
+          'nombre.max' => 'El Nombre no puede tener más de 75 caracteres.' ,
+          'nombre.unique' => 'Ya existe dicho Deporte.'
+        ];
+
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
           'nombre' => 'required|max:75|unique:deporte'
-        ]);
+        ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails())
@@ -114,6 +121,13 @@ class DeporteController extends Controller
      */
     public function update(Request $request)
     {
+        //mensaje de error que se mostrará por pantalla
+        $messages = [
+          'nombre.required' => 'Es necesario ingresar un Nombre.',
+          'nombre.max' => 'El Nombre no puede tener más de 75 caracteres.' ,
+          'nombre.unique' => 'Ya existe dicho Deporte.'
+        ];
+
         //valido los datos enviados
         $validacion = Validator::make($request->all(), [
           'nombre' => [
@@ -121,7 +135,7 @@ class DeporteController extends Controller
             'max:75',
             Rule::unique('deporte')->ignore($request->id)
           ]
-        ]);
+        ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails())
