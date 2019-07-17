@@ -17,9 +17,10 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}" required>
-                                @if( $errors->has('nombre'))
-                                  <span class="text-danger">Ingrese un nombre válido</span>
-                                @endif
+                                
+                                @foreach ($errors->get('nombre') as $message)
+                                  <span class="text-danger">{{$message}}</span>
+                                @endforeach
                             </div>
                         </div>
 
