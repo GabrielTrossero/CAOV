@@ -53,6 +53,21 @@ class SocioController extends Controller
         $persona = new Persona;
         $socioRetornado = new Socio;
 
+        //mensajes de error que se mostraran por pantalla
+        $messages = [
+          'numSocio.required' => 'Es necesario ingresar un Número de Socio.',
+          'numSocio.unique' => 'Ya existe un Socio con dicho número.',
+          'oficio.max' => 'La cantidad máxima de caracteres es 75.',
+          'vitalicio.required' => 'Ingrese una opción válida.',
+          'vitalicio.min' => 'Ingrese una opción válida.',
+          'vitalicio.max' => 'Ingrese una opción válida.',
+          'vitalicio.in' => 'Ingrese una opción válida.',
+          'DNIPersona.required' => 'Es necesario ingresar un DNI válido.',
+          'DNIPersona.min' => 'Es necesario ingresar un DNI válido.',
+          'DNIPersona.max' => 'Es necesario ingresar un DNI válido.',
+          'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
+        ];
+
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
         'numSocio' => 'required|unique:socio',
@@ -60,7 +75,7 @@ class SocioController extends Controller
         'vitalicio' => 'required|min:1|max:1|in:s,n',
         'DNIPersona' => 'required|min:8|max:8',
         'idGrupoFamiliar' => 'required'
-        ]);
+        ], $messages);
 
         //para que le asigne null si es que no pertenece a ningun grupo familiar
         if($request->idGrupoFamiliar == 0)
@@ -163,6 +178,21 @@ class SocioController extends Controller
      */
     public function update(Request $request)
     {
+      //mensajes de error que se mostraran por pantalla
+      $messages = [
+        'numSocio.required' => 'Es necesario ingresar un Número de Socio.',
+        'numSocio.unique' => 'Ya existe un Socio con dicho número.',
+        'oficio.max' => 'La cantidad máxima de caracteres es 75.',
+        'vitalicio.required' => 'Ingrese una opción válida.',
+        'vitalicio.min' => 'Ingrese una opción válida.',
+        'vitalicio.max' => 'Ingrese una opción válida.',
+        'vitalicio.in' => 'Ingrese una opción válida.',
+        'DNIPersona.required' => 'Es necesario ingresar un DNI válido.',
+        'DNIPersona.min' => 'Es necesario ingresar un DNI válido.',
+        'DNIPersona.max' => 'Es necesario ingresar un DNI válido.',
+        'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
+      ];
+
       //valido los datos ingresados
       $validacion = Validator::make($request->all(),[
       'numSocio' => [
@@ -173,7 +203,7 @@ class SocioController extends Controller
       'vitalicio' => 'required|min:1|max:1|in:s,n',
       'DNIPersona' => 'required|min:8|max:8',
       'idGrupoFamiliar' => 'required'
-      ]);
+      ], $messages);
 
       //para que le asigne null si es que no pertenece a ningun grupo familiar
       if($request->idGrupoFamiliar == 0)

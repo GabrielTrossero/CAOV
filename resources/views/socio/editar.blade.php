@@ -19,11 +19,11 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ $socio->numSocio }}" required>
-                            </div>
 
-                            @if ($errors->has('nomSocio'))
-                              <span class="text-danger">Ingrese un Número de Socio válido</span>
-                            @endif
+                                @foreach ($errors->get('numSocio') as $message)
+                                  <span class="text-danger">{{$message}}</span>
+                                @endforeach
+                            </div>
                         </div>
 
                         <div class="form-group row">
@@ -31,11 +31,11 @@
 
                             <div class="col-md-6">
                                 <input type="date" name="fechaNac" id="FechaNac" class="form-control" value="{{ $socio->fechaNac }}">
-                            </div>
 
-                            @if ($errors->has('fechaNac'))
-                              <span class="text-danger">Ingrese una Fecha de Nacimiento válida</span>
-                            @endif
+                                @if ($errors->has('fechaNac'))
+                                  <span class="text-danger">Ingrese una Fecha de Nacimiento válida</span>
+                                @endif
+                            </div>
                         </div>
 
                         <div class="form-group row">
@@ -43,11 +43,9 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="oficio" id="oficio" class="form-control" value="{{ $socio->oficio }}">
-                            </div>
 
-                            @if ($errors->has('oficio'))
-                              <span class="text-danger">Ingrese un Oficio válido</span>
-                            @endif
+                                <span class="text-danger">{{$errors->first('oficio')}}</span>
+                            </div>
                         </div>
 
                         <div class="form-group row">
@@ -64,21 +62,17 @@
                                   @endif
                                 </select>
 
-                                @if ($errors->has('vitalicio'))
-                                  <span class="text-danger">Seleccione una opción válida</span>
-                                @endif
+                                <span class="text-danger">{{$errors->first('vitalicio')}}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="DNIPersona" class="col-md-4 col-form-label text-md-right">{{ __('DNI de la Persona') }}</label>
+                            <label for="DNIPersona" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Persona') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="DNIPersona" id="DNIPersona" class="form-control" value="{{ $socio->persona->DNI }}" required>
 
-                                @if ($errors->has('DNIPersona'))
-                                  <span class="text-danger">Ingrese un DNI válido de una persona cargada en el sistema</span>
-                                @endif
+                                <span class="text-danger">{{$errors->first('DNIPersona')}}</span>
                             </div>
                         </div>
 
@@ -93,9 +87,7 @@
                                 @endforeach
                               </select>
 
-                              @if ($errors->has('idGrupoFamiliar'))
-                                <span class="text-danger">Ingrese un Socio Títular válido</span>
-                              @endif
+                              <span class="text-danger">{{$errors->first('idGrupoFamiliar')}}</span>
                             </div>
                         </div>
 
