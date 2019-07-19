@@ -49,6 +49,26 @@ class EmpleadoController extends Controller
     {
         $empleado = new User;
 
+        //mensajes de error que se mostraran por pantalla
+        $messages = [
+          'username.required' => 'Es necesario ingresar nombre de usuario.',
+          'username.unique' => 'Ya existe dicho nombre.',
+          'username.min' => 'El nombre debe contener al menos 8 caracteres.',
+          'username.max' => 'Ingrese un nombre de usuario válido.',
+          'email.email' => 'El Email no es único o válido.',
+          'email.unique' => 'El Email no es único o válido.',
+          'email.max' => 'El Email no es único o válido.',
+          'persona.required' => 'Es necesario seleccionar una Persona.',
+          'password.required' => 'Es necesario ingresar una Contraseña.',
+          'password.min' => 'La Contraseña debe tener como mínimo 8 caracteres.',
+          'password.max' => 'Ingrese una Contraseña válida.',
+          'passwordRepeat.required' => 'Es necesario repetir la Contraseña.',
+          'passwordRepeat.same' => 'La Contraseñas no coinciden.',
+          'passwordRepeat.min' => 'La Contraseña debe tener como mínimo 8 caracteres.',
+          'passwordRepeat.max' => 'Ingrese una Contraseña válida.',
+          'tipoUsuario.required' => 'Es necesario seleccionar un Tipo de Usuario.'
+        ];
+
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
           'username' => 'required|min:8|max:75|unique:users',
@@ -57,7 +77,7 @@ class EmpleadoController extends Controller
           'password' => 'required|min:8|max:80',
           'passwordRepeat' => 'required|min:8|max:80|same:password',
           'tipoUsuario' => 'required'
-        ]);
+        ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
@@ -137,6 +157,24 @@ class EmpleadoController extends Controller
      */
     public function update(Request $request)
     {
+        //mensajes de error que se mostraran por pantalla
+        $messages = [
+          'username.required' => 'Es necesario ingresar nombre de usuario.',
+          'username.unique' => 'Ya existe dicho nombre.',
+          'username.min' => 'El nombre debe contener al menos 8 caracteres.',
+          'username.max' => 'Ingrese un nombre de usuario válido.',
+          'email.email' => 'El Email no es único o válido.',
+          'email.unique' => 'El Email no es único o válido.',
+          'email.max' => 'El Email no es único o válido.',
+          'persona.required' => 'Es necesario seleccionar una Persona.',
+          'persona.required' => 'Es necesario seleccionar una Persona.',
+          'password.max' => 'Ingrese una Contraseña válida.',
+          'passwordRepeat.required_with' => 'Es necesario repetir la Contraseña.',
+          'passwordRepeat.same' => 'La Contraseñas no coinciden.',
+          'passwordRepeat.max' => 'Ingrese una Contraseña válida.',
+          'tipoUsuario.required' => 'Es necesario seleccionar un Tipo de Usuario.'
+        ];
+
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
           'username' => [
@@ -151,9 +189,10 @@ class EmpleadoController extends Controller
             Rule::unique('users')->ignore($request->id)
           ],
           'persona' => 'required',
-          'password' => 'required|min:8|max:80',
-          'passwordRepeat' => 'required|min:8|max:80|same:password'
-        ]);
+          'password' => 'max:80',
+          'passwordRepeat' => 'required_with:password|max:80|same:password',
+          'tipoUsuario' => 'required'
+        ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){

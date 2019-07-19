@@ -41,15 +41,32 @@ class PersonaController extends Controller
     {
         $persona = new Persona;
 
+        //mensajes de error que se mostraran por pantalla
+        $messages = [
+          'DNI.required' => 'Es necesario ingresar un DNI válido.',
+          'DNI.unique' => 'Ya existe una Persona con dicho DNI.',
+          'DNI.min' => 'Es necesario ingresar un DNI válido.',
+          'DNI.max' => 'Es necesario ingresar un DNI válido.',
+          'nombres.required' => 'Es necesario ingresar un Nombre.',
+          'nombres.max' => 'Ingrese Nombres válidos.',
+          'apellido.required' => 'Es necesario ingresar un Apellido.',
+          'apellido.max' => 'Ingrese un Apellido válido.',
+          'domicilio.max' => 'Ingrese un Domicilio válido.',
+          'telefono.max' => 'El número no puede tener más de 25 caracteres.',
+          'email.email' => 'El email no es único o válido',
+          'email.unique' => 'El email no es único o válido',
+          'email.max' => 'El email no es único o válido'
+        ];
+
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
           'DNI' => 'required|min:8|max:8|unique:persona',
           'nombres' => 'required|max:100',
           'apellido' => 'required|max:100',
-          'domicilio' => 'required|max:100',
+          'domicilio' => 'max:100',
           'telefono' => 'max:25',
           'email' => 'email|unique:persona|max:75'
-        ]);
+        ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
@@ -118,6 +135,23 @@ class PersonaController extends Controller
      */
     public function update(Request $request)
     {
+        //mensajes de error que se mostraran por pantalla
+        $messages = [
+          'DNI.required' => 'Es necesario ingresar un DNI válido.',
+          'DNI.unique' => 'Ya existe una Persona con dicho DNI.',
+          'DNI.min' => 'Es necesario ingresar un DNI válido.',
+          'DNI.max' => 'Es necesario ingresar un DNI válido.',
+          'nombres.required' => 'Es necesario ingresar un Nombre.',
+          'nombres.max' => 'Ingrese Nombres válidos.',
+          'apellido.required' => 'Es necesario ingresar un Apellido.',
+          'apellido.max' => 'Ingrese un Apellido válido.',
+          'domicilio.max' => 'Ingrese un Domicilio válido.',
+          'telefono.max' => 'El número no puede tener más de 25 caracteres.',
+          'email.email' => 'El email no es único o válido',
+          'email.unique' => 'El email no es único o válido',
+          'email.max' => 'El email no es único o válido'
+        ];
+
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
           'DNI' => [
@@ -136,7 +170,7 @@ class PersonaController extends Controller
             'max:75',
             Rule::unique('persona')->ignore($request->id),
           ]
-        ]);
+        ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){

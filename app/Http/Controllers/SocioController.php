@@ -57,7 +57,7 @@ class SocioController extends Controller
         $messages = [
           'numSocio.required' => 'Es necesario ingresar un Número de Socio.',
           'numSocio.unique' => 'Ya existe un Socio con dicho número.',
-          'oficio.max' => 'La cantidad máxima de caracteres es 75.',
+          'oficio.max' => 'Ingrese un oficio válido.',
           'vitalicio.required' => 'Ingrese una opción válida.',
           'vitalicio.min' => 'Ingrese una opción válida.',
           'vitalicio.max' => 'Ingrese una opción válida.',
@@ -182,7 +182,7 @@ class SocioController extends Controller
       $messages = [
         'numSocio.required' => 'Es necesario ingresar un Número de Socio.',
         'numSocio.unique' => 'Ya existe un Socio con dicho número.',
-        'oficio.max' => 'La cantidad máxima de caracteres es 75.',
+        'oficio.max' => 'Ingrese un oficio válido.',
         'vitalicio.required' => 'Ingrese una opción válida.',
         'vitalicio.min' => 'Ingrese una opción válida.',
         'vitalicio.max' => 'Ingrese una opción válida.',
@@ -192,6 +192,7 @@ class SocioController extends Controller
         'DNIPersona.max' => 'Es necesario ingresar un DNI válido.',
         'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
       ];
+
 
       //valido los datos ingresados
       $validacion = Validator::make($request->all(),[

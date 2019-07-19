@@ -17,9 +17,10 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="username" id="username" class="form-control" value="{{ old('username') }}" required>
-                                @if ($errors->has('username'))
-                                  <span class="text-danger">Ingrese un Nombre de Usuario válido</span>
-                                @endif
+
+                                @foreach ($errors->get('username') as $message)
+                                  <span class="text-danger">{{$message}}</span>
+                                @endforeach
                             </div>
                         </div>
 
@@ -28,9 +29,8 @@
 
                             <div class="col-md-6">
                                 <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
-                                @if ($errors->has('email'))
-                                  <span class="text-danger">Ingrese un email válido</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('email')}}</span>
                             </div>
                         </div>
 
@@ -39,16 +39,14 @@
 
                             <div class="col-md-6">
                                 <select name="persona" id="persona" class="form-control" required>
-                                  <option value="0">Seleccionar Socio</option>
-
+                                  
                                   @foreach ($personas as $persona)
                                     <option value="{{ $persona->id }}">{{ $persona->DNI." - ".$persona->nombres." ".$persona->apellido }}</option>
                                   @endforeach
 
                                 </select>
-                                @if ($errors->has('persona'))
-                                  <span class="text-danger">Ingrese una Persona válida</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('persona')}}</span>
                             </div>
                         </div>
 
@@ -57,9 +55,8 @@
 
                             <div class="col-md-6">
                                 <input type="password" name="password" id="password" class="form-control" required>
-                                @if ($errors->has('password'))
-                                  <span class="text-danger">La Contraseña no es válida o no coincide con la confirmación</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('password')}}</span>
                             </div>
                         </div>
 
@@ -68,9 +65,8 @@
 
                             <div class="col-md-6">
                                 <input type="password" name="passwordRepeat" id="passwordRepeat" class="form-control" required>
-                                @if ($errors->has('passwordRepeat'))
-                                  <span class="text-danger">La Contraseña no es válida o no coincide con la confirmación</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('passwordRepeat')}}</span>
                             </div>
                         </div>
 
@@ -85,9 +81,8 @@
                                   @endforeach
 
                                 </select>
-                                @if ($errors->has('tipoUsuario'))
-                                  <span class="text-danger">Ingrese un Tipo de Usuario válido</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('tipoUsuario')}}</span>
                             </div>
                         </div>
 

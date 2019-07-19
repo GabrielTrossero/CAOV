@@ -17,11 +17,9 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') }}" required>
-                                @if ($errors->has('DNI'))
-                                  <span class="text-danger">Ingrese un DNI válido</span>
-                                @endif
-                            </div>
 
+                                <span class="text-danger">{{$errors->first('DNI')}}</span>
+                            </div>
                         </div>
 
                         <div class="form-group row">
@@ -29,9 +27,8 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="nombres" id="nombres" class="form-control" value="{{ old('nombres') }}" required>
-                                @if ($errors->has('nombres'))
-                                  <span class="text-danger">Ingrese un nombre válido</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('nombres')}}</span>
                             </div>
 
                         </div>
@@ -41,9 +38,8 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="apellido" id="apellido" class="form-control" value="{{ old('apellido') }}" required>
-                                @if ($errors->has('apellido'))
-                                  <span class="text-danger">Ingrese un apellido válido</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('apellido')}}</span>
                             </div>
 
                         </div>
@@ -52,10 +48,9 @@
                             <label for="domicilio" class="col-md-4 col-form-label text-md-right">{{ __('Domicilio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="domicilio" id="domicilio" class="form-control" value="{{ old('domicilio') }}" required>
-                                @if ($errors->has('domicilio'))
-                                  <span class="text-danger">Ingrese un domicilio válido</span>
-                                @endif
+                                <input type="text" name="domicilio" id="domicilio" class="form-control" value="{{ old('domicilio') }}">
+
+                                <span class="text-danger">{{$errors->first('domicilio')}}</span>
                             </div>
 
                         </div>
@@ -65,9 +60,8 @@
 
                             <div class="col-md-6">
                                 <input type="tel" name="telefono" id="telefono" class="form-control" value="{{ old('telefono') }}">
-                                @if ($errors->has('telefono'))
-                                  <span class="text-danger">Ingrese un telefono válido</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('telefono')}}</span>
                             </div>
 
                         </div>
@@ -77,9 +71,8 @@
 
                             <div class="col-md-6">
                                 <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}">
-                                @if ($errors->has('email'))
-                                  <span class="text-danger">Ingrese un email válido</span>
-                                @endif
+
+                                <span class="text-danger">{{$errors->first('email')}}</span>
                             </div>
 
                         </div>

@@ -20,9 +20,7 @@
                             <div class="col-md-6">
                                 <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ $socio->numSocio }}" required>
 
-                                @foreach ($errors->get('numSocio') as $message)
-                                  <span class="text-danger">{{$message}}</span>
-                                @endforeach
+                                <span class="text-danger">{{$errors->first('numSocio')}}</span>
                             </div>
                         </div>
 
