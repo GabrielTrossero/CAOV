@@ -18,7 +18,7 @@
                             <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="nombre" id="nombre" class="form-control" value=" {{ $deporte->nombre }}" required>
+                                <input type="text" name="nombre" id="nombre" class="form-control" value=" {{ $deporte->nombre }}" maxlength="75" required>
 
                                 @foreach ($errors->get('nombre') as $message)
                                   <span class="text-danger">{{$message}}</span>

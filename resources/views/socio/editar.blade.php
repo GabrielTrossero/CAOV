@@ -40,7 +40,7 @@
                             <label for="oficio" class="col-md-4 col-form-label text-md-right">{{ __('Oficio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="oficio" id="oficio" class="form-control" value="{{ $socio->oficio }}">
+                                <input type="text" name="oficio" id="oficio" class="form-control" value="{{ $socio->oficio }}" maxlength="80">
 
                                 <span class="text-danger">{{$errors->first('oficio')}}</span>
                             </div>
@@ -65,12 +65,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="DNIPersona" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Persona') }}</label>
+                            <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Persona') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNIPersona" id="DNIPersona" class="form-control" value="{{ $socio->persona->DNI }}" required>
+                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ $socio->persona->DNI }}" min="0" required>
 
-                                <span class="text-danger">{{$errors->first('DNIPersona')}}</span>
+                                <span class="text-danger">{{$errors->first('DNI')}}</span>
                             </div>
                         </div>
 

@@ -62,18 +62,28 @@ class SocioController extends Controller
           'vitalicio.min' => 'Ingrese una opción válida.',
           'vitalicio.max' => 'Ingrese una opción válida.',
           'vitalicio.in' => 'Ingrese una opción válida.',
-          'DNIPersona.required' => 'Es necesario ingresar un DNI válido.',
-          'DNIPersona.min' => 'Es necesario ingresar un DNI válido.',
-          'DNIPersona.max' => 'Es necesario ingresar un DNI válido.',
+          'DNI.required' => 'Es necesario ingresar un DNI válido.',
+          'DNI.min' => 'Es necesario ingresar un DNI válido.',
+          'DNI.max' => 'Es necesario ingresar un DNI válido.',
+          'DNI.exists' => 'Es necesario que dicho Socio esté cargado como Persona.',
           'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
         ];
+
+        //obtengo la persona correspondiente al DNI ingresado
+        $persona = Persona::where('DNI', $request->DNI)->first();
 
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
         'numSocio' => 'required|unique:socio',
         'oficio' => 'max:75',
         'vitalicio' => 'required|min:1|max:1|in:s,n',
-        'DNIPersona' => 'required|min:8|max:8',
+        'DNI' => ['required',
+          'min:8',
+          'max:8',
+          //hace select count(*) from persona where DNI = $request->DNI and id = $persona->id
+          //para verificar que exista dicha persona
+          Rule::exists('persona')->where('id', $persona->id)
+        ],
         'idGrupoFamiliar' => 'required'
         ], $messages);
 
@@ -91,7 +101,6 @@ class SocioController extends Controller
         $socio->fechaNac = $request->fechaNac;
         $socio->oficio = $request->oficio;
         $socio->vitalicio = $request->vitalicio;
-        $persona = Persona::where('DNI', $request->DNIPersona)->first();
         $socio->idPersona = $persona->id;
         $socio->idGrupoFamiliar = $request->idGrupoFamiliar;
 
@@ -187,12 +196,16 @@ class SocioController extends Controller
         'vitalicio.min' => 'Ingrese una opción válida.',
         'vitalicio.max' => 'Ingrese una opción válida.',
         'vitalicio.in' => 'Ingrese una opción válida.',
-        'DNIPersona.required' => 'Es necesario ingresar un DNI válido.',
-        'DNIPersona.min' => 'Es necesario ingresar un DNI válido.',
-        'DNIPersona.max' => 'Es necesario ingresar un DNI válido.',
+        'DNI.required' => 'Es necesario ingresar un DNI válido.',
+        'DNI.min' => 'Es necesario ingresar un DNI válido.',
+        'DNI.max' => 'Es necesario ingresar un DNI válido.',
+        'DNI.exists' => 'Es necesario que dicho Socio esté cargado como Persona.',
         'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
       ];
 
+      //para cargar el id de la persona a traves del DNI ingresado
+      $persona = new Persona;
+      $persona = Persona::where('DNI', $request->DNI)->first();
 
       //valido los datos ingresados
       $validacion = Validator::make($request->all(),[
@@ -202,7 +215,13 @@ class SocioController extends Controller
       ],
       'oficio' => 'max:75',
       'vitalicio' => 'required|min:1|max:1|in:s,n',
-      'DNIPersona' => 'required|min:8|max:8',
+      'DNI' => ['required',
+        'min:8',
+        'max:8',
+        //hace select count(*) from persona where DNI = $request->DNI and id = $persona->id
+        //para verificar que exista dicha persona
+        Rule::exists('persona')->where('id', $persona->id)
+      ],
       'idGrupoFamiliar' => 'required'
       ], $messages);
 
@@ -214,10 +233,6 @@ class SocioController extends Controller
       if($validacion->fails()){
         return redirect()->back()->withInput()->withErrors($validacion->errors());
       }
-
-      //para cargar el id de la persona a traves del DNI ingresado
-      $persona = new Persona;
-      $persona = Persona::where('DNI', $request->DNIPersona)->first();
 
       Socio::where('id', $request->id)
             ->update([

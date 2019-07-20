@@ -16,7 +16,7 @@
                             <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') }}" required>
+                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('DNI')}}</span>
                             </div>
@@ -26,7 +26,7 @@
                             <label for="nombres" class="col-md-4 col-form-label text-md-right">{{ __('Nombres') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="nombres" id="nombres" class="form-control" value="{{ old('nombres') }}" required>
+                                <input type="text" name="nombres" id="nombres" class="form-control" value="{{ old('nombres') }}" maxlength="100" required>
 
                                 <span class="text-danger">{{$errors->first('nombres')}}</span>
                             </div>
@@ -37,7 +37,7 @@
                             <label for="apellido" class="col-md-4 col-form-label text-md-right">{{ __('Apellido') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="apellido" id="apellido" class="form-control" value="{{ old('apellido') }}" required>
+                                <input type="text" name="apellido" id="apellido" class="form-control" value="{{ old('apellido') }}" maxlength="100" required>
 
                                 <span class="text-danger">{{$errors->first('apellido')}}</span>
                             </div>
@@ -48,7 +48,7 @@
                             <label for="domicilio" class="col-md-4 col-form-label text-md-right">{{ __('Domicilio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="domicilio" id="domicilio" class="form-control" value="{{ old('domicilio') }}">
+                                <input type="text" name="domicilio" id="domicilio" class="form-control" value="{{ old('domicilio') }}" maxlength="100">
 
                                 <span class="text-danger">{{$errors->first('domicilio')}}</span>
                             </div>

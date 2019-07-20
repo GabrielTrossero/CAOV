@@ -16,7 +16,7 @@
                             <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Nombre de Usuario') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="username" id="username" class="form-control" value="{{ old('username') }}" required>
+                                <input type="text" name="username" id="username" class="form-control" value="{{ old('username') }}" minlength="8" maxlength="75" required>
 
                                 @foreach ($errors->get('username') as $message)
                                   <span class="text-danger">{{$message}}</span>
@@ -28,7 +28,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Email') }}</label>
 
                             <div class="col-md-6">
-                                <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
+                                <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" maxlength="75" required>
 
                                 <span class="text-danger">{{$errors->first('email')}}</span>
                             </div>
@@ -39,7 +39,7 @@
 
                             <div class="col-md-6">
                                 <select name="persona" id="persona" class="form-control" required>
-                                  
+
                                   @foreach ($personas as $persona)
                                     <option value="{{ $persona->id }}">{{ $persona->DNI." - ".$persona->nombres." ".$persona->apellido }}</option>
                                   @endforeach
@@ -54,7 +54,7 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
 
                             <div class="col-md-6">
-                                <input type="password" name="password" id="password" class="form-control" required>
+                                <input type="password" name="password" id="password" class="form-control" minlength="8" maxlength="80" required>
 
                                 <span class="text-danger">{{$errors->first('password')}}</span>
                             </div>
@@ -64,7 +64,7 @@
                             <label for="passwordRepeat" class="col-md-4 col-form-label text-md-right">{{ __('Repetir Contraseña') }}</label>
 
                             <div class="col-md-6">
-                                <input type="password" name="passwordRepeat" id="passwordRepeat" class="form-control" required>
+                                <input type="password" name="passwordRepeat" id="passwordRepeat" class="form-control" minlength="8" maxlength="80" required>
 
                                 <span class="text-danger">{{$errors->first('passwordRepeat')}}</span>
                             </div>

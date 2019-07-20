@@ -162,7 +162,7 @@ class PersonaController extends Controller
           ],
           'nombres' => 'required|max:100',
           'apellido' => 'required|max:100',
-          'domicilio' => 'required|max:100',
+          'domicilio' => 'max:100',
           'telefono' => 'max:25',
           'email' => [
             'required',
