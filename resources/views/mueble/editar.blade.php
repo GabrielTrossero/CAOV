@@ -12,13 +12,25 @@
                     <form method="POST" action="{{ url('/mueble/edit') }}">
                         {{ csrf_field() }}
 
-                        <input type="hidden" name="id" value="1">
+                        <input type="hidden" name="id" value="{{ $mueble->id }}">
 
                         <div class="form-group row">
                             <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="nombre" id="nombre" class="form-control" value="Sillas">
+                                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ $mueble->nombre }}" maxlength="75" required>
+
+                                <span class="text-danger">{{$errors->first('nombre')}}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="cantidadActual" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad Actual') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="number" name="cantidadActual" id="cantidadActual" class="form-control" value="{{ $mueble->cantidad }}" disabled>
+
+                                <span class="text-danger">{{$errors->first('cantidadActual')}}</span>
                             </div>
                         </div>
 
@@ -27,18 +39,22 @@
 
                             <div class="col-md-6">
                                 <select name="accionCantidad" id="accionCantidad" class="form-control">
-                                  <option value="0">Ninguna</option>
-                                  <option value="1">Sumar cantidad</option>
-                                  <option value="2">Restar cantidad</option>
+                                  <option value="0">Ninguna acción</option>
+                                  <option value="1">Restar cantidad</option>
+                                  <option value="2">Aumentar cantidad</option>
                                 </select>
+
+                                <span class="text-danger">{{$errors->first('accionCantidad')}}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="cantidad" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad') }}</label>
+                            <label for="cantidadModificar" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="cantidad" id="cantidad" class="form-control" value="100">
+                                <input type="number" name="cantidadModificar" id="cantidadModificar" class="form-control" min="1">
+
+                                <span class="text-danger">{{$errors->first('cantidadModificar')}}</span>
                             </div>
                         </div>
 

@@ -8,18 +8,18 @@
     <div class="card-body border">
       <table class="table">
         <tr>
-          <td><b>Nombre</b></td>
-          <td><b>Cantidad</b></td>   <!-- la <b> es para poner en negrita -->
+          <th>Nombre</th>
+          <th>Cantidad</th>
         </tr>
         <tr>
-          <td>Sillas</td>
-          <td>100</td>
+          <td>{{ $mueble->nombre }}</td>
+          <td>{{ $mueble->cantidad }}</td>
         </tr>
       </table>
 
       <div class="card-footer">
 
-        <a style="text-decoration:none" href="{{ url('/mueble/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/mueble/edit/'.$mueble->id) }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Mueble
           </button>
@@ -28,7 +28,7 @@
         &nbsp;&nbsp;
         <form action="{{url('/mueble/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
-          <input type="hidden" name="id" value="1">
+          <input type="hidden" name="id" value="{{ $mueble->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
             Eliminar Mueble
           </button>

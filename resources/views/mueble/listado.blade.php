@@ -17,21 +17,15 @@
           </tr>
         </thead>
           <tbody>
-          <tr>
-            <td>Sillas</td>
-            <td>200</td>
-            <td><a href="{{ url('/mueble/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>Mesas</td>
-            <td>20</td>
-            <td><a href="{{ url('/mueble/show/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>Caballetes</td>
-            <td>40</td>
-            <td><a href="{{ url('/mueble/show/'.'3') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
+            @foreach ($muebles as $mueble)
+
+              <tr>
+                <td>{{ $mueble->nombre }}</td>
+                <td>{{ $mueble->cantidad }}</td>
+                <td><a href="{{ url('/mueble/show/'.$mueble->id) }}"> <i class="fas fa-plus"></i></a> </td>
+              </tr>
+
+            @endforeach
         </tbody>
       </table>
     </div>
