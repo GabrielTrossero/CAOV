@@ -12,13 +12,15 @@
                     <form method="POST" action="{{ url('/inmueble/edit') }}">
                         {{ csrf_field() }}
 
-                        <input type="hidden" name="id" value="1">
+                        <input type="hidden" name="id" value="{{ $inmueble->id }}">
 
                         <div class="form-group row">
                             <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="nombre" id="nombre" class="form-control" value="SUM">
+                                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ $inmueble->nombre }}" maxlength="75" required>
+
+                                <span class="text-danger">{{$errors->first('nombre')}}</span>
                             </div>
                         </div>
 
@@ -26,7 +28,7 @@
                             <label for="descripcion" class="col-md-4 col-form-label text-md-right">{{ __('Descripción') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="descripcion" id="descripcion" class="form-control" value="Capacidad para 100 personas">
+                                <input type="text" name="descripcion" id="descripcion" class="form-control" value="{{ $inmueble->descripcion }}" maxlength="75">
                             </div>
                         </div>
 

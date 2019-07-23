@@ -17,16 +17,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Cancha</td>
-            <td>150 X 30 metros</td>
-            <td><a href="{{ url('/inmueble/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>SUM</td>
-            <td>Capacidad para 100 personas</td>
-            <td><a href="{{ url('/inmueble/show/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
+          @foreach ($inmuebles as $inmueble)
+            <tr>
+              <td>{{ $inmueble->nombre }}</td>
+              <td>{{ $inmueble->descripcion }}</td>
+              <td><a href="{{ url('/inmueble/show/'.$inmueble->id) }}"> <i class="fas fa-plus"></i></a> </td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>

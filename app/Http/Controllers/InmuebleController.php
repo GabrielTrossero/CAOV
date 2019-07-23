@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use App\Inmueble;
 
 class InmuebleController extends Controller
 {
@@ -24,6 +27,7 @@ class InmuebleController extends Controller
      */
     public function create()
     {
+        //redirijo a la vista para agregar un inmueble
         return view('inmueble.agregar');
     }
 
@@ -35,7 +39,34 @@ class InmuebleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $inmueble = new Inmueble;
+
+      //mensajes de error que se mostraran por pantalla
+      $messages = [
+        'nombre.required' => 'Es necesario ingresar un Nombre.',
+        'nombre.max' => 'Es necesario ingresar un Nombre válido.',
+        'nombre.unique' => 'Ya existe un Inmueble con dicho Nombre.',
+        'descripcion.max' => 'La Descripción no puede ser tan extensa.'
+      ];
+
+      //valido los datos ingresados
+      $validacion = Validator::make($request->all(), [
+        'nombre' => 'required|max:75|unique:inmueble',
+        'descripcion' => 'max:75'
+      ], $messages);
+
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails()){
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      //almaceno la persona
+      $inmueble->create($request->all());
+
+      $inmuebleRetornado = Inmueble::where('nombre', $request->nombre)->first();
+
+      //redirijo para mostrar el mueble ingresado
+      return redirect()->action('InmuebleController@getShowId', $inmuebleRetornado->id);
     }
 
     /**
@@ -45,7 +76,11 @@ class InmuebleController extends Controller
      */
     public function getShow()
     {
-      return view('inmueble.listado');
+        //busco todas los inmuebles
+        $inmuebles = Inmueble::all();
+
+        //redirijo a la vista para listar todos los inmuebles pasando el array 'inmuebles'
+        return view('inmueble.listado' , compact('inmuebles'));
     }
 
     /**
@@ -56,7 +91,11 @@ class InmuebleController extends Controller
      */
     public function getShowId($id)
     {
-        return view('inmueble.individual');
+        //busco el inmueble
+        $inmueble = Inmueble::find($id);
+
+        //redirijo a la vista individual con los datos del inmueble
+        return view('inmueble.individual' , ['inmueble' => $inmueble]);
     }
 
     /**
@@ -67,7 +106,11 @@ class InmuebleController extends Controller
      */
     public function edit($id)
     {
-        return view('inmueble.editar');
+        //busco el registro
+        $inmueble = Inmueble::find($id);
+
+        //redirijo al formulario de edicion con los datos del inmueble
+        return view('inmueble.editar' , ['inmueble' => $inmueble]);
     }
 
     /**
@@ -79,7 +122,41 @@ class InmuebleController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        //mensajes de error que se mostraran por pantalla
+        $messages = [
+          'nombre.required' => 'Es necesario ingresar un Nombre.',
+          'nombre.max' => 'Es necesario ingresar un Nombre válido.',
+          'nombre.unique' => 'Ya existe un Inmueble con dicho Nombre.',
+          'descripcion.max' => 'La Descripción no puede ser tan extensa.'
+        ];
+
+        //valido los datos ingresados
+        $validacion = Validator::make($request->all(), [
+          'nombre' => [
+            'required',
+            'max:75',
+            Rule::unique('inmueble')->ignore($request->id)
+          ],
+          'descripcion' => 'max:75'
+        ], $messages);
+
+        //si la validacion falla vuelvo hacia atras con los errores
+        if($validacion->fails()){
+          return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+        //busco el registro
+        $inmueble = Inmueble::find($request->id);
+
+        //actualizo dicho registro
+        Inmueble::where('id', $request->id)
+              ->update([
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion
+              ]);
+
+        //retorno a la vista el socio actualizado
+        return redirect()->action('InmuebleController@getShowId', $request->id);
     }
 
     /**
@@ -88,8 +165,12 @@ class InmuebleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        //elimino el registro con tal id
+        $inmueble = Inmueble::destroy($request->id);
+
+        //redirijo al listado
+        return redirect()->action('InmuebleController@getShow');
     }
 }

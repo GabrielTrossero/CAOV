@@ -8,18 +8,18 @@
     <div class="card-body border">
       <table class="table">
         <tr>
-          <td><b>Nombre</b></td>
-          <td><b>Descripción</b></td>   <!-- la <b> es para poner en negrita -->
+          <th>Nombre</th>
+          <th>Descripción</th>
         </tr>
         <tr>
-          <td>Cancha</td>
-          <td>150 X 30 metros</td>
+          <td>{{ $inmueble->nombre }}</td>
+          <td>{{ $inmueble->descripcion }}</td>
         </tr>
       </table>
 
       <div class="card-footer">
 
-        <a style="text-decoration:none" href="{{ url('/inmueble/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/inmueble/edit/'.$inmueble->id) }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Inmueble
           </button>
@@ -28,7 +28,7 @@
         &nbsp;&nbsp;
         <form action="{{url('/inmueble/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
-          <input type="hidden" name="id" value="1">
+          <input type="hidden" name="id" value="{{ $inmueble->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
             Eliminar Inmueble
           </button>

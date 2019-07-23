@@ -46,7 +46,7 @@ class MuebleController extends Controller
           'nombre.required' => 'Es necesario ingresar un Nombre.',
           'nombre.max' => 'Es necesario ingresar un Nombre válido.',
           'nombre.unique' => 'Ya existe un Mueble con dicho Nombre.',
-          'contidad.required' => 'Es necesario ingresar una Cantidad.'
+          'cantidad.required' => 'Es necesario ingresar una Cantidad.'
         ];
 
         //valido los datos ingresados
