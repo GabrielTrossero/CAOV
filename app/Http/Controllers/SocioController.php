@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\GrupoFamiliar;
@@ -11,6 +12,7 @@ use App\Deporte;
 use App\Socio;
 use App\SocioDeporte;
 use App\Persona;
+use Carbon\Carbon;
 
 class SocioController extends Controller
 {
@@ -126,6 +128,20 @@ class SocioController extends Controller
     }
 
     /**
+     * calcula la edad del socio ingresado por parametro
+     * @param  App\Socio $socio
+     * @return App\Socio
+     */
+    private function calculaEdad($socio)
+    {
+        //asigna al atributo edad del socio su edad calculada a partir de su fecha de nacimiento
+        $socio->edad = Carbon::parse($socio->fechaNac)->age;
+
+        //retorna al socio con su edad
+        return $socio;
+    }
+
+    /**
      * Display the resource list
      *
      * @return \Illuminate\Http\Response
@@ -134,6 +150,11 @@ class SocioController extends Controller
     {
         //tomo todos los socios
         $socios = Socio::all();
+
+        //le agrego a cada socio su edad
+        foreach ($socios as $socio) {
+          $socio = $this->calculaEdad($socio);
+        }
 
         //los envio a la vista
         return view('socio.listado', compact('socios'));
@@ -149,6 +170,9 @@ class SocioController extends Controller
     {
         //busco el socio
         $socio = Socio::find($id);
+
+        //calculo la edad del socio
+        $socio = $this->calculaEdad($socio);
 
         //se lo envío a la vista
         return view('socio.individual', ['socio' => $socio]);
