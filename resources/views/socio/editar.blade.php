@@ -28,11 +28,9 @@
                             <label for="fechaNac" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Nacimiento') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaNac" id="FechaNac" class="form-control" value="{{ $socio->fechaNac }}">
+                                <input type="date" name="fechaNac" id="FechaNac" class="form-control" value="{{ $socio->fechaNac }}" required>
 
-                                @if ($errors->has('fechaNac'))
-                                  <span class="text-danger">Ingrese una Fecha de Nacimiento válida</span>
-                                @endif
+                                <span class="text-danger">{{$errors->first('fechaNac')}}</span>
                             </div>
                         </div>
 

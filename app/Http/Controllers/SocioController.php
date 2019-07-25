@@ -59,6 +59,7 @@ class SocioController extends Controller
         $messages = [
           'numSocio.required' => 'Es necesario ingresar un Número de Socio.',
           'numSocio.unique' => 'Ya existe un Socio con dicho número.',
+          'fechaNac.required' => 'Es necesario ingresar la Fecha de Nacimiento.',
           'oficio.max' => 'Ingrese un oficio válido.',
           'vitalicio.required' => 'Ingrese una opción válida.',
           'vitalicio.min' => 'Ingrese una opción válida.',
@@ -77,6 +78,7 @@ class SocioController extends Controller
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
         'numSocio' => 'required|unique:socio',
+        'fechaNac' => 'required',
         'oficio' => 'max:75',
         'vitalicio' => 'required|min:1|max:1|in:s,n',
         'DNI' => ['required',
@@ -215,6 +217,7 @@ class SocioController extends Controller
       $messages = [
         'numSocio.required' => 'Es necesario ingresar un Número de Socio.',
         'numSocio.unique' => 'Ya existe un Socio con dicho número.',
+        'fechaNac.required' => 'Es necesario ingresar la Fecha de Nacimiento.',
         'oficio.max' => 'Ingrese un oficio válido.',
         'vitalicio.required' => 'Ingrese una opción válida.',
         'vitalicio.min' => 'Ingrese una opción válida.',
