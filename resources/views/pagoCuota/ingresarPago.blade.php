@@ -12,11 +12,15 @@
                     <form method="POST" action="{{ url('/pagocuota/pago') }}">
                         {{ csrf_field() }}
 
+                        <input type="hidden" name="id" value="{{ $socio->id }}">
+
                         <div class="form-group row">
                             <label for="fechaPago" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Pago') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaPago" id="fechaPago" class="form-control">
+                                <input type="date" name="fechaPago" id="fechaPago" class="form-control" value="{{ old('fechaPago') }}" required>
+
+                                <span class="text-danger">{{$errors->first('fechaPago')}}</span>
                             </div>
                         </div>
 
@@ -24,7 +28,9 @@
                             <label for="fechaMesAnio" class="col-md-4 col-form-label text-md-right">{{ __('Mes y Año correspondinte') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaMesAnio" id="fechaMesAnio" class="form-control">
+                                <input type="date" name="fechaMesAnio" id="fechaMesAnio" class="form-control" value="{{ old('fechaMesAnio') }}" required>
+
+                                <span class="text-danger">{{$errors->first('fechaMesAnio')}}</span>
                             </div>
                         </div>
 
@@ -34,20 +40,23 @@
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control">
                                   <option value="1">Efectivo</option>
-                                  <option value="2">Tarjeta</option>
                                 </select>
+
+                                <span class="text-danger">{{$errors->first('medioPago')}}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="tipo" class="col-md-4 col-form-label text-md-right">{{ __('Tipo') }}</label>
+                            <label for="tipo" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Pago realizado') }}</label>
 
                             <div class="col-md-6">
                                 <select name="tipo" id="tipo" class="form-control">
-                                  <option value="1">Mensual</option>
-                                  <option value="2">Semestral</option>
-                                  <option value="3">Anual</option>
+                                  <option value="m">Mensual</option>
+                                  <option value="s">Semestral</option>
+                                  <option value="a">Anual</option>
                                 </select>
+
+                                <span class="text-danger">{{$errors->first('tipo')}}</span>
                             </div>
                         </div>
 

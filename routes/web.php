@@ -90,6 +90,7 @@ Route::group(['middleware' => 'auth'], function()
         Route::get('/', 'CuotaController@index');
         Route::get('createMontoCuota', 'CuotaController@createMontoCuota');
         Route::post('createMontoCuota', 'CuotaController@storeMontoCuota');
+        Route::get('showMontoCuota', 'CuotaController@getShowMontoCuota');
         Route::get('show', 'CuotaController@getShow');
         Route::get('show/{id}', 'CuotaController@getShowId');
         Route::get('edit/{id}', 'CuotaController@edit');

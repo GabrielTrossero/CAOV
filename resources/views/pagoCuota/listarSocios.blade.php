@@ -21,51 +21,38 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>40566858</td>
-            <td>1</td>
-            <td>Ricle</td>
-            <td>Joaquin</td>
-            <td>Activo</td>
-            <td>Enero</td>
-            <td>
-              <a href="{{ url('/pagocuota/pago/'.'1') }}">
-                <button type="button" class="btn btn-primary tam_letra_small">
-                  Pagar
-                </button>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>43568695</td>
-            <td>2</td>
-            <td>Lopez</td>
-            <td>Anibal</td>
-            <td>Activo</td>
-            <td>Enero</td>
-            <td>
-              <a href="{{ url('/pagocuota/pago/'.'1') }}">
-                <button type="button" class="btn btn-primary tam_letra_small">
-                  Pagar
-                </button>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>23568954</td>
-            <td>3</td>
-            <td>Stallman</td>
-            <td>Richard</td>
-            <td>Grupo Familiar</td>
-            <td>Julio</td>
-            <td>
-              <a href="{{ url('/pagocuota/pago/'.'1') }}">
-                <button type="button" class="btn btn-primary tam_letra_small">
-                  Pagar
-                </button>
-              </a>
-            </td>
-          </tr>
+          @foreach ($socios as $socio)
+            @if (($socio->vitalicio == 'n') && ((!$socio->idGrupoFamiliar) || ($socio->id == $socio->grupoFamiliar->titular)))
+              <tr>
+                <td>{{ $socio->persona->DNI }}</td>
+                <td>{{ $socio->numSocio }}</td>
+                <td>{{ $socio->persona->apellido }}</td>
+                <td>{{ $socio->persona->nombres }}</td>
+
+                @if ($socio->vitalicio == 's')
+                  <td>{{ 'Vitalicio' }}</td>
+                @elseif ($socio->idGrupoFamiliar)
+                  <td>{{ 'Grupo Familiar' }}</td>
+                @else
+                  <td>{{ 'Activo' }}</td>
+                @endif
+
+                <td>
+                  @foreach ($socio->comprobantesDeCuotas as $comprobante)
+                    {{date("m/Y", strtotime($comprobante->fechaMesAnio))}}<!arreglar->
+                  @endforeach
+                </td>
+
+                <td>
+                  <a href="{{ url('/pagocuota/pago/'.$socio->id) }}">
+                    <button type="button" class="btn btn-primary tam_letra_small">
+                      Pagar
+                    </button>
+                  </a>
+                </td>
+              </tr>
+            @endif
+          @endforeach
         </tbody>
       </table>
     </div>
