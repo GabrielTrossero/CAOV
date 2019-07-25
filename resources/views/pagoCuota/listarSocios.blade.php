@@ -37,11 +37,11 @@
                   <td>{{ 'Activo' }}</td>
                 @endif
 
-                <td>
-                  @foreach ($socio->comprobantesDeCuotas as $comprobante)
-                    {{date("m/Y", strtotime($comprobante->fechaMesAnio))}}<!arreglar->
-                  @endforeach
-                </td>
+                @if ($socio->ultimoMesPagado)
+                  <td>{{date("m/Y", strtotime($socio->ultimoMesPagado)) }}</td>
+                @else
+                  <td></td>
+                @endif
 
                 <td>
                   <a href="{{ url('/pagocuota/pago/'.$socio->id) }}">

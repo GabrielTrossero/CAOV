@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\MontoCuota;
 use App\ComprobanteCuota;
 use App\Socio;
+use Carbon\Carbon;
 
 class CuotaController extends Controller
 {
@@ -114,6 +115,9 @@ class CuotaController extends Controller
     //busco la cuota
     $cuota = ComprobanteCuota::find($id);
 
+    //calculo la edad para despues mostrarlo en la vista
+    $cuota->socio->edad = Carbon::parse($cuota->socio->fechaNac)->age;
+
     //se lo envío a la vista
     return view('cuota.individual', ['cuota' => $cuota]);
   }
@@ -165,6 +169,7 @@ class CuotaController extends Controller
       return redirect()->back()->withInput()->withErrors($validacion->errors());
     }
 
+    //actualizo el ComprobanteCuota correspondinte
     ComprobanteCuota::where('id', $request->id)
           ->update([
             'tipo' => $request->tipo,

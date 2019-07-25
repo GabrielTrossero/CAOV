@@ -26,8 +26,10 @@
             <td>{{ 'Vitalicio' }}</td>
           @elseif ($cuota->socio->idGrupoFamiliar)
             <td>{{ 'Grupo Familiar' }}</td>
-          @else
+          @elseif ($cuota->socio->edad >= 18)
             <td>{{ 'Activo' }}</td>
+          @else
+            <td>{{ 'Cadete' }}</td>
           @endif
 
           <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
@@ -47,7 +49,7 @@
           @if ($cuota->tipo == "s")
             <td>{{ "$". $cuota->montoCuota->monto * $cuota->montoCuota->dtoSemestre / 100 ." (". $cuota->montoCuota->dtoSemestre ."%)" }}</td>
           @elseif ($cuota->tipo == "a")
-            <td>{{ "$". $cuota->montoCuota->monto * $cuota->montoCuota->dtoAnio / 100 ." (". $cuota->montoCuota->dtoSemestre ."%)" }}</td>
+            <td>{{ "$". $cuota->montoCuota->monto * $cuota->montoCuota->dtoAnio / 100 ." (". $cuota->montoCuota->dtoAnio ."%)" }}</td>
           @elseif ($cuota->tipo == "m")
             <td> 0% </td>
           @endif

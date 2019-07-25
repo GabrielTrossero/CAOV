@@ -9,9 +9,33 @@ use Illuminate\Validation\Rule;
 use App\Socio;
 use App\ComprobanteCuota;
 use App\MontoCuota;
+use Carbon\Carbon;
 
 class PagoCuotaController extends Controller
 {
+  /**
+   * calcula la edad del socio ingresado por parametro
+   * @param  App\Socio $socio
+   * @return App\Socio
+   */
+  private function calculaUltimoMes($socio)
+  {
+      //busco el último mes que pagó tal socio
+      $ultimoMes = ComprobanteCuota::select('fechaMesAnio')->where('idSocio', $socio->id)->orderBy('fechaMesAnio', 'DESC')->first();
+
+      //si ha pagado cuotas, asigno al atributo ultimoMesPagado lo que recuperé anteriormente
+      if($ultimoMes){
+        $socio->ultimoMesPagado = $ultimoMes->fechaMesAnio;
+      }
+      //sino le asigno null
+      else{
+        $socio->ultimoMesPagado = null;
+      }
+
+      //retorna al socio con su último mes pagado
+      return $socio;
+  }
+
   /**
    * Display the list of Socios to choose who paids the Cuota.
    *
@@ -21,6 +45,10 @@ class PagoCuotaController extends Controller
   {
     //obtengo todos los socios
     $socios = Socio::all();
+
+    foreach ($socios as $socio) {
+      $socio = $this->calculaUltimoMes($socio);
+    }
 
     //se los envio a la vista
     return view('pagoCuota.listarSocios', compact('socios'));
@@ -36,10 +64,19 @@ class PagoCuotaController extends Controller
       //busco el socio
       $socio = Socio::find($id);
 
-      //montocuota?
-
       //se lo envío a la vista
       return view('pagoCuota.ingresarPago', ['socio' => $socio]);
+    }
+
+    /**
+     * calcula la edad del socio ingresado por parametro
+     * @param  App\Socio $socio
+     * @return App\Socio
+     */
+    private function calculaEdad($socio)
+    {
+        //retorno la edad del socio
+        return Carbon::parse($socio->fechaNac)->age;
     }
 
     /**
@@ -75,13 +112,21 @@ class PagoCuotaController extends Controller
           return redirect()->back()->withInput()->withErrors($validacion->errors());
         }
 
+        //busco el socio que estoy cargando
         $socio = Socio::find($request->id);
 
+        //y de acuerdo con el socio obtendio, obtengo el MontoCuota correspondinte a la categoría del socio
         if($socio->idGrupoFamiliar){
           $montoCuota = MontoCuota::where('tipo', 'g')->orderBy('fechaCreacion','DESC')->first();
         }
-        //HACER PARA CADETE Y ACTIVO UNA VEZ QUE TENGA LA EDAD
+        else if($this->calculaEdad($socio) >= 18){
+          $montoCuota = MontoCuota::where('tipo', 'a')->orderBy('fechaCreacion','DESC')->first();
+        }
+        else if($this->calculaEdad($socio) <= 18){
+          $montoCuota = MontoCuota::where('tipo', 'c')->orderBy('fechaCreacion','DESC')->first();
+        }
 
+        //cargo los datos de ComprobanteCuota
         $comprobanteCuota->tipo = $request->tipo;
         $comprobanteCuota->fechaMesAnio = $request->fechaMesAnio;
         $comprobanteCuota->fechaPago = $request->fechaPago;
