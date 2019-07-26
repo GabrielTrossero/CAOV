@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\GrupoFamiliar;
 use App\Socio;
 
@@ -95,7 +96,7 @@ class GrupoFamiliarController extends Controller
         $grupo = GrupoFamiliar::find($id);
 
         //retorno la vista individual del grupo familiar
-        return view('grupoFamiliar.individual', ['grupo' , $grupo]);
+        return view('grupoFamiliar.individual', compact('grupo'));
     }
 
     /**
