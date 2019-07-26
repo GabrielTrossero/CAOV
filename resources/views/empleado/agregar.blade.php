@@ -35,10 +35,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="persona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
 
                             <div class="col-md-6">
-                                <select name="persona" id="persona" class="form-control" required>
+                                <select name="idPersona" id="idPersona" class="form-control" required>
 
                                   @foreach ($personas as $persona)
                                     <option value="{{ $persona->id }}">{{ $persona->DNI." - ".$persona->nombres." ".$persona->apellido }}</option>
@@ -46,7 +46,7 @@
 
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('persona')}}</span>
+                                <span class="text-danger">{{$errors->first('idPersona')}}</span>
                             </div>
                         </div>
 
@@ -71,10 +71,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="tipoUsuario" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Usuario') }}</label>
+                            <label for="idTipoUsuario" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Usuario') }}</label>
 
                             <div class="col-md-6">
-                                <select name="tipoUsuario" id="tipoUsuario" class="form-control" required>
+                                <select name="idTipoUsuario" id="idTipoUsuario" class="form-control" required>
 
                                   @foreach ($tiposUsuarios as $tipoUsuario)
                                     <option value="{{ $tipoUsuario->id }}">{{ $tipoUsuario->nombre }}</option>
@@ -82,7 +82,7 @@
 
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('tipoUsuario')}}</span>
+                                <span class="text-danger">{{$errors->first('idTipoUsuario')}}</span>
                             </div>
                         </div>
 

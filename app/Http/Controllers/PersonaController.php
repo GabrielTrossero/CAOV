@@ -177,22 +177,18 @@ class PersonaController extends Controller
           return redirect()->back()->withErrors($validacion->errors());
         }
 
-        //busco el registro
-        $persona = Persona::find($request->id);
-
-        //reemplazo los datos del resgistro con los del request validado
-        $persona->DNI = $request->DNI;
-        $persona->nombres = $request->nombres;
-        $persona->apellido = $request->apellido;
-        $persona->domicilio = $request->domicilio;
-        $persona->telefono = $request->telefono;
-        $persona->email = $request->email;
-
-        //guardo el registro editado
-        $persona->save();
+        Persona::where('id', $request->id)
+              ->update([
+                'DNI' => $request->DNI,
+                'nombres' => $request->nombres,
+                'apellido' => $request->apellido,
+                'domicilio' => $request->domicilio,
+                'telefono' => $request->telefono,
+                'email' => $request->email
+              ]);
 
         //redirijo a la vista individual
-        return redirect()->action('PersonaController@getShowId', $persona->id);
+        return redirect()->action('PersonaController@getShowId', $request->id);
     }
 
     /**

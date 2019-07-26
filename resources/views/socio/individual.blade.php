@@ -42,7 +42,7 @@
             @endforeach
           </td>
 
-          <td>{{ $socio->fechaNac }}</td>
+          <td>{{ date("d/m/Y", strtotime($socio->fechaNac)) }}</td>
 
           @if ($socio->grupoFamiliar)
             <td>{{ $socio->grupoFamiliar->socioTitular->persona->apellido.

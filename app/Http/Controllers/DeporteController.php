@@ -143,17 +143,13 @@ class DeporteController extends Controller
           return redirect()->back()->withErrors($validacion->errors());
         }
 
-        //busco el registro
-        $deporte = Deporte::find($request->id);
-
-        //reemplazo los datos enviados por el registro encontrado
-        $deporte->nombre = $request->nombre;
-
-        //guardo el registro
-        $deporte->save();
+        Deporte::where('id', $request->id)
+              ->update([
+                'nombre' => $request->nombre
+              ]);
 
         //redirijo a la vista individual
-        return redirect()->action('DeporteController@getShowId', $deporte->id);
+        return redirect()->action('DeporteController@getShowId', $request->id);
     }
 
     /**

@@ -53,8 +53,8 @@
                                     <option value="n" selected>No</option>
                                     <option value="s">Si</option>
                                   @else
-                                  <option value="n">No</option>
-                                  <option value="s" selected>Si</option>
+                                    <option value="n">No</option>
+                                    <option value="s" selected>Si</option>
                                   @endif
                                 </select>
 
@@ -77,10 +77,22 @@
 
                             <div class="col-md-6">
                               <select name="idGrupoFamiliar" id="idGrupoFamiliar" class="form-control">
-                                <option value="0">No posee grupo familiar</option>
-                                @foreach ($grupos as $grupo)
-                                  <option value="{{ $grupo->id }}">Titular: {{$grupo->socioTitular->persona->apellido." ".$grupo->SocioTitular->persona->nombres." - ".$grupo->socioTitular->persona->DNI}}</option>
-                                @endforeach
+                                <!-- esto es para seleccionar en el select la opcion que tiene actualmente -->
+                                @if ($socio->grupoFamiliar)
+                                  <option value="0">No posee grupo familiar</option>
+                                  @foreach ($grupos as $grupo)
+                                    @if ($socio->grupoFamiliar->id == $grupo->id)
+                                      <option value="{{ $grupo->id }}" selected>Titular: {{$grupo->socioTitular->persona->apellido." ".$grupo->SocioTitular->persona->nombres." - ".$grupo->socioTitular->persona->DNI}}</option>
+                                    @else
+                                      <option value="{{ $grupo->id }}">Titular: {{$grupo->socioTitular->persona->apellido." ".$grupo->SocioTitular->persona->nombres." - ".$grupo->socioTitular->persona->DNI}}</option>
+                                    @endif
+                                  @endforeach
+                                @else
+                                  <option value="0" selected>No posee grupo familiar</option>
+                                  @foreach ($grupos as $grupo)
+                                    <option value="{{ $grupo->id }}">Titular: {{$grupo->socioTitular->persona->apellido." ".$grupo->SocioTitular->persona->nombres." - ".$grupo->socioTitular->persona->DNI}}</option>
+                                  @endforeach
+                                @endif
                               </select>
 
                               <span class="text-danger">{{$errors->first('idGrupoFamiliar')}}</span>

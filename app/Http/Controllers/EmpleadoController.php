@@ -58,7 +58,8 @@ class EmpleadoController extends Controller
           'email.email' => 'El Email no es único o válido.',
           'email.unique' => 'El Email no es único o válido.',
           'email.max' => 'El Email no es único o válido.',
-          'persona.required' => 'Es necesario seleccionar una Persona.',
+          'idPersona.required' => 'Es necesario seleccionar una Persona.',
+          'idPersona.unique' => 'Ya existe un Usuario de dicha Persona.',
           'password.required' => 'Es necesario ingresar una Contraseña.',
           'password.min' => 'La Contraseña debe tener como mínimo 8 caracteres.',
           'password.max' => 'Ingrese una Contraseña válida.',
@@ -66,17 +67,17 @@ class EmpleadoController extends Controller
           'passwordRepeat.same' => 'La Contraseñas no coinciden.',
           'passwordRepeat.min' => 'La Contraseña debe tener como mínimo 8 caracteres.',
           'passwordRepeat.max' => 'Ingrese una Contraseña válida.',
-          'tipoUsuario.required' => 'Es necesario seleccionar un Tipo de Usuario.'
+          'idTipoUsuario.required' => 'Es necesario seleccionar un Tipo de Usuario.'
         ];
 
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
           'username' => 'required|min:8|max:75|unique:users',
           'email' => 'email|unique:users|max:75',
-          'persona' => 'required',
+          'idPersona' => 'required|unique:users',
           'password' => 'required|min:8|max:80',
           'passwordRepeat' => 'required|min:8|max:80|same:password',
-          'tipoUsuario' => 'required'
+          'idTipoUsuario' => 'required'
         ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
@@ -88,8 +89,8 @@ class EmpleadoController extends Controller
         $empleado->username = $request->username;
         $empleado->email = $request->email;
         $empleado->password = bcrypt($request->password);
-        $empleado->idPersona = $request->persona;
-        $empleado->idTipoUsuario = $request->tipoUsuario;
+        $empleado->idPersona = $request->idPersona;
+        $empleado->idTipoUsuario = $request->idTipoUsuario;
 
         $empleado->save();
 
@@ -166,13 +167,13 @@ class EmpleadoController extends Controller
           'email.email' => 'El Email no es único o válido.',
           'email.unique' => 'El Email no es único o válido.',
           'email.max' => 'El Email no es único o válido.',
-          'persona.required' => 'Es necesario seleccionar una Persona.',
-          'persona.required' => 'Es necesario seleccionar una Persona.',
+          'idPersona.required' => 'Es necesario seleccionar una Persona.',
+          'idPersona.unique' => 'Ya existe un Usuario de dicha Persona.',
           'password.max' => 'Ingrese una Contraseña válida.',
           'passwordRepeat.required_with' => 'Es necesario repetir la Contraseña.',
           'passwordRepeat.same' => 'La Contraseñas no coinciden.',
           'passwordRepeat.max' => 'Ingrese una Contraseña válida.',
-          'tipoUsuario.required' => 'Es necesario seleccionar un Tipo de Usuario.'
+          'idTipoUsuario.required' => 'Es necesario seleccionar un Tipo de Usuario.'
         ];
 
         //valido los datos ingresados
@@ -188,10 +189,13 @@ class EmpleadoController extends Controller
             'max:75',
             Rule::unique('users')->ignore($request->id)
           ],
-          'persona' => 'required',
+          'idPersona' => [
+            'required',
+            Rule::unique('users')->ignore($request->id)
+          ],
           'password' => 'max:80',
           'passwordRepeat' => 'required_with:password|max:80|same:password',
-          'tipoUsuario' => 'required'
+          'idTipoUsuario' => 'required'
         ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
@@ -204,8 +208,8 @@ class EmpleadoController extends Controller
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'idPersona' => $request->persona,
-                'idTipoUsuario' => $request->tipoUsuario
+                'idPersona' => $request->idPersona,
+                'idTipoUsuario' => $request->idTipoUsuario
               ]);
 
         return redirect()->action('EmpleadoController@getShowId', $request->id);

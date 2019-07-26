@@ -36,16 +36,21 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="persona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
 
                             <div class="col-md-6">
-                                <select name="persona" id="persona" class="form-control" required>
+                                <select name="idPersona" id="idPersona" class="form-control" required>
                                   @foreach ($personas as $persona)
-                                    <option value="{{ $persona->id }}">{{ $persona->DNI." - ".$persona->nombres." ".$persona->apellido }}</option>
+                                    <!--para seleccionar en el select la persona actual -->
+                                    @if ($usuario->idPersona == $persona->id)
+                                      <option value="{{ $persona->id }}" selected>{{ $persona->DNI." - ".$persona->nombres." ".$persona->apellido }}</option>
+                                    @else
+                                      <option value="{{ $persona->id }}">{{ $persona->DNI." - ".$persona->nombres." ".$persona->apellido }}</option>
+                                    @endif
                                   @endforeach
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('persona')}}</span>
+                                <span class="text-danger">{{$errors->first('idPersona')}}</span>
                             </div>
                         </div>
 
@@ -70,18 +75,21 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="tipoUsuario" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Usuario') }}</label>
+                            <label for="idTipoUsuario" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Usuario') }}</label>
 
                             <div class="col-md-6">
-                                <select name="tipoUsuario" id="tipoUsuario" class="form-control" required>
-
-                                    @foreach ($tiposUsuarios as $tipoUsuario)
+                                <select name="idTipoUsuario" id="idTipoUsuario" class="form-control" required>
+                                  @foreach ($tiposUsuarios as $tipoUsuario)
+                                    <!--para seleccionar en el select el tipo de usuario actual -->
+                                    @if ($usuario->idTipoUsuario == $tipoUsuario->id)
+                                      <option value="{{ $tipoUsuario->id }}" selected>{{ $tipoUsuario->nombre }}</option>
+                                    @else
                                       <option value="{{ $tipoUsuario->id }}">{{ $tipoUsuario->nombre }}</option>
-                                    @endforeach
-
+                                    @endif
+                                  @endforeach
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('tipoUsuario')}}</span>
+                                <span class="text-danger">{{$errors->first('idTipoUsuario')}}</span>
                             </div>
                         </div>
 
