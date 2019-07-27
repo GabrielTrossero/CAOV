@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Socio;
+use App\Deporte;
 
 class InformeController extends Controller
 {
@@ -64,7 +66,14 @@ class InformeController extends Controller
    */
   public function getCantidadSocios()
   {
-    return view('informe.cantidadSocios');
+    //tomo todos los socios
+    $socios = Socio::all();
+
+    //calculo la cantidad de socios
+    $cantidadSocios = sizeof($socios);
+
+    //retorno la vista con la cantidad de socios
+    return view('informe.cantidadSocios', compact('cantidadSocios'));
   }
 
   /**
@@ -84,7 +93,16 @@ class InformeController extends Controller
    */
   public function getCantidadSociosDeporte()
   {
-    return view('informe.cantidadSociosDeporte');
+    //tomo todos los deportes
+    $deportes = Deporte::all();
+
+    //calculco la cantidad de socios de cada deporte
+    foreach ($deportes as $deporte) {
+      $deporte->cantidadSocios = sizeof($deporte->socios);
+    }
+
+    //retorno la vista con la cantidad de socios por deporte
+    return view('informe.cantidadSociosDeporte', compact('deportes'));
   }
 
   /**

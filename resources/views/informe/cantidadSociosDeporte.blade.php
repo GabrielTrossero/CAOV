@@ -13,14 +13,15 @@
           <th>Deporte</th>
           <th>Cantidad de Socios</th>
         </tr>
-        <tr>
-          <td>Futbol</td>
-          <td>120</td>
-        </tr>
-        <tr>
-          <td>Basquet</td>
-          <td>79</td>
-        </tr>
+
+        @foreach ($deportes as $deporte)
+          <tr>
+            <td>{{ $deporte->nombre }}</td>
+            <td>{{ $deporte->cantidadSocios }}</td>
+          </tr>
+        @endforeach
+
+
       </table>
     </div>
 

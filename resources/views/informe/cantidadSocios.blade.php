@@ -13,7 +13,7 @@
           <th>Cantidad de Socios</th>
         </tr>
         <tr>
-          <td>1200</td>
+          <td>{{ $cantidadSocios }}</td>
         </tr>
       </table>
     </div>
