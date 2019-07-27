@@ -16,7 +16,7 @@
                             <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Socio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') }} req" required>
+                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') }}" required>
 
                                 <span class="text-danger">{{$errors->first('numSocio')}}</span>
                             </div>
