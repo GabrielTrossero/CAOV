@@ -71,7 +71,7 @@
         &nbsp;&nbsp;
         <form action="{{url('/alquilerinmueble/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
-          <input type="hidden" name="id" value="1">
+          <input type="hidden" name="id" value="{{ $reservaInmueble->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
             Eliminar Alquiler
           </button>
