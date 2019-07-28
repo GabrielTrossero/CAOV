@@ -14,20 +14,18 @@
           <td><b>Titular</b></td>
           <td><b>Info. Socio</b></td>
         </tr>
-        <tr>
-          <td>{{ $grupo->socioTitular->persona->DNI }}</td>
-          <td>{{ $grupo->socioTitular->persona->apellido }}</td>
-          <td>{{ $grupo->socioTitular->persona->nombres }}</td>
-          <td>Si</td>
-          <td><a href="{{ url('/socio/show/'.$grupo->socioTitular->id) }}"> <i class="fas fa-plus"></i></a> </td>
-        </tr>
+        
 
         @foreach ($grupo->socios as $socio)
           <tr>
             <td>{{ $socio->persona->DNI }}</td>
             <td>{{ $socio->persona->apellido }}</td>
             <td>{{ $socio->persona->nombres }}</td>
-            <td>No</td>
+            @if ($grupo->socioTitular->id == $socio->id)
+              <td>Si</td>
+            @else
+              <td>No</td>
+            @endif
             <td><a href="{{ url('/socio/show/'.$socio->id) }}"> <i class="fas fa-plus"></i></a> </td>
           </tr>
         @endforeach

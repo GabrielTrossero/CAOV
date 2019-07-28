@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <div class="cuadro">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -9,17 +10,17 @@
                 <div class="card-header">{{ __('Agregar Grupo Familiar') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ url('/empleado/create') }}">
+                    <form method="POST" action="{{ url('/grupofamiliar/edit') }}">
                         {{ csrf_field() }}
 
                         <input type="hidden" name="id" value="{{ $grupo->id }}">
 
                         <div class="form-group row">
-                            <label for="titulas" class="col-md-4 col-form-label text-md-right">{{ __('Titular') }}</label>
+                            <label for="titular" class="col-md-4 col-form-label text-md-right">{{ __('Titular') }}</label>
 
                             <div class="col-md-6">
                                 <select name="titular" id="titular" class="form-control">
-                                  <option value="0">Seleccionar Socio</option>
+                                    <option value="{{ $grupo->socioTitular->id }}">{{ $grupo->socioTitular->persona->DNI." - ".$grupo->socioTitular->persona->nombres." ".$grupo->socioTitular->persona->apellido }}</option>
                                     @foreach ($grupo->socios as $socio)
                                       <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
                                     @endforeach
@@ -44,7 +45,6 @@
 
                             <div class="col-md-6">
                                 <select name="miembro" id="miembro" class="form-control">
-                                  <option value="0">Seleccionar Socio</option>
 
                                   <optgroup id="miembros-actuales" label="Miembros Actuales">
                                     @foreach ($grupo->socios as $socio)
@@ -79,5 +79,7 @@
     </div>
 </div>
 
+<!-- Script para filtrar los select para agregar/quitar miembros del grupo -->
+<script src="{{ asset('js/filtro-miembros-grupo-familiar.js') }}"></script>
 
 @stop
