@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use App\ReservaMueble;
+use App\MedioDePago;
+use App\Mueble;
+use App\Persona;
 
 class AlquilerMuebleController extends Controller
 {
@@ -24,7 +30,14 @@ class AlquilerMuebleController extends Controller
      */
     public function create()
     {
-        return view('alquilerMueble.agregar');
+        //obtengo todos los muebles
+        $muebles = Mueble::all();
+
+        //obtnego todos los medios de pagos
+        $mediosDePagos = MedioDePago::all();
+
+        //se los envio a la vista
+        return view('alquilerMueble.agregar', compact(['muebles','mediosDePagos']));
     }
 
     /**
@@ -35,7 +48,67 @@ class AlquilerMuebleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $reserva = new ReservaMueble;
+
+      //mensajes de error que se mostraran por pantalla
+      $messages = [
+        'DNI.required' => 'Es necesario ingresar un DNI válido.',
+        'DNI.exists' => 'Error, ingrese el DNI de una Persona cargada en el sistema.',
+        'DNI.min' => 'Es necesario ingresar un DNI válido.',
+        'DNI.max' => 'Es necesario ingresar un DNI válido.',
+        'fechaSolicitud.required' => 'Es necesario ingresar una Fecha.',
+        'tipoMueble.required' => 'Seleccione un Mueble.',
+        'cantMueble.required' => 'Es necesario ingresar una Cantidad.',
+        'fechaHoraInicio.required' => 'Es necesario ingresar una Fecha y Hora de Inicio.',
+        'fechaHoraFin.required' => 'Es necesario ingresar una Fecha y Hora de Finalización.',
+        'costo.required' => 'Es necesario ingresar el Costo.',
+        'medioPago.required' => 'Es necesario ingresar un Medio de Pago',
+        'observacion.max' => 'La Observación no puede ser tan extensa'
+      ];
+
+      //valido los datos ingresados
+      $validacion = Validator::make($request->all(), [
+        'DNI' => [
+          'required',
+          'min:8',
+          'max:8',
+          //hace select count(*) from persona where DNI = $request->DNI
+          //para verificar que exista dicha persona
+          Rule::exists('persona')
+        ],
+        'fechaSolicitud' => 'required',
+        'tipoMueble' => 'required',
+        'cantMueble' => 'required',
+        'fechaHoraInicio' => 'required',
+        'fechaHoraFin' => 'required',
+        'costo' => 'required',
+        'medioPago' => 'required',
+        'observacion' => 'max:100'
+      ], $messages);
+
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails()){
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      //obtengo la persona correspondiente al DNI ingresado
+      $persona = Persona::where('DNI', $request->DNI)->first();
+
+      //almaceno la información
+      $reserva->costoTotal = $request->costo;
+      $reserva->fechaHoraInicio = $request->fechaHoraInicio;
+      $reserva->fechaHoraFin = $request->fechaHoraFin;
+      $reserva->fechaSolicitud = $request->fechaSolicitud;
+      $reserva->cantidad = $request->cantMueble;
+      $reserva->observacion = $request->observacion;
+      $reserva->idMueble = $request->tipoMueble;
+      $reserva->idPersona = $persona->id;
+      $reserva->idMedioDePago = $request->medioPago;
+
+      $reserva->save();
+
+      //redirijo para mostrar la reserva ingresada
+      return redirect()->action('AlquilerMuebleController@getShowId', $reserva->id);
     }
 
     /**
@@ -46,7 +119,16 @@ class AlquilerMuebleController extends Controller
      */
     public function getShow()
     {
-        return view('alquilerMueble.listado');
+        //almaceno todas las reservas y se las envío a la vista
+        $reservas = ReservaMueble::all();
+
+        return view('alquilerMueble.listado', compact('reservas'));
+    }
+
+    private function total($alquiler)
+    {
+        //retorna al socio con su edad
+        return $alquiler->costoTotal;
     }
 
     /**
@@ -57,7 +139,24 @@ class AlquilerMuebleController extends Controller
      */
     public function getShowId($id)
     {
-        return view('alquilerMueble.individual');
+        //busco la reserva solicitada y se la envío a la vista
+        $reserva = ReservaMueble::find($id);
+
+        //busco las reservas relacionadas a la anterior, exeptuando la anterior, para mostrarlas en el 2do cuadro de la vista
+        $reservasRelacionadas = ReservaMueble::where('numRecibo', $reserva->numRecibo)
+                                            ->where('id', '!=', $id)->get();
+
+        //busco los contratos que tengan el mismo número de recibo para mostrarlo en el 3er cuadro de la vista
+        $infoRecibo = ReservaMueble::where('numRecibo', $reserva->numRecibo)->get();
+
+        //calculo el costo total del recibo
+        $total = 0;
+        foreach ($infoRecibo as $alquiler) {
+          //llamo a la funcion total, pasandole cada alquiler
+          $total = $total + $this->total($alquiler);
+        }
+
+        return view('alquilerMueble.individual', compact('reserva', 'reservasRelacionadas', 'infoRecibo', 'total'));
     }
 
     /**
@@ -68,7 +167,17 @@ class AlquilerMuebleController extends Controller
      */
     public function edit($id)
     {
-        return view('alquilerMueble.editar');
+        //obtengo todos los muebles
+        $muebles = Mueble::all();
+
+        //obtnego todos los medios de pagos
+        $mediosDePagos = MedioDePago::all();
+
+        //obtengo la reserva a editar
+        $reserva = ReservaMueble::find($id);
+
+        //se lo envío a la vista
+        return view('alquilerMueble.editar', compact(['muebles','mediosDePagos','reserva']));
     }
 
     /**
@@ -80,7 +189,67 @@ class AlquilerMuebleController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        //mensajes de error que se mostraran por pantalla
+        $messages = [
+          'DNI.required' => 'Es necesario ingresar un DNI válido.',
+          'DNI.exists' => 'Error, ingrese el DNI de una Persona cargada en el sistema.',
+          'DNI.min' => 'Es necesario ingresar un DNI válido.',
+          'DNI.max' => 'Es necesario ingresar un DNI válido.',
+          'fechaSolicitud.required' => 'Es necesario ingresar una Fecha.',
+          'tipoMueble.required' => 'Seleccione un Mueble.',
+          'cantMueble.required' => 'Es necesario ingresar una Cantidad.',
+          'fechaHoraInicio.required' => 'Es necesario ingresar una Fecha y Hora de Inicio.',
+          'fechaHoraFin.required' => 'Es necesario ingresar una Fecha y Hora de Finalización.',
+          'costo.required' => 'Es necesario ingresar el Costo.',
+          'medioPago.required' => 'Es necesario ingresar un Medio de Pago',
+          'observacion.max' => 'La Observación no puede ser tan extensa'
+        ];
+
+        //valido los datos ingresados
+        $validacion = Validator::make($request->all(), [
+          'DNI' => [
+            'required',
+            'min:8',
+            'max:8',
+            //hace select count(*) from persona where DNI = $request->DNI
+            //para verificar que exista dicha persona
+            Rule::exists('persona')
+          ],
+          'fechaSolicitud' => 'required',
+          'tipoMueble' => 'required',
+          'cantMueble' => 'required',
+          'fechaHoraInicio' => 'required',
+          'fechaHoraFin' => 'required',
+          'costo' => 'required',
+          'medioPago' => 'required',
+          'observacion' => 'max:100',
+        ], $messages);
+
+        //si la validacion falla vuelvo hacia atras con los errores
+        if($validacion->fails()){
+          return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+        //obtengo la persona correspondiente al DNI ingresado
+        $persona = Persona::where('DNI', $request->DNI)->first();
+
+        //actualizo dicho registro
+        ReservaMueble::where('id', $request->id)
+              ->update([
+                'costoTotal' => $request->costo,
+                'fechaHoraInicio' => $request->fechaHoraInicio,
+                'fechaHoraFin' => $request->fechaHoraFin,
+                'fechaSolicitud' => $request->fechaSolicitud,
+                'cantidad' => $request->cantMueble,
+                'observacion' => $request->observacion,
+                'idMueble' => $request->tipoMueble,
+                'idPersona' => $persona->id,
+                'idMedioDePago' => $request->medioPago,
+                'numRecibo' => $request->numRecibo
+              ]);
+
+        //redirijo a la vista individual
+        return redirect()->action('AlquilerMuebleController@getShowId', $request->id);
     }
 
     /**
@@ -89,8 +258,12 @@ class AlquilerMuebleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        //elimino el registro con tal id
+        $reserva = ReservaMueble::destroy($request->id);
+
+        //redirijo al listado
+        return redirect()->action('AlquilerMuebleController@getShow');
     }
 }
