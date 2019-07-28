@@ -8,15 +8,16 @@
     <div class="card-body border tam_letra_x-small">
       <table class="table">
         <tr>
-          <td><b>N° de Contrato Inmueble</b></td>    <!-- la <b> es para poner en negrita -->
+          <!-- la <b> es para poner en negrita -->
           <td><b>DNI Solicitante</b></td>
-          <td><b>Fecha Solicitud</b></td>
-          <td><b>Fecha Realización</b></td>
+          <td><b>Inmueble</b></td>
+          <td><b>Fecha de Solicitud</b></td>
+          <td><b>Fecha/Hora Inicio</b></td>
+          <td><b>Fecha/Hora Finalización</b></td>
           <td><b>Observación</b></td>
           <td><b>Costo Reserva</b></td>
           <td><b>Costo Total</b></td>
           <td><b>Medio de Pago</b></td>
-          <td><b>Horario</b></td>
           <td><b>Tipo de Evento</b></td>
           <td><b>Cantiad Asistentes</b></td>
           <td><b>Limpieza</b></td>
@@ -25,27 +26,43 @@
           <td><b>N° Recibo</b></td>
         </tr>
         <tr>
-          <td>1</td>
-          <td>40662158</td>
-          <td>09/02/2019</td>
-          <td>25/08/2019</td>
-          <td></td>
-          <td>1000</td>
-          <td>3000</td>
-          <td>Tarjeta</td>
-          <td>18 a 21</td>
-          <td>Cumpleaños</td>
-          <td>30</td>
-          <td>No</td>
-          <td>Si</td>
-          <td>Si</td>
-          <td>18</td>
+          <td>{{ $reservaInmueble->persona->DNI }}</td>
+          <td>{{ $reservaInmueble->inmueble->nombre }}</td>
+          <td>{{ $reservaInmueble->fechaSolicitud }}</td>
+          <td>{{ $reservaInmueble->fechaHoraInicio }}</td>
+          <td>{{ $reservaInmueble->fechaHoraFin }}</td>
+          <td>{{ $reservaInmueble->observacion }}</td>
+          <td>{{ $reservaInmueble->costoReserva }}</td>
+          <td>{{ $reservaInmueble->costoTotal }}</td>
+          <td>{{ $reservaInmueble->medioDePago->nombre }}</td>
+          <td>{{ $reservaInmueble->tipoEvento }}</td>
+          <td>{{ $reservaInmueble->cantAsistentes }}</td>
+          @if ($reservaInmueble->tieneServicioLimpieza)
+            <td>Si</td>
+          @else
+            <td>No</td>
+          @endif
+          @if ($reservaInmueble->tieneMusica)
+            <td>Si</td>
+          @else
+            <td>No</td>
+          @endif
+          @if ($reservaInmueble->tieneReglamento)
+            <td>Si</td>
+          @else
+            <td>No</td>
+          @endif
+          @if ($reservaInmueble->numRecibo)
+            <td>{{ $reservaInmueble->numRecibo }}</td>
+          @else
+            <td>-</td>
+          @endif
         </tr>
       </table>
 
       <div class="card-footer">
 
-        <a style="text-decoration:none" href="{{ url('/alquilerinmueble/edit/'.'1') }}">
+        <a style="text-decoration:none" href="{{ url('/alquilerinmueble/edit/'.$reservaInmueble->id) }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Alquiler
           </button>

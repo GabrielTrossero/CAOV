@@ -12,8 +12,9 @@
         <thead>
           <tr>
             <th>DNI Solicitante</th>
-            <th>N° de Contrato Inmueble</th>
-            <th>Fecha Realización</th>
+            <th>Inmueble</th>
+            <th>Fecha/Hora Inicio</th>
+            <th>Fecha/Hora Finalización</th>
             <th>Costo Reserva</th>
             <th>Costo Total</th>
             <th>N° Recibo</th>
@@ -21,24 +22,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>39842653</td>
-            <td>1</td>
-            <td>27/05/2019</td>
-            <td>1000</td>
-            <td>3000</td>
-            <td>21</td>
-            <td><a href="{{ url('/alquilerinmueble/show/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>25963214</td>
-            <td>2</td>
-            <td>05/05/2019</td>
-            <td>4500</td>
-            <td>1500</td>
-            <td></td>
-            <td><a href="{{ url('/alquilerinmueble/show/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
+          @foreach ($reservasInmuebles as $reservaInmueble)
+            <tr>
+              <td>{{ $reservaInmueble->persona->DNI }}</td>
+              <td>{{ $reservaInmueble->inmueble->nombre }}</td>
+              <td>{{ $reservaInmueble->fechaHoraInicio }}</td>
+              <td>{{ $reservaInmueble->fechaHoraFin }}</td>
+              <td>{{ $reservaInmueble->costoReserva }}</td>
+              <td>{{ $reservaInmueble->costoTotal }}</td>
+              @if ($reservaInmueble->numRecibo)
+                <td>{{ $reservaInmueble->numRecibo }}</td>
+              @else
+                <td>-</td>
+              @endif
+              <td><a href="{{ url('/alquilerinmueble/show/'.$reservaInmueble->id) }}"> <i class="fas fa-plus"></i></a> </td>
+            </tr>
+          @endforeach
+
         </tbody>
       </table>
     </div>
