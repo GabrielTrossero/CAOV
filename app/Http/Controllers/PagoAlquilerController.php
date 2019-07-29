@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use App\ReservaMueble;
+use App\Mueble;
+use App\MedioDePago;
+use App\ReservaInmueble;
+use App\Inmueble;
 
 class PagoAlquilerController extends Controller
 {
@@ -24,7 +30,10 @@ class PagoAlquilerController extends Controller
     */
     public function getShowMueble()
     {
-      return view('pagoAlquiler.listaMuebles');
+      //obtengo todas las reservas, menos las que ya tienen N° de recibo, o sea, están pagadas
+      $alquileresMuebles = ReservaMueble::where('numRecibo', null)->get();
+
+      return view('pagoAlquiler.listaMuebles', compact('alquileresMuebles'));
     }
 
     /**
@@ -34,7 +43,10 @@ class PagoAlquilerController extends Controller
     */
     public function getShowInmueble()
     {
-      return view('pagoAlquiler.listaInmuebles');
+      //obtengo todas las reservas, menos las que ya tienen N° de recibo, o sea, están pagadas
+      $reservasInmuebles = ReservaInmueble::where('numRecibo', null)->get();
+
+      return view('pagoAlquiler.listaInmuebles', compact('reservasInmuebles'));
     }
 
     /**
@@ -45,7 +57,16 @@ class PagoAlquilerController extends Controller
     */
     public function getPagoMueble($id)
     {
-      return view('pagoAlquiler.ingresarPagoMueble');
+      //obtengo todos los muebles
+      $muebles = Mueble::all();
+
+      //obtnego todos los medios de pagos
+      $mediosDePagos = MedioDePago::all();
+
+      //obtengo la reserva a editar
+      $reserva = ReservaMueble::find($id);
+
+      return view('pagoAlquiler.ingresarPagoMueble', compact(['muebles','mediosDePagos','reserva']));
     }
 
     /**
@@ -56,7 +77,31 @@ class PagoAlquilerController extends Controller
      */
     public function postPagoMueble(Request $request)
     {
-      //
+      $reserva = new ReservaMueble;
+
+      //mensajes de error que se mostraran por pantalla
+      $messages = [
+        'numRecibo.required' => 'Es necesario ingresar un N° de Recibo.',
+      ];
+
+      //valido los datos ingresados
+      $validacion = Validator::make($request->all(), [
+        'numRecibo' => 'required'
+      ], $messages);
+
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails()){
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      //actualizo dicho registro
+      ReservaMueble::where('id', $request->id)
+            ->update([
+              'numRecibo' => $request->numRecibo
+            ]);
+
+      //redirijo a la vista individual
+      return redirect()->action('AlquilerMuebleController@getShowId', $request->id);
     }
 
     /**
@@ -67,7 +112,16 @@ class PagoAlquilerController extends Controller
     */
     public function getPagoInmueble($id)
     {
-      return view('pagoalquiler.ingresarPagoInmueble');
+      //tomo la reserva del inmueble
+      $reservaInmueble = ReservaInmueble::find($id);
+
+      //tomo todos los inmuebles
+      $inmuebles = Inmueble::all();
+
+      //tomo los medios de pago
+      $mediosDePago = MedioDePago::all();
+
+      return view('pagoalquiler.ingresarPagoInmueble', compact('reservaInmueble', 'inmuebles', 'mediosDePago'));
     }
 
     /**
@@ -78,6 +132,30 @@ class PagoAlquilerController extends Controller
      */
     public function postPagoInmueble(Request $request)
     {
-      //
+      $reserva = new ReservaInmueble;
+
+      //mensajes de error que se mostraran por pantalla
+      $messages = [
+        'numRecibo.required' => 'Es necesario ingresar un N° de Recibo.',
+      ];
+
+      //valido los datos ingresados
+      $validacion = Validator::make($request->all(), [
+        'numRecibo' => 'required'
+      ], $messages);
+
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails()){
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      //actualizo dicho registro
+      ReservaInmueble::where('id', $request->id)
+            ->update([
+              'numRecibo' => $request->numRecibo
+            ]);
+
+      //redirijo a la vista individual
+      return redirect()->action('AlquilerInmuebleController@getShowId', $request->id);
     }
 }

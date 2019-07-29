@@ -12,13 +12,38 @@
                     <form method="POST" action="{{ url('/pagoalquiler/pagoinmueble') }}">
                         {{ csrf_field() }}
 
-                        <input type="hidden" name="id" value="1">
+                        @if (\Session::has('newID'))
+                          <input type="hidden" name="id" value="{!! \Session::get('newID') !!}">
+                        @else
+                          <input type="hidden" name="id" value="{{ $reservaInmueble->id }}">
+                        @endif
 
                         <div class="form-group row">
                             <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Solicitante') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNI" id="DNI" class="form-control" value="40563214" disabled>
+                                <input type="number" name="DNI" id="DNI" class="form-control" maxlength="8" value="{{ old('DNI') ?? $reservaInmueble->persona->DNI }}" disabled>
+                                <span class="text-danger">{{$errors->first('DNI')}}</span>
+                                @if (\Session::has('DNIinexistente'))
+                                  <span class="text-danger">{!! \Session::get('DNIinexistente') !!}</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="inmueble" class="col-md-4 col-form-label text-md-right">{{ __('Inmueble') }}</label>
+
+                            <div class="col-md-6">
+                                <select name="inmueble" id="inmueble" class="form-control" disabled>
+                                  @foreach ($inmuebles as $inmueble)
+                                    @if ($inmueble->id == $reservaInmueble->idInmueble)
+                                      <option value="{{ $inmueble->id }}" selected>{{ $inmueble->nombre }}</option>
+                                    @else
+                                      <option value="{{ $inmueble->id }}">{{ $inmueble->nombre }}</option>
+                                    @endif
+                                  @endforeach
+                                </select>
+                                <span class="text-danger">{{$errors->first('inmueble')}}</span>
                             </div>
                         </div>
 
@@ -26,15 +51,38 @@
                             <label for="fechaSol" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Solicitud') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaSol" id="fechaSol" class="form-control" value="2019-04-12" disabled>
+                                <input type="date" name="fechaSol" id="fechaSol" class="form-control" value="{{ old('fechaSol') ?? $reservaInmueble->fechaSolicitud }}" disabled>
+                                <span class="text-danger">{{$errors->first('fechaSol')}}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaRea" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Realización') }}</label>
+                            <label for="fechaHoraInicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaRea" id="fechaRea" class="form-control" value="2019-07-07" disabled>
+                                <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" value="{{ old('fechaHoraInicio') ?? $reservaInmueble->fechaHoraInicio }}" disabled>
+                                <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
+                                @if (\Session::has('errorFechaHoraInicio'))
+                                  <span class="text-danger">{!! \Session::get('errorFechaHoraInicio') !!}</span>
+                                @endif
+                                @if (\Session::has('solapamientoFechaHoraInicio'))
+                                  <span class="text-danger">{!! \Session::get('solapamientoFechaHoraInicio') !!}</span>
+                                @endif
+                                @if (\Session::has('solapamientoFechaHoraFin'))
+                                  <span class="text-danger">{!! \Session::get('solapamientoFechaHoraFin') !!}</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control" value="{{ old('fechaHoraFin') ?? $reservaInmueble->fechaHoraFin }}" disabled>
+                                <span class="text-danger">{{$errors->first('fechaHoraFin')}}</span>
+                                @if (\Session::has('errorFechaHoraFin'))
+                                  <span class="text-danger">{!! \Session::get('errorFechaHoraFin') !!}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -42,7 +90,8 @@
                             <label for="observacion" class="col-md-4 col-form-label text-md-right">{{ __('Observación') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="observacion" id="observacion" class="form-control" value="" disabled>
+                                <input type="text" name="observacion" id="observacion" class="form-control" value="{{ old('observacion') ?? $reservaInmueble->observacion }}" disabled>
+                                <span class="text-danger">{{$errors->first('observacion')}}</span>
                             </div>
                         </div>
 
@@ -50,7 +99,8 @@
                             <label for="costoReserva" class="col-md-4 col-form-label text-md-right">{{ __('Costo de la Reserva') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costoReserva" id="costoReserva" class="form-control" value="1000" disabled>
+                                <input type="number" name="costoReserva" id="costoReserva" class="form-control" value="{{ old('costoReserva') ?? $reservaInmueble->costoReserva }}" disabled>
+                                <span class="text-danger">{{$errors->first('costoReserva')}}</span>
                             </div>
                         </div>
 
@@ -58,7 +108,8 @@
                             <label for="costoTotal" class="col-md-4 col-form-label text-md-right">{{ __('Costo Total') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costoTotal" id="costoTotal" class="form-control" value="3000" disabled>
+                                <input type="number" name="costoTotal" id="costoTotal" class="form-control" value="{{ old('costoTotal') ?? $reservaInmueble->costoTotal }}" disabled>
+                                <span class="text-danger">{{$errors->first('costoTotal')}}</span>
                             </div>
                         </div>
 
@@ -67,17 +118,16 @@
 
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control" disabled>
-                                  <option value="1">Efectivo</option>
-                                  <option value="2">Tarjeta</option>
+                                  @foreach ($mediosDePago as $medioDePago)
+                                    @if ($medioDePago->id == $reservaInmueble->idMedioDePago)
+                                      <option value="{{ $medioDePago->id }}" selected>{{ $medioDePago->nombre }}</option>
+                                    @else
+                                      <option value="{{ $medioDePago->id }}">{{ $medioDePago->nombre }}</option>
+                                    @endif
+
+                                  @endforeach
                                 </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="horario" class="col-md-4 col-form-label text-md-right">{{ __('Horario') }}</label>
-
-                            <div class="col-md-6">
-                                <input type="text" name="horario" id="horario" class="form-control" value="18 a 21" disabled>
+                                <span class="text-danger">{{$errors->first('medioPago')}}</span>
                             </div>
                         </div>
 
@@ -85,7 +135,8 @@
                             <label for="tipoEvento" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Evento') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="tipoEvento" id="tipoEvento" class="form-control" value="cumpleaños" disabled>
+                                <input type="text" name="tipoEvento" id="tipoEvento" class="form-control" value="{{ old('tipoEvento') ?? $reservaInmueble->tipoEvento }}" disabled>
+                                <span class="text-danger">{{$errors->first('tipoEvento')}}</span>
                             </div>
                         </div>
 
@@ -93,7 +144,8 @@
                             <label for="cantAsistentes" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad de Asistentes') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="cantAsistentes" id="cantAsistentes" class="form-control" value="30" disabled>
+                                <input type="number" name="cantAsistentes" id="cantAsistentes" class="form-control" value="{{ old('cantAsistentes') ?? $reservaInmueble->cantAsistentes }}" disabled>
+                                <span class="text-danger">{{$errors->first('cantAsistentes')}}</span>
                             </div>
                         </div>
 
@@ -102,9 +154,15 @@
 
                             <div class="col-md-6">
                                 <select name="servicioLimp" id="servicioLimp" class="form-control" disabled>
-                                  <option value="1">Si</option>
-                                  <option value="2">No</option>
+                                  @if ($reservaInmueble->tieneServicioLimpieza)
+                                    <option value="0">No</option>
+                                    <option value="1" selected>Si</option>
+                                  @else
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Si</option>
+                                  @endif
                                 </select>
+                                <span class="text-danger">{{$errors->first('servicioLimp')}}</span>
                             </div>
                         </div>
 
@@ -113,9 +171,15 @@
 
                             <div class="col-md-6">
                                 <select name="musica" id="musica" class="form-control" disabled>
-                                  <option value="1">Si</option>
-                                  <option value="2">No</option>
+                                  @if ($reservaInmueble->tieneMusica)
+                                    <option value="0">No</option>
+                                    <option value="1" selected>Si</option>
+                                  @else
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Si</option>
+                                  @endif
                                 </select>
+                                <span class="text-danger">{{$errors->first('musica')}}</span>
                             </div>
                         </div>
 
@@ -124,17 +188,26 @@
 
                             <div class="col-md-6">
                                 <select name="reglamento" id="reglamento" class="form-control" disabled>
-                                  <option value="1">Si</option>
-                                  <option value="2">No</option>
+                                  @if ($reservaInmueble->tieneReglamento)
+                                    <option value="0">No</option>
+                                    <option value="1" selected>Si</option>
+                                  @else
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Si</option>
+                                  @endif
                                 </select>
+
+                                <span class="text-danger">{{$errors->first('reglamento')}}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="numRecibo" class="col-md-4 col-form-label text-md-right">{{ __('Número de Recibo') }}</label>
+                            <label for="numRecibo" class="col-md-4 col-form-label text-md-right">{{ __('N° Recibo') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="">
+                                <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ $reservaInmueble->numRecibo }}" min="0" required>
+
+                                <span class="text-danger">{{$errors->first('numRecibo')}}</span>
                             </div>
                         </div>
 
