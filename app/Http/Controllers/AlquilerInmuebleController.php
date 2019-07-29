@@ -354,7 +354,6 @@ class AlquilerInmuebleController extends Controller
         $reservaOriginal->observacion = $request->observacion;
         $reservaOriginal->tieneServicioLimpieza = intval($request->servicioLimp);
         $reservaOriginal->cantAsistentes = intval($request->cantAsistentes);
-        $reservaOriginal->numRecibo = NULL;
         $reservaOriginal->tipoEvento = $request->tipoEvento;
         $reservaOriginal->costoTotal = $request->costoTotal;
         $reservaOriginal->tieneMusica = intval($request->musica);
@@ -362,6 +361,7 @@ class AlquilerInmuebleController extends Controller
         $reservaOriginal->idInmueble = $request->inmueble;
         $reservaOriginal->idPersona = $persona->id;
         $reservaOriginal->idMedioDePago = $request->medioPago;
+        $reservaOriginal->numRecibo = $request->numRecibo;
 
         $reservaOriginal->save();
 

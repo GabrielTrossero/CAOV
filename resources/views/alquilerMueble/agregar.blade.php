@@ -36,7 +36,7 @@
                             <label for="tipoMueble" class="col-md-4 col-form-label text-md-right">{{ __('Seleccione el Mueble') }}</label>
 
                             <div class="col-md-6">
-                              <select name="tipoMueble" id="tipoMueble" class="form-control">
+                              <select name="tipoMueble" id="tipoMueble" class="form-control" required>
                                 @foreach ($muebles as $mueble)
                                   <option value="{{ $mueble->id }}">{{ $mueble->nombre }}</option>
                                 @endforeach
@@ -90,7 +90,7 @@
                             <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
 
                             <div class="col-md-6">
-                                <select name="medioPago" id="medioPago" class="form-control">
+                                <select name="medioPago" id="medioPago" class="form-control" required>
                                   @foreach ($mediosDePagos as $medioDePago)
                                     <option value="{{ $medioDePago->id }}">{{ $medioDePago->nombre }}</option>
                                   @endforeach

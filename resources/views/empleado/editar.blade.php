@@ -17,7 +17,7 @@
                             <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Nombre de Usuario') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="username" id="username" class="form-control" value="{{ $usuario->username }}" minlength="8" maxlength="75" required>
+                                <input type="text" name="username" id="username" class="form-control" value="{{ old('username') ?? $usuario->username }}" minlength="8" maxlength="75" required>
 
                                 @foreach ($errors->get('username') as $message)
                                   <span class="text-danger">{{$message}}</span>
@@ -29,7 +29,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Email') }}</label>
 
                             <div class="col-md-6">
-                                <input type="email" name="email" id="email" class="form-control" value="{{ $usuario->email }}" maxlength="75" required>
+                                <input type="email" name="email" id="email" class="form-control" value="{{ old('email') ?? $usuario->email }}" maxlength="75" required>
 
                                 <span class="text-danger">{{$errors->first('email')}}</span>
                             </div>
