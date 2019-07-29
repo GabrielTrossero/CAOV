@@ -228,6 +228,8 @@ class SocioController extends Controller
         'DNI.max' => 'Es necesario ingresar un DNI válido.',
         'DNI.exists' => 'Es necesario que dicho Socio esté cargado como Persona.',
         'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
+        'activo.required' => 'Es necesario ingresar el Estado del Socio.',
+        'activo.in' => 'Es necesario ingresar valores válidos para el Estado del Socio.'
       ];
 
       //para cargar el id de la persona a traves del DNI ingresado
@@ -249,7 +251,8 @@ class SocioController extends Controller
         //para verificar que exista dicha persona
         Rule::exists('persona')->where('id', $persona->id)
       ],
-      'idGrupoFamiliar' => 'required'
+      'idGrupoFamiliar' => 'required',
+      'activo' => 'required|in:0,1'
       ], $messages);
 
       //para que le asigne null si es que no pertenece a ningun grupo familiar
@@ -268,7 +271,8 @@ class SocioController extends Controller
               'idPersona' => $persona->id,
               'numSocio' => $request->numSocio,
               'oficio' => $request->oficio,
-              'vitalicio' => $request->vitalicio
+              'vitalicio' => $request->vitalicio,
+              'activo' => $request->activo
             ]);
 
       //proceso para AGREGAR un nuevo deporte a dicho socio

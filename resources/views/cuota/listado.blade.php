@@ -22,7 +22,7 @@
         <tbody>
           @foreach ($cuotas as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
               <td>{{date("d/m/Y", strtotime($cuota->fechaPago))}}</td><!-- para mostrar en formato dia/mes/año -->
 
