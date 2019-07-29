@@ -137,6 +137,24 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label for="activo" class="col-md-4 col-form-label text-md-right">{{ __('Activo') }}</label>
+
+                            <div class="col-md-6">
+                                <select name="activo" id="activo" class="form-control">
+                                  @if ($socio->activo == 0)
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Si</option>
+                                  @else
+                                    <option value="0">No</option>
+                                    <option value="1" selected>Si</option>
+                                  @endif
+                                </select>
+
+                                <span class="text-danger">{{$errors->first('activo')}}</span>
+                            </div>
+                        </div>
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">

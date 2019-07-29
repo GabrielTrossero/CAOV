@@ -17,6 +17,7 @@
           <th>Deportes</th>
           <th>Fecha de Nacimiento</th>
           <th>Titular Grupo Familiar</th>
+          <th>Acitvo</th>
         </tr>
         <tr>
           <td>{{ $socio->persona->DNI }}</td>
@@ -53,6 +54,11 @@
           @else
             <td></td>
           @endif
+          @if ($socio->activo)
+            <td>Si</td>
+          @else
+            <td>No</td>
+          @endif
 
         </tr>
       </table>
@@ -64,7 +70,7 @@
             Editar Socio
           </button>
         </a>
-
+        <!-- POR EL MOMENTO NO USAMOS ESTE METODO
         &nbsp;&nbsp;
         <form action="{{url('/socio/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
@@ -73,6 +79,7 @@
             Eliminar Socio
           </button>
         </form>
+      -->
       </div>
 
     </div>

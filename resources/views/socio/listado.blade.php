@@ -17,6 +17,7 @@
             <th>Nombres</th>
             <th>Categoria</th>
             <th>Deportes</th>
+            <th>Activo</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -44,6 +45,11 @@
                   <br>
                 @endforeach
               </td>
+              @if ($socio->activo)
+                <td>Si</td>
+              @else
+                <td>No</td>
+              @endif
 
               <td><a href="{{ url('/socio/show/'.$socio->id) }}"> <i class="fas fa-plus"></i></a> </td>
             </tr>
