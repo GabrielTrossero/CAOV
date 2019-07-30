@@ -72,9 +72,6 @@ class SocioController extends Controller
           'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
         ];
 
-        //obtengo la persona correspondiente al DNI ingresado
-        $persona = Persona::where('DNI', $request->DNI)->first();
-
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
         'numSocio' => 'required|unique:socio',
@@ -84,21 +81,40 @@ class SocioController extends Controller
         'DNI' => ['required',
           'min:8',
           'max:8',
-          //hace select count(*) from persona where DNI = $request->DNI and id = $persona->id
+          //hace select count(*) from persona where DNI = $request->DNI
           //para verificar que exista dicha persona
-          Rule::exists('persona')->where('id', $persona->id)
+          Rule::exists('persona')
         ],
         'idGrupoFamiliar' => 'required'
         ], $messages);
-
-        //para que le asigne null si es que no pertenece a ningun grupo familiar
-        if($request->idGrupoFamiliar == 0)
-          $request->idGrupoFamiliar = null;
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
           return redirect()->back()->withInput()->withErrors($validacion->errors());
         }
+
+
+        //valido que el id del Grupo Familiar exista
+        $validarGrupoFamiliar = GrupoFamiliar::where('id', $request->idGrupoFamiliar)->first();
+
+        if($request->idGrupoFamiliar == 0){
+          $request->idGrupoFamiliar = null;
+        }
+        elseif (!isset($validarGrupoFamiliar)) {
+          return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+        }
+
+
+        //obtengo la persona correspondiente al DNI ingresado
+        $persona = Persona::where('DNI', $request->DNI)->first();
+
+        //valido que ya no haiga otro Socio con dicha idPersona
+        $validarIdPersona = Socio::where('idPersona', $persona->id)->first();
+
+        if(isset($validarIdPersona)){
+          return redirect()->back()->withInput()->with('validarIdPersona', 'Error, ya dicho Socio.');
+        }
+
 
         //almaceno al socio y el deporte que realiza
         $socio->numSocio = $request->numSocio;
@@ -115,6 +131,12 @@ class SocioController extends Controller
           $socio = Socio::where('numSocio', $request->numSocio)->first();
 
           foreach ($request->idDeporte as $value) {
+            //valido que el id del Deporte exista
+            $validarDeporte = Deporte::where('id', $value)->first();
+            if (!isset($validarDeporte)) {
+              return redirect()->back()->withInput()->with('validarDeporte', 'Error al seleccionar un Deporte');
+            }
+
             $socioDeporte = new SocioDeporte;
             $socioDeporte->idSocio = $socio->id;
 
@@ -247,22 +269,45 @@ class SocioController extends Controller
       'DNI' => ['required',
         'min:8',
         'max:8',
-        //hace select count(*) from persona where DNI = $request->DNI and id = $persona->id
+        //hace select count(*) from persona where DNI = $request->DNI
         //para verificar que exista dicha persona
-        Rule::exists('persona')->where('id', $persona->id)
+        Rule::exists('persona')
       ],
       'idGrupoFamiliar' => 'required',
       'activo' => 'required|in:0,1'
       ], $messages);
 
-      //para que le asigne null si es que no pertenece a ningun grupo familiar
-      if($request->idGrupoFamiliar == 0)
-        $request->idGrupoFamiliar = null;
-
       //si la validacion falla vuelvo hacia atras con los errores
       if($validacion->fails()){
         return redirect()->back()->withInput()->withErrors($validacion->errors());
       }
+
+
+      //valido que el id del Grupo Familiar exista
+      $validarGrupoFamiliar = GrupoFamiliar::where('id', $request->idGrupoFamiliar)->first();
+
+      if($request->idGrupoFamiliar == 0){
+        $request->idGrupoFamiliar = null;
+      }
+      elseif (!isset($validarGrupoFamiliar)) {
+        return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+      }
+
+
+      //obtengo la persona correspondiente al DNI ingresado
+      $persona = Persona::where('DNI', $request->DNI)->first();
+
+      //obtengo el socio actual (sin actualizar)
+      $socio = Socio::where('id', $request->id)->first();
+
+      //valido que ya no haiga otro Socio con dicha idPersona, exepto el actual
+      $validarIdPersona = Socio::where('idPersona', $persona->id)
+                              ->where('id', '!=', $socio->id)->first();
+
+      if(isset($validarIdPersona)){
+        return redirect()->back()->withInput()->with('validarIdPersona', 'Error, ya dicho Socio.');
+      }
+
 
       Socio::where('id', $request->id)
             ->update([
@@ -275,10 +320,17 @@ class SocioController extends Controller
               'activo' => $request->activo
             ]);
 
+
       //proceso para AGREGAR un nuevo deporte a dicho socio
       //si está vacía la variable que contiene los deportes que ahora realiza, que no entre
       if(isset($request->idDeporte)){
         foreach ($request->idDeporte as $deporteQueTiene) {
+          //valido que el id del Deporte exista
+          $validarDeporte = Deporte::where('id', $deporteQueTiene)->first();
+          if (!isset($validarDeporte)) {
+            return redirect()->back()->withInput()->with('validarDeporte', 'Error al seleccionar un Deporte');
+          }
+
           $deporteQueTenia = new SocioDeporte;
           //busco si el socio realiza tal deporte (que ahora si realiza)
           $deporteQueTenia = SocioDeporte::where('idSocio', $request->id)

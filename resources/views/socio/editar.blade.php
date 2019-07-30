@@ -69,6 +69,10 @@
                                 <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') ?? $socio->persona->DNI }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('DNI')}}</span>
+
+                                @if (\Session::has('validarIdPersona'))
+                                  <span class="text-danger">{!! \Session::get('validarIdPersona') !!}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -96,6 +100,10 @@
                               </select>
 
                               <span class="text-danger">{{$errors->first('idGrupoFamiliar')}}</span>
+
+                              @if (\Session::has('validarGrupoFamiliar'))
+                                <span class="text-danger">{!! \Session::get('validarGrupoFamiliar') !!}</span>
+                              @endif
                             </div>
                         </div>
 
@@ -129,11 +137,11 @@
                                   </label>
                                   <br>
                                 @endforeach
-
-                                @if ($errors->has('idDeporte'))
-                                  <span class="text-danger">Ingrese un Deporte válido</span>
-                                @endif
                               </div>
+
+                              @if (\Session::has('validarDeporte'))
+                                <span class="text-danger">{!! \Session::get('validarDeporte') !!}</span>
+                              @endif
                             </div>
                         </div>
 

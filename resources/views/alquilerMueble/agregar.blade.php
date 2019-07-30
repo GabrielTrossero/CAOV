@@ -19,10 +19,6 @@
                                 <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('DNI')}}</span>
-
-                                @if (\Session::has('DNIinexistente'))
-                                  <span class="text-danger">{!! \Session::get('DNIinexistente') !!}</span>
-                                @endif
                             </div>
                         </div>
 
@@ -47,6 +43,10 @@
                               </select>
 
                               <span class="text-danger">{{$errors->first('tipoMueble')}}</span>
+
+                              @if (\Session::has('validarMueble'))
+                                <span class="text-danger">{!! \Session::get('validarMueble') !!}</span>
+                              @endif
                             </div>
                         </div>
 

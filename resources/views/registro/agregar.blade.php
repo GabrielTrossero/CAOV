@@ -74,7 +74,12 @@
                                     <option value="{{ $usuario->id }}">{{ $usuario->persona->DNI . " - " . $usuario->persona->nombres . " " . $usuario->persona->apellido }}</option>
                                   @endforeach
                                 </select>
+
                                 <span class="text-danger">{{$errors->first('usuario')}}</span>
+
+                                @if (\Session::has('validarUsuario'))
+                                  <span class="text-danger">{!! \Session::get('validarUsuario') !!}</span>
+                                @endif
                             </div>
                         </div>
 

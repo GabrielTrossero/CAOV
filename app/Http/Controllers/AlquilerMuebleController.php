@@ -61,6 +61,7 @@ class AlquilerMuebleController extends Controller
         'fechaHoraFin.required' => 'Es necesario ingresar una Fecha y Hora de Finalización.',
         'costo.required' => 'Es necesario ingresar el Costo.',
         'medioPago.required' => 'Es necesario ingresar un Medio de Pago',
+        'medioPago.in' => 'Seleccione un Medio de Pago válido.',
         'observacion.max' => 'La Observación no puede ser tan extensa'
       ];
 
@@ -80,7 +81,7 @@ class AlquilerMuebleController extends Controller
         'fechaHoraInicio' => 'required',
         'fechaHoraFin' => 'required',
         'costo' => 'required',
-        'medioPago' => 'required',
+        'medioPago' => 'required|in:1',
         'observacion' => 'max:100'
       ], $messages);
 
@@ -124,6 +125,15 @@ class AlquilerMuebleController extends Controller
       if (sizeof($solapamientoFechas) != 0) {
         return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
       }
+
+
+      //valido que el Mueble exista
+      $validarMueble = Mueble::where('id', $request->tipoMueble)->first();
+
+      if (!isset($validarMueble)) {
+        return redirect()->back()->withInput()->with('validarMueble', 'Error al seleccionar un Mueble.');
+      }
+
 
       //obtengo la persona correspondiente al DNI ingresado
       $persona = Persona::where('DNI', $request->DNI)->first();
@@ -307,6 +317,15 @@ class AlquilerMuebleController extends Controller
         if (sizeof($solapamientoFechas) != 0) {
           return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
+
+
+        //valido que el Mueble exista
+        $validarMueble = Mueble::where('id', $request->tipoMueble)->first();
+
+        if (!isset($validarMueble)) {
+          return redirect()->back()->withInput()->with('validarMueble', 'Error al seleccionar un Mueble.');
+        }
+
 
         //obtengo la persona correspondiente al DNI ingresado
         $persona = Persona::where('DNI', $request->DNI)->first();

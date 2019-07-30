@@ -50,6 +50,10 @@
                               </select>
 
                               <span class="text-danger">{{$errors->first('tipoMueble')}}</span>
+
+                              @if (\Session::has('validarMueble'))
+                                <span class="text-danger">{!! \Session::get('validarMueble') !!}</span>
+                              @endif
                             </div>
                         </div>
 

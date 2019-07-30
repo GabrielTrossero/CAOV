@@ -61,6 +61,15 @@ class RegistroController extends Controller
       return redirect()->back()->withInput()->withErrors($validacion->errors());
     }
 
+
+    //valido que el Usuario exista
+    $validarUsuario = User::where('id', $request->usuario)->first();
+
+    if (!isset($validarUsuario)) {
+      return redirect()->back()->withInput()->with('validarUsuario', 'Error al seleccionar un Usuario.');
+    }
+
+
     $movimiento = new MovExtras;
 
     //almaceno el movimiento extra

@@ -21,10 +21,6 @@
                                 <input type="number" name="DNI" id="DNI" class="form-control" required maxlength="8" value="{{ old('DNI') ?? $reservaInmueble->persona->DNI }}">
 
                                 <span class="text-danger">{{$errors->first('DNI')}}</span>
-
-                                @if (\Session::has('DNIinexistente'))
-                                  <span class="text-danger">{!! \Session::get('DNIinexistente') !!}</span>
-                                @endif
                             </div>
                         </div>
 
@@ -43,6 +39,10 @@
                                 </select>
 
                                 <span class="text-danger">{{$errors->first('inmueble')}}</span>
+
+                                @if (\Session::has('validarInmueble'))
+                                  <span class="text-danger">{!! \Session::get('validarInmueble') !!}</span>
+                                @endif
                             </div>
                         </div>
 

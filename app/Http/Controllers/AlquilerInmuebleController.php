@@ -95,18 +95,19 @@ class AlquilerInmuebleController extends Controller
           'observacion' => 'max:100',
           'costoReserva' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
           'costoTotal' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
-          'medioPago' =>'required|in:1,2',
+          'medioPago' =>'required|in:1',
           'tipoEvento' => 'required|max:75',
           'cantAsistentes' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
           'servicioLimp' => 'required|in:0,1',
           'musica' => 'required|in:0,1',
           'reglamento' => 'required|in:0,1'
-          ], $messages);
+        ], $messages);
 
-          //si la validacion falla vuelvo hacia atras con los errores
-          if($validacion->fails()){
-            return redirect()->back()->withInput()->withErrors($validacion->errors());
-          }
+        //si la validacion falla vuelvo hacia atras con los errores
+        if($validacion->fails()){
+          return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
 
         //valido si la fecha y hora de finalizacion es menor a la de inicio
         if ($request->fechaHoraInicio >= $request->fechaHoraFin) {
@@ -143,6 +144,15 @@ class AlquilerInmuebleController extends Controller
         if (sizeof($solapamientoFechas) != 0) {
           return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
+
+
+        //valido que el Inmueble exista
+        $validarInmueble = Inmueble::where('id', $request->inmueble)->first();
+
+        if (!isset($validarInmueble)) {
+          return redirect()->back()->withInput()->with('validarInmueble', 'Error al seleccionar un Inmueble.');
+        }
+
 
         //obtengo la persona correspondiente al DNI ingresado
         $persona = Persona::where('DNI', $request->DNI)->first();
@@ -332,6 +342,15 @@ class AlquilerInmuebleController extends Controller
         if (sizeof($solapamientoFechas) != 0) {
           return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
+
+
+        //valido que el Inmueble exista
+        $validarInmueble = Inmueble::where('id', $request->inmueble)->first();
+
+        if (!isset($validarInmueble)) {
+          return redirect()->back()->withInput()->with('validarInmueble', 'Error al seleccionar un Inmueble.');
+        }
+
 
         //obtengo la persona correspondiente al DNI ingresado
         $persona = Persona::where('DNI', $request->DNI)->first();

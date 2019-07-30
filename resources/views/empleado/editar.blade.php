@@ -36,21 +36,16 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Empleado') }}</label>
 
                             <div class="col-md-6">
-                                <select name="idPersona" id="idPersona" class="form-control" required>
-                                  @foreach ($personas as $persona)
-                                    <!--para seleccionar en el select la persona actual -->
-                                    @if ($usuario->idPersona == $persona->id)
-                                      <option value="{{ $persona->id }}" selected>{{ $persona->DNI." - ".$persona->nombres." ".$persona->apellido }}</option>
-                                    @else
-                                      <option value="{{ $persona->id }}">{{ $persona->DNI." - ".$persona->nombres." ".$persona->apellido }}</option>
-                                    @endif
-                                  @endforeach
-                                </select>
+                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') ?? $usuario->persona->DNI }}" min="0" required>
 
-                                <span class="text-danger">{{$errors->first('idPersona')}}</span>
+                                <span class="text-danger">{{$errors->first('DNI')}}</span>
+
+                                @if (\Session::has('validarIdPersona'))
+                                  <span class="text-danger">{!! \Session::get('validarIdPersona') !!}</span>
+                                @endif
                             </div>
                         </div>
 
