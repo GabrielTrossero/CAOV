@@ -18,7 +18,7 @@
                             <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ $mueble->nombre }}" maxlength="75" required>
+                                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') ?? $mueble->nombre }}" maxlength="75" required>
 
                                 <span class="text-danger">{{$errors->first('nombre')}}</span>
                             </div>
@@ -28,7 +28,7 @@
                             <label for="cantidadActual" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad Actual') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="cantidadActual" id="cantidadActual" class="form-control" value="{{ $mueble->cantidad }}" disabled>
+                                <input type="number" name="cantidadActual" id="cantidadActual" class="form-control" value="{{ old('cantidadActual') ?? $mueble->cantidad }}" disabled>
 
                                 <span class="text-danger">{{$errors->first('cantidadActual')}}</span>
                             </div>
@@ -38,7 +38,7 @@
                             <label for="accionCantidad" class="col-md-4 col-form-label text-md-right">{{ __('Sumar o Restar cantidad del mueble') }}</label>
 
                             <div class="col-md-6">
-                                <select name="accionCantidad" id="accionCantidad" class="form-control">
+                                <select name="accionCantidad" id="accionCantidad" class="form-control" required>
                                   <option value="0">Ninguna acción</option>
                                   <option value="1">Restar cantidad</option>
                                   <option value="2">Aumentar cantidad</option>
@@ -52,7 +52,7 @@
                             <label for="cantidadModificar" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="cantidadModificar" id="cantidadModificar" class="form-control" min="1">
+                                <input type="number" name="cantidadModificar" id="cantidadModificar" class="form-control" value="{{ old('cantidadModificar') }}" min="1">
 
                                 <span class="text-danger">{{$errors->first('cantidadModificar')}}</span>
                             </div>

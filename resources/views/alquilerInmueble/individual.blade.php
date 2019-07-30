@@ -8,29 +8,28 @@
     <div class="card-body border tam_letra_x-small">
       <table class="table">
         <tr>
-          <!-- la <b> es para poner en negrita -->
-          <td><b>DNI Solicitante</b></td>
-          <td><b>Inmueble</b></td>
-          <td><b>Fecha de Solicitud</b></td>
-          <td><b>Fecha/Hora Inicio</b></td>
-          <td><b>Fecha/Hora Finalización</b></td>
-          <td><b>Observación</b></td>
-          <td><b>Costo Reserva</b></td>
-          <td><b>Costo Total</b></td>
-          <td><b>Medio de Pago</b></td>
-          <td><b>Tipo de Evento</b></td>
-          <td><b>Cantiad Asistentes</b></td>
-          <td><b>Limpieza</b></td>
-          <td><b>Música</b></td>
-          <td><b>Reglamento</b></td>
-          <td><b>N° Recibo</b></td>
+          <th>DNI Solicitante</th>
+          <th>Inmueble</th>
+          <th>Fecha de Solicitud</th>
+          <th>Fecha/Hora Inicio</th>
+          <th>Fecha/Hora Finalización</th>
+          <th>Observación</th>
+          <th>Costo Reserva</th>
+          <th>Costo Total</th>
+          <th>Medio de Pago</th>
+          <th>Tipo de Evento</th>
+          <th>Cantiad Asistentes</th>
+          <th>Limpieza</th>
+          <th>Música</th>
+          <th>Reglamento</th>
+          <th>N° Recibo</th>
         </tr>
         <tr>
           <td>{{ $reservaInmueble->persona->DNI }}</td>
           <td>{{ $reservaInmueble->inmueble->nombre }}</td>
-          <td>{{ $reservaInmueble->fechaSolicitud }}</td>
-          <td>{{ $reservaInmueble->fechaHoraInicio }}</td>
-          <td>{{ $reservaInmueble->fechaHoraFin }}</td>
+          <td>{{ date("d/m/Y", strtotime($reservaInmueble->fechaSolicitud)) }}</td>
+          <td>{{ date("d/m/Y H:i", strtotime($reservaInmueble->fechaHoraInicio)) }}</td>
+          <td>{{ date("d/m/Y H:i", strtotime($reservaInmueble->fechaHoraFin)) }}</td>
           <td>{{ $reservaInmueble->observacion }}</td>
           <td>{{ $reservaInmueble->costoReserva }}</td>
           <td>{{ $reservaInmueble->costoTotal }}</td>

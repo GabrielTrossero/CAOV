@@ -20,7 +20,7 @@
                             <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI Socio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ $cuota->socio->persona->DNI }}" min="0" disabled>
+                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') ?? $cuota->socio->persona->DNI }}" min="0" disabled>
                             </div>
                         </div>
 
@@ -28,7 +28,7 @@
                             <label for="fechaPago" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Pago') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaPago" id="fechaPago" class="form-control" value="{{ $cuota->fechaPago }}" required>
+                                <input type="date" name="fechaPago" id="fechaPago" class="form-control" value="{{ old('fechaPago') ?? $cuota->fechaPago }}" required>
 
                                 <span class="text-danger">{{$errors->first('fechaPago')}}</span>
                             </div>
@@ -38,9 +38,9 @@
                             <label for="fechaMesAnio" class="col-md-4 col-form-label text-md-right">{{ __('Mes y Año correspondinte') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaMesAnio" id="fechaMesAnio" class="form-control" value="{{ $cuota->fechaMesAnio }}" required>
+                                <input type="date" name="fechaMesAnio" id="fechaMesAnio" class="form-control" value="{{ old('fechaMesAnio') ?? $cuota->fechaMesAnio }}" required>
 
-                                <span class="text-danger">{{$errors->first('fechaPago')}}</span>
+                                <span class="text-danger">{{$errors->first('fechaMesAnio')}}</span>
                             </div>
                         </div>
 
@@ -48,7 +48,7 @@
                             <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
 
                             <div class="col-md-6">
-                                <select name="medioPago" id="medioPago" class="form-control">
+                                <select name="medioPago" id="medioPago" class="form-control" required>
                                   <option value="1">Efectivo</option>
                                 </select>
 
@@ -60,7 +60,7 @@
                             <label for="tipo" class="col-md-4 col-form-label text-md-right">{{ __('Tipo') }}</label>
 
                             <div class="col-md-6">
-                                <select name="tipo" id="tipo" class="form-control">
+                                <select name="tipo" id="tipo" class="form-control" required>
                                   @if ($cuota->tipo == "m")
                                     <option value="m" selected>Mensual</option>
                                     <option value="s">Semestral</option>

@@ -26,8 +26,8 @@
             <tr>
               <td>{{ $reservaInmueble->persona->DNI }}</td>
               <td>{{ $reservaInmueble->inmueble->nombre }}</td>
-              <td>{{ $reservaInmueble->fechaHoraInicio }}</td>
-              <td>{{ $reservaInmueble->fechaHoraFin }}</td>
+              <td>{{ date("d/m/Y H:i", strtotime($reservaInmueble->fechaHoraInicio)) }}</td>
+              <td>{{ date("d/m/Y H:i", strtotime($reservaInmueble->fechaHoraFin)) }}</td>
               <td>{{ $reservaInmueble->costoReserva }}</td>
               <td>{{ $reservaInmueble->costoTotal }}</td>
               @if ($reservaInmueble->numRecibo)

@@ -18,7 +18,7 @@
                             <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ $inmueble->nombre }}" maxlength="75" required>
+                                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') ?? $inmueble->nombre }}" maxlength="75" required>
 
                                 <span class="text-danger">{{$errors->first('nombre')}}</span>
                             </div>
@@ -28,7 +28,7 @@
                             <label for="descripcion" class="col-md-4 col-form-label text-md-right">{{ __('Descripción') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="descripcion" id="descripcion" class="form-control" value="{{ $inmueble->descripcion }}" maxlength="75">
+                                <input type="text" name="descripcion" id="descripcion" class="form-control" value="{{ old('descripcion') ?? $inmueble->descripcion }}" maxlength="75">
                             </div>
                         </div>
 

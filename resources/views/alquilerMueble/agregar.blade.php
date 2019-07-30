@@ -19,6 +19,10 @@
                                 <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('DNI')}}</span>
+
+                                @if (\Session::has('DNIinexistente'))
+                                  <span class="text-danger">{!! \Session::get('DNIinexistente') !!}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -36,7 +40,7 @@
                             <label for="tipoMueble" class="col-md-4 col-form-label text-md-right">{{ __('Seleccione el Mueble') }}</label>
 
                             <div class="col-md-6">
-                              <select name="tipoMueble" id="tipoMueble" class="form-control">
+                              <select name="tipoMueble" id="tipoMueble" class="form-control" required>
                                 @foreach ($muebles as $mueble)
                                   <option value="{{ $mueble->id }}">{{ $mueble->nombre }}</option>
                                 @endforeach
@@ -63,6 +67,10 @@
                                 <input type="datetime-local" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" value="{{ old('fechaHoraInicio') }}" required>
 
                                 <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
+
+                                @if (\Session::has('solapamientoFechas'))
+                                  <span class="text-danger">{!! \Session::get('solapamientoFechas') !!}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -90,7 +98,7 @@
                             <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
 
                             <div class="col-md-6">
-                                <select name="medioPago" id="medioPago" class="form-control">
+                                <select name="medioPago" id="medioPago" class="form-control" required>
                                   @foreach ($mediosDePagos as $medioDePago)
                                     <option value="{{ $medioDePago->id }}">{{ $medioDePago->nombre }}</option>
                                   @endforeach

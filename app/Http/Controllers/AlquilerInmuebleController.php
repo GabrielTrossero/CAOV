@@ -76,26 +76,17 @@ class AlquilerInmuebleController extends Controller
           'musica.required' => 'Es necesario ingresar si posee Música',
           'musica.in' => ' Ingrese valores válidos para Música',
           'reglamento.required' => 'Es necesario ingresar si posee Reglamento',
-          'reglamento.in' => 'Ingrese valores válidos para Reglamento',
-
+          'reglamento.in' => 'Ingrese valores válidos para Reglamento'
         ];
-
-        //obtengo la persona correspondiente al DNI ingresado
-        $persona = Persona::where('DNI', $request->DNI)->first();
-
-        //valído si el DNI ingresado existe
-        if (is_null($persona)) {
-          return redirect()->back()->withInput()->with('DNIinexistente', 'El DNI ingresado es erróneo o no pertence a ninguna Persona');
-        }
 
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
           'DNI' => ['required',
             'min:8',
             'max:8',
-            //hace select count(*) from persona where DNI = $request->DNI and id = $persona->id
+            //hace select count(*) from persona where DNI = $request->DNI
             //para verificar que exista dicha persona
-            Rule::exists('persona')->where('id', $persona->id)
+            Rule::exists('persona')
           ],
           'inmueble' => 'required',
           'fechaSol' => 'required',
@@ -109,48 +100,52 @@ class AlquilerInmuebleController extends Controller
           'cantAsistentes' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
           'servicioLimp' => 'required|in:0,1',
           'musica' => 'required|in:0,1',
-          'reglamento' => 'required|in:0,1',
-
+          'reglamento' => 'required|in:0,1'
           ], $messages);
+
+          //si la validacion falla vuelvo hacia atras con los errores
+          if($validacion->fails()){
+            return redirect()->back()->withInput()->withErrors($validacion->errors());
+          }
 
         //valido si la fecha y hora de finalizacion es menor a la de inicio
         if ($request->fechaHoraInicio >= $request->fechaHoraFin) {
-          return redirect()->back()->withInput()->with('errorFechaHoraInicio', 'La Fecha y Hora de Inicio y Finalización son erróneas, por favor revise las mismas');
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización son erróneas, por favor revise las mismas');
         }
 
-        //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del inmueble a alquilar
-        $solapamientoEnFechaHoraInicio = ReservaInmueble::where('idInmueble', $request->inmueble)
+        //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del inmueble a alquilar.
+        //Por lo tanto obtengo todas las reservas de dicho Inmueble, donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
+        $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
                                        ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
-        if (sizeof($solapamientoEnFechaHoraInicio) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechaHoraInicio', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
 
         //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del inmueble a alquilar
-        $solapamientoEnFechaHoraFin = ReservaInmueble::where('idInmueble', $request->inmueble)
+        //Por lo tanto obtengo todas las reservas de dicho Inmueble, donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
+        $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
                                        ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
-        if (sizeof($solapamientoEnFechaHoraFin) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechaHoraFin', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
 
         //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del inmueble a alquilar
-        //(si las fechas que ingreso caen dentro de otra reserva)
-        $incluidoEnFechaHora = ReservaInmueble::where('idInmueble', $request->inmueble)
+        //(si alguna reserva está entre medio de las que ingresó)
+        $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
                                        ->where('id', '<>', $request->id)
                                        ->where('fechaHoraInicio', '<=', $request->fechaHoraInicio)
                                        ->where('fechaHoraFin','>=', $request->fechaHoraFin)
                                        ->get();
 
 
-        if (sizeof($incluidoEnFechaHora) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechaHoraInicio', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
 
-        //si la validacion falla vuelvo hacia atras con los errores
-        if($validacion->fails()){
-          return redirect()->back()->withInput()->withErrors($validacion->errors());
-        }
+        //obtengo la persona correspondiente al DNI ingresado
+        $persona = Persona::where('DNI', $request->DNI)->first();
 
         //alamceno el nuevo registro en la BD
         $reservaInmueble = new ReservaInmueble;
@@ -173,8 +168,8 @@ class AlquilerInmuebleController extends Controller
 
         $reservaInmueble->save();
 
-        //redirijo al formulario de agregar, con mensaje de exito
-        return redirect()->back()->with('success', 'Reserva de Inmueble creada con éxito!');
+        //redirijo para mostrar la reserva ingresada
+        return redirect()->action('AlquilerInmuebleController@getShowId', $reservaInmueble->id);
     }
 
     /**
@@ -265,26 +260,17 @@ class AlquilerInmuebleController extends Controller
         'musica.required' => 'Es necesario ingresar si posee Música',
         'musica.in' => ' Ingrese valores válidos para Música',
         'reglamento.required' => 'Es necesario ingresar si posee Reglamento',
-        'reglamento.in' => 'Ingrese valores válidos para Reglamento',
-
+        'reglamento.in' => 'Ingrese valores válidos para Reglamento'
       ];
-
-      //obtengo la persona correspondiente al DNI ingresado
-      $persona = Persona::where('DNI', $request->DNI)->first();
-
-      //valído si el DNI ingresado existe
-      if (is_null($persona)) {
-        return redirect()->back()->withInput()->with('DNIinexistente', 'El DNI ingresado es erróneo o no pertence a ninguna Persona');
-      }
 
       //valido los datos ingresados
       $validacion = Validator::make($request->all(),[
         'DNI' => ['required',
           'min:8',
           'max:8',
-          //hace select count(*) from persona where DNI = $request->DNI and id = $persona->id
+          //hace select count(*) from persona where DNI = $request->DNI
           //para verificar que exista dicha persona
-          Rule::exists('persona')->where('id', $persona->id)
+          Rule::exists('persona')
         ],
         'inmueble' => 'required',
         'fechaSol' => 'required',
@@ -298,53 +284,57 @@ class AlquilerInmuebleController extends Controller
         'cantAsistentes' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
         'servicioLimp' => 'required|in:0,1',
         'musica' => 'required|in:0,1',
-        'reglamento' => 'required|in:0,1',
-
+        'reglamento' => 'required|in:0,1'
         ], $messages);
+
+        //si la validacion falla vuelvo hacia atras con los errores
+        if($validacion->fails()){
+          return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
 
         //tomo la reserva del inmueble
         $reservaOriginal = ReservaInmueble::find($request->id);
 
         //valido si la fecha y hora de finalizacion es menor a la de inicio
         if ($request->fechaHoraInicio >= $request->fechaHoraFin) {
-          return redirect()->back()->withInput()->with('errorFechaHoraInicio', 'La Fecha y Hora de Inicio y  Finalización son erróneas, por favor revise las mismas');
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y  Finalización son erróneas, por favor revise las mismas');
         }
 
         //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del inmueble a alquilar
-        $solapamientoEnFechaHoraInicio = ReservaInmueble::where('idInmueble', $request->inmueble)
+        //Por lo tanto obtengo todas las reservas de dicho Inmueble (omitiendo la que estoy actualizando), donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
+        $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
                                        ->where('id', '<>', $request->id)
                                        ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
-        if (sizeof($solapamientoEnFechaHoraInicio) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechaHoraInicio', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
 
         //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del inmueble a alquilar
-        $solapamientoEnFechaHoraFin = ReservaInmueble::where('idInmueble', $request->inmueble)
+        //Por lo tanto obtengo todas las reservas de dicho Inmueble(omitiendo la que estoy actualizando), donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
+        $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
                                        ->where('id', '<>', $request->id)
                                        ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
-        if (sizeof($solapamientoEnFechaHoraFin) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechaHoraFin', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
 
         //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del inmueble a alquilar
-        //(si las fechas que ingreso caen dentro de otra reserva)
-        $incluidoEnFechaHora = ReservaInmueble::where('idInmueble', $request->inmueble)
+        //(si alguna reserva está entre medio de las que ingresó)
+        $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
                                        ->where('id', '<>', $request->id)
                                        ->where('fechaHoraInicio', '<=', $request->fechaHoraInicio)
                                        ->where('fechaHoraFin','>=', $request->fechaHoraFin)
                                        ->get();
 
 
-        if (sizeof($incluidoEnFechaHora) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechaHoraInicio', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
 
-        //si la validacion falla vuelvo hacia atras con los errores
-        if($validacion->fails()){
-          return redirect()->back()->withInput()->withErrors($validacion->errors());
-        }
+        //obtengo la persona correspondiente al DNI ingresado
+        $persona = Persona::where('DNI', $request->DNI)->first();
 
         //almaceno los nuevos datos en la BD
         $reservaOriginal->fechaSolicitud = $request->fechaSol;
@@ -354,7 +344,6 @@ class AlquilerInmuebleController extends Controller
         $reservaOriginal->observacion = $request->observacion;
         $reservaOriginal->tieneServicioLimpieza = intval($request->servicioLimp);
         $reservaOriginal->cantAsistentes = intval($request->cantAsistentes);
-        $reservaOriginal->numRecibo = NULL;
         $reservaOriginal->tipoEvento = $request->tipoEvento;
         $reservaOriginal->costoTotal = $request->costoTotal;
         $reservaOriginal->tieneMusica = intval($request->musica);
@@ -362,6 +351,7 @@ class AlquilerInmuebleController extends Controller
         $reservaOriginal->idInmueble = $request->inmueble;
         $reservaOriginal->idPersona = $persona->id;
         $reservaOriginal->idMedioDePago = $request->medioPago;
+        $reservaOriginal->numRecibo = $request->numRecibo;
 
         $reservaOriginal->save();
 

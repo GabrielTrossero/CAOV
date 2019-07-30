@@ -6,13 +6,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-
-                @if (\Session::has('success'))
-                  <div class="alert alert-success">
-                      {!! \Session::get('success') !!}
-                  </div>
-                @endif
-
                 <div class="card-header">{{ __('Agregar Alquiler de Inmueble') }}</div>
 
                 <div class="card-body">
@@ -24,7 +17,9 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="DNI" id="DNI" class="form-control" required maxlength="8" value="{{ old('DNI') }}">
+
                                 <span class="text-danger">{{$errors->first('DNI')}}</span>
+
                                 @if (\Session::has('DNIinexistente'))
                                   <span class="text-danger">{!! \Session::get('DNIinexistente') !!}</span>
                                 @endif
@@ -40,6 +35,7 @@
                                     <option value="{{ $inmueble->id }}">{{ $inmueble->nombre }}</option>
                                   @endforeach
                                 </select>
+
                                 <span class="text-danger">{{$errors->first('inmueble')}}</span>
                             </div>
                         </div>
@@ -49,6 +45,7 @@
 
                             <div class="col-md-6">
                                 <input type="date" name="fechaSol" id="fechaSol" class="form-control" required value="{{ old('fechaSol')  }}">
+
                                 <span class="text-danger">{{$errors->first('fechaSol')}}</span>
                             </div>
                         </div>
@@ -58,15 +55,11 @@
 
                             <div class="col-md-6">
                                 <input type="datetime-local" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" required value="{{ old('fechaHoraInicio') }}">
+
                                 <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
-                                @if (\Session::has('errorFechaHoraInicio'))
-                                  <span class="text-danger">{!! \Session::get('errorFechaHoraInicio') !!}</span>
-                                @endif
-                                @if (\Session::has('solapamientoFechaHoraInicio'))
-                                  <span class="text-danger">{!! \Session::get('solapamientoFechaHoraInicio') !!}</span>
-                                @endif
-                                @if (\Session::has('solapamientoFechaHoraFin'))
-                                  <span class="text-danger">{!! \Session::get('solapamientoFechaHoraFin') !!}</span>
+
+                                @if (\Session::has('solapamientoFechas'))
+                                  <span class="text-danger">{!! \Session::get('solapamientoFechas') !!}</span>
                                 @endif
                             </div>
                         </div>
@@ -76,10 +69,8 @@
 
                             <div class="col-md-6">
                                 <input type="datetime-local" name="fechaHoraFin" id="fechaHoraFin" class="form-control" required value="{{ old('fechaHoraFin') }}">
+
                                 <span class="text-danger">{{$errors->first('fechaHoraFin')}}</span>
-                                @if (\Session::has('errorFechaHoraFin'))
-                                  <span class="text-danger">{!! \Session::get('errorFechaHoraFin') !!}</span>
-                                @endif
                             </div>
                         </div>
 
@@ -88,6 +79,7 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="observacion" id="observacion" class="form-control" value="{{ old('observacion') }}">
+
                                 <span class="text-danger">{{$errors->first('observacion')}}</span>
                             </div>
                         </div>
@@ -97,6 +89,7 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="costoReserva" id="costoReserva" class="form-control" required value="{{ old('costoReserva') }}">
+
                                 <span class="text-danger">{{$errors->first('costoReserva')}}</span>
                             </div>
                         </div>
@@ -106,6 +99,7 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="costoTotal" id="costoTotal" class="form-control" required value="{{ old('costoTotal') }}">
+
                                 <span class="text-danger">{{$errors->first('costoTotal')}}</span>
                             </div>
                         </div>
@@ -119,6 +113,7 @@
                                     <option value="{{ $medioDePago->id }}">{{ $medioDePago->nombre }}</option>
                                   @endforeach
                                 </select>
+
                                 <span class="text-danger">{{$errors->first('medioPago')}}</span>
                             </div>
                         </div>
@@ -128,6 +123,7 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="tipoEvento" id="tipoEvento" class="form-control" required value="{{ old('tipoEvento') }}">
+
                                 <span class="text-danger">{{$errors->first('tipoEvento')}}</span>
                             </div>
                         </div>
@@ -137,6 +133,7 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="cantAsistentes" id="cantAsistentes" class="form-control" required value="{{ old('cantAsistentes') }}">
+
                                 <span class="text-danger">{{$errors->first('cantAsistentes')}}</span>
                             </div>
                         </div>
@@ -149,6 +146,7 @@
                                   <option value="0">No</option>
                                   <option value="1">Si</option>
                                 </select>
+
                                 <span class="text-danger">{{$errors->first('servicioLimp')}}</span>
                             </div>
                         </div>
@@ -161,6 +159,7 @@
                                   <option value="0">No</option>
                                   <option value="1">Si</option>
                                 </select>
+
                                 <span class="text-danger">{{$errors->first('musica')}}</span>
                             </div>
                         </div>
@@ -173,6 +172,7 @@
                                   <option value="0">No</option>
                                   <option value="1">Si</option>
                                 </select>
+
                                 <span class="text-danger">{{$errors->first('reglamento')}}</span>
                             </div>
                         </div>

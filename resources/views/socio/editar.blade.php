@@ -18,7 +18,7 @@
                             <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Socio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ $socio->numSocio }}" required>
+                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') ?? $socio->numSocio }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('numSocio')}}</span>
                             </div>
@@ -28,7 +28,7 @@
                             <label for="fechaNac" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Nacimiento') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaNac" id="FechaNac" class="form-control" value="{{ $socio->fechaNac }}" required>
+                                <input type="date" name="fechaNac" id="FechaNac" class="form-control" value="{{ old('fechaNac') ?? $socio->fechaNac }}" required>
 
                                 <span class="text-danger">{{$errors->first('fechaNac')}}</span>
                             </div>
@@ -38,7 +38,7 @@
                             <label for="oficio" class="col-md-4 col-form-label text-md-right">{{ __('Oficio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="oficio" id="oficio" class="form-control" value="{{ $socio->oficio }}" maxlength="80">
+                                <input type="text" name="oficio" id="oficio" class="form-control" value="{{ old('oficio') ?? $socio->oficio }}" maxlength="80">
 
                                 <span class="text-danger">{{$errors->first('oficio')}}</span>
                             </div>
@@ -66,7 +66,7 @@
                             <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Persona') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ $socio->persona->DNI }}" min="0" required>
+                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') ?? $socio->persona->DNI }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('DNI')}}</span>
                             </div>
