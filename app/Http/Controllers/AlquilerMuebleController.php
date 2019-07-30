@@ -48,8 +48,6 @@ class AlquilerMuebleController extends Controller
      */
     public function store(Request $request)
     {
-      $reserva = new ReservaMueble;
-
       //mensajes de error que se mostraran por pantalla
       $messages = [
         'DNI.required' => 'Es necesario ingresar un DNI válido.',
@@ -91,8 +89,47 @@ class AlquilerMuebleController extends Controller
         return redirect()->back()->withInput()->withErrors($validacion->errors());
       }
 
+      //valido si la fecha y hora de finalizacion es menor a la de inicio
+      if ($request->fechaHoraInicio >= $request->fechaHoraFin) {
+        return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización son erróneas, por favor revise las mismas');
+      }
+
+      //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del inmueble a alquilar.
+      //Por lo tanto obtengo todas las reservas de dicho Inmueble, donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
+      $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+                                     ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
+
+      if (sizeof($solapamientoFechas) != 0) {
+        return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+      }
+
+      //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del inmueble a alquilar
+      //Por lo tanto obtengo todas las reservas de dicho Inmueble, donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
+      $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+                                     ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
+
+      if (sizeof($solapamientoFechas) != 0) {
+        return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+      }
+
+      //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del inmueble a alquilar
+      //(si alguna reserva está entre medio de las que ingresó)
+      $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+                                     ->where('id', '<>', $request->id)
+                                     ->where('fechaHoraInicio', '<=', $request->fechaHoraInicio)
+                                     ->where('fechaHoraFin','>=', $request->fechaHoraFin)
+                                     ->get();
+
+
+      if (sizeof($solapamientoFechas) != 0) {
+        return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+      }
+
       //obtengo la persona correspondiente al DNI ingresado
       $persona = Persona::where('DNI', $request->DNI)->first();
+
+      //alamceno el nuevo registro en la BD
+      $reserva = new ReservaMueble;
 
       //almaceno la información
       $reserva->costoTotal = $request->costo;
@@ -228,6 +265,47 @@ class AlquilerMuebleController extends Controller
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
           return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+        //tomo la reserva del inmueble
+        $reservaOriginal = ReservaMueble::find($request->id);
+
+        //valido si la fecha y hora de finalizacion es menor a la de inicio
+        if ($request->fechaHoraInicio >= $request->fechaHoraFin) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y  Finalización son erróneas, por favor revise las mismas');
+        }
+
+        //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del inmueble a alquilar
+        //Por lo tanto obtengo todas las reservas de dicho Inmueble (omitiendo la que estoy actualizando), donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
+        $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+                                       ->where('id', '<>', $request->id)
+                                       ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
+
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        }
+
+        //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del inmueble a alquilar
+        //Por lo tanto obtengo todas las reservas de dicho Inmueble(omitiendo la que estoy actualizando), donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
+        $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+                                       ->where('id', '<>', $request->id)
+                                       ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
+
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        }
+
+        //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del inmueble a alquilar
+        //(si alguna reserva está entre medio de las que ingresó)
+        $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+                                       ->where('id', '<>', $request->id)
+                                       ->where('fechaHoraInicio', '<=', $request->fechaHoraInicio)
+                                       ->where('fechaHoraFin','>=', $request->fechaHoraFin)
+                                       ->get();
+
+
+        if (sizeof($solapamientoFechas) != 0) {
+          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
         }
 
         //obtengo la persona correspondiente al DNI ingresado

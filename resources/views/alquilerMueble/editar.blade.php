@@ -70,6 +70,10 @@
                                 <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" value="{{ old('fechaHoraInicio') ?? $reserva->fechaHoraInicio }}" required>
 
                                 <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
+
+                                @if (\Session::has('solapamientoFechas'))
+                                  <span class="text-danger">{!! \Session::get('solapamientoFechas') !!}</span>
+                                @endif
                             </div>
                         </div>
 
