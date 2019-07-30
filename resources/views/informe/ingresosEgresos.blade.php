@@ -19,27 +19,48 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Ingreso</td>
-            <td>1</td>
-            <td>Subsidio de la Cristi</td>
-            <td>25/12/2014</td>
-            <td>$5000</td>
-          </tr>
-          <tr>
-            <td>Ingreso</td>
-            <td>2</td>
-            <td>Donación de los Pro-Aborto</td>
-            <td>12/8/2018</td>
-            <td>$2500</td>
-          </tr>
-          <tr>
-            <td>Egreso</td>
-            <td>3</td>
-            <td>Venta de paragua venenoso</td>
-            <td>6/11/2015</td>
-            <td>$10000</td>
-          </tr>
+
+          @foreach ($movExtras as $movExtra)
+            <tr>
+              @if ($movExtra->tipo == "1")
+                <td>{{ 'Ingreso' }}</td>
+              @elseif ($movExtra->tipo == "2")
+                <td>{{ 'Egreso' }}</td>
+              @endif
+              <td>{{ $movExtra->numRecibo }}</td>
+              <td>{{ $movExtra->descripcion }}</td>
+              <td>{{ date("d/m/Y", strtotime($movExtra->fecha)) }}</td>
+              <td>{{ '$'.$movExtra->monto }}</td>
+            </tr>
+          @endforeach
+          @foreach ($alquileresInmueblePagos as $alquilerInmueble)
+            <tr>
+              <td>{{ 'Ingreso' }}</td>
+              <td>{{ '-' }}</td>
+              <td>{{ 'Alquileres de Inmuebles' }}</td>
+              <td>{{ $alquilerInmueble->mes.'/'.$alquilerInmueble->anio }}</td>
+              <td>{{ '$'.$alquilerInmueble->total }}</td>
+            </tr>
+          @endforeach
+          @foreach ($alquileresMueblePagos as $alquilerMueble)
+            <tr>
+              <td>{{ 'Ingreso' }}</td>
+              <td>{{ '-' }}</td>
+              <td>{{ 'Alquileres de Muebles' }}</td>
+              <td>{{ $alquilerMueble->mes.'/'.$alquilerMueble->anio }}</td>
+              <td>{{ '$'.$alquilerMueble->total }}</td>
+            </tr>
+          @endforeach
+          @foreach ($cuotasPagadas as $cuota)
+            <tr>
+              <td>{{ 'Ingreso' }}</td>
+              <td>{{ '-' }}</td>
+              <td>{{ 'Alquileres de Muebles' }}</td>
+              <td>{{ $cuota->mes.'/'.$cuota->anio }}</td>
+              <td>{{ '$'.$cuota->total }}</td>
+            </tr>
+          @endforeach
+
         </tbody>
       </table>
     </div>
