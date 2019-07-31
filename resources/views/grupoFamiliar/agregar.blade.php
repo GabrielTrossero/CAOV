@@ -21,6 +21,7 @@
                         <th>Apellido</th>
                         <th>Nombres</th>
                         <th>Seleccionar Titular</th>
+                        <th>Seleccionar Pareja</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -31,7 +32,15 @@
                           <td>{{ $socio->numSocio }}</td>
                           <td>{{ $socio->persona->apellido }}</td>
                           <td>{{ $socio->persona->nombres }}</td>
-                          <td><input type="radio" name="titular" value="{{ $socio->id }}"></td>
+                          <td>
+                            <input type="radio" name="titular" value="{{ $socio->id }}" required>
+                            <span class="text-danger">{{$errors->first('titular')}}</span>
+                            <span class="text-danger">{!! \Session::get('errorIguales') !!}</span>
+                          </td>
+                          <td>
+                            <input type="radio" name="pareja" value="{{ $socio->id }}">
+                            <span class="text-danger">{{$errors->first('pareja')}}</span>
+                          </td>
                         </tr>
                       @endforeach
 

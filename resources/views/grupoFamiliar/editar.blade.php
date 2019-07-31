@@ -25,6 +25,23 @@
                                       <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
                                     @endforeach
                                 </select>
+                                <span class="text-danger">{!! \Session::get('errorIguales') !!}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="pareja" class="col-md-4 col-form-label text-md-right">{{ __('Pareja') }}</label>
+
+                            <div class="col-md-6">
+                                <select name="pareja" id="pareja" class="form-control">
+                                  <option value="0">No posee Pareja</option>
+                                  @if ($grupo->socioPareja != NULL)
+                                    <option value="{{ $grupo->socioPareja->id }}" selected>{{ $grupo->socioPareja->persona->DNI." - ".$grupo->socioPareja->persona->nombres." ".$grupo->socioPareja->persona->apellido }}</option>
+                                  @endif
+                                  @foreach ($grupo->socios as $socio)
+                                    <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                  @endforeach
+                                </select>
                             </div>
                         </div>
 
@@ -37,6 +54,7 @@
                                   <option value="1">Agregar Miembro</option>
                                   <option value="2">Eliminar Miembro</option>
                                 </select>
+                                <span class="text-danger">{!! \Session::get('errorEliminacionTitular') !!}</span>
                             </div>
                         </div>
 

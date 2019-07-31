@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\GrupoFamiliar;
 use App\Socio;
+use Carbon\Carbon;
 
 class GrupoFamiliarController extends Controller
 {
@@ -44,19 +45,41 @@ class GrupoFamiliarController extends Controller
     {
       $grupo = new GrupoFamiliar;
 
+      $messages = [
+        'titular.required' => 'Es necesario ingresar un Socio Titular.',
+        'titular.unique' => 'El Titular ya pertenece a otro Grupo Familiar.',
+        'pareja.unique' => 'La Pareja del Titular ya pertenece a otro Grupo Familiar.'
+      ];
+
       //valido los datos ingresados
       $validacion = Validator::make($request->all(),[
-        'titular' => 'required|unique:grupofamiliar'
-      ]);
+        'titular' => 'required|unique:grupofamiliar',
+        'pareja' => 'unique:grupofamiliar'
+      ], $messages);
+
+      //valido si los socios titular y pareja son distintos
+      if($request->titular == $request->pareja)
+      {
+        return redirect()->back()->withInput()->with('errorIguales', 'Los Socios para Titular y Pareja son la misma Persona, por favor revisar la selección.');
+      }
 
       //si la validacion falla vuelvo hacia atras con los errores
       if($validacion->fails())
       {
-        return redirect()->back()->withErrors($validacion->errors());
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
       }
 
       //almaceno el grupo familiar en la BD
-      $grupo->create($request->all());
+                /*$grupo->create($request->all());*/
+      $grupo->titular = $request->titular;
+
+      if (isset($request->pareja)) {
+        $grupo->pareja = $request->pareja;
+      } else {
+        $grupo->pareja = NULL;
+      }
+
+      $grupo->save();
 
       //tomo el grupo para pasarlo a la vista individual del mismo
       $grupoRetornado = GrupoFamiliar::where('titular', $request->titular)->first();
@@ -118,6 +141,20 @@ class GrupoFamiliarController extends Controller
     }
 
     /**
+     * calcula la edad del socio ingresado por parametro
+     * @param  App\Socio $socio
+     * @return int
+     */
+    private function calculaEdad($socio)
+    {
+        //asigna a $edad, la edad del socio calculada a partir de su fecha de nacimiento
+        $edad = Carbon::parse($socio->fechaNac)->age;
+
+        //retorna la edad del socio
+        return $edad;
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -126,8 +163,39 @@ class GrupoFamiliarController extends Controller
      */
     public function update(Request $request)
     {
+        $messages = [
+          'titular.required' => 'Es necesario ingresar un Socio Titular.',
+          ];
+
+        //valido los datos ingresados
+        $validacion = Validator::make($request->all(),[
+          'titular' => 'required'
+        ], $messages);
+
+        //valido si los socios titular y pareja son distintos
+        if($request->titular == $request->pareja)
+        {
+          return redirect()->back()->withInput()->with('errorIguales', 'Los Socios para Titular y Pareja son la misma Persona, por favor revisar la selección.');
+        }
+
         //tomo el grupo a actualizar
         $grupo = GrupoFamiliar::find($request->id);
+
+        //valido si el socio a eliminar es el titular, si lo es redirijo con error
+        if(($request->accionMiembro == 2) && ($request->miembro == $grupo->titular))
+        {
+          return redirect()->back()->withInput()->with('errorEliminacionTitular', 'Se intenta eliminar al Socio Titular, por favor seleccione otro Titular antes de esto.');
+        }
+
+        //guardo el id del socio pareja en el grupo
+        if ($request->pareja != 0) {
+          $grupo->pareja = $request->pareja;
+        } else {
+          $grupo->pareja = NULL;
+        }
+
+        $grupo->save();
+        $grupo->refresh();
 
         //convierto a int los valores de titular, accionMiembro y miembro de $request
         $titular = intval($request->titular);
@@ -138,7 +206,9 @@ class GrupoFamiliarController extends Controller
         if (($titular != 0) && ($titular != $grupo->titular)){
           $grupo->titular = $titular;
           $grupo->save();
+          $grupo->refresh();
         }
+
 
         if (($accionMiembro != 0) && ($miembro != 0)) {
           if ($accionMiembro == 1) {
@@ -153,7 +223,25 @@ class GrupoFamiliarController extends Controller
             //tomo el socio que sale del grupo
             $socio = Socio::find($miembro);
 
+            if ((isset($grupo->socioPareja)) && ($grupo->socioPareja->id == $socio->id)) {
+              $grupo->pareja = NULL;
+              $grupo->save();
+              $grupo->refresh();
+            }
+
             //actualizo el grupo familiar del socio que sale
+            $socio->idGrupoFamiliar = NULL;
+            $socio->save();
+          }
+        }
+
+        //tomo todos los socios del grupo para validar sus edades
+        $socios = $grupo->socios;
+
+        foreach ($socios as $socio) {
+          $edad = $this->calculaEdad($socio);
+
+          if (($edad >= 18) && ($socio->id != $grupo->titular) && ($socio->id != $grupo->pareja)) {
             $socio->idGrupoFamiliar = NULL;
             $socio->save();
           }

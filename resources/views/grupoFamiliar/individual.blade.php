@@ -12,9 +12,10 @@
           <td><b>Apellido</b></td>
           <td><b>Nombres</b></td>
           <td><b>Titular</b></td>
+          <td><b>Pareja</b></td>
           <td><b>Info. Socio</b></td>
         </tr>
-        
+
 
         @foreach ($grupo->socios as $socio)
           <tr>
@@ -22,6 +23,11 @@
             <td>{{ $socio->persona->apellido }}</td>
             <td>{{ $socio->persona->nombres }}</td>
             @if ($grupo->socioTitular->id == $socio->id)
+              <td>Si</td>
+            @else
+              <td>No</td>
+            @endif
+            @if ($grupo->pareja == $socio->id))
               <td>Si</td>
             @else
               <td>No</td>
