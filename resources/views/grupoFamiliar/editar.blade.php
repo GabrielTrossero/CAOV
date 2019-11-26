@@ -26,6 +26,7 @@
                                     @endforeach
                                 </select>
                                 <span class="text-danger">{!! \Session::get('errorIguales') !!}</span>
+                                <span class="text-danger">{!! \Session::get('errorMenoresEdad') !!}</span>
                             </div>
                         </div>
 
@@ -38,7 +39,7 @@
                                   @if ($grupo->socioPareja != NULL)
                                     <option value="{{ $grupo->socioPareja->id }}" selected>{{ $grupo->socioPareja->persona->DNI." - ".$grupo->socioPareja->persona->nombres." ".$grupo->socioPareja->persona->apellido }}</option>
                                   @endif
-                                  @foreach ($grupo->socios as $socio)
+                                  @foreach ($sociosPareja as $socio)
                                     <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
                                   @endforeach
                                 </select>
@@ -78,6 +79,7 @@
                                   </optgroup>
 
                                 </select>
+                                <span class="text-danger">{!! \Session::get('errorEdadNuevoMiembro') !!}</span>
                             </div>
                         </div>
 

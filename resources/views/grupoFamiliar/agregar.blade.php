@@ -36,6 +36,7 @@
                             <input type="radio" name="titular" value="{{ $socio->id }}" required>
                             <span class="text-danger">{{$errors->first('titular')}}</span>
                             <span class="text-danger">{!! \Session::get('errorIguales') !!}</span>
+                            <span class="text-danger">{!! \Session::get('errorMenoresEdad') !!}</span>
                           </td>
                           <td>
                             <input type="radio" name="pareja" value="{{ $socio->id }}">
