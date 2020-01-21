@@ -159,7 +159,7 @@ class SocioController extends Controller
     private function calculaEdad($socio)
     {
         //asigna al atributo edad del socio su edad calculada a partir de su fecha de nacimiento
-        $socio->edad = Carbon::parse($socio->fechaNac)->age;
+        $socio->edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
 
         //retorna al socio con su edad
         return $socio;
