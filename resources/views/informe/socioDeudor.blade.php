@@ -45,7 +45,7 @@
 
       <div class="card-footer">
         &nbsp;&nbsp;
-        <form action="{{url('/informe/socio_deudor')}}" method="post" style="display:inline">
+        <form action="{{url('/informe/pdf_socio_deudor')}}" method="get" style="display:inline">
           {{ csrf_field() }}
           <input type="hidden" name="id" value="1">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">

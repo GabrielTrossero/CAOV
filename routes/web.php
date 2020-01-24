@@ -130,18 +130,24 @@ Route::group(['middleware' => 'auth'], function()
     Route::group(['prefix' => 'informe'], function()
     {
         Route::get('/', 'InformeController@index');
+
         Route::get('deudores', 'InformeController@getDeudores');
-        Route::post('deudores', 'InformeController@postDeudores');
+        Route::get('pdf_deudores', 'InformeController@pdfDeudores');
+
         Route::get('socio_deudor/{id}', 'InformeController@getSocioDeudor');
-        Route::post('socio_deudor', 'InformeController@postSocioDeudor');
+        Route::get('pdf_socio_deudor', 'InformeController@pdfSocioDeudor');
+
         Route::get('cantidad_socios', 'InformeController@getCantidadSocios');
-        Route::post('cantidad_socios', 'InformeController@postCantidadSocios');
+        Route::get('pdf_cantidad_socios', 'InformeController@pdfCantidadSocios');
+
         Route::get('cantidad_socios_deporte', 'InformeController@getCantidadSociosDeporte');
-        Route::post('cantidad_socios_deporte', 'InformeController@postCantidadSociosDeporte');
+        Route::get('pdf_cantidad_socios_deporte', 'InformeController@pdfCantidadSociosDeporte');
+
         Route::get('ingresos_egresos', 'InformeController@getIngresosEgresos');
-        Route::post('ingresos_egresos', 'InformeController@postIngresosEgresos');
+        Route::get('pdf_ingresos_egresos', 'InformeController@pdfIngresosEgresos');
+
         Route::get('pagos', 'InformeController@getPagos');
-        Route::post('pagos', 'InformeController@postPagos');
+        Route::get('pdf_pagos', 'InformeController@pdfPagos');
     });
 
     //Rutas para Empleados

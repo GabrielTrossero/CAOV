@@ -1,0 +1,36 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+header {
+    background-color: green;
+    height: 70px;
+    text-align: center;
+    font-size: 36px;
+    padding-top: 17px;
+}
+
+table { 
+    border-collapse: collapse; 
+} 
+
+tr {
+    border-spacing: 0px;
+}
+
+th {
+    font-size: 20px;
+}
+
+td {
+    font-size: 15px;
+}
+
+th, td { 
+    width: auto; 
+    text-align: center; 
+    border: 1px solid black;
+    padding: 5px; 
+} 
