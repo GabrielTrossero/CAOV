@@ -12,6 +12,7 @@
 */
 
 Auth::routes();
+Auth::routes(['register' => false]);
 
 //Grupos de Rutas con el Middleware "auth"
 Route::group(['middleware' => 'auth'], function()
