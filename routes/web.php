@@ -14,8 +14,8 @@
 Auth::routes();
 Auth::routes(['register' => false]);
 
-//Grupos de Rutas con el Middleware "auth"
-Route::group(['middleware' => 'auth'], function()
+//Grupos de Rutas con el Middleware "auth" y "empleado"
+Route::group(['middleware' => ['auth', 'empleado']], function()
 {
     //Ruta del Home
     Route::get('/', 'HomeController@index');
@@ -59,31 +59,7 @@ Route::group(['middleware' => 'auth'], function()
         Route::post('delete', 'GrupoFamiliarController@destroy');
     });
 
-    //Rutas de Inmuebles
-    Route::group(['prefix' => 'inmueble'], function()
-    {
-        Route::get('/', 'InmuebleController@index');
-        Route::get('create', 'InmuebleController@create');
-        Route::post('create', 'InmuebleController@store');
-        Route::get('show', 'InmuebleController@getShow');
-        Route::get('show/{id}', 'InmuebleController@getShowId');
-        Route::get('edit/{id}', 'InmuebleController@edit');
-        Route::post('edit', 'InmuebleController@update');
-        Route::post('delete', 'InmuebleController@destroy');
-    });
-
-    //Rutas de Muebles
-    Route::group(['prefix' => 'mueble'], function()
-    {
-        Route::get('/', 'MuebleController@index');
-        Route::get('create', 'MuebleController@create');
-        Route::post('create', 'MuebleController@store');
-        Route::get('show', 'MuebleController@getShow');
-        Route::get('show/{id}', 'MuebleController@getShowId');
-        Route::get('edit/{id}', 'MuebleController@edit');
-        Route::post('edit', 'MuebleController@update');
-        Route::post('delete', 'MuebleController@destroy');
-    });
+   
 
     //Rutas para Cuota
     Route::group(['prefix' => 'cuota'], function()
@@ -127,63 +103,94 @@ Route::group(['middleware' => 'auth'], function()
         Route::post('/', 'RegistroController@postRegistro');
     });
 
-    //Rutas para Informes
-    Route::group(['prefix' => 'informe'], function()
-    {
-        Route::get('/', 'InformeController@index');
+    //Grupo de Rutas con el Middleware "admin"
+    Route::group(['middleware' => 'admin'], function () {
+        //Rutas para Informes
+        Route::group(['prefix' => 'informe'], function()
+        {
+            Route::get('/', 'InformeController@index');
 
-        Route::get('deudores', 'InformeController@getDeudores');
-        Route::get('pdf_deudores', 'InformeController@pdfDeudores');
+            Route::get('deudores', 'InformeController@getDeudores');
+            Route::get('pdf_deudores', 'InformeController@pdfDeudores');
 
-        Route::get('socio_deudor/{id}', 'InformeController@getSocioDeudor');
-        Route::get('pdf_socio_deudor', 'InformeController@pdfSocioDeudor');
+            Route::get('socio_deudor/{id}', 'InformeController@getSocioDeudor');
+            Route::get('pdf_socio_deudor', 'InformeController@pdfSocioDeudor');
 
-        Route::get('cantidad_socios', 'InformeController@getCantidadSocios');
-        Route::get('pdf_cantidad_socios', 'InformeController@pdfCantidadSocios');
+            Route::get('cantidad_socios', 'InformeController@getCantidadSocios');
+            Route::get('pdf_cantidad_socios', 'InformeController@pdfCantidadSocios');
 
-        Route::get('cantidad_socios_deporte', 'InformeController@getCantidadSociosDeporte');
-        Route::get('pdf_cantidad_socios_deporte', 'InformeController@pdfCantidadSociosDeporte');
+            Route::get('cantidad_socios_deporte', 'InformeController@getCantidadSociosDeporte');
+            Route::get('pdf_cantidad_socios_deporte', 'InformeController@pdfCantidadSociosDeporte');
 
-        Route::get('ingresos_egresos', 'InformeController@getIngresosEgresos');
-        Route::get('pdf_ingresos_egresos', 'InformeController@pdfIngresosEgresos');
+            Route::get('ingresos_egresos', 'InformeController@getIngresosEgresos');
+            Route::get('pdf_ingresos_egresos', 'InformeController@pdfIngresosEgresos');
 
-        Route::get('pagos', 'InformeController@getPagos');
-        Route::get('pdf_pagos', 'InformeController@pdfPagos');
+            Route::get('pagos', 'InformeController@getPagos');
+            Route::get('pdf_pagos', 'InformeController@pdfPagos');
+        });
+
+        //Rutas de Inmuebles
+        Route::group(['prefix' => 'inmueble'], function()
+        {
+            Route::get('/', 'InmuebleController@index');
+            Route::get('create', 'InmuebleController@create');
+            Route::post('create', 'InmuebleController@store');
+            Route::get('show', 'InmuebleController@getShow');
+            Route::get('show/{id}', 'InmuebleController@getShowId');
+            Route::get('edit/{id}', 'InmuebleController@edit');
+            Route::post('edit', 'InmuebleController@update');
+            Route::post('delete', 'InmuebleController@destroy');
+        });
+    
+        //Rutas de Muebles
+        Route::group(['prefix' => 'mueble'], function()
+        {
+            Route::get('/', 'MuebleController@index');
+            Route::get('create', 'MuebleController@create');
+            Route::post('create', 'MuebleController@store');
+            Route::get('show', 'MuebleController@getShow');
+            Route::get('show/{id}', 'MuebleController@getShowId');
+            Route::get('edit/{id}', 'MuebleController@edit');
+            Route::post('edit', 'MuebleController@update');
+            Route::post('delete', 'MuebleController@destroy');
+        });
+
+        //Rutas para Empleados
+        Route::group(['prefix' => 'empleado'], function()
+        {
+            Route::get('/', 'EmpleadoController@index');
+            Route::get('create', 'EmpleadoController@create');
+            Route::post('create', 'EmpleadoController@store');
+            Route::get('show', 'EmpleadoController@getShow');
+            Route::get('show/{id}', 'EmpleadoController@getShowId');
+            Route::get('edit/{id}', 'EmpleadoController@edit');
+            Route::post('edit', 'EmpleadoController@update');
+            Route::post('delete', 'EmpleadoController@destroy');
+        });
+
+        //Rutas para Administradores
+        Route::group(['prefix' => 'administrador'], function()
+        {
+            Route::get('/', 'AdministradorController@index');
+            Route::post('backup', 'AdministradorController@postBackup');
+            Route::get('ingresos', 'AdministradorController@getIngresos');
+        });
+
+        //Rutas de Deportes
+        Route::group(['prefix' => 'deporte'], function()
+        {
+            Route::get('/', 'DeporteController@index');
+            Route::get('create', 'DeporteController@create');
+            Route::post('create', 'DeporteController@store');
+            Route::get('show', 'DeporteController@getShow');
+            Route::get('show/{id}', 'DeporteController@getShowId');
+            Route::get('edit/{id}', 'DeporteController@edit');
+            Route::post('edit', 'DeporteController@update');
+            Route::post('delete', 'DeporteController@destroy');
+        });
     });
 
-    //Rutas para Empleados
-    Route::group(['prefix' => 'empleado'], function()
-    {
-        Route::get('/', 'EmpleadoController@index');
-        Route::get('create', 'EmpleadoController@create');
-        Route::post('create', 'EmpleadoController@store');
-        Route::get('show', 'EmpleadoController@getShow');
-        Route::get('show/{id}', 'EmpleadoController@getShowId');
-        Route::get('edit/{id}', 'EmpleadoController@edit');
-        Route::post('edit', 'EmpleadoController@update');
-        Route::post('delete', 'EmpleadoController@destroy');
-    });
-
-    //Rutas para Administradores
-    Route::group(['prefix' => 'administrador'], function()
-    {
-        Route::get('/', 'AdministradorController@index');
-        Route::post('backup', 'AdministradorController@postBackup');
-        Route::get('ingresos', 'AdministradorController@getIngresos');
-    });
-
-    //Rutas de Deportes
-    Route::group(['prefix' => 'deporte'], function()
-    {
-        Route::get('/', 'DeporteController@index');
-        Route::get('create', 'DeporteController@create');
-        Route::post('create', 'DeporteController@store');
-        Route::get('show', 'DeporteController@getShow');
-        Route::get('show/{id}', 'DeporteController@getShowId');
-        Route::get('edit/{id}', 'DeporteController@edit');
-        Route::post('edit', 'DeporteController@update');
-        Route::post('delete', 'DeporteController@destroy');
-    });
+    
 
     //Rutas de Alquiler de Muebles
     Route::group(['prefix' => 'alquilermueble'], function()
