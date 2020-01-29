@@ -33,7 +33,7 @@ class GrupoFamiliarController extends Controller
 
         //filtro los socios mayores de edad
         $socios = $socios->filter(function ($socio){
-          return Carbon::parse($socio->fechaNac)->age >= 18;
+          return $this->calculaEdad($socio) >= 18;
         });
 
         //redirijo a la vista de agregar con los socios
@@ -152,12 +152,12 @@ class GrupoFamiliarController extends Controller
 
         //tomo socios mayores de edad sin grupo para posible pareja
         $sociosPareja = $sociosSinGrupo->filter(function ($socio){
-          return Carbon::parse($socio->fechaNac)->age >= 18;
+          return $this->calculaEdad($socio) >= 18;
         });
 
         //filtros los socios sin grupo familiar menores de edad
         $sociosSinGrupo = $sociosSinGrupo->filter(function ($socio){
-          return Carbon::parse($socio->fechaNac)->age < 18;
+          return $this->calculaEdad($socio) < 18;
         });
 
         
