@@ -14,12 +14,15 @@
 				     <a class="dropdown-item" href="#">Salir</a>
 				   </div>
 			</div>-->
-			<div class="btn-group ml-auto">
-				<form action="{{ url('/logout') }}" method="POST">
-					@csrf
-					<button type="submit" class="btn btn-light ml-auto">Cerrar sesión</button>
-				</form>
-			</div>
+			@auth
+				<div class="btn-group ml-auto">
+					<form action="{{ url('/logout') }}" method="POST">
+						@csrf
+						<button type="submit" class="btn btn-light ml-auto">Cerrar sesión</button>
+					</form>
+				</div>
+			@endauth
+			
 
 			&nbsp; &nbsp; &nbsp; &nbsp;				<!-- Para realizar espacios en blanco -->
 
