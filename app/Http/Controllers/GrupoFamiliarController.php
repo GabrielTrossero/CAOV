@@ -266,6 +266,6 @@ class GrupoFamiliarController extends Controller
         $grupo = GrupoFamiliar::destroy($request->id);
 
         //redirijo al listado
-        return redirect()->action('GrupoFamiliarController@getSHow');
+        return redirect()->action('GrupoFamiliarController@getShow');
     }
 }

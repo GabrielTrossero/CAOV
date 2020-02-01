@@ -17,7 +17,7 @@
           <th>Deportes</th>
           <th>Fecha de Nacimiento</th>
           <th>Titular Grupo Familiar</th>
-          <th>Acitvo</th>
+          <th>Activo</th>
         </tr>
         <tr>
           <td>{{ $socio->persona->DNI }}</td>

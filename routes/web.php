@@ -91,11 +91,16 @@ Route::group(['middleware' => 'auth'], function()
         Route::get('createMontoCuota', 'CuotaController@createMontoCuota');
         Route::post('createMontoCuota', 'CuotaController@storeMontoCuota');
         Route::get('showMontoCuota', 'CuotaController@getShowMontoCuota');
-        Route::get('show', 'CuotaController@getShow');
+        Route::get('showCreateCuota', 'CuotaController@showCreateCuota'); //listado de socios para crear cuota
+        Route::get('createCuota/{id}', 'CuotaController@createCuota');
+        Route::post('createCuota', 'CuotaController@storeCuota');
+        Route::post('storeMontoCuota', 'CuotaController@show');
+        Route::get('show', 'CuotaController@getShow'); //listado de cuotas
         Route::get('show/{id}', 'CuotaController@getShowId');
         Route::get('edit/{id}', 'CuotaController@edit');
         Route::post('edit', 'CuotaController@update');
-        Route::post('delete', 'CuotaController@destroy');
+        Route::post('disable', 'CuotaController@disable');
+        Route::post('enable', 'CuotaController@enable');
     });
 
     //Rutas para Pago de Cuota

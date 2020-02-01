@@ -13,9 +13,9 @@
           <tr>
             <th>Fecha de Creación</th>
             <th>Tipo</th>
-            <th>Monto</th>
-            <th>Descuento Mensual</th>
-            <th>Descuento Anual</th>
+            <th>Monto Mensual</th>
+            <th>Interés Grupo Familiar</th>
+            <th>Interés por retraso</th>
           </tr>
         </thead>
         <tbody>
@@ -32,9 +32,14 @@
                   <td>Grupo Familiar</td>
               @endif
 
-              <td>${{ $montoCuota->monto }}</td>
-              <td>{{ $montoCuota->dtoSemestre }}%</td>
-              <td>{{ $montoCuota->dtoAnio }}%</td>
+              <td>{{ '$'.$montoCuota->montoMensual }}</td>
+              @if ($montoCuota->tipo == 'g')
+                <td>{{ '$'.$montoCuota->montoInteresGrupoFamiliar.' por mes, a partir del integrante N° '.$montoCuota->cantidadIntegrantes }}</td>
+              @else
+                <td>{{ '-' }}</td>
+              @endif
+
+              <td>{{ '$'.$montoCuota->montoInteresMensual.' por mes, a partir del mes N° '.$montoCuota->cantidadMeses.' atraso' }}</td>
             </tr>
           @endforeach
 
