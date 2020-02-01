@@ -11,6 +11,7 @@ use App\MovExtras;
 use App\ReservaInmueble;
 use App\ReservaMueble;
 use App\ComprobanteCuota;
+use PDF;
 
 class InformeController extends Controller
 {
@@ -59,7 +60,7 @@ class InformeController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function postSocioDeudor(Request $request)
+  public function pdfSocioDeudor(Request $request)
   {
     //
   }
@@ -86,9 +87,17 @@ class InformeController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function postCantidadSocios()
+  public function pdfCantidadSocios()
   {
-    //
+    //tomo todos los socios
+    $socios = Socio::all();
+
+    //calculo la cantidad de socios
+    $cantidadSocios = sizeof($socios);
+
+    $pdf = PDF::loadView('pdf.cantidadSocios', ['cantidadSocios' => $cantidadSocios]);
+
+    return $pdf->download('cantidad-socios.pdf');
   }
 
   /**
@@ -115,9 +124,19 @@ class InformeController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function postCantidadSociosDeporte()
+  public function pdfCantidadSociosDeporte()
   {
-    //
+    //tomo todos los deportes
+    $deportes = Deporte::all();
+
+    //calculco la cantidad de socios de cada deporte
+    foreach ($deportes as $deporte) {
+      $deporte->cantidadSocios = sizeof($deporte->socios);
+    }
+
+    $pdf = PDF::loadView('pdf.cantidadSociosDeporte', ['deportes' => $deportes]);
+
+    return $pdf->download('cantidad-socios-deporte.pdf');
   }
 
   /**
@@ -153,7 +172,7 @@ class InformeController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function postIngresosEgresos()
+  public function pdfIngresosEgresos()
   {
     //
   }
@@ -173,7 +192,7 @@ class InformeController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function postPagos()
+  public function pdfPagos()
   {
     //
   }

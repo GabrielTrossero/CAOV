@@ -39,6 +39,16 @@
         </tbody>
       </table>
     </div>
+
+    <div class="card-footer">
+      <form action="{{url('/informe/pdf_pagos')}}" method="get" style="display:inline">
+        {{ csrf_field() }}
+        <button type="submit" class="btn btn-outline-danger" style="display:inline">
+          Generar PDF
+        </button>
+      </form>
+    </div>
+
   </div>
 </div>
 

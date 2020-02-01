@@ -31,6 +31,11 @@ class GrupoFamiliarController extends Controller
         //tomo los socios
         $socios = Socio::where('idGrupoFamiliar', null)->get();
 
+        //filtro los socios mayores de edad
+        $socios = $socios->filter(function ($socio){
+          return $this->calculaEdad($socio) >= 18;
+        });
+
         //redirijo a la vista de agregar con los socios
         return view('grupoFamiliar.agregar', compact('socios'));
     }
@@ -57,16 +62,25 @@ class GrupoFamiliarController extends Controller
         'pareja' => 'unique:grupofamiliar'
       ], $messages);
 
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails())
+      {
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
       //valido si los socios titular y pareja son distintos
       if($request->titular == $request->pareja)
       {
         return redirect()->back()->withInput()->with('errorIguales', 'Los Socios para Titular y Pareja son la misma Persona, por favor revisar la selección.');
       }
 
-      //si la validacion falla vuelvo hacia atras con los errores
-      if($validacion->fails())
+      $titular = Socio::find($request->titular);
+      $pareja = Socio::find($request->pareja);
+
+      //valido si los socios titular y pareja son mayores de edad
+      if(($this->calculaEdad($titular) < 18) || (isset($pareja) && ($this->calculaEdad($pareja) < 18)))
       {
-        return redirect()->back()->withInput()->withErrors($validacion->errors());
+        return redirect()->back()->withInput()->with('errorMenoresEdad', 'Los socios Titular y Pareja deben ser mayores de 18 años');
       }
 
       //almaceno el grupo familiar en la BD
@@ -136,20 +150,36 @@ class GrupoFamiliarController extends Controller
         //tomo los socios sin grupo familiar
         $sociosSinGrupo = Socio::where('idGrupoFamiliar', null)->get();
 
+        //tomo socios mayores de edad sin grupo para posible pareja
+        $sociosPareja = $sociosSinGrupo->filter(function ($socio){
+          return $this->calculaEdad($socio) >= 18;
+        });
+
+        //filtros los socios sin grupo familiar menores de edad
+        $sociosSinGrupo = $sociosSinGrupo->filter(function ($socio){
+          return $this->calculaEdad($socio) < 18;
+        });
+
+        
+
         //redirijo a la vista de edicion del grupo familiar
-        return view('grupoFamiliar.editar', compact('grupo', 'sociosSinGrupo'));
+        return view('grupoFamiliar.editar', compact('grupo', 'sociosSinGrupo', 'sociosPareja'));
     }
 
     /**
-     * calcula la edad del socio ingresado por parametro
+     * calcula la edad segun categoria del socio ingresado por parametro
      * @param  App\Socio $socio
      * @return int
      */
     private function calculaEdad($socio)
     {
-        //asigna a $edad, la edad del socio calculada a partir de su fecha de nacimiento
-        $edad = Carbon::parse($socio->fechaNac)->age;
-
+        /*asigna a $edad, la edad del socio calculada a partir de su fecha de nacimiento
+          $edad = Carbon::parse($socio->fechaNac)->age;
+        */
+        
+        // calcula la edad del socio segun su categoria
+        $edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
+      
         //retorna la edad del socio
         return $edad;
     }
@@ -169,13 +199,28 @@ class GrupoFamiliarController extends Controller
 
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
-          'titular' => 'required'
+          'titular' => 'required',
         ], $messages);
+
+        //si la validacion falla vuelvo hacia atras con los errores
+        if($validacion->fails())
+        {
+          return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
 
         //valido si los socios titular y pareja son distintos
         if($request->titular == $request->pareja)
         {
           return redirect()->back()->withInput()->with('errorIguales', 'Los Socios para Titular y Pareja son la misma Persona, por favor revisar la selección.');
+        }
+
+        $titular = Socio::find($request->titular);
+        $pareja = Socio::find($request->pareja);
+
+        //valido si los socios titular y pareja son mayores de edad
+        if(($this->calculaEdad($titular) < 18) || (isset($pareja) && ($this->calculaEdad($pareja) < 18)))
+        {
+          return redirect()->back()->withInput()->with('errorMenoresEdad', 'Los socios Titular y Pareja deben ser mayores de 18 años');
         }
 
         //tomo el grupo a actualizar
@@ -190,6 +235,9 @@ class GrupoFamiliarController extends Controller
         //guardo el id del socio pareja en el grupo
         if ($request->pareja != 0) {
           $grupo->pareja = $request->pareja;
+          $pareja->idGrupoFamiliar = $grupo->id;
+          $pareja->save();
+
         } else {
           $grupo->pareja = NULL;
         }
@@ -198,13 +246,14 @@ class GrupoFamiliarController extends Controller
         $grupo->refresh();
 
         //convierto a int los valores de titular, accionMiembro y miembro de $request
-        $titular = intval($request->titular);
+        $idTitular = intval($request->titular);
         $accionMiembro = intval($request->accionMiembro);
         $miembro = intval($request->miembro);
 
         //si el numero de titular es distinto a cero y distinto al titular actual se actualiza el titular del grupo
-        if (($titular != 0) && ($titular != $grupo->titular)){
-          $grupo->titular = $titular;
+        if (($idTitular != 0) && ($idTitular != $grupo->titular)){
+          $grupo->titular = $idTitular;
+          $titular->idGrupoFamiliar = $grupo->id;
           $grupo->save();
           $grupo->refresh();
         }
@@ -214,6 +263,11 @@ class GrupoFamiliarController extends Controller
           if ($accionMiembro == 1) {
             //tomo el socio que se agrega al grupo
             $socio = Socio::find($miembro);
+
+            //valido si el socio a agregar es menor de edad
+            if($this->calculaEdad($socio) >= 18){
+              return redirect()->back()->withInput()->with('errorEdadNuevoMiembro', 'Se intenta agregar un Socio mayor de edad, por favor seleccione otro Socio.');
+            }
 
             //actualizo el grupo familiar del socio agregado
             $socio->idGrupoFamiliar = $grupo->id;

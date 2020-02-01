@@ -13,14 +13,14 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail') }}</label>
+                            <label for="user" class="col-md-4 col-form-label text-md-right">{{ __('Nombre de Usuario o E-Mail') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+                                <input id="user" type="text" class="form-control" name="user" value="{{ old('user') }}" required autofocus>
 
-                                @if ($errors->has('email'))
+                                @if ($errors->has('user'))
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong>{{ $errors->first('user') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -40,7 +40,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <!--<div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -50,7 +50,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
@@ -59,9 +59,9 @@
                                 </button>
 
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    <!--<a class="btn btn-link" href="{{ route('password.request') }}">
                                         {{ __('Olvidé mi contraseña') }}
-                                    </a>
+                                    </a>-->
                                 @endif
                             </div>
                         </div>

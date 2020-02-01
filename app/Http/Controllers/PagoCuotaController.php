@@ -82,8 +82,15 @@ class PagoCuotaController extends Controller
      */
     private function calculaEdad($socio)
     {
-        //retorno la edad del socio
+        /*retorno la edad del socio
         return Carbon::parse($socio->fechaNac)->age;
+        */
+
+        // calcula la edad del socio segun su categoria
+        $edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
+      
+        //retorna la edad del socio
+        return $edad;
     }
 
     /**

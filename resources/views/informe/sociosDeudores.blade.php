@@ -41,7 +41,7 @@
     </div>
 
     <div class="card-footer">
-      <form action="{{url('/informe/deudores')}}" method="post" style="display:inline">
+      <form action="{{url('/informe/pdf_deudores')}}" method="get" style="display:inline">
         {{ csrf_field() }}
         <button type="submit" class="btn btn-outline-danger" style="display:inline">
           Generar PDF

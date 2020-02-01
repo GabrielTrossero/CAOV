@@ -108,6 +108,7 @@ class EmpleadoController extends Controller
         $empleado->password = bcrypt($request->password);
         $empleado->idPersona = $persona->id;
         $empleado->idTipoUsuario = $request->idTipoUsuario;
+        $empleado->remember_token = 0;
 
         $empleado->save();
 
