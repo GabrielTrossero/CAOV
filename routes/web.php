@@ -172,7 +172,7 @@ Route::group(['middleware' => ['auth', 'empleado']], function()
             Route::get('show/{id}', 'EmpleadoController@getShowId');
             Route::get('edit/{id}', 'EmpleadoController@edit');
             Route::post('edit', 'EmpleadoController@update');
-            //Route::post('delete', 'EmpleadoController@destroy');
+            Route::post('delete', 'EmpleadoController@destroy');
         });
 
         //Rutas para Administradores

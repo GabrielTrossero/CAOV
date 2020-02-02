@@ -109,6 +109,7 @@ class EmpleadoController extends Controller
         $empleado->idPersona = $persona->id;
         $empleado->idTipoUsuario = $request->idTipoUsuario;
         $empleado->remember_token = 0;
+        $empleado->activo = true;
 
         $empleado->save();
 
@@ -125,8 +126,8 @@ class EmpleadoController extends Controller
      */
     public function getShow()
     {
-        //tomo todos los usuarios
-        $usuarios = User::all();
+        //tomo todos los usuarios activos
+        $usuarios = User::all()->where('activo', true);
 
         //redirijo al listado de usuarios
         return view('empleado.listado', compact('usuarios'));
@@ -259,8 +260,14 @@ class EmpleadoController extends Controller
      */
     public function destroy(Request $request)
     {
-        //elimino el registro con tal id
-        $usuario = User::destroy($request->id);
+        //busco el registro con tal id
+        $usuario = User::find($request->id);
+
+        //cambio atributo activo a false
+        $usuario->activo = false;
+
+        //guardo el usuario
+        $usuario->save();
 
         //redirijo al listado
         return redirect()->action('EmpleadoController@getShow');

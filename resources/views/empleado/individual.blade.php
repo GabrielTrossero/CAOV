@@ -34,15 +34,15 @@
         </a>
 
         &nbsp;&nbsp;
-        <!--
+        
         <form action="{{url('/empleado/delete')}}" method="post" style="display:inline">
           {{ csrf_field() }}
           <input type="hidden" name="id" value="{{ $usuario->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Eliminar Empleado
+            Desactivar Empleado
           </button>
         </form>
-        -->
+        
 
       </div>
 
