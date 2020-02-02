@@ -158,7 +158,7 @@
 
           @if (($cuota->fechaPago == '') && (! $cuota->inhabilitada))
             <td>
-              <a href="{{ url('/pagocuota/pago/'.$cuota->id) }}">
+              <a href="{{ url('/cuota/pago/'.$cuota->id) }}">
                 <button type="button" class="btn btn-primary tam_letra_small">
                   Pagar
                 </button>
@@ -174,7 +174,7 @@
             </td>
           @else
             <td>
-              <a href="{{ url('/pagocuota/pago/'.$cuota->id) }}">
+              <a href="{{ url('/cuota/pago/'.$cuota->id) }}">
                 <button type="button" class="btn btn-primary tam_letra_small" disabled>
                   Pagar
                 </button>

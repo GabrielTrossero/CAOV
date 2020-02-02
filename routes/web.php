@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth', 'empleado']], function()
         Route::post('delete', 'GrupoFamiliarController@destroy');
     });
 
-   
+
 
     //Rutas para Cuota
     Route::group(['prefix' => 'cuota'], function()
@@ -78,15 +78,17 @@ Route::group(['middleware' => ['auth', 'empleado']], function()
         Route::post('edit', 'CuotaController@update');
         Route::post('disable', 'CuotaController@disable');
         Route::post('enable', 'CuotaController@enable');
+        Route::get('pago/{id}', 'CuotaController@getPago');
+        Route::post('pago', 'CuotaController@postPago');
     });
-
+/*
     //Rutas para Pago de Cuota
     Route::group(['prefix' => 'pagocuota'], function()
     {
         Route::get('show', 'PagoCuotaController@getShow');
         Route::get('pago/{id}', 'PagoCuotaController@getPago');
         Route::post('pago', 'PagoCuotaController@postPago');
-    });
+    });*/
 
 
     //Rutas para Pago de Alquiler
@@ -146,7 +148,7 @@ Route::group(['middleware' => ['auth', 'empleado']], function()
             Route::post('edit', 'InmuebleController@update');
             Route::post('delete', 'InmuebleController@destroy');
         });
-    
+
         //Rutas de Muebles
         Route::group(['prefix' => 'mueble'], function()
         {
@@ -195,7 +197,7 @@ Route::group(['middleware' => ['auth', 'empleado']], function()
         });
     });
 
-    
+
 
     //Rutas de Alquiler de Muebles
     Route::group(['prefix' => 'alquilermueble'], function()

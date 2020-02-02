@@ -37,6 +37,21 @@
 
       <div class="card-footer">
 
+        @if (!$reserva->numRecibo)
+          <a style="text-decoration:none" href="{{ url('/pagoalquiler/pagomueble/'.$reserva->id) }}">
+            <button type="button" class="btn btn-outline-primary" style="display:inline">
+              Pagar Alquiler
+            </button>
+          </a>
+        @else
+          <a style="text-decoration:none" href="{{ url('/alquilermueble/show/'.$reserva->id) }}">
+            <button type="button" class="btn btn-outline-primary" style="display:inline" onClick="alert('El alquiler ya ha sido pagado')">
+              Pagar Alquiler
+            </button>
+          </a>
+        @endif
+
+        &nbsp;&nbsp;
         <a style="text-decoration:none" href="{{ url('/alquilermueble/edit/'.$reserva->id) }}">
           <button type="button" class="btn btn-outline-warning" style="display:inline">
             Editar Alquiler
