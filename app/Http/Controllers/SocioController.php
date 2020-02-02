@@ -300,7 +300,7 @@ class SocioController extends Controller
       //obtengo el socio actual (sin actualizar)
       $socio = Socio::where('id', $request->id)->first();
 
-      //valido que ya no haiga otro Socio con dicha idPersona, exepto el actual
+      //valido que ya no haya otro Socio con dicha idPersona, exepto el actual
       $validarIdPersona = Socio::where('idPersona', $persona->id)
                               ->where('id', '!=', $socio->id)->first();
 

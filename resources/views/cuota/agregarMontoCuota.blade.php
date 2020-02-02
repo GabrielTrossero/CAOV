@@ -27,32 +27,52 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="dtoSemestre" class="col-md-4 col-form-label text-md-right">{{ __('Descuento Semestre (%)') }}</label>
+                            <label for="montoMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Mensual') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" step="0.01" name="dtoSemestre" id="dtoSemestre" class="form-control" value="{{ old('dtoSemestre') }}" min="0" max="99" placeholder="0 - 99" required>
+                              <input type="number" name="montoMensual" id="montoMensual" class="form-control" min="0" value="{{ old('montoMensual') }}" placeholder="Ingresar monto" required>
 
-                                <span class="text-danger">{{$errors->first('dtoSemestre')}}</span>
+                              <span class="text-danger">{{$errors->first('montoMensual')}}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="dtoAnio" class="col-md-4 col-form-label text-md-right">{{ __('Descuento Año (%)') }}</label>
+                            <label for="montoInteresGrupoFamiliar" class="col-md-4 col-form-label text-md-right">{{ __('Monto Interés Grupo Familiar') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" step="0.01" name="dtoAnio" id="dtoAnio" class="form-control" value="{{ old('dtoAnio') }}" min="0" max="99" placeholder="0 - 99" required>
+                                <input type="number" name="montoInteresGrupoFamiliar" id="montoInteresGrupoFamiliar" class="form-control" value="{{ old('montoInteresGrupoFamiliar') }}" min="0" placeholder="Ingresar monto de interés por integrante" disabled>
 
-                                <span class="text-danger">{{$errors->first('dtoAnio')}}</span>
+                                <span class="text-danger">{{$errors->first('montoInteresGrupoFamiliar')}}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="monto" class="col-md-4 col-form-label text-md-right">{{ __('Monto Base Mensual') }}</label>
+                            <label for="cantidadIntegrantes" class="col-md-4 col-form-label text-md-right">{{ __('Aplicado despúes de cuantos integrantes') }}</label>
 
                             <div class="col-md-6">
-                              <input type="number" name="monto" id="monto" class="form-control" min="0" value="{{ old('monto') }}" required>
+                                <input type="number" name="cantidadIntegrantes" id="cantidadIntegrantes" class="form-control" value="{{ old('cantidadIntegrantes') }}" min="0" placeholder="N° de integrantes" disabled>
 
-                              <span class="text-danger">{{$errors->first('monto')}}</span>
+                                <span class="text-danger">{{$errors->first('cantidadIntegrantes')}}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="montoInteresMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Interes Mensual') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="number" name="montoInteresMensual" id="montoInteresMensual" class="form-control" value="{{ old('montoInteresMensual') }}" min="0" placeholder="Ingresar monto de interes por atraso" required>
+
+                                <span class="text-danger">{{$errors->first('montoInteresMensual')}}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="cantidadMeses" class="col-md-4 col-form-label text-md-right">{{ __('Aplicado despúes de cuantos meses') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="number" name="cantidadMeses" id="cantidadMeses" class="form-control" value="{{ old('cantidadMeses') }}" min="0" placeholder="N° de meses" required>
+
+                                <span class="text-danger">{{$errors->first('cantidadMeses')}}</span>
                             </div>
                         </div>
 
@@ -70,5 +90,7 @@
     </div>
 </div>
 
+<!-- Script para filtrar habilitar los input montoInteresGrupoFamiliar y cantidadIntegrantes -->
+<script src="{{ asset('js/filtro-agregar-monto-cuota.js') }}"></script>
 
 @stop

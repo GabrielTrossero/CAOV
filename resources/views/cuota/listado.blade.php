@@ -12,10 +12,11 @@
         <thead>
           <tr>
             <th>DNI Socio</th>
+            <th>N° de Socio</th>
             <th>Mes/Año</th>
-            <th>Fecha Pago</th>
-            <th>Monto Mensual Pagado</th>
-            <th>Tipo de Cobro</th>
+            <th>Estado Cuota</th>
+            <th>Monto Base</th>
+            <th>Monto Total</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -23,24 +24,24 @@
           @foreach ($cuotas as $cuota)
             <tr>
               <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
+              <td>{{ $cuota->socio->numSocio }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
-              <td>{{date("d/m/Y", strtotime($cuota->fechaPago))}}</td><!-- para mostrar en formato dia/mes/año -->
 
-              <!--para mostrar con los corresponientes descuentos-->
-              @if ($cuota->tipo == "s")
-                <td>{{ "$". ($cuota->montoCuota->monto - ($cuota->montoCuota->monto * $cuota->montoCuota->dtoSemestre / 100)) }}</td>
-              @elseif ($cuota->tipo == "a")
-                <td>{{ "$". ($cuota->montoCuota->monto - ($cuota->montoCuota->monto * $cuota->montoCuota->dtoAnio / 100)) }}</td>
-              @elseif ($cuota->tipo == "m")
-                <td>{{ "$". ($cuota->montoCuota->monto) }}</td>
+              @if ($cuota->inhabilitada)
+                <td>{{ 'Inhabilitada' }}</td>
+              @elseif ($cuota->fechaPago != '')
+                <td>{{ 'Pagada' }}</td>
+              @else
+                <td>{{ 'No Pagada' }}</td>
               @endif
 
-              @if ($cuota->tipo == "s")
-                <td>Semestral</td>
-              @elseif ($cuota->tipo == "a")
-                <td>Anual</td>
-              @elseif ($cuota->tipo == "m")
-                <td>Mensual</td>
+              <td>{{ '$'.$cuota->montoCuota->montoMensual }}</td>
+
+              @if ($cuota->fechaPago)
+                <!--suma del monto base + intereses por atrazo + intereses cantidad integrantes -->
+                <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtrazo + $cuota->montoInteresGrupoFamiliar) }}</td>
+              @else
+                <td>{{ 'Sin Fecha de Pago' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>

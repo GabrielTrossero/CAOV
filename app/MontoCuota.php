@@ -10,7 +10,7 @@ class MontoCuota extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'dtoAnio', 'dtoSemestre', 'fechaCreacion', 'monto', 'tipo'
+         'tipo', 'montoMensual', 'montoInteresGrupoFamiliar', 'cantidadIntegrantes', 'montoInteresMensual', 'cantidadMeses', 'fechaCreacion'
     ];
 
     //relacion a comprobantes de cuotas
