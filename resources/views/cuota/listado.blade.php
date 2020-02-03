@@ -38,8 +38,8 @@
               <td>{{ '$'.$cuota->montoCuota->montoMensual }}</td>
 
               @if ($cuota->fechaPago)
-                <!--suma del monto base + intereses por atrazo + intereses cantidad integrantes -->
-                <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtrazo + $cuota->montoInteresGrupoFamiliar) }}</td>
+                <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
+                <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
                 <td>{{ 'Sin Fecha de Pago' }}</td>
               @endif

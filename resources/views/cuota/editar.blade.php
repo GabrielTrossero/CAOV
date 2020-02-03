@@ -125,15 +125,15 @@
                             <label for="montoMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Base') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="montoMensual" id="montoMensual" class="form-control" maxlength="75" value="{{ '$'. $cuota->montoCuota->montoMensual }}" disabled>
+                                <input type="text" name="montoMensual" id="montoMensual" class="form-control" maxlength="75" valor="{{ '$'. $cuota->montoCuota->montoMensual }}" value="{{ '$'. $cuota->montoCuota->montoMensual }}" disabled>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="mesesAtrazo" class="col-md-4 col-form-label text-md-right">{{ __('Meses de Atrazo') }}</label>
+                            <label for="mesesAtraso" class="col-md-4 col-form-label text-md-right">{{ __('Meses de Atraso') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="mesesAtrazo" id="mesesAtrazo" class="form-control" maxlength="75" disabled>
+                                <input type="text" name="mesesAtraso" id="mesesAtraso" class="form-control" maxlength="75" disabled>
                             </div>
                         </div>
 
@@ -165,10 +165,10 @@
                         </div>  -->
 
                         <div class="form-group row">
-                            <label for="interesAtrazo" class="col-md-4 col-form-label text-md-right">{{ __('Interés por Atrazo de Pago') }}</label>
+                            <label for="interesAtraso" class="col-md-4 col-form-label text-md-right">{{ __('Interés por Atraso de Pago') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="interesAtrazo" id="interesAtrazo" class="form-control" maxlength="75"  disabled>
+                                <input type="text" name="interesAtraso" id="interesAtraso" class="form-control" maxlength="75"  disabled>
                             </div>
                         </div>
 
@@ -202,7 +202,7 @@
                         </div>
 
                         <!--lo uso para calcular el monto total en montos.js -->
-                        <input type="hidden" id="valorAtrazo">
+                        <input type="hidden" id="valorAtraso">
                         <input type="hidden" id="valorGrupoFamiliar" value="{{ $cuota->montoInteresGrupoFamiliar }}">
                         <input type="hidden" id="valorMensual" value="{{ $cuota->montoCuota->montoMensual }}">
 
@@ -227,5 +227,9 @@
         </div>
     </div>
 </div>
+
+<script src="{!! asset('js/editarCuota.js') !!}"></script> <!--conexion a js que es utilizado en las vistas de Cuota-->
+
+<script src="{!! asset('js/montos.js') !!}"></script> <!--conexion a js que es utilizado en las vistas de Cuota-->
 
 @stop

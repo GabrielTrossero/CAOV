@@ -73,8 +73,8 @@
           <th>Mes/Anio</th>
           <th>Fecha Pago</th>
           <th>Monto Base</th>
-          <th>Interés por Atrazo de Pago</th>
-          <th>Mes/es de Atrazo</th>
+          <th>Interés por Atraso de Pago</th>
+          <th>Mes/es de Atraso</th>
           <th>Interés por Integrante/s de Grupo Familiar</th>
           <th>Cantidad de Integrante/s</th>
           <th>Monto Total</th>
@@ -102,9 +102,9 @@
           <td>{{ '$'. $cuota->montoCuota->montoMensual }}</td>
 
           @if ($cuota->fechaPago)
-            <!--si la cantidad de meses atrazados es mayor que la cantidad mínima de montoCuota (para que no quede negativo)-->
-            @if ($cuota->mesesAtrazados > $cuota->montoCuota->cantidadMeses)
-              <td>{{ '$'. $cuota->montoInteresAtrazo ." (". ($cuota->mesesAtrazados - $cuota->montoCuota->cantidadMeses) ." mes/es)" }}</td>
+            <!--si la cantidad de meses atrasados es mayor que la cantidad mínima de montoCuota (para que no quede negativo)-->
+            @if ($cuota->mesesAtrasados > $cuota->montoCuota->cantidadMeses)
+              <td>{{ '$'. $cuota->montoInteresAtraso ." (". ($cuota->mesesAtrasados - $cuota->montoCuota->cantidadMeses) ." mes/es)" }}</td>
             @else
               <td>{{ "$0" }}</td>
             @endif
@@ -113,7 +113,7 @@
           @endif
 
           @if ($cuota->fechaPago)
-            <td>{{ $cuota->mesesAtrazados ." mes/es" }}</td>
+            <td>{{ $cuota->mesesAtrasados ." mes/es" }}</td>
           @else
             <td>{{ 'Cuota no pagada' }}</td>
           @endif
@@ -136,8 +136,8 @@
           @endif
 
           @if ($cuota->fechaPago)
-            <!--suma del monto base + intereses por atrazo + intereses cantidad integrantes -->
-            <th>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtrazo + $cuota->montoInteresGrupoFamiliar) }}</th>
+            <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
+            <th>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</th>
           @else
             <td>{{ 'Sin Fecha de Pago' }}</td>
           @endif

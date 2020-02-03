@@ -40,8 +40,6 @@
     <script src="{{ asset('js/datatable.js') }}"></script>
 
 
-    <script src="{!! asset('js/montos.js') !!}"></script> <!--conexion a js que es utilizado en las vistas de Cuota-->
-    <script src="{!! asset('js/editarCuota.js') !!}"></script> <!--conexion a js que es utilizado en las vistas de Cuota-->
     <script src="http://momentjs.com/downloads/moment.min.js"></script>
 
   </body>

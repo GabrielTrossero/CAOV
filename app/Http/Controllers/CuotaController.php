@@ -243,7 +243,7 @@ class CuotaController extends Controller
 
     //le agrego a cada cuota los montos que se usan en la columna "Monto Total"
     foreach ($cuotas as $cuota) {
-      $cuota->montoInteresAtrazo = $this->montoInteresAtrazo($cuota);
+      $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
       $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
     }
 
@@ -265,8 +265,8 @@ class CuotaController extends Controller
     //calculo la edad para despues mostrarlo en la vista
     $cuota->socio->edad = Carbon::parse($cuota->socio->fechaNac)->age; //ELIMINAR
 
-    $cuota->mesesAtrazados = $this->mesesAtrazados($cuota);
-    $cuota->montoInteresAtrazo = $this->montoInteresAtrazo($cuota);
+    $cuota->mesesAtrasados = $this->mesesAtrasados($cuota);
+    $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
 
     $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
 
@@ -288,8 +288,8 @@ class CuotaController extends Controller
     //le asigno a la cuota el MontoCuota de cada tipo de socio
     $cuota = $this->montoTipoSocio($cuota); //NO LO USO
 
-    $cuota->mesesAtrazados = $this->mesesAtrazados($cuota);
-    $cuota->montoInteresAtrazo = $this->montoInteresAtrazo($cuota);
+    $cuota->mesesAtrasados = $this->mesesAtrasados($cuota);
+    $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
 
     $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
 
@@ -408,8 +408,8 @@ class CuotaController extends Controller
       //busco la cuota
       $cuota = ComprobanteCuota::find($id);
 
-      $cuota->mesesAtrazados = $this->mesesAtrazados($cuota);
-      $cuota->montoInteresAtrazo = $this->montoInteresAtrazo($cuota);
+      $cuota->mesesAtrasados = $this->mesesAtrasados($cuota);
+      $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
 
       $cuota->compruebaCuota = $this->comprobarCuota($cuota);
 
@@ -566,7 +566,7 @@ class CuotaController extends Controller
   }
 
   //calculo la diferencia de meses entre el mes correspondiente y el pago
-  private function mesesAtrazados($cuota){
+  private function mesesAtrasados($cuota){
     if ($cuota->fechaMesAnio < $cuota->fechaPago) {
       $date = Carbon::parse($cuota->fechaMesAnio);
       $now = Carbon::parse($cuota->fechaPago);
@@ -578,10 +578,10 @@ class CuotaController extends Controller
   }
 
   //calculo el monto a pagar por intereses
-  private function montoInteresAtrazo($cuota){
-    //si la diferencia de meses entre fechaMesAnio y el pagoCuota es > que la cantidad de meses máxima permitida de atrazo => se cobra intereses
-    if ($this->mesesAtrazados($cuota) > $cuota->montoCuota->cantidadMeses) {
-      $montoPagar = ($this->mesesAtrazados($cuota) - $cuota->montoCuota->cantidadMeses) * $cuota->montoCuota->montoInteresMensual;
+  private function montoInteresAtraso($cuota){
+    //si la diferencia de meses entre fechaMesAnio y el pagoCuota es > que la cantidad de meses máxima permitida de atraso => se cobra intereses
+    if ($this->mesesAtrasados($cuota) > $cuota->montoCuota->cantidadMeses) {
+      $montoPagar = ($this->mesesAtrasados($cuota) - $cuota->montoCuota->cantidadMeses) * $cuota->montoCuota->montoInteresMensual;
       return $montoPagar;
     }
     else {
