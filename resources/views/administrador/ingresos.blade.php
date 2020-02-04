@@ -18,24 +18,41 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Subsidio Municipalidad</td>
-            <td>25/12/2014</td>
-            <td>$5000</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Donación Anonima</td>
-            <td>12/8/2018</td>
-            <td>$2500</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Alquiler sillas</td>
-            <td>6/11/2015</td>
-            <td>$1700</td>
-          </tr>
+          @foreach ($movimientos as $movimiento)
+            <tr>
+              <td>{{ $movimiento->numRecibo }}</td>
+              <td>{{ $movimiento->descripcion }}</td>
+              <td>{{ date("d/m/Y", strtotime($movimiento->fecha)) }}</td>
+              <td>${{ $movimiento->monto }}</td>
+            </tr>
+          @endforeach
+          
+          @foreach ($reservasInmueble as $reservaInmueble)
+            <tr>
+              <td>{{ $reservaInmueble->numRecibo }}</td>
+              <td>Alquiler de {{ $reservaInmueble->inmueble->nombre }}</td>
+              <td>{{ date("d/m/Y", strtotime($reservaInmueble->fechaSolicitud)) }}</td>
+              <td>${{ $reservaInmueble->costoTotal }}</td>
+            </tr>
+          @endforeach
+          
+          @foreach ($reservasMueble as $reservaMueble)
+            <tr>
+              <td>{{ $reservaMueble->numRecibo }}</td>
+              <td>Alquiler de {{ $reservaMueble->cantidad ." ". $reservaMueble->mueble->nombre }}</td>
+              <td>{{ date("d/m/Y", strtotime($reservaMueble->fechaSolicitud)) }}</td>
+              <td>${{ $reservaMueble->costoTotal }}</td>
+            </tr>
+          @endforeach
+
+          @foreach ($cuotasPagadas as $cuotaPagada)
+            <tr>
+              <td>-</td>
+              <td>Cuota</td>
+              <td>{{ date("d/m/Y", strtotime($cuotaPagada->fechaPago)) }}</td>
+              <td>${{ $cuotaPagada->montoTotal }}</td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>

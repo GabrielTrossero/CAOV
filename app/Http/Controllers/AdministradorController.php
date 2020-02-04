@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\CuotaController;
+
+use App\MovExtras;
+use App\ComprobanteCuota;
+use App\ReservaInmueble;
+use App\ReservaMueble;
+
 class AdministradorController extends Controller
 {
   /**
@@ -43,6 +50,33 @@ class AdministradorController extends Controller
    */
   public function getIngresos()
   {
-    return view('administrador.ingresos');
+    //tomo los ingresos de movimientos extra
+    $movimientos = MovExtras::all()->where('tipo', '1');
+
+    //tomo los pagos de cuotas
+    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
+    
+    foreach($cuotasPagadas as $cuotaPagada) {
+      $cuotaController = new CuotaController;
+
+      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
+      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
+      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
+
+      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+    }
+
+    //tomo los alquileres de inmuebles
+    $reservasInmueble = ReservaInmueble::all()->where('numRecibo', '<>', null);
+
+    //tomo los alquileres de muebles
+    $reservasMueble = ReservaMueble::all()->where('numRecibo', '<>', null);
+
+    return view('administrador.ingresos', compact(['movimientos',
+                                                   'cuotasPagadas',
+                                                   'reservasInmueble',
+                                                   'reservasMueble'
+                                                   ])
+                                                  );
   }
 }

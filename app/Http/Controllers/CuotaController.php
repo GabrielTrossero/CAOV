@@ -577,8 +577,13 @@ class CuotaController extends Controller
     }
   }
 
-  //calculo el monto a pagar por intereses
-  private function montoInteresAtraso($cuota){
+  /**
+   * Calcula el monto a pagar por intereses
+   *
+   * @param App\ComprobanteCuota $cuota
+   * @return float
+   */
+  public function montoInteresAtraso($cuota){
     //si la diferencia de meses entre fechaMesAnio y el pagoCuota es > que la cantidad de meses máxima permitida de atraso => se cobra intereses
     if ($this->mesesAtrasados($cuota) > $cuota->montoCuota->cantidadMeses) {
       $montoPagar = ($this->mesesAtrasados($cuota) - $cuota->montoCuota->cantidadMeses) * $cuota->montoCuota->montoInteresMensual;
@@ -601,8 +606,13 @@ class CuotaController extends Controller
     return $cantidadIntegrantes;
   }*/
 
-  //calculo el monto a pagar por cantidad de integrantes
-  private function montoInteresGrupoFamiliar($cuota){
+  /**
+   * Calcula el monto a pagar por cantidad de integrantes 
+   *
+   * @param App\ComprobanteCuota $cuota
+   * @return void
+   */
+  public function montoInteresGrupoFamiliar($cuota){
     //para que no evalue las cuotas que no son de grupo familiar
     if ($cuota->montoCuota->tipo != 'g') {
       return 0;
