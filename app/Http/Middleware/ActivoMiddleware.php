@@ -3,8 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 
-class AdminMiddleware
+class ActivoMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,12 +16,13 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        //id 1 => Administrador
-        if ($request->user() && $request->user()->idTipoUsuario != 1)
+        //si el empleado está inactivo hace logout
+        if ($request->user() && (!$request->user()->activo))
         {
+            Auth::logout();
             return redirect()->action('HomeController@index');
         }
-        
+
         return $next($request);
     }
 }

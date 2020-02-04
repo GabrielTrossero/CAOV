@@ -16,6 +16,7 @@
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Tipo de Usuario</th>
+            <th>Activo</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -28,6 +29,11 @@
               <td>{{ $usuario->persona->apellido }}</td>
               <td>{{ $usuario->persona->nombres }}</td>
               <td>{{ $usuario->tipoUsuario->nombre}}</td>
+              @if ($usuario->activo)
+                  <td>Si</td>
+              @else
+                  <td>No</td>
+              @endif
               <td><a href="{{ url('/empleado/show/'.$usuario->id) }}"> <i class="fas fa-plus"></i></a> </td>
             </tr>
           @endforeach

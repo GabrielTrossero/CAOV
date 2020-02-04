@@ -15,7 +15,7 @@ Auth::routes();
 Auth::routes(['register' => false]);
 
 //Grupos de Rutas con el Middleware "auth" y "empleado"
-Route::group(['middleware' => ['auth', 'empleado']], function()
+Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
 {
     //Ruta del Home
     Route::get('/', 'HomeController@index');
@@ -173,6 +173,7 @@ Route::group(['middleware' => ['auth', 'empleado']], function()
             Route::get('edit/{id}', 'EmpleadoController@edit');
             Route::post('edit', 'EmpleadoController@update');
             Route::post('delete', 'EmpleadoController@destroy');
+            Route::post('enable', 'EmpleadoController@enable');
         });
 
         //Rutas para Administradores

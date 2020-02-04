@@ -14,6 +14,7 @@
           <td><b>Apellido</b></td>
           <td><b>Nombres</b></td>
           <td><b>Tipo de Usuario</b></td>
+          <td><b>Activo</b></td>
         </tr>
         <tr>
           <td>{{ $usuario->persona->DNI }}</td>
@@ -22,6 +23,11 @@
           <td>{{ $usuario->persona->apellido }}</td>
           <td>{{ $usuario->persona->nombres }}</td>
           <td>{{ $usuario->tipoUsuario->nombre }}</td>
+          @if ($usuario->activo)
+              <td>Si</td>
+          @else
+              <td>No</td>
+          @endif
         </tr>
       </table>
 
@@ -35,13 +41,25 @@
 
         &nbsp;&nbsp;
         
-        <form action="{{url('/empleado/delete')}}" method="post" style="display:inline">
-          {{ csrf_field() }}
-          <input type="hidden" name="id" value="{{ $usuario->id }}">
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Desactivar Empleado
-          </button>
-        </form>
+        @if ($usuario->activo)
+          <form action="{{url('/empleado/delete')}}" method="post" style="display:inline">
+            {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $usuario->id }}">
+            <button type="submit" class="btn btn-outline-danger" style="display:inline">
+              Desactivar Empleado
+            </button>
+          </form>
+        @else
+          <form action="{{url('/empleado/enable')}}" method="post" style="display:inline">
+            {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $usuario->id }}">
+            <button type="submit" class="btn btn-outline-danger" style="display:inline">
+              Activar Empleado
+            </button>
+          </form> 
+        @endif
+
+        
         
 
       </div>

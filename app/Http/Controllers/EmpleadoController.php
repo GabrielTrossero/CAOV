@@ -127,7 +127,7 @@ class EmpleadoController extends Controller
     public function getShow()
     {
         //tomo todos los usuarios activos
-        $usuarios = User::all()->where('activo', true);
+        $usuarios = User::all();
 
         //redirijo al listado de usuarios
         return view('empleado.listado', compact('usuarios'));
@@ -253,7 +253,7 @@ class EmpleadoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Disable the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -265,6 +265,27 @@ class EmpleadoController extends Controller
 
         //cambio atributo activo a false
         $usuario->activo = false;
+
+        //guardo el usuario
+        $usuario->save();
+
+        //redirijo al listado
+        return redirect()->action('EmpleadoController@getShow');
+    }
+
+    /**
+     * Enable the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function enable(Request $request)
+    {
+        //busco el registro con tal id
+        $usuario = User::find($request->id);
+
+        //cambio atributo activo a true
+        $usuario->activo = true;
 
         //guardo el usuario
         $usuario->save();
