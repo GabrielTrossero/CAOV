@@ -7,7 +7,7 @@
     <h2>Nombre: </h2>
     <h2>DNI: </h2>
     <h2>Numero de Socio: </h2>
-    <table>
+    <table align="center">
         <thead>
             <tr>
                 <th>Tipo de Deuda</th>

@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Ingresos y Egresos</h1>
-    <table>
+    <table align="center">
         <thead>
             <tr>
               <th>Tipo</th>

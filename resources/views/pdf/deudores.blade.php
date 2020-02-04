@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Socios deudores</h1>
-    <table>
+    <table  align="center">
         <thead>
             <tr>
                 <th>DNI</th>

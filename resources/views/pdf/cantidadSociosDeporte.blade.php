@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Cantidad de socios por deporte</h1>
-    <table>
+    <table align="center">
         <thead>
             <tr>
                 <th>Deporte</th>

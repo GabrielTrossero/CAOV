@@ -18,24 +18,33 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>23/2/2019</td>
-            <td>Pago alquiler cancha</td>
-            <td>600</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>2/3/2019</td>
-            <td>Pago cuota societaria</td>
-            <td>120</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>12/2/2019</td>
-            <td>Pago alquiler sillas</td>
-            <td>550</td>
-          </tr>
+          @foreach ($cuotasPagadas as $cuotaPagada)
+            <tr>
+              <td>-</td>
+              <td>{{ $cuotaPagada->fechaPago }}</td>
+              <td>Cuota</td>
+              <td>${{ $cuotaPagada->montoTotal }}</td>
+            </tr>
+          @endforeach
+          
+          @foreach ($reservasInmueble as $reservaInmueble)
+            <tr>
+              <td>{{ $reservaInmueble->numRecibo }}</td>
+              <td>{{ $reservaInmueble->fechaSolicitud }}</td>
+              <td>Alquiler de {{ $reservaInmueble->inmueble->nombre }}</td>
+              <td>${{ $reservaInmueble->costoTotal }}</td>
+            </tr>
+          @endforeach
+
+          @foreach ($reservasMueble as $reservaMueble)
+            <tr>
+              <td>{{ $reservaMueble->numRecibo }}</td>
+              <td>{{ $reservaMueble->fechaSolicitud }}</td>
+              <td>Alquiler de {{ $reservaMueble->cantidad . " " . $reservaMueble->mueble->nombre}}</td>
+              <td>${{ $reservaMueble->costoTotal }}</td>
+            </tr>
+          @endforeach
+
         </tbody>
       </table>
     </div>

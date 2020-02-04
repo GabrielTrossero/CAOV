@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
+use App\Http\Controllers\CuotaController;
 use Illuminate\Support\Facades\DB;
 use App\Socio;
 use App\Deporte;
@@ -184,7 +186,30 @@ class InformeController extends Controller
    */
   public function getPagos()
   {
-    return view('informe.pagos');
+    //tomo los pagos de cuotas
+    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
+    
+    foreach($cuotasPagadas as $cuotaPagada) {
+      $cuotaController = new CuotaController;
+
+      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
+      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
+      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
+
+      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+    }
+
+    //tomo los alquileres de inmuebles
+    $reservasInmueble = ReservaInmueble::all()->where('numRecibo', '<>', null);
+
+    //tomo los alquileres de muebles
+    $reservasMueble = ReservaMueble::all()->where('numRecibo', '<>', null);
+
+    return view('informe.pagos', compact(['cuotasPagadas',
+                                          'reservasInmueble',
+                                          'reservasMueble'
+                                          ])
+                                          );
   }
 
   /**
@@ -194,6 +219,29 @@ class InformeController extends Controller
    */
   public function pdfPagos()
   {
-    //
+    //tomo los pagos de cuotas
+    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
+    
+    foreach($cuotasPagadas as $cuotaPagada) {
+      $cuotaController = new CuotaController;
+
+      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
+      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
+      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
+
+      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+    }
+
+    //tomo los alquileres de inmuebles
+    $reservasInmueble = ReservaInmueble::all()->where('numRecibo', '<>', null);
+
+    //tomo los alquileres de muebles
+    $reservasMueble = ReservaMueble::all()->where('numRecibo', '<>', null);
+
+    $pdf = PDF::loadView('pdf.pagos', ['cuotasPagadas' => $cuotasPagadas,
+                                       'reservasInmueble' => $reservasInmueble,
+                                       'reservasMueble' => $reservasMueble]);
+
+    return $pdf->download('pagos.pdf');
   }
 }
