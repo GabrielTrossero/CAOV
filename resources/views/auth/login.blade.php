@@ -17,12 +17,12 @@
 
                             <div class="col-md-6">
                                 <input id="user" type="text" class="form-control" name="user" value="{{ old('user') }}" required autofocus>
-
-                                @if ($errors->has('user'))
+                                <span class="text-danger">{!! \Session::get('user') !!}</span>
+                                <!--@if ($errors->has('user'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('user') }}</strong>
                                     </span>
-                                @endif
+                                @endif-->
                             </div>
                         </div>
 
