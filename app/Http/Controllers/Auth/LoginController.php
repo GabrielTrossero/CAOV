@@ -66,7 +66,7 @@ class LoginController extends Controller
 
         return redirect()->back()
             ->withInput()
-            ->withErrors([
+            ->with([
                 'user' => 'Credenciales erróneas, por favor intente nuevamente.',
             ]);
     }
