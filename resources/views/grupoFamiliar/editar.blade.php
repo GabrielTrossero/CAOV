@@ -20,9 +20,14 @@
 
                             <div class="col-md-6">
                                 <select name="titular" id="titular" class="form-control">
-                                    <option value="{{ $grupo->socioTitular->id }}">{{ $grupo->socioTitular->persona->DNI." - ".$grupo->socioTitular->persona->nombres." ".$grupo->socioTitular->persona->apellido }}</option>
+                                    <!--<option value="{{ $grupo->socioTitular->id }}">{{ $grupo->socioTitular->persona->DNI." - ".$grupo->socioTitular->persona->nombres." ".$grupo->socioTitular->persona->apellido }}</option>-->
                                     @foreach ($grupo->socios as $socio)
-                                      <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      @if ($grupo->titular == $socio->id)
+                                        <option value="{{ $socio->id }}" selected>{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      @else
+                                        <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      @endif
+                                      
                                     @endforeach
                                 </select>
                                 <span class="text-danger">{!! \Session::get('errorIguales') !!}</span>
@@ -39,6 +44,7 @@
                                   @if ($grupo->socioPareja != NULL)
                                     <option value="{{ $grupo->socioPareja->id }}" selected>{{ $grupo->socioPareja->persona->DNI." - ".$grupo->socioPareja->persona->nombres." ".$grupo->socioPareja->persona->apellido }}</option>
                                   @endif
+                                  <option value="{{ $grupo->titular }}">{{ $grupo->socioTitular->persona->DNI . " - " . $grupo->socioTitular->persona->nombres . " " . $grupo->socioTitular->persona->apellido }}</option>
                                   @foreach ($sociosPareja as $socio)
                                     <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
                                   @endforeach
