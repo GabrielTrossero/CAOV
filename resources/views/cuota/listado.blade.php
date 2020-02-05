@@ -29,7 +29,7 @@
 
               @if ($cuota->inhabilitada)
                 <td>{{ 'Inhabilitada' }}</td>
-              @elseif ($cuota->fechaPago != '')
+              @elseif ($cuota->fechaPago)
                 <td>{{ 'Pagada' }}</td>
               @else
                 <td>{{ 'No Pagada' }}</td>

@@ -78,7 +78,7 @@
                             <div class="col-md-6">
                                 @if ($socio->idGrupoFamiliar)
                                     <input type="text" name="categoria" id="categoria" class="form-control" value="Grupo Familiar" disabled>
-    <!agregar cadete>           @elseif ($socio->idGrupoFamiliar)
+                                @elseif ($socio->edad < 18)
                                     <input type="text" name="categoria" id="categoria" class="form-control" value="Cadete" disabled>
                                 @else
                                     <input type="text" name="categoria" id="categoria" class="form-control" value="Activo" disabled>
@@ -94,7 +94,7 @@
                             <div class="col-md-6">
                               @if ($socio->idGrupoFamiliar)
                                   <input type="text" name="montoMensual" id="montoMensual" class="form-control" value="{{$socio->montoGrupoFamiliar}}" disabled>
-    <!agregar cadete>         @elseif ($socio->idGrupoFamiliar)
+                              @elseif ($socio->edad < 18)
                                   <input type="text" name="montoMensual" id="montoMensual" class="form-control" value="{{$socio->montoCadete}}" disabled>
                               @else
                                   <input type="text" name="montoMensual" id="montoMensual" class="form-control" value="{{$socio->montoActivo}}" disabled>
@@ -139,7 +139,7 @@
                             <div class="col-md-6">
                               @if ($socio->idGrupoFamiliar)
                                   <input type="text" name="montoTotal" id="montoTotal" class="form-control" value="{{ '$'. ($socio->montoGrupoFamiliar + $socio->montoCuotaInteresGrupoFamiliar * ($socio->cantidadIntegrantes - $socio->montoCuotaCantidadIntegrantes)) }}" disabled>
-                              @elseif ($socio->idGrupoFamiliar)
+                              @elseif ($socio->edad < 18)
                                   <input type="text" name="montoTotal" id="montoTotal" class="form-control" value="{{ '$'. $socio->montoCadete }}" disabled>
                               @else
                                   <input type="text" name="montoTotal" id="montoTotal" class="form-control" value="{{ '$'. $socio->montoActivo }}" disabled>

@@ -111,6 +111,7 @@ class CuotaController extends Controller
     //le agrego a cada socio el último mes pagado
     foreach ($socios as $socio) {
       $socio = $this->ultimoMesPagado($socio);
+      $socio->edad = $this->calculaEdad($socio);
     }
 
     //retorno los socios a la vista
@@ -134,6 +135,9 @@ class CuotaController extends Controller
 
     //le agrego al socio los montoCuota de cada categoría
     $socio = $this->asignarMontos($socio);
+
+    //le agrego la edad
+    $socio->edad = $this->calculaEdad($socio);
 
     //para contar la cantidad integrantes de su grupo familiar (CANTIDAD ACTUAL, es el valor que va a tener despues $cuota->cantidadIntegrantes)
     if ($socio->idGrupoFamiliar) {
@@ -165,6 +169,8 @@ class CuotaController extends Controller
     $socio = $this->ultimoMesCuotaCreada($socio);
     //para saber si no pagó alguna cuota
     $socio = $this->hayCuotaNoPagada($socio);
+    //le agrego la edad
+    $socio->edad = $this->calculaEdad($socio);
 
     //para redirigir si el socio quiere generar un adelanto de pago y no pagó alguna cuota anterior
     if(($socio->cuotaNoPagada) && ($request->estado == 'pagada')){
@@ -197,8 +203,7 @@ class CuotaController extends Controller
       $cuota->idMontoCuota = $monto['id'];
       $cuota->cantidadIntegrantes = Socio::where('idGrupoFamiliar', $socio->idGrupoFamiliar)->count();
     }
-    elseif ($socio->idGrupoFamiliar){
-                 //COMPLETAR #####################################
+    elseif ($socio->edad < 18){
       $monto = MontoCuota::select('id')->where('tipo', 'c')->orderBy('fechaCreacion', 'DESC')->first();
       $cuota->idMontoCuota = $monto['id'];
       $cuota->cantidadIntegrantes = 0;
@@ -276,11 +281,13 @@ class CuotaController extends Controller
     $cuota = ComprobanteCuota::find($id);
 
     //calculo la edad para despues mostrarlo en la vista
-    $cuota->socio->edad = Carbon::parse($cuota->socio->fechaNac)->age; //ELIMINAR
+    $cuota->socio->edad = $this->calculaEdad($cuota->socio);
 
     $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
 
     $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
+
+    $cuota->mesesAtrasados = $this->mesesAtrasados($cuota);
 
     //se lo envío a la vista
     return view('cuota.individual', ['cuota' => $cuota]);
@@ -476,7 +483,7 @@ class CuotaController extends Controller
   /**
    * calcula la edad del socio ingresado por parametro
    * @param  App\Socio $socio
-   * @return App\Socio
+   * @return int
    */
   private function calculaEdad($socio)
   {

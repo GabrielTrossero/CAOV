@@ -98,11 +98,6 @@
                             </div>
                         </div>
 
-                        <!--lo uso para calcular los montos en editarCuota.js -->
-                        <input type="hidden" id="montoCuotaGrupoFamiliar" value="{{ $cuota->montoGrupoFamiliar }}">
-                        <input type="hidden" id="montoCuotaCadete" value="{{ $cuota->montoCadete }}">
-                        <input type="hidden" id="montoCuotaActivo" value="{{ $cuota->montoActivo }}">
-
                         <div class="form-group row">
                             <label for="montoMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Base') }}</label>
 
