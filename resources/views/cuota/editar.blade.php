@@ -102,24 +102,6 @@
                         <input type="hidden" id="montoCuotaGrupoFamiliar" value="{{ $cuota->montoGrupoFamiliar }}">
                         <input type="hidden" id="montoCuotaCadete" value="{{ $cuota->montoCadete }}">
                         <input type="hidden" id="montoCuotaActivo" value="{{ $cuota->montoActivo }}">
-<!--
-                        <div class="form-group row">
-                            <label for="montoMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Base') }}</label>
-
-                            @if ($cuota->montoCuota->tipo == 'g')
-                              <div class="col-md-6">
-                                  <input type="text" name="montoMensual" id="montoMensual" class="form-control" maxlength="75" value="{{ '$'. $cuota->montoGrupoFamiliar->montoMensual }}" disabled>
-                              </div>
-                            @elseif ($cuota->montoCuota->tipo == 'c')
-                              <div class="col-md-6">
-                                  <input type="text" name="montoMensual" id="montoMensual" class="form-control" maxlength="75" value="{{ '$'. $cuota->montoCadete->montoMensual }}" disabled>
-                              </div>
-                            @elseif ($cuota->montoCuota->tipo == 'a')
-                              <div class="col-md-6">
-                                  <input type="text" name="montoMensual" id="montoMensual" class="form-control" maxlength="75" value="{{ '$'. $cuota->montoActivo->montoMensual }}" disabled>
-                              </div>
-                            @endif
-                        </div> -->
 
                         <div class="form-group row">
                             <label for="montoMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Base') }}</label>
@@ -136,33 +118,6 @@
                                 <input type="text" name="mesesAtraso" id="mesesAtraso" class="form-control" maxlength="75" disabled>
                             </div>
                         </div>
-
-<!--
-                        <div class="form-group row">
-                            <label for="interesAtrazo" class="col-md-4 col-form-label text-md-right">{{ __('Interés por Atrazo de Pago') }}</label>
-
-                            <div class="col-md-6">
-                                @if ($cuota->montoCuota->tipo == 'g')
-                                  @if ($cuota->mesesAtrazados > $cuota->montoGrupoFamiliar->cantidadMeses)
-                                    <input type="text" name="interesAtrazo" id="interesAtrazo" class="form-control" maxlength="75" value="{{ '$'. $cuota->montoInteresAtrazo ." (". ($cuota->mesesAtrazados - $cuota->montoGrupoFamiliar->cantidadMeses) ." mes/es)"  }}" disabled>
-                                  @else
-                                    <input type="text" name="interesAtrazo" id="interesAtrazo" class="form-control" maxlength="75" value="{{ '$0' }}" disabled>
-                                  @endif
-                                @elseif ($cuota->montoCuota->tipo == 'c')
-                                  @if ($cuota->mesesAtrazados > $cuota->montoCadete->cantidadMeses)
-                                    <input type="text" name="interesAtrazo" id="interesAtrazo" class="form-control" maxlength="75" value="{{ '$'. $cuota->montoInteresAtrazo ." (". ($cuota->mesesAtrazados - $cuota->montoCadete->cantidadMeses) ." mes/es)"  }}" disabled>
-                                  @else
-                                    <input type="text" name="interesAtrazo" id="interesAtrazo" class="form-control" maxlength="75" value="{{ '$0' }}" disabled>
-                                  @endif
-                                @elseif ($cuota->montoCuota->tipo == 'a')
-                                  @if ($cuota->mesesAtrazados > $cuota->montoActivo->cantidadMeses)
-                                    <input type="text" name="interesAtrazo" id="interesAtrazo" class="form-control" maxlength="75" value="{{ '$'. $cuota->montoInteresAtrazo ." (". ($cuota->mesesAtrazados - $cuota->montoActivo->cantidadMeses) ." mes/es)"  }}" disabled>
-                                  @else
-                                    <input type="text" name="interesAtrazo" id="interesAtrazo" class="form-control" maxlength="75" value="{{ '$0' }}" disabled>
-                                  @endif
-                                @endif
-                            </div>
-                        </div>  -->
 
                         <div class="form-group row">
                             <label for="interesAtraso" class="col-md-4 col-form-label text-md-right">{{ __('Interés por Atraso de Pago') }}</label>

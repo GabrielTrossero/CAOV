@@ -23,6 +23,8 @@ class CuotaController extends Controller
     return view('cuota.menu');
   }
 
+
+
   /**
    * Show the form for creating a new resource.
    *
@@ -33,6 +35,8 @@ class CuotaController extends Controller
     //redirijo a la vista para agregar un monto de cuota
     return view('cuota.agregarMontoCuota');
   }
+
+
 
   /**
    * Store a newly created resource in storage.
@@ -76,6 +80,8 @@ class CuotaController extends Controller
     return view('cuota.listadoMontoCuota' , compact('montosCuotas'));
   }
 
+
+
   /**
    * Display the resource list
    *
@@ -89,6 +95,8 @@ class CuotaController extends Controller
     //redirijo a la vista para listar todos los montos de cuotas pasando el array 'montoCuota'
     return view('cuota.listadoMontoCuota' , compact('montosCuotas'));
   }
+
+
 
   /**
    * Show the form for creating a new resource.
@@ -109,6 +117,8 @@ class CuotaController extends Controller
     return view('cuota.listarSociosCreate', compact('socios'));
   }
 
+
+
   /**
    * Show the form for creating a new resource.
    *
@@ -121,9 +131,6 @@ class CuotaController extends Controller
 
     //le agrego al socio la última cuota que tiene generada
     $socio = $this->ultimoMesCuotaCreada($socio);
-
-    //para saber si no pagó alguna cuota
-    $socio = $this->hayCuotaNoPagada($socio);
 
     //le agrego al socio los montoCuota de cada categoría
     $socio = $this->asignarMontos($socio);
@@ -139,6 +146,8 @@ class CuotaController extends Controller
     //retorno los socios a la vista
     return view('cuota.agregarCuota', compact('socio'));
   }
+
+
 
   /**
    * Store a newly created resource in storage.
@@ -231,6 +240,8 @@ class CuotaController extends Controller
     return redirect()->action('CuotaController@getShowId', $cuotaRetornada->id);
   }
 
+
+
   /**
    * Display the resource list
    *
@@ -251,6 +262,8 @@ class CuotaController extends Controller
     return view('cuota.listado', compact('cuotas'));
   }
 
+
+
   /**
    * Display the specified resource.
    *
@@ -265,7 +278,6 @@ class CuotaController extends Controller
     //calculo la edad para despues mostrarlo en la vista
     $cuota->socio->edad = Carbon::parse($cuota->socio->fechaNac)->age; //ELIMINAR
 
-    $cuota->mesesAtrasados = $this->mesesAtrasados($cuota);
     $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
 
     $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
@@ -273,6 +285,8 @@ class CuotaController extends Controller
     //se lo envío a la vista
     return view('cuota.individual', ['cuota' => $cuota]);
   }
+
+
 
   /**
    * Show the form for editing the specified resource.
@@ -285,23 +299,18 @@ class CuotaController extends Controller
     //recupero la cuota a editar
     $cuota = ComprobanteCuota::find($id);
 
-    //le asigno a la cuota el MontoCuota de cada tipo de socio
-    $cuota = $this->montoTipoSocio($cuota); //NO LO USO
-
-    $cuota->mesesAtrasados = $this->mesesAtrasados($cuota);
-    $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
-
     $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
 
     //se los envio a la vista
     return view('cuota.editar', ['cuota' => $cuota]);
   }
 
+
+
   /**
    * Update the specified resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
-   *
    * @return \Illuminate\Http\Response
    */
   public function update(Request $request)
@@ -355,7 +364,13 @@ class CuotaController extends Controller
     return redirect()->action('CuotaController@getShowId', $request->id);
   }
 
-  //inhabilitar cuota
+
+
+  /**
+   * fución para inhabilitar la cuota
+   * @param  Request $request
+   * @return \Illuminate\Http\Response
+   */
   public function disable(Request $request)
   {
     ComprobanteCuota::where('id', $request->id)
@@ -367,7 +382,13 @@ class CuotaController extends Controller
     return redirect()->action('CuotaController@getShowId', $request->id);
   }
 
-  //habilitar cuota
+
+
+  /**
+   * fución para habilitar la cuota
+   * @param  Request $request
+   * @return \Illuminate\Http\Response
+   */
   public function enable(Request $request)
   {
     ComprobanteCuota::where('id', $request->id)
@@ -380,23 +401,6 @@ class CuotaController extends Controller
   }
 
 
-  /**
-   * Display the list of Socios to choose who paids the Cuota.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function getShowPago()
-  {
-    //obtengo todos los socios
-    $socios = Socio::all();
-
-    foreach ($socios as $socio) {
-      $socio = $this->calculaUltimoMes($socio);
-    }
-
-    //se los envio a la vista
-    return view('cuota.listarSociosPago', compact('socios'));
-  }
 
 /**
    * Display the the form to add the Socios's payment.
@@ -408,9 +412,6 @@ class CuotaController extends Controller
       //busco la cuota
       $cuota = ComprobanteCuota::find($id);
 
-      $cuota->mesesAtrasados = $this->mesesAtrasados($cuota);
-      $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
-
       $cuota->compruebaCuota = $this->comprobarCuota($cuota);
 
       $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
@@ -418,6 +419,7 @@ class CuotaController extends Controller
       //se lo envío a la vista
       return view('cuota.ingresarPago', ['cuota' => $cuota]);
     }
+
 
 
   /**
@@ -470,6 +472,7 @@ class CuotaController extends Controller
     }
 
 
+
   /**
    * calcula la edad del socio ingresado por parametro
    * @param  App\Socio $socio
@@ -489,31 +492,12 @@ class CuotaController extends Controller
   }
 
 
+
   /**
-   * calcula la edad del socio ingresado por parametro
+   * calculo el último mes pagado
    * @param  App\Socio $socio
    * @return App\Socio
    */
-  private function calculaUltimoMes($socio)
-  {
-      //busco el último mes que pagó tal socio
-      $ultimoMes = ComprobanteCuota::select('fechaMesAnio')->where('idSocio', $socio->id)->orderBy('fechaMesAnio', 'DESC')->first();
-
-      //si ha pagado cuotas, asigno al atributo ultimoMesPagado lo que recuperé anteriormente
-      if($ultimoMes){
-        $socio->ultimoMesPagado = $ultimoMes->fechaMesAnio;
-      }
-      //sino le asigno null
-      else{
-        $socio->ultimoMesPagado = null;
-      }
-
-      //retorna al socio con su último mes pagado
-      return $socio;
-  }
-
-
-  //calculo el último mes pagado
   private function ultimoMesPagado($socio){
     $fecha = new ComprobanteCuota;
     $fecha = ComprobanteCuota::select('fechaMesAnio')->where('idSocio', $socio->id)->where('inhabilitada', false)->orderBy('fechaMesAnio', 'DESC')->first();
@@ -523,7 +507,12 @@ class CuotaController extends Controller
     return $socio;
   }
 
-  //busco si tal socio tiene alguna cuota sin pagar (que no sea inhabilitada)
+
+  /**
+   * busco si tal socio tiene alguna cuota sin pagar (que no sea inhabilitada)
+   * @param  App\Socio $socio
+   * @return App\Socio
+   */
   private function hayCuotaNoPagada($socio){
     $cuota = new ComprobanteCuota;
     $cuota = ComprobanteCuota::where('idSocio', $socio->id)->where('inhabilitada', false)->where('fechaPago', null)->first();
@@ -533,7 +522,12 @@ class CuotaController extends Controller
     return $socio;
   }
 
-  //busco la última cuota generada de dicho socio
+
+  /**
+   * busco la última cuota generada de dicho socio
+   * @param  App\Socio $socio
+   * @return App\Socio
+   */
   private function ultimoMesCuotaCreada($socio){
     $cuota = new ComprobanteCuota;
     $cuota = ComprobanteCuota::where('idSocio', $socio->id)->orderBy('fechaMesAnio', 'DESC')->first();
@@ -548,9 +542,14 @@ class CuotaController extends Controller
     return $socio;
   }
 
-  //le agrego al socio los montos MÁS ACTUALES de cada categoría
-  private function asignarMontos($socio){
 
+
+  /**
+   * le agrego al socio los montos MÁS ACTUALES de cada categoría
+   * @param  App\Socio $socio
+   * @return App\Socio
+   */
+  private function asignarMontos($socio){
     $monto = MontoCuota::select('montoMensual')->where('tipo', 'a')->orderBy('fechaCreacion', 'DESC')->first();
     $socio->montoActivo = $monto['montoMensual'];
 
@@ -565,7 +564,13 @@ class CuotaController extends Controller
     return $socio;
   }
 
-  //calculo la diferencia de meses entre el mes correspondiente y el pago
+
+
+  /**
+   * calculo la diferencia de meses entre el mes correspondiente y el pago
+   * @param  App\ComprobanteCuota $cuota
+   * @return int
+   */
   private function mesesAtrasados($cuota){
     if ($cuota->fechaMesAnio < $cuota->fechaPago) {
       $date = Carbon::parse($cuota->fechaMesAnio);
@@ -576,6 +581,8 @@ class CuotaController extends Controller
       return 0;
     }
   }
+
+
 
   /**
    * Calcula el monto a pagar por intereses
@@ -593,24 +600,12 @@ class CuotaController extends Controller
       return 0;
     }
   }
-/*
-  private function integrantesGrupoFamiliar($cuota){
-    if ($cuota->montoCuota->tipo == 'g') {
-      $idGrupoFamiliar = $cuota->socio->grupoFamiliar->id;
-      $cantidadIntegrantes = Socio::where('idGrupoFamiliar', $idGrupoFamiliar)->count();
-    }
-    else {
-      $cantidadIntegrantes = '0';
-    }
-
-    return $cantidadIntegrantes;
-  }*/
 
   /**
-   * Calcula el monto a pagar por cantidad de integrantes 
+   * Calcula el monto a pagar por cantidad de integrantes
    *
    * @param App\ComprobanteCuota $cuota
-   * @return void
+   * @return float
    */
   public function montoInteresGrupoFamiliar($cuota){
     //para que no evalue las cuotas que no son de grupo familiar
@@ -628,23 +623,13 @@ class CuotaController extends Controller
     }
   }
 
-//NO LO USO ##########
-  //le asigno cada uno de los montos (activo, grupo familiar, cadete) correspondientes al montoCuota DE LA FECHA
-  private function montoTipoSocio($cuota){
-    //a la fechaMesAnio le sumo un mes (para que abarque todo ese mes) porque ser que coincida con el mes de creacion del montoCuota
-    $fecha = date("Y:m:d H:i:s", strtotime ('+1 month', strtotime ($cuota->fechaMesAnio)));
 
-    //le asigno cada uno de los montos
-    $cuota->montoActivo = MontoCuota::where('tipo', 'a')->where('fechaCreacion','<', $fecha)->orderBy('fechaCreacion','DES')->first();
 
-    $cuota->montoGrupoFamiliar = MontoCuota::where('tipo', 'g')->where('fechaCreacion','<', $fecha)->orderBy('fechaCreacion','DES')->first();
-
-    $cuota->montoCadete = MontoCuota::where('tipo', 'c')->where('fechaCreacion','<', $fecha)->orderBy('fechaCreacion','DES')->first();
-
-    return $cuota;
-  }
-
-  //comprueba que la cuota que se quiera pagar sea la "más antigua", esto es por como está diseñado el sistema de pagos
+  /**
+   * comprueba que la cuota que se quiera pagar sea la "más antigua", esto es porque no tiene sentido pagar antes una más actual
+   * @param  App\ComprobanteCuota $cuota
+   * @return boolean
+   */
   private function comprobarCuota($cuota){
     //obtengo la cuota más vieja
     $cuotaQueDeberiaPagar = ComprobanteCuota::where('idSocio', $cuota->idSocio)->where('fechaPago', null)->where('inhabilitada', false)->orderBy('fechaMesAnio', 'ASC')->first();

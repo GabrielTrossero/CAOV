@@ -25,10 +25,6 @@ $(document).ready(function () {
     $("#valorAtraso").val(0);
   }
 
-  //esto lo hago porque el value de los siguientes input no los tengo en otro lado, entonces los conservo en la variable "valor" de cada input
-  $('#mesesAtraso').attr('valor', $("#mesesAtraso").val()); //inserto en la variable valor del input mesesAtraso lo que tiene como value el input mesesAtraso
-  $('#interesAtraso').attr('valor', $("#interesAtraso").val());
-
   //PARA MONTO TOTAL
   var valueAtraso = parseInt(jQuery('#valorAtraso').val(),10);
   var valueGrupoFamiliar = parseInt(jQuery('#valorGrupoFamiliar').val(),10);
@@ -36,6 +32,12 @@ $(document).ready(function () {
   var total = ( "$" + (valueAtraso + valueGrupoFamiliar + valueMensual));
 
   $("#montoTot").val(total); //inserto el valor seleccionado en el input "id=montoTotal"
+
+  //esto lo hago porque el value de los siguientes input no los tengo en otro lado, entonces los conservo en la variable "valor" de cada input
+  $('#mesesAtraso').attr('valor', $("#mesesAtraso").val()); //inserto en la variable valor del input mesesAtraso lo que tiene como value el input mesesAtraso
+  $('#interesAtraso').attr('valor', $("#interesAtraso").val());
+  $('#montoTot').attr('valor', $("#montoTot").val());
+
 
 
 
@@ -76,49 +78,9 @@ $(document).ready(function () {
       $('#interesGrupoFamiliar').val(intGruFam);
       var fechPag = $('#fechaPago').attr('valor');
       $('#fechaPago').val(fechPag);
+      var monTot = $('#montoTot').attr('valor');
+      $('#montoTot').val(monTot);
     }
   });
 
-
-
-/*
-  $("#tipoSocio").change(function () { //detecta los cambios del input tipoSocio
-    var montoCuota = new Object();
-    var estado = $("#tipoSocio").find(':selected').val(); //asigno a estado el valor que tiene el atributo "tipoSocio" del input select seleccionado
-
-    //dependiendo del tipo de socio, se tendrán diferentes montos
-    if (estado == 'g') {
-      montoCuota = $('#montoCuotaGrupoFamiliar').val();
-    }
-    else if (estado == 'c') {
-      montoCuota = $('#montoCuotaCadete').val();
-    }
-    else if (estado == 'a') {
-      montoCuota = $('#montoCuotaActivo').val();
-    }
-
-//INPUT MONTO MENSUAL
-    montoCuota = JSON.parse(montoCuota); //transformo de json (string) a objeto
-    $('#montoMensual').val("$" + montoCuota.montoMensual);
-
-//INPUT INTERESES
-    //moment sirve para sacar la diferencia de meses entre las dos fechas
-    var mesAnio = moment($("#fechaMesAnio").attr('mesAnio'));
-    var fechaPago = moment($("#fechaPago").val()); //obtengo el value que tiene el input
-    var mesesAtrazados = fechaPago.diff(mesAnio, 'months'); //calculo la diferencia de meses entre el pago y el mes/anio de la cuota
-
-    if (mesesAtrazados > montoCuota.cantidadMeses){
-      var montoPagar = (mesesAtrazados - montoCuota.cantidadMeses) * montoCuota.montoInteresMensual; //calculo el monto a pagar
-      $("#interesAtrazo").val("$" + montoPagar + " (" + mesesAtrazados + " meses)"); //inserto en el input id=interesAtrazo
-      $("#valorAtrazo").val(montoPagar);
-    }
-    else if (mesesAtrazados >= 0){
-      $("#interesAtrazo").val("$0 (" + mesesAtrazados + " meses)");
-      $("#valorAtrazo").val(0);
-    }
-    else {
-      $("#interesAtrazo").val("$0 (0 meses)");
-      $("#valorAtrazo").val(0);
-    }
-  });*/
 });

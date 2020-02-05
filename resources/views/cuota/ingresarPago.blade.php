@@ -144,18 +144,6 @@
                                 @endif
                             </div>
                         </div>
-<!--
-                        <div class="form-group row">
-                            <label for="interesGrupoFamiliar" class="col-md-4 col-form-label text-md-right">{{ __('Interés por Integrantes de Grupo Familiar') }}</label>
-
-                            <div class="col-md-6">
-                                @if ($cuota->socio->grupoFamiliar != null)
-                                  <input type="text" name="interesGrupoFamiliar" id="interesGrupoFamiliar" class="form-control" maxlength="75" value="{{ '$'. $cuota->montoInteresGrupoFamiliar ." (". $cuota->integrantesGrupoFamiliar ." integrantes)" }}" disabled>
-                                @else
-                                  <input type="text" name="interesGrupoFamiliar" id="interesGrupoFamiliar" class="form-control" maxlength="75" value="{{ '-' }}" disabled>
-                                @endif
-                            </div>
-                        </div>  -->
 
                         <!--lo uso para calcular el monto total en montos.js -->
                         <input type="hidden" id="valorAtraso">
