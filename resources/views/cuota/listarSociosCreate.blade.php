@@ -23,7 +23,7 @@
         <tbody>
           @foreach ($socios as $socio)
             <!--para no mostrar los vitalicios y los que no son titulares-->
-            @if (($socio->vitalicio == 'n') && ((!$socio->idGrupoFamiliar) || ($socio->id == $socio->grupoFamiliar->titular)))    <!FALTA CADETE>
+            @if (($socio->vitalicio == 'n') && ((!$socio->idGrupoFamiliar) || ($socio->id == $socio->grupoFamiliar->titular)))
               <tr>
                 <td>{{ $socio->persona->DNI }}</td>
                 <td>{{ $socio->numSocio }}</td>

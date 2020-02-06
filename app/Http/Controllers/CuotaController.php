@@ -177,6 +177,20 @@ class CuotaController extends Controller
       return redirect()->back()->withInput()->with('validarPagada', 'ERROR: no puede generar un adelanto de pago si alguna cuota anterior no está pagada.');
     }
 
+    //para redirigir si la fecha de pago es mayor que el mes actual, ya que no tiene sentido poner una fecha de pago futura en un adelanto
+    if ($socio->ultimaCuota == null) {  //en caso de que el socio no tenga cuotas generadas
+      $fechaMesAnio = Carbon::parse($socio->mesActual);  //lo pongo en formato Carbon
+      $fechaPago = Carbon::parse($request->fechaPago);  //lo pongo en formato Carbon
+    }
+    else {  //sino tomo la cuota más actual generada y le sumo un mes
+      $fechaMesAnio = Carbon::parse($socio->ultimaCuota->fechaMesAnio);  //lo pongo en formato Carbon
+      $fechaMesAnio->addMonth();  //si tomo la fecha de la última cuota le agrego un mes a esta
+      $fechaPago = Carbon::parse($request->fechaPago);  //lo pongo en formato Carbon
+    }
+      if (($fechaPago->month > $fechaMesAnio->month) && ($request->estado == 'pagada')) {
+        return redirect()->back()->withInput()->with('validarFechaPago', 'ERROR: el mes de la fecha de pago no puede ser mayor que el mes de la cuota.');
+      }
+
 
     //mensajes de error que se mostraran por pantalla
     $messages = [
@@ -228,7 +242,7 @@ class CuotaController extends Controller
 
     //en caso de que el socio sea nuevo va a tener null, entonces le pongo el mes corriente
     if ($socio->ultimaCuota == null) {
-      $cuota->fechaMesAnio = $socio->mesActual;
+      $cuota->fechaMesAnio = $socio->mesActual->toDateString();
     }
     else {
       //convierto la fecha porque me lo da en otro formato
@@ -487,10 +501,6 @@ class CuotaController extends Controller
    */
   private function calculaEdad($socio)
   {
-      /*retorno la edad del socio
-      return Carbon::parse($socio->fechaNac)->age;
-      */
-
       // calcula la edad del socio segun su categoria
       $edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
 
@@ -541,7 +551,8 @@ class CuotaController extends Controller
 
     //en caso de que el socio sea nuevo y no tenga cuotas asignadas, le asigno el mes actual en otra variable
     if ($cuota == null) {
-      $socio->mesActual = Carbon::Now();
+      $fechaActual =  Carbon::Now();  //obtengo la fecha actual
+      $socio->mesActual = $fechaActual->subDays($fechaActual->day - 1);  //y le resto los días del mes, para que siemrpe sea el 1er dia del mes
     }
 
     $socio->ultimaCuota = $cuota;
