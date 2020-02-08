@@ -10,6 +10,12 @@
       </table>
     </div>
     <div class="card-body border">
+      @if (isset($gruposActualizados))
+          <div class="alert alert-warning">
+            {!! $gruposActualizados !!}
+         </div>
+       @endif
+       
       <table id="idDataTable" class="table table-striped">
         <thead>
           <tr>
