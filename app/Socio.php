@@ -30,8 +30,13 @@ class Socio extends Model
       return $this->belongsTo('App\Persona', 'idPersona');
     }
 
-    //relacion a los comprobantes de cuotas
+    //relacion a los comprobantes de cuotas (titular)
     public function comprobantesDeCuotas(){
       return $this->hasMany('App\ComprobanteCuota', 'idSocio');
+    }
+
+    //relacion a los comprobantes de cuotas (adherentes)
+    public function comprobantes(){
+      return $this->belongsToMany('App\ComprobanteCuota', 'sociocomprobante', 'idSocio', 'idComprobante');
     }
 }

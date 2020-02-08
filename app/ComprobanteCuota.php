@@ -13,9 +13,14 @@ class ComprobanteCuota extends Model
         'fechaMesAnio', 'fechaPago', 'cantidadIntegrantes', 'idMedioDePago', 'idMontoCuota', 'idSocio', 'inhabilitada'
     ];
 
-    //relacion a socio
+    //relacion a socio (titular si es grupofamiliar)
     public function socio(){
       return $this->belongsTo('App\Socio', 'idSocio');
+    }
+
+    //relacion a adherente (si es grupoFamiliar)
+    public function adherentes(){
+      return $this->belongsToMany('App\Socio', 'sociocomprobante', 'idComprobante', 'idSocio');
     }
 
     //relacion a medio de pago

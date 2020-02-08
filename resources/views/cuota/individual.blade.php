@@ -3,60 +3,111 @@
 @section('content')
 
 <div class="cuadro">
-  <div class="card">
-    <div class="card-header">Información del Socio</div>
-    <div class="card-body border">
-      <table class="table">
-        <tr>
-          <th>DNI</th>
-          <th>Numero de Socio</th>
-          <th>Apellido</th>
-          <th>Nombres</th>
-          <th>Categoria</th>
-          <th>Oficio</th>
-          <th>Deportes</th>
-          <th>Fecha de Nacimiento</th>
-          <th>Activo</th>
-        </tr>
 
-        <tr>
-          <td>{{ $cuota->socio->persona->DNI }}</td>
-          <td>{{ $cuota->socio->numSocio }}</td>
-          <td>{{ $cuota->socio->persona->apellido }}</td>
-          <td>{{ $cuota->socio->persona->nombres }}</td>
+    <div class="card">
+      <div class="card-header">Información del Socio</div>
+      <div class="card-body border">
+        <table class="table">
+          <tr>
+            @if ($cuota->montoCuota->tipo == 'g')
+              <th>Tipo</th>
+            @endif
+            <th>DNI</th>
+            <th>Numero de Socio</th>
+            <th>Apellido</th>
+            <th>Nombres</th>
+            <th>Categoria (actual)</th>
+            <th>Oficio</th>
+            <th>Deportes</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Activo</th>
+          </tr>
 
-          @if ($cuota->socio->vitalicio == 's')
-            <td>{{ 'Vitalicio' }}</td>
-          @elseif ($cuota->socio->idGrupoFamiliar)
-            <td>{{ 'Grupo Familiar' }}</td>
-          @elseif ($cuota->socio->edad < 18)
-            <td>{{ 'Cadete' }}</td>
-          @else
-            <td>{{ 'Activo' }}</td>
-          @endif
+          <tr>
+            @if ($cuota->montoCuota->tipo == 'g')
+              <td><p style="color:red;">{{ 'Titular' }}</p></td>
+            @endif
+            <td>{{ $cuota->socio->persona->DNI }}</td>
+            <td>{{ $cuota->socio->numSocio }}</td>
+            <td>{{ $cuota->socio->persona->apellido }}</td>
+            <td>{{ $cuota->socio->persona->nombres }}</td>
 
-          <td>{{ $cuota->socio->oficio }}</td>
+            @if ($cuota->socio->vitalicio == 's')
+              <td>{{ 'Vitalicio' }}</td>
+            @elseif ($cuota->socio->idGrupoFamiliar)
+              <td>{{ 'Grupo Familiar' }}</td>
+            @elseif ($cuota->socio->edad < 18)
+              <td>{{ 'Cadete' }}</td>
+            @else
+              <td>{{ 'Activo' }}</td>
+            @endif
 
-          <td>
-            @foreach ($cuota->socio->deportes as $deporte)
-              {{ $deporte->nombre }}
-              <br>
+            <td>{{ $cuota->socio->oficio }}</td>
+
+            <td>
+              @foreach ($cuota->socio->deportes as $deporte)
+                {{ $deporte->nombre }}
+                <br>
+              @endforeach
+            </td>
+
+            <td>{{ date("d/m/Y", strtotime($cuota->socio->fechaNac)) }}</td>
+
+            @if ($cuota->socio->activo)
+              <td>Si</td>
+            @else
+              <td>No</td>
+            @endif
+
+          </tr>
+
+          <!--si pertenece a un grupo familiar, muestro la información de los adherentes-->
+          @if ($cuota->montoCuota->tipo == 'g')
+            @foreach ($cuota->adherentes as $adherente)
+              <tr>
+                @if ($adherente->id == $adherente->grupoFamiliar->pareja)
+                  <td>{{ 'Adherente Pareja' }}</td>
+                @else
+                  <td>{{ 'Adherente Cadete' }}</td>
+                @endif
+                <td>{{ $adherente->persona->DNI }}</td>
+                <td>{{ $adherente->numSocio }}</td>
+                <td>{{ $adherente->persona->apellido }}</td>
+                <td>{{ $adherente->persona->nombres }}</td>
+
+                @if ($adherente->vitalicio == 's')
+                  <td>{{ 'Vitalicio' }}</td>
+                @elseif ($adherente->idGrupoFamiliar)
+                  <td>{{ 'Grupo Familiar' }}</td>
+                @elseif ($adherente->edad < 18)
+                  <td>{{ 'Cadete' }}</td>
+                @else
+                  <td>{{ 'Activo' }}</td>
+                @endif
+
+                <td>{{ $adherente->oficio }}</td>
+
+                <td>
+                  @foreach ($adherente->deportes as $deporte)
+                    {{ $deporte->nombre }}
+                    <br>
+                  @endforeach
+                </td>
+
+                <td>{{ date("d/m/Y", strtotime($adherente->fechaNac)) }}</td>
+
+                @if ($adherente->activo)
+                  <td>Si</td>
+                @else
+                  <td>No</td>
+                @endif
+              </tr>
             @endforeach
-          </td>
-
-          <td>{{ date("d/m/Y", strtotime($cuota->socio->fechaNac)) }}</td>
-
-          @if ($cuota->socio->activo)
-            <td>Si</td>
-          @else
-            <td>No</td>
           @endif
+        </table>
 
-        </tr>
-      </table>
-
+      </div>
     </div>
-  </div>
 
 
 

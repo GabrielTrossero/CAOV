@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\MontoCuota;
 use App\ComprobanteCuota;
 use App\Socio;
+use App\SocioComprobante;
 use Carbon\Carbon;
 
 class CuotaController extends Controller
@@ -253,7 +254,20 @@ class CuotaController extends Controller
 
     $cuota->save();
 
+    //identifico la cuota generada
     $cuotaRetornada = ComprobanteCuota::where('idSocio', $request->id)->where('fechaMesAnio', $cuota->fechaMesAnio)->first();
+
+    //si es de tipo grupofamiliar relaciono la cuota con los adherentes del grupo
+    if ($socio->idGrupoFamiliar) {
+      foreach ($socio->grupofamiliar->socios as $adherente) {
+        if ($adherente->id != $socio->id) {  //para que al titular no lo ponga como adherente
+          $socioComprobante = new SocioComprobante;
+          $socioComprobante->idSocio = $adherente->id;
+          $socioComprobante->idComprobante = $cuotaRetornada->id;
+          $socioComprobante->save();
+        }
+      }
+    }
 
     //redirijo para mostrar la cuota ingresada
     return redirect()->action('CuotaController@getShowId', $cuotaRetornada->id);
@@ -296,6 +310,13 @@ class CuotaController extends Controller
 
     //calculo la edad para despues mostrarlo en la vista
     $cuota->socio->edad = $this->calculaEdad($cuota->socio);
+
+    //le asigno la edad a los adherentes (en caso de que la cuota sea grupofamiliar)
+    if ($cuota->montoCuota->tipo == 'g'){
+      foreach ($cuota->adherentes as $adherente){
+        $adherente->edad = $this->calculaEdad($adherente);
+      }
+    }
 
     $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
 
