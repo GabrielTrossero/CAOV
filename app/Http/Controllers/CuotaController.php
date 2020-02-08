@@ -315,6 +315,7 @@ class CuotaController extends Controller
     if ($cuota->montoCuota->tipo == 'g'){
       foreach ($cuota->adherentes as $adherente){
         $adherente->edad = $this->calculaEdad($adherente);
+        $adherente->pareja = $this->esPareja($adherente, $cuota);
       }
     }
 
@@ -527,6 +528,26 @@ class CuotaController extends Controller
 
       //retorna la edad del socio
       return $edad;
+  }
+
+
+
+  /**
+   * calcula la edad que tenía el socio al momento que se generó la cuota (si es mayor de 18 era la pareja, sino era un hijo)
+   * @param  App\Socio $adherente, App\ComprobanteCuota $cuota
+   * @return boolean
+   */
+  private function esPareja($adherente, $cuota)
+  {
+      // calcula la edad del socio segun su categoria
+      $edad = Carbon::parse($cuota->fechaMesAnio)->year - Carbon::parse($adherente->fechaNac)->year;
+
+      if ($edad > 18) {
+        return true;
+      }
+      else {
+        return false;
+      }
   }
 
 

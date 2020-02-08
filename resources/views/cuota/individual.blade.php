@@ -65,7 +65,7 @@
           @if ($cuota->montoCuota->tipo == 'g')
             @foreach ($cuota->adherentes as $adherente)
               <tr>
-                @if ($adherente->id == $adherente->grupoFamiliar->pareja)
+                @if ($adherente->pareja)
                   <td>{{ 'Adherente Pareja' }}</td>
                 @else
                   <td>{{ 'Adherente Cadete' }}</td>
