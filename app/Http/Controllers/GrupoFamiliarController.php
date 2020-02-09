@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\GrupoFamiliar;
 use App\Socio;
+use App\User;
 use Carbon\Carbon;
 
 class GrupoFamiliarController extends Controller
@@ -21,6 +22,58 @@ class GrupoFamiliarController extends Controller
         return view('grupoFamiliar.menu');
     }
 
+       /**
+     * Actualiza grupo familiar, eliminando grupos o borrando los integrantes activos
+     * 
+     * @param App\GrupoFamiliar $grupo
+     * @return int
+     */
+    public function actualizaGrupoIndividual($grupo)
+    {
+      if (sizeof($grupo->socios) < 2) {
+        $socio = Socio::find($grupo->titular);
+        $socio->idGrupoFamiliar = null;
+        $socio->save();
+
+        $grupo = GrupoFamiliar::destroy($grupo->id);
+
+        return 1;
+      }
+      else{
+        $socios = $grupo->socios;
+        $eliminados = 0;
+
+        foreach ($socios as $socio) {
+          if (($this->calculaEdad($socio) >= 18) && ($socio->id != $grupo->titular) && ($socio->id != $grupo->pareja)) {
+            $socio->idGrupoFamiliar = null;
+            $socio->save();
+
+            $eliminados += 1;
+          }
+        }
+
+        return $eliminados;
+      }
+
+      return 0;
+    }
+
+    /**
+     * Actualiza todos los grupos familiares
+     * 
+     * @return int
+     */
+    public function actualizaGrupos(){
+      $grupos = GrupoFamiliar::all();
+      $respuesta = 0;
+
+      foreach ($grupos as $grupo) {
+        $respuesta += $this->actualizaGrupoIndividual($grupo);
+      }
+
+      return $respuesta;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -28,16 +81,25 @@ class GrupoFamiliarController extends Controller
      */
     public function create()
     {
-        //tomo los socios
-        $socios = Socio::where('idGrupoFamiliar', null)->get();
+      //actualizo los grupos familiares
+      $actualizados = $this->actualizaGrupos();
 
-        //filtro los socios mayores de edad
-        $socios = $socios->filter(function ($socio){
-          return $this->calculaEdad($socio) >= 18;
-        });
+      //tomo los socios
+      $socios = Socio::where('idGrupoFamiliar', null)->get();
 
+      //filtro los socios mayores de edad
+      $socios = $socios->filter(function ($socio){
+        return $this->calculaEdad($socio) >= 18;
+      });
+      
+      if ($actualizados) {
+        $gruposActualizados = 'Atención: se han actualizado grupos familiares. Puede ser que haya grupos de solo 1 integrante eliminados.';
+        return view('grupoFamiliar.agregar', compact('socios', 'gruposActualizados'));
+      }
+      else{
         //redirijo a la vista de agregar con los socios
         return view('grupoFamiliar.agregar', compact('socios'));
+      }
     }
 
     /**
@@ -114,11 +176,20 @@ class GrupoFamiliarController extends Controller
      */
     public function getShow()
     {
-        //tomo los grupos familiares
-        $grupos = GrupoFamiliar::all();
+      //actualizo los grupos familiares
+      $actualizados = $this->actualizaGrupos();
 
+      //tomo los grupos familiares
+      $grupos = GrupoFamiliar::all();
+
+      if ($actualizados) {
+        $gruposActualizados = 'Atención: se han actualizado grupos familiares. Puede ser que haya grupos de solo 1 integrante eliminados.';
+        return view('grupoFamiliar.listado', compact('grupos', 'gruposActualizados'));
+      }
+      else{
         //redirijo al listado de grupos familiares
         return view('grupoFamiliar.listado', compact('grupos'));
+      }
     }
 
     /**
