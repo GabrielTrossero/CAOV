@@ -188,9 +188,10 @@ class CuotaController extends Controller
       $fechaMesAnio->addMonth();  //si tomo la fecha de la última cuota le agrego un mes a esta
       $fechaPago = Carbon::parse($request->fechaPago);  //lo pongo en formato Carbon
     }
-      if (($fechaPago->month > $fechaMesAnio->month) && ($request->estado == 'pagada')) {
-        return redirect()->back()->withInput()->with('validarFechaPago', 'ERROR: el mes de la fecha de pago no puede ser mayor que el mes de la cuota.');
-      }
+
+    if (($fechaPago->month > $fechaMesAnio->month) && ($request->estado == 'pagada')) {
+      return redirect()->back()->withInput()->with('validarFechaPago', 'ERROR: el mes de la fecha de pago no puede ser mayor que el mes de la cuota.');
+    }
 
 
     //mensajes de error que se mostraran por pantalla
@@ -216,17 +217,14 @@ class CuotaController extends Controller
     if ($socio->idGrupoFamiliar){
       $monto = MontoCuota::select('id')->where('tipo', 'g')->orderBy('fechaCreacion', 'DESC')->first();
       $cuota->idMontoCuota = $monto['id'];
-      $cuota->cantidadIntegrantes = Socio::where('idGrupoFamiliar', $socio->idGrupoFamiliar)->count();
     }
     elseif ($socio->edad < 18){
       $monto = MontoCuota::select('id')->where('tipo', 'c')->orderBy('fechaCreacion', 'DESC')->first();
       $cuota->idMontoCuota = $monto['id'];
-      $cuota->cantidadIntegrantes = 0;
     }
     else{
       $monto = MontoCuota::select('id')->where('tipo', 'a')->orderBy('fechaCreacion', 'DESC')->first();
       $cuota->idMontoCuota = $monto['id'];
-      $cuota->cantidadIntegrantes = 0;
     }
 
 
@@ -325,6 +323,9 @@ class CuotaController extends Controller
 
     $cuota->mesesAtrasados = $this->mesesAtrasados($cuota);
 
+    //le asigno a la cuota la cantidad de integrantes que tenía cuando se creo (adherentes + titular)
+    $cuota->cantidadIntegrantes = $cuota->adherentes->count()+1;
+
     //se lo envío a la vista
     return view('cuota.individual', ['cuota' => $cuota]);
   }
@@ -343,6 +344,9 @@ class CuotaController extends Controller
     $cuota = ComprobanteCuota::find($id);
 
     $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
+
+    //le asigno a la cuota la cantidad de integrantes que tenía cuando se creo (adherentes + titular)
+    $cuota->cantidadIntegrantes = $cuota->adherentes->count()+1;
 
     //se los envio a la vista
     return view('cuota.editar', ['cuota' => $cuota]);
@@ -458,6 +462,9 @@ class CuotaController extends Controller
       $cuota->compruebaCuota = $this->comprobarCuota($cuota);
 
       $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
+
+      //le asigno a la cuota la cantidad de integrantes que tenía cuando se creo (adherentes + titular)
+      $cuota->cantidadIntegrantes = $cuota->adherentes->count()+1;
 
       //se lo envío a la vista
       return view('cuota.ingresarPago', ['cuota' => $cuota]);
@@ -674,8 +681,8 @@ class CuotaController extends Controller
     }
 
     //si la cantidad de integrantes registrada es > que la cantidad de integrantes mínima => cobro
-    if ($cuota->cantidadIntegrantes > $cuota->montoCuota->cantidadIntegrantes) {
-      $montoPagar = ($cuota->cantidadIntegrantes - $cuota->montoCuota->cantidadIntegrantes) * $cuota->montoCuota->montoInteresGrupoFamiliar;
+    if (($cuota->adherentes->count()+1) > $cuota->montoCuota->cantidadIntegrantes) {
+      $montoPagar = (($cuota->adherentes->count()+1) - $cuota->montoCuota->cantidadIntegrantes) * $cuota->montoCuota->montoInteresGrupoFamiliar;
       return $montoPagar;
     }
     else {
