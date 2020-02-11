@@ -523,6 +523,62 @@ class CuotaController extends Controller
 
 
 
+    /**
+     * Listar socios para ver sus cuotas
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showSocios()
+    {
+      //recupero todas los socios
+      $socios = Socio::all();
+
+      //le agrego a cada socio el último mes pagado
+      foreach ($socios as $socio) {
+        $socio = $this->ultimoMesPagado($socio);
+        $socio->edad = $this->calculaEdad($socio);
+      }
+
+      //retorno los socios a la vista
+      return view('cuota.listarSocios', compact('socios'));
+    }
+
+
+
+    /**
+     * Listar cuotas de tal socio
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showSocioCuotas($id)
+    {
+      //busco todas las cuotas de tal socio
+      $cuotas = ComprobanteCuota::where('idSocio', $id)->get();
+
+      //busco todos los SocioComprobante (para buscar en las que está como adherente)
+      $socioComprobante = SocioComprobante::where('idSocio', $id)->get();
+
+      //dentro del foreach concateno lo que tiene $cuotas y las cuotas que voy recuperando (como adherente)
+      foreach ($socioComprobante as $socCom) {
+        $cuotaComoAdherente = ComprobanteCuota::where('id', $socCom->idComprobante)->get();
+        $cuotas = $cuotas->merge($cuotaComoAdherente);
+      }
+
+      //le agrego a cada cuota los montos de intereses
+      foreach ($cuotas as $cuota) {
+        $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
+        $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
+      }
+
+      //envío el socio para mostrar su info
+      $socio = Socio::find($id);
+
+      //retorno las cuotas a la vista
+      return view('cuota.listarCuotasSocio', compact('cuotas', 'socio'));
+    }
+
+
+
   /**
    * calcula la edad del socio ingresado por parametro
    * @param  App\Socio $socio
