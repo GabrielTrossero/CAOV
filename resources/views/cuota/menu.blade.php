@@ -10,6 +10,8 @@
   <a href="{{ url('cuota/showCreateCuota') }}"><i class="icono3 fas fa-file-medical"></i> &nbsp; Generar Adelanto de Cuota</a>
   <br>
   <a href="{{ url('cuota/show') }}"><i class="icono3 fas fa-list-ol"></i> &nbsp; Listar Cuotas</a>
+  <br>
+  <a href="{{ url('cuota/showSocios') }}"><i class="icono3 fas fa-list-ul"></i> &nbsp; Listar Cuotas de un Socio</a>
 </div>
 
 

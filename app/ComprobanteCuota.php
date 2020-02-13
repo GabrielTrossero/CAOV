@@ -10,7 +10,7 @@ class ComprobanteCuota extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'fechaMesAnio', 'fechaPago', 'cantidadIntegrantes', 'idMedioDePago', 'idMontoCuota', 'idSocio', 'inhabilitada'
+        'fechaMesAnio', 'fechaPago', 'idMedioDePago', 'idMontoCuota', 'idSocio', 'inhabilitada'
     ];
 
     //relacion a socio (titular si es grupofamiliar)

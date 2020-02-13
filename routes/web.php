@@ -80,6 +80,8 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::post('enable', 'CuotaController@enable');
         Route::get('pago/{id}', 'CuotaController@getPago');
         Route::post('pago', 'CuotaController@postPago');
+        Route::get('showSocios', 'CuotaController@showSocios'); //listado de socios para buscar cuotas
+        Route::get('showSocioCuotas/{id}', 'CuotaController@showSocioCuotas'); //listado de cuotas de tal socio
     });
 /*
     //Rutas para Pago de Cuota
