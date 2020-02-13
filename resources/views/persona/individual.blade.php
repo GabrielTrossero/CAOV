@@ -32,7 +32,7 @@
             Editar Persona
           </button>
         </a>
-
+        <!-- POR EL MOMENTO NO USAMOS ESTE METODO
         &nbsp;&nbsp;
         <form action="{{ url('/persona/delete') }}" method="post" style="display:inline">
           {{ csrf_field() }}
@@ -41,7 +41,7 @@
             Eliminar Persona
           </button>
         </form>
-
+      -->
       </div>
 
     </div>
