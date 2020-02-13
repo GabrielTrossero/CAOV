@@ -97,12 +97,18 @@ class SocioController extends Controller
         //valido que el id del Grupo Familiar exista
         $validarGrupoFamiliar = GrupoFamiliar::where('id', $request->idGrupoFamiliar)->first();
 
-        if($request->idGrupoFamiliar == 0){
+        if ($request->vitalicio == 's') {
           $request->idGrupoFamiliar = null;
         }
-        elseif (!isset($validarGrupoFamiliar)) {
-          return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+        elseif($request->vitalicio == 'n'){
+              if($request->idGrupoFamiliar == 0){
+                $request->idGrupoFamiliar = null;
+              }
+              elseif (!isset($validarGrupoFamiliar)) {
+                return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+              }
         }
+        
 
 
         //obtengo la persona correspondiente al DNI ingresado
@@ -286,11 +292,16 @@ class SocioController extends Controller
       //valido que el id del Grupo Familiar exista
       $validarGrupoFamiliar = GrupoFamiliar::where('id', $request->idGrupoFamiliar)->first();
 
-      if($request->idGrupoFamiliar == 0){
+      if ($request->vitalicio == 's') {
         $request->idGrupoFamiliar = null;
       }
-      elseif (!isset($validarGrupoFamiliar)) {
-        return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+      elseif($request->vitalicio == 'n'){
+            if($request->idGrupoFamiliar == 0){
+              $request->idGrupoFamiliar = null;
+            }
+            elseif (!isset($validarGrupoFamiliar)) {
+              return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+            }
       }
 
 

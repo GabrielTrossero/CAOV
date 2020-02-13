@@ -177,5 +177,6 @@
     </div>
 </div>
 
+<script src="{!! asset('js/verifica-socio-vitalicio.js') !!}"></script>
 
 @stop
