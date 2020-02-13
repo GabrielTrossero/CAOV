@@ -2,7 +2,34 @@
 
 @section('content')
 
-<div class="cuadro">
+
+<div class="cuadro" style="padding-top:25px; padding-bottom:25px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Consultar Disponibilidad de Inmueble') }}</div>
+                <div class="card-body">
+                     <div class="form-group row">
+                        <label for="chequear-fecha" class="col-md-4 col-form-label text-md-right">{{ __('Consultar Disponibilidad') }}</label>
+
+                        <div class="col-md-6">
+                            <form action="#" id="form-check">
+                                <input type="text" id="action" value="{{ url('alquilerinmueble/disponibilidad') }}'" hidden>
+                                <input type="date" name="chequear-fecha" id="chequear-fecha" class="form-control" value="">
+                                <input type="text" id="token" value="{{ csrf_token() }}" hidden>
+                                <input type="text" id="tipo" value="inmueble" hidden>
+                                <button type="button" id="chequear"><i class="fas fa-check" style="color:blue"></i></button>
+                            </form>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cuadro" style="padding-top:15px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
