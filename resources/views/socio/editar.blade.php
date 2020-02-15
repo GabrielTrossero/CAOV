@@ -101,7 +101,7 @@
 
                               <span class="text-danger">{{$errors->first('idGrupoFamiliar')}}</span>
 
-                              @if ($socio->id == $socio->grupoFamiliar->titular)
+                              @if (isset($socio->ifGrupoFamiliar) && ($socio->id == $socio->grupoFamiliar->titular))
                                 <span class="text-danger">{!! "El Socio a editar es titular de un Grupo Familiar. Para eliminarlo del mismo dirijase a la edición de su Grupo Familiar." !!}</span>
                               @endif
 
