@@ -32,6 +32,10 @@
                                   <div class="alert alert-danger">
                                     {!! \Session::get('validarFechaPago') !!}
                                   </div>
+                              @elseif (\Session::has('errorVitalicio'))
+                                  <div class="alert alert-danger">
+                                    {!! \Session::get('errorVitalicio') !!}
+                                  </div>
                               @endif
                             </div>
                         </div>

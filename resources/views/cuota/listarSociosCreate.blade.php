@@ -46,7 +46,7 @@
                   <td> - </td>
                 @endif
 
-                <td><a href="{{ url('/cuota/showSocioCuotas/'.$socio->id) }}"> <i class="fas fa-plus"></i></a> </td>
+                <td><a href="{{ url('/cuota/createCuota/'.$socio->id) }}"> <i class="fas fa-plus"></i></a> </td>
 
               </tr>
             @endif

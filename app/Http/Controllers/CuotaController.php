@@ -148,7 +148,7 @@ class CuotaController extends Controller
       $socio->cantidadIntegrantes = 0;
     }
 
-    //retorno los socios a la vista
+    //retorno el socio a la vista
     return view('cuota.agregarCuota', compact('socio'));
   }
 
@@ -214,7 +214,10 @@ class CuotaController extends Controller
       return redirect()->back()->withInput()->withErrors($validacion->errors());
     }
 
-    if ($socio->idGrupoFamiliar){
+    if ($socio->vitalicio == 's') {
+      return redirect()->back()->withInput()->with('errorVitalicio', 'ERROR: no puede generar un adelanto de pago a un socio Vitalicio.');
+    }
+    elseif ($socio->idGrupoFamiliar){
       $monto = MontoCuota::select('id')->where('tipo', 'g')->orderBy('fechaCreacion', 'DESC')->first();
       $cuota->idMontoCuota = $monto['id'];
     }
@@ -281,13 +284,19 @@ class CuotaController extends Controller
   public function getShow()
   {
     //recupero todas las cuotas
-    $cuotas = ComprobanteCuota::all();
+    $c = ComprobanteCuota::all();
 
     //le agrego a cada cuota los montos que se usan en la columna "Monto Total"
-    foreach ($cuotas as $cuota) {
+    foreach ($c as $cuota) {
       $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
       $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
     }
+
+    $cuotas = $c->filter(function ($value, $key) {  //funcion para filtrar y no eviarle las cuotas de vitalicios
+        if ($value->montoCuota->tipo != 'v')
+          return true;
+        else false;
+    });
 
     //retorno las cuotas a la vista
     return view('cuota.listado', compact('cuotas'));
@@ -553,7 +562,13 @@ class CuotaController extends Controller
     public function showSocioCuotas($id)
     {
       //busco todas las cuotas de tal socio
-      $cuotas = ComprobanteCuota::where('idSocio', $id)->get();
+      $c = ComprobanteCuota::where('idSocio', $id)->get();
+
+      $cuotas = $c->filter(function ($value, $key) {  //funcion para filtrar y no eviarle las cuotas de vitalicios
+          if ($value->montoCuota->tipo != 'v')
+            return true;
+          else false;
+      });
 
       //busco todos los SocioComprobante (para buscar en las que está como adherente)
       $socioComprobante = SocioComprobante::where('idSocio', $id)->get();
@@ -575,6 +590,103 @@ class CuotaController extends Controller
 
       //retorno las cuotas a la vista
       return view('cuota.listarCuotasSocio', compact('cuotas', 'socio'));
+    }
+
+
+    /**
+     * Listar cuotas de tal socio
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function generateCuotasAuto()
+    {
+      //variable que cuenta la cantidad de cuotas generadas
+      $count = 0;
+      //recupero todos los socios para generarle la cuota este mes en caso que corresponda
+      $socios = Socio::all();
+
+      $fechaActual =  Carbon::Now();  //obtengo la fecha actual
+      $fechaActual = $fechaActual->subDays($fechaActual->day - 1);  //y le resto los días del mes, para que siempre sea el 1er dia del mes
+      $fechaActual = $fechaActual->toDateString();
+
+      foreach ($socios as $socio) {
+        //le agrego la edad
+        $socio->edad = $this->calculaEdad($socio);
+
+        //busco si el socio tiene una cuota creada este mes
+        $cuotaEsteMes = ComprobanteCuota::where('idSocio', $socio->id)->where('fechaMesAnio', $fechaActual)->first();
+
+        //si el socio no tiene cuota generada para este mes y, en caso de pertenecer a un grupo familiar sea titular => le genero una cuota
+        if ($cuotaEsteMes == null) {
+          if ((($socio->idGrupoFamiliar) && ($socio->grupoFamiliar->titular == $socio->id)) || ($socio->idGrupoFamiliar == null)) {
+            $cuota = new ComprobanteCuota; //genero la cuota
+            $cuota->fechaMesAnio = $fechaActual;
+            $cuota->fechaPago = null;
+            $cuota->idMedioDePago = null;
+            $cuota->idSocio = $socio->id;
+
+            if (($socio->vitalicio == 's') ||($socio->activo == false)) {
+              $cuota->inhabilitada = true;
+            }
+            else {
+              $cuota->inhabilitada = false;
+            }
+
+            if ($socio->vitalicio == 's') {
+              $monto = MontoCuota::select('id')->where('tipo', 'v')->orderBy('fechaCreacion', 'ASC')->first();
+              $cuota->idMontoCuota = $monto['id'];
+
+              $cuota->save();
+              $count++;
+            }
+
+            elseif ($socio->idGrupoFamiliar) {
+              $monto = MontoCuota::select('id')->where('tipo', 'g')->orderBy('fechaCreacion', 'DESC')->first();
+              $cuota->idMontoCuota = $monto['id'];
+
+              $cuota->save();
+              $count++;
+
+              //identifico la cuota generada para relacionarla con los adherentes
+              $cuotaRetornada = ComprobanteCuota::where('idSocio', $socio->id)->where('fechaMesAnio', $cuota->fechaMesAnio)->first();
+
+              //si es de tipo grupofamiliar relaciono la cuota con los adherentes del grupo
+              foreach ($socio->grupofamiliar->socios as $adherente) {
+                if ($adherente->id != $socio->id) {  //para que al titular no lo ponga como adherente
+                  $socioComprobante = new SocioComprobante;
+                  $socioComprobante->idSocio = $adherente->id;
+                  $socioComprobante->idComprobante = $cuotaRetornada->id;
+                  $socioComprobante->save();
+                }
+              }
+            }
+
+            elseif ($socio->edad < 18){
+              $monto = MontoCuota::select('id')->where('tipo', 'c')->orderBy('fechaCreacion', 'DESC')->first();
+              $cuota->idMontoCuota = $monto['id'];
+
+              $cuota->save();
+              $count++;
+            }
+
+            else{
+              $monto = MontoCuota::select('id')->where('tipo', 'a')->orderBy('fechaCreacion', 'DESC')->first();
+              $cuota->idMontoCuota = $monto['id'];
+
+              $cuota->save();
+              $count++;
+            }
+
+          }
+        }
+      }
+
+      if ($count == 0) {
+        return redirect()->back()->with('sinCuotasGeneradas', 'No se generó ninguna cuota.');
+      }
+      else {
+        return redirect()->back()->with('conCuotasGeneradas', 'Se generaron '. $count .' cuota/s.');
+      }
     }
 
 
@@ -657,7 +769,7 @@ class CuotaController extends Controller
     //en caso de que el socio sea nuevo y no tenga cuotas asignadas, le asigno el mes actual en otra variable
     if ($cuota == null) {
       $fechaActual =  Carbon::Now();  //obtengo la fecha actual
-      $socio->mesActual = $fechaActual->subDays($fechaActual->day - 1);  //y le resto los días del mes, para que siemrpe sea el 1er dia del mes
+      $socio->mesActual = $fechaActual->subDays($fechaActual->day - 1);  //y le resto los días del mes, para que siempre sea el 1er dia del mes
     }
 
     $socio->ultimaCuota = $cuota;
