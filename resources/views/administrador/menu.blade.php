@@ -13,10 +13,23 @@
     <button type="submit" class="btn btn-danger">
       <i class="icono3 fas fa-save"></i> &nbsp; {{ __('Generar BackUp') }}
     </button>
-    
+
   </form>
-  <span class="text-success" style="display:inline-block; margin-top: 10px;">{!! \Session::get('backupExitoso') !!}</span>
-  <span class="text-danger" style="display:inline-block; margin-top: 10px;">{!! \Session::get('backupErroneo') !!}</span>
+
+  @if (\Session::has('backupExitoso'))
+    <script type="text/javascript">
+      window.onload = () => { //para que el script se muestre despúes de cargar el html
+              alert('{!! \Session::get('backupExitoso') !!}')
+          }
+    </script>
+  @elseif (\Session::has('backupErroneo'))
+    <script type="text/javascript">
+      window.onload = () => {
+              alert('{!! \Session::get('backupErroneo') !!}')
+          }
+    </script>
+  @endif
+  
 </div>
 
 

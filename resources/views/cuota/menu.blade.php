@@ -12,7 +12,32 @@
   <a href="{{ url('cuota/show') }}"><i class="icono3 fas fa-list-ol"></i> &nbsp; Listar Cuotas</a>
   <br>
   <a href="{{ url('cuota/showSocios') }}"><i class="icono3 fas fa-list-ul"></i> &nbsp; Listar Cuotas de un Socio</a>
+  <br>
+  <form method="POST" action="{{ url('/cuota/generateCuotasAuto') }}">
+    {{ csrf_field() }}
+
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="submit" class="btn btn-danger">
+      <i class="icono3 fas fa-save"></i> &nbsp; {{ __('Generar Cuotas de este mes') }}
+    </button>
+
+  </form>
+
 </div>
+
+@if (\Session::has('sinCuotasGeneradas'))
+  <script type="text/javascript">
+    window.onload = () => { //para que el script se muestre despúes de cargar el html
+            alert('{!! \Session::get('sinCuotasGeneradas') !!}')
+        }
+  </script>
+@elseif (\Session::has('conCuotasGeneradas'))
+  <script type="text/javascript">
+    window.onload = () => {
+            alert('{!! \Session::get('conCuotasGeneradas') !!}')
+        }
+  </script>
+@endif
 
 
 @stop
