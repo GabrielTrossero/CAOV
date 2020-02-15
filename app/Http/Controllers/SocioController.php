@@ -97,12 +97,18 @@ class SocioController extends Controller
         //valido que el id del Grupo Familiar exista
         $validarGrupoFamiliar = GrupoFamiliar::where('id', $request->idGrupoFamiliar)->first();
 
-        if($request->idGrupoFamiliar == 0){
+        if ($request->vitalicio == 's') {
           $request->idGrupoFamiliar = null;
         }
-        elseif (!isset($validarGrupoFamiliar)) {
-          return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+        elseif($request->vitalicio == 'n'){
+              if($request->idGrupoFamiliar == 0){
+                $request->idGrupoFamiliar = null;
+              }
+              elseif (!isset($validarGrupoFamiliar)) {
+                return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+              }
         }
+        
 
 
         //obtengo la persona correspondiente al DNI ingresado
@@ -286,11 +292,16 @@ class SocioController extends Controller
       //valido que el id del Grupo Familiar exista
       $validarGrupoFamiliar = GrupoFamiliar::where('id', $request->idGrupoFamiliar)->first();
 
-      if($request->idGrupoFamiliar == 0){
+      if ($request->vitalicio == 's') {
         $request->idGrupoFamiliar = null;
       }
-      elseif (!isset($validarGrupoFamiliar)) {
-        return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+      elseif($request->vitalicio == 'n'){
+            if($request->idGrupoFamiliar == 0){
+              $request->idGrupoFamiliar = null;
+            }
+            elseif (!isset($validarGrupoFamiliar)) {
+              return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+            }
       }
 
 
@@ -308,11 +319,27 @@ class SocioController extends Controller
         return redirect()->back()->withInput()->with('validarIdPersona', 'Error, ya dicho Socio.');
       }
 
+      $idGrupo = $socio->idGrupoFamiliar;
+      
+      //si se decide que el socio no tiene grupo
+      if (is_null($request->idGrupoFamiliar)) {
+        //si el socio tiene grupo y es pareja, setea el atributo pareja del grupo a null
+        if (isset($socio->idGrupoFamiliar) && ($socio->grupoFamiliar->pareja == $socio->id)) {
+          $grupo = GrupoFamiliar::find($socio->idGrupoFamiliar);
+          $grupo->pareja = null;
+          $grupo->save(); 
+        }
+
+        //si el socio no es el titular, se asigna null al atributo idGrupoFamiliar
+        if ($socio->id != $socio->grupoFamiliar->titular) {
+          $idGrupo = null;
+        }
+      }
 
       Socio::where('id', $request->id)
             ->update([
               'fechaNac' => $request->fechaNac,
-              'idGrupoFamiliar' => $request->idGrupoFamiliar,
+              'idGrupoFamiliar' => $idGrupo,
               'idPersona' => $persona->id,
               'numSocio' => $request->numSocio,
               'oficio' => $request->oficio,

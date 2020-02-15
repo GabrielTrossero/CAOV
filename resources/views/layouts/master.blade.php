@@ -38,6 +38,7 @@
 
     <!-- Link de js para la dataTable -->
     <script src="{{ asset('js/datatable.js') }}"></script>
+    <script src="{{ asset('js/disponibilidad-alquileres.js') }}"></script>
 
 
     <script src="http://momentjs.com/downloads/moment.min.js"></script>

@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rule;
 use App\ReservaMueble;
 use App\MedioDePago;
 use App\Mueble;
 use App\Persona;
+use Carbon\Carbon;
 
 class AlquilerMuebleController extends Controller
 {
@@ -21,6 +23,29 @@ class AlquilerMuebleController extends Controller
     public function index()
     {
         return view('alquilerMueble.menu');
+    }
+
+    /**
+     * Devuelve información acerca de la disponibilidad de horarios en tal fecha
+     * 
+     * 
+     */
+    public function postDisponibilidad(){
+      $muebleSeleccionado = Input::get('mueble');
+      $alquileres = ReservaMueble::all()->where('idMueble', $muebleSeleccionado);
+      $fecha = Carbon::parse(Input::get('fecha'))->format('Y-m-d');
+   
+      $fechasReservadas = array();
+
+      foreach($alquileres as $alquiler){
+        $alquiler->soloFecha = Carbon::parse($alquiler->fechaHoraInicio)->format('Y-m-d');
+
+        if ($alquiler->soloFecha == $fecha) {
+          $fechasReservadas[] = array($alquiler->soloFecha, $alquiler->fechaHoraInicio, $alquiler->fechaHoraFin);
+        }
+      }
+
+      return response()->json(['fechasReservadas' => $fechasReservadas]);
     }
 
     /**

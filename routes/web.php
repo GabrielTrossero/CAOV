@@ -214,6 +214,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('edit/{id}', 'AlquilerMuebleController@edit');
         Route::post('edit', 'AlquilerMuebleController@update');
         Route::post('delete', 'AlquilerMuebleController@destroy');
+        Route::post('disponibilidad', 'AlquilerMuebleController@postDisponibilidad');
     });
 
     //Rutas de Alquiler de Inmuebles
@@ -227,5 +228,6 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('edit/{id}', 'AlquilerInmuebleController@edit');
         Route::post('edit', 'AlquilerInmuebleController@update');
         Route::post('delete', 'AlquilerInmuebleController@destroy');
+        Route::post('disponibilidad', 'AlquilerInmuebleController@postDisponibilidad');
     });
 });
