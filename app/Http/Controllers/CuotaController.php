@@ -178,7 +178,6 @@ class CuotaController extends Controller
       return redirect()->back()->withInput()->with('validarPagada', 'ERROR: no puede generar un adelanto de pago si alguna cuota anterior no está pagada.');
     }
 
-    //para redirigir si la fecha de pago es mayor que el mes actual, ya que no tiene sentido poner una fecha de pago futura en un adelanto
     if ($socio->ultimaCuota == null) {  //en caso de que el socio no tenga cuotas generadas
       $fechaMesAnio = Carbon::parse($socio->mesActual);  //lo pongo en formato Carbon
       $fechaPago = Carbon::parse($request->fechaPago);  //lo pongo en formato Carbon
@@ -189,6 +188,7 @@ class CuotaController extends Controller
       $fechaPago = Carbon::parse($request->fechaPago);  //lo pongo en formato Carbon
     }
 
+    //para redirigir si la fecha de pago es mayor que el mes actual, ya que no tiene sentido poner una fecha de pago futura en un adelanto
     if (($fechaPago->month > $fechaMesAnio->month) && ($request->estado == 'pagada')) {
       return redirect()->back()->withInput()->with('validarFechaPago', 'ERROR: el mes de la fecha de pago no puede ser mayor que el mes de la cuota.');
     }
@@ -218,8 +218,13 @@ class CuotaController extends Controller
       return redirect()->back()->withInput()->with('errorVitalicio', 'ERROR: no puede generar un adelanto de pago a un socio Vitalicio.');
     }
     elseif ($socio->idGrupoFamiliar){
-      $monto = MontoCuota::select('id')->where('tipo', 'g')->orderBy('fechaCreacion', 'DESC')->first();
-      $cuota->idMontoCuota = $monto['id'];
+      if ($socio->id != $socio->grupoFamiliar->titular) {  //para no generar una cuota a un socio no titular
+        return redirect()->back()->withInput()->with('errorAdherente', 'ERROR: no puede generar un adelanto de pago a un socio que no es titular del Grupo Familiar.');
+      }
+      else {
+        $monto = MontoCuota::select('id')->where('tipo', 'g')->orderBy('fechaCreacion', 'DESC')->first();
+        $cuota->idMontoCuota = $monto['id'];
+      }
     }
     elseif ($socio->edad < 18){
       $monto = MontoCuota::select('id')->where('tipo', 'c')->orderBy('fechaCreacion', 'DESC')->first();
@@ -637,7 +642,7 @@ class CuotaController extends Controller
               $cuota->idMontoCuota = $monto['id'];
 
               $cuota->save();
-              $count++;
+              // $count++;   las del vitalicio no se las voy a contar
             }
 
             elseif ($socio->idGrupoFamiliar) {
@@ -766,13 +771,31 @@ class CuotaController extends Controller
     $cuota = new ComprobanteCuota;
     $cuota = ComprobanteCuota::where('idSocio', $socio->id)->orderBy('fechaMesAnio', 'DESC')->first();
 
-    //en caso de que el socio sea nuevo y no tenga cuotas asignadas, le asigno el mes actual en otra variable
-    if ($cuota == null) {
+    $cuotasAdherente = $this->cuotasAdherentes($socio);  //busco todas las cuotas en las que está como adherente
+
+    //en caso de que el socio sea nuevo y no tenga cuotas asignadas (tanto asignadas a él como relacionadas indirectamente como adherente), le asigno el mes actual en otra variable
+    if (($cuota == null) && (empty($cuotasAdherente))) {
       $fechaActual =  Carbon::Now();  //obtengo la fecha actual
       $socio->mesActual = $fechaActual->subDays($fechaActual->day - 1);  //y le resto los días del mes, para que siempre sea el 1er dia del mes
     }
 
-    $socio->ultimaCuota = $cuota;
+    else {
+      $socio = $this->cuotasAdherentesUltimaCuota($socio);  //busco la cuota más actual que está como adherente
+      if (($socio->cuotaMasActualAdherente) && ($cuota)) {  //si el socio cuota como adherente y directas
+        if ($socio->cuotaMasActualAdherente->fechaMesAnio > $cuota->fechaMesAnio) {  //tomo de las dos y veo cual es más actual
+          $socio->ultimaCuota = $socio->cuotaMasActualAdherente;
+        }
+        else {
+          $socio->ultimaCuota = $cuota;
+        }
+      }
+      elseif ($socio->cuotaMasActualAdherente){  //si solo tenía como adherente, tomo esa
+        $socio->ultimaCuota = $socio->cuotaMasActualAdherente;
+      }
+      else {  //sino tomo la directa
+        $socio->ultimaCuota = $cuota;
+      }
+    }
 
     return $socio;
   }
@@ -876,6 +899,66 @@ class CuotaController extends Controller
     else {
       return false;
     }
+  }
+
+
+
+  /**
+   * retorna todas las cuotas en las que el socio está como adherente
+   * @param  App\Socio $socio
+   * @return App\ComprobanteCuota $cuotasAdherente
+   */
+  private function cuotasAdherentes($socio){
+    //para capturar todas las cuotas en el que el socio está como adherente
+    $cuotas = ComprobanteCuota::all();  //recupero todas las cuotas
+    foreach ($cuotas as $c) {  //desagrego cada cuota
+      foreach ($c->adherentes as $adherente) {  //desagrego los adherentes en cada cuota
+        if ($adherente->id == $socio->id) {  //si el socio analizado está como adherente de la cuota
+          $cuotasAdherente = $cuotas->filter(function ($value, $key) {  //entonces agrego la cuota en otro array
+            return true;
+          });
+        }
+      }
+    }
+
+    if (empty($cuotasAdherente)) {
+      return null;
+    }
+    else {
+      return $cuotasAdherente;
+    }
+  }
+
+
+
+  /**
+   * busco la cuota más actual en la que el socio está como adherente
+   * @param  App\Socio $socio
+   * @return App\Socio $socio
+   */
+  private function cuotasAdherentesUltimaCuota($socio){
+    $cuotaMasActual = new ComprobanteCuota;
+    $cuotaMasActual->fechaMesAnio = '1900-01-01';  //le pongo una fecha exagerada para que guarde la primera vez
+    //para capturar todas las cuotas en el que el socio está como adherente
+    $cuotas = ComprobanteCuota::all();  //recupero todas las cuotas
+    foreach ($cuotas as $c) {  //desagrego cada cuota
+      foreach ($c->adherentes as $adherente) {  //desagrego los adherentes en cada cuota
+        if ($adherente->id == $socio->id) {  //si el socio analizado está como adherente de la cuota
+          if ($cuotaMasActual->fechaMesAnio < $c->fechaMesAnio) {  //si se cumple guardo la cuota más actual
+            $cuotaMasActual = $c;
+          }
+        }
+      }
+    }
+
+    if ($cuotaMasActual->fechaMesAnio != '1900-0101') {
+      $socio->cuotaMasActualAdherente = $cuotaMasActual;
+    }
+    else {
+      $socio->cuotaMasActualAdherente = null;
+    }
+
+    return $socio;
   }
 
 }
