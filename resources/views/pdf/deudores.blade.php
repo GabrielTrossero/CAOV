@@ -11,13 +11,20 @@
                 <th>Numero de Socio</th>
                 <th>Apellido</th>
                 <th>Nombres</th>
-                <th>Deuda</th>
-                <th>Más Información</th>
+                <th>Cuotas que adeuda</th>
             </tr>
         </thead>
         <tbody>
             
-           <!-- Iteraciones sobre los socios deudores, con link a info individual de cada uno -->
+           @foreach ($cuotasNoPagadas as $cuotaNoPagada)
+              <tr>
+                <td>{{ $cuotaNoPagada->DNI }}</td>
+                <td>{{ $cuotaNoPagada->numSocio }}</td>
+                <td>{{ $cuotaNoPagada->apellido }}</td>
+                <td>{{ $cuotaNoPagada->nombres }}</td>
+                <td>{{ $cuotaNoPagada->count }}</td>
+              </tr>
+           @endforeach
             
         </tbody>
     </table>

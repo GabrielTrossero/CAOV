@@ -584,7 +584,7 @@ class CuotaController extends Controller
    * @param  App\Socio $socio
    * @return int
    */
-  private function calculaEdad($socio)
+  public function calculaEdad($socio)
   {
       // calcula la edad del socio segun su categoria
       $edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;

@@ -34,7 +34,15 @@ class InformeController extends Controller
    */
   public function getDeudores()
   {
-    return view('informe.sociosDeudores');
+    $cuotasNoPagadas = ComprobanteCuota:: selectRaw('idSocio, numSocio, DNI, apellido, nombres, count(*) as count')
+                                          ->where('fechaPago', null)
+                                          ->where('inhabilitada', false)
+                                          ->join('socio','socio.id','=','comprobantecuota.idSocio')
+                                          ->join('persona','persona.id','=','socio.idPersona')
+                                          ->groupBy(DB::raw('idSocio, numSocio, DNI, apellido, nombres'))
+                                          ->get();
+
+    return view('informe.sociosDeudores', compact('cuotasNoPagadas'));
   }
 
   /**
@@ -42,9 +50,19 @@ class InformeController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function postDeudores()
+  public function pdfDeudores()
   {
-    //
+    $cuotasNoPagadas = ComprobanteCuota:: selectRaw('idSocio, numSocio, DNI, apellido, nombres, count(*) as count')
+                                          ->where('fechaPago', null)
+                                          ->where('inhabilitada', false)
+                                          ->join('socio','socio.id','=','comprobantecuota.idSocio')
+                                          ->join('persona','persona.id','=','socio.idPersona')
+                                          ->groupBy(DB::raw('idSocio, numSocio, DNI, apellido, nombres'))
+                                          ->get();
+
+    $pdf = PDF::loadView('pdf.deudores', ['cuotasNoPagadas' => $cuotasNoPagadas]);
+
+    return $pdf->download('deudores.pdf');
   }
 
   /**
@@ -54,7 +72,21 @@ class InformeController extends Controller
    */
   public function getSocioDeudor($id)
   {
-    return view('informe.socioDeudor');
+    //tomo el socio
+    $socio = Socio::find($id);
+
+    $cuotaController = new CuotaController;
+
+    $socio->edad = $cuotaController->calculaEdad($socio);
+
+    //tomo las cuotas que debe
+    $cuotasNoPagadas = ComprobanteCuota::all()
+                                         ->where('fechaPago', null)
+                                         ->where('inhabilitada', false)
+                                         ->where('idSocio', $id);
+    
+
+    return view('informe.socioDeudor', compact('socio', 'cuotasNoPagadas'));
   }
 
   /**
@@ -64,7 +96,22 @@ class InformeController extends Controller
    */
   public function pdfSocioDeudor(Request $request)
   {
-    //
+    //tomo el socio
+    $socio = Socio::find($request->id);
+
+    $cuotaController = new CuotaController;
+
+    $socio->edad = $cuotaController->calculaEdad($socio);
+
+    //tomo las cuotas que debe
+    $cuotasNoPagadas = ComprobanteCuota::all()
+                                         ->where('fechaPago', null)
+                                         ->where('inhabilitada', false)
+                                         ->where('idSocio', $request->id);
+
+    $pdf = PDF::loadView('pdf.socioDeudor', ['socio' => $socio, 'cuotasNoPagadas' => $cuotasNoPagadas]);
+
+    return $pdf->download('socio-deudor.pdf');
   }
 
   /**
@@ -152,17 +199,19 @@ class InformeController extends Controller
       $movExtras = MovExtras::all();
 
       //tomo los alquileres de inmueble pagados
-      $alquileresInmueblePagos = ReservaInmueble::selectRaw('MONTH(fechaHoraInicio) as mes, YEAR(fechaHoraInicio) as anio, SUM(costoTotal) as total')            ->where('numRecibo','<>',null)
+      $alquileresInmueblePagos = ReservaInmueble::selectRaw('MONTH(fechaHoraInicio) as mes, YEAR(fechaHoraInicio) as anio, SUM(costoTotal) as total')
+                                                  ->where('numRecibo','<>',null)
                                                   ->groupBy(DB::raw('mes, anio'))->get();
 
       //tomo los alquileres de mueble pagados
-      $alquileresMueblePagos = ReservaMueble::selectRaw('MONTH(fechaHoraInicio) as mes, YEAR(fechaHoraInicio) as anio, SUM(costoTotal) as total')              ->where('numRecibo','<>',null)
+      $alquileresMueblePagos = ReservaMueble::selectRaw('MONTH(fechaHoraInicio) as mes, YEAR(fechaHoraInicio) as anio, SUM(costoTotal) as total')              
+                                              ->where('numRecibo','<>',null)
                                               ->groupBy(DB::raw('mes, anio'))->get();
 
       //tomo los pagos de cuotas
       $cuotasPagadas = ComprobanteCuota::selectRaw("MONTH(comprobantecuota.fechaPago) as mes, YEAR(comprobantecuota.fechaPago) as anio, SUM(CASE WHEN comprobantecuota.tipo = 'a' THEN montocuota.monto - (montocuota.monto * (montocuota.dtoAnio / 100)) WHEN comprobantecuota.tipo = 's' THEN montocuota.monto -(montocuota.monto * (montocuota.dtoSemestre / 100)) WHEN comprobantecuota.tipo = 'm' THEN montocuota.monto END) as total")
-                                              ->join('montocuota','montocuota.id','=','comprobantecuota.idMontoCuota')
-                                              ->groupBy(DB::raw('mes, anio'))->get();
+                                         ->join('montocuota','montocuota.id','=','comprobantecuota.idMontoCuota')
+                                         ->groupBy(DB::raw('mes, anio'))->get();
 
       //redirijo a la vistas con los datos de ingresos/egresos
       return view('informe.ingresosEgresos', compact('movExtras', 'alquileresInmueblePagos', 'alquileresMueblePagos', 'cuotasPagadas'));

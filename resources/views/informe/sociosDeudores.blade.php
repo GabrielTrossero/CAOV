@@ -15,27 +15,22 @@
             <th>Numero de Socio</th>
             <th>Apellido</th>
             <th>Nombres</th>
-            <th>Deuda</th>
+            <th>Cuotas que adeuda</th>
             <th>Más Información</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>39842653</td>
-            <td>1</td>
-            <td>Ricle</td>
-            <td>Penka</td>
-            <td>3800</td>
-            <td><a href="{{ url('/informe/socio_deudor/'.'1') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
-          <tr>
-            <td>38956324</td>
-            <td>2</td>
-            <td>Tula</td>
-            <td>Tula</td>
-            <td>1000</td>
-            <td><a href="{{ url('/informe/socio_deudor/'.'2') }}"> <i class="fas fa-plus"></i></a> </td>
-          </tr>
+          @foreach ($cuotasNoPagadas as $cuotaNoPagada)
+            <tr>
+              <td>{{ $cuotaNoPagada->DNI }}</td>
+              <td>{{ $cuotaNoPagada->numSocio }}</td>
+              <td>{{ $cuotaNoPagada->apellido }}</td>
+              <td>{{ $cuotaNoPagada->nombres }}</td>
+              <td>{{ $cuotaNoPagada->count }}</td>
+              <td><a href="{{ url('/informe/socio_deudor/'.$cuotaNoPagada->idSocio) }}"> <i class="fas fa-plus"></i></a> </td>
+            </tr> 
+          @endforeach
+          
         </tbody>
       </table>
     </div>
