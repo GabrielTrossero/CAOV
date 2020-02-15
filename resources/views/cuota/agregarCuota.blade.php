@@ -36,6 +36,10 @@
                                   <div class="alert alert-danger">
                                     {!! \Session::get('errorVitalicio') !!}
                                   </div>
+                              @elseif (\Session::has('errorAdherente'))
+                                  <div class="alert alert-danger">
+                                    {!! \Session::get('errorAdherente') !!}
+                                  </div>
                               @endif
                             </div>
                         </div>
