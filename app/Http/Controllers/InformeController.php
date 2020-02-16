@@ -506,7 +506,69 @@ class InformeController extends Controller
    */
   public function getIngresosEgresosMensuales()
   {
-    //
+    //tomo los movimientos extra
+    $movExtras = MovExtras::all();
+    
+    //filtro los movimientos extra que son mayores a 30 dias
+    $movExtras = $movExtras->filter(function($movExtra){
+      $now = $this->fechaHoy();
+      $fechaFormateada = Carbon::parse($movExtra->fecha);
+      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+
+      return $diferenciaEnDias <= 30;
+    });
+
+    //tomo los alquileres de inmuebles pagados
+    $alquileresInmueblePagos = ReservaInmueble::all()->where('numRecibo', '<>', null);
+
+    //filtro los alquileres de inmuebles que son mayores a 30 dias
+    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago){
+      $now = $this->fechaHoy();
+      $fechaFormateada = Carbon::parse($alquilerInmueblePago->fechaSolicitud);
+      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+
+      return $diferenciaEnDias <= 30;
+    });
+
+    //tomo los alquileres de muebles pagados
+    $alquileresMueblePagos = ReservaMueble::all()->where('numRecibo', '<>', null);
+
+    //filtro los alquileres de muebles que son mayores a 30 dias
+    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago){
+      $now = $this->fechaHoy();
+      $fechaFormateada = Carbon::parse($alquilerMueblePago->fechaSolicitud);
+      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+
+      return $diferenciaEnDias <= 30;
+    });
+
+    //tomo los pagos de cuotas
+    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
+    
+    //filtro los pagos de cuotas que son mayores a 30 dias
+    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada){
+      $now = $this->fechaHoy();
+      $fechaFormateada = Carbon::parse($cuotaPagada->fechaPago);
+      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+
+      return $diferenciaEnDias <= 30;
+    });
+
+    //calculo el monto de las cuotas pagadas
+    foreach($cuotasPagadas as $cuotaPagada) {
+      $cuotaController = new CuotaController;
+
+      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
+      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
+      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
+
+      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+    }
+
+    return view('informe.ingresosEgresos.ingresosEgresosMensuales', compact('movExtras', 
+                                                                            'alquileresInmueblePagos',
+                                                                            'alquileresMueblePagos',
+                                                                            'cuotasPagadas'));
   }
 
   /**
@@ -516,7 +578,71 @@ class InformeController extends Controller
    */
   public function pdfIngresosEgresosMensuales()
   {
-    //
+    //tomo los movimientos extra
+    $movExtras = MovExtras::all();
+    
+    //filtro los movimientos extra que son mayores a 30 dias
+    $movExtras = $movExtras->filter(function($movExtra){
+      $now = $this->fechaHoy();
+      $fechaFormateada = Carbon::parse($movExtra->fecha);
+      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+
+      return $diferenciaEnDias <= 30;
+    });
+
+    //tomo los alquileres de inmuebles pagados
+    $alquileresInmueblePagos = ReservaInmueble::all()->where('numRecibo', '<>', null);
+
+    //filtro los alquileres de inmuebles que son mayores a 30 dias
+    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago){
+      $now = $this->fechaHoy();
+      $fechaFormateada = Carbon::parse($alquilerInmueblePago->fechaSolicitud);
+      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+
+      return $diferenciaEnDias <= 30;
+    });
+
+    //tomo los alquileres de muebles pagados
+    $alquileresMueblePagos = ReservaMueble::all()->where('numRecibo', '<>', null);
+
+    //filtro los alquileres de muebles que son mayores a 30 dias
+    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago){
+      $now = $this->fechaHoy();
+      $fechaFormateada = Carbon::parse($alquilerMueblePago->fechaSolicitud);
+      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+
+      return $diferenciaEnDias <= 30;
+    });
+
+    //tomo los pagos de cuotas
+    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
+    
+    //filtro los pagos de cuotas que son mayores a 30 dias
+    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada){
+      $now = $this->fechaHoy();
+      $fechaFormateada = Carbon::parse($cuotaPagada->fechaPago);
+      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+
+      return $diferenciaEnDias <= 30;
+    });
+
+    //calculo el monto de las cuotas pagadas
+    foreach($cuotasPagadas as $cuotaPagada) {
+      $cuotaController = new CuotaController;
+
+      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
+      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
+      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
+
+      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+    }
+
+    $pdf = PDF::loadView('pdf.ingresosEgresosMensuales', ['movExtras' => $movExtras,
+                                                          'alquileresInmueblePagos' => $alquileresInmueblePagos,
+                                                          'alquileresMueblePagos' => $alquileresMueblePagos,
+                                                          'cuotasPagadas' => $cuotasPagadas]);
+
+    return $pdf->download('ingresos-egresos-mensuales.pdf');
   }
 
   /**
