@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\CuotaController;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\Socio;
 use App\Deporte;
 use App\MovExtras;
@@ -189,12 +190,13 @@ class InformeController extends Controller
   }
 
   /**
-   * Show a list with Ingresos y Egresos.
+   * Show a menu of Ingresos y Egresos.
    *
    * @return \Illuminate\Http\Response
    */
   public function getIngresosEgresos()
   {
+    /*
       //tomo todos los movimientos extras
       $movExtras = MovExtras::all();
 
@@ -215,15 +217,178 @@ class InformeController extends Controller
 
       //redirijo a la vistas con los datos de ingresos/egresos
       return view('informe.ingresosEgresos', compact('movExtras', 'alquileresInmueblePagos', 'alquileresMueblePagos', 'cuotasPagadas'));
-
+    */
+    return view('informe.ingresosEgresos');
   }
 
   /**
-   * Generates a pdf of Ingresos y Egresos.
+   * Devuelve la fecha de hoy en formato Y-m-d
+   * 
+   * @return Carbon\Carbon
+   */
+  public function fechaHoy()
+  {
+    return Carbon::now()->format('Y-m-d');
+  }
+
+  /**
+   * Shows a list of Ingresos/Egresos diarios
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getIngresosEgresosDiarios()
+  {
+    //tomo los movimientos extra
+    $movExtras = MovExtras::all();
+    
+    //filtro los movimientos extra que son distintos a la fecha de hoy
+    $movExtras = $movExtras->filter(function($movExtra){
+      $now = $this->fechaHoy();
+      return $movExtra->fecha == $now;
+    });
+
+    //tomo los alquileres de inmuebles pagados
+    $alquileresInmueblePagos = ReservaInmueble::all()->where('numRecibo', '<>', null);
+
+    //filtro los alquileres de inmuebles que son distintos a la fecha de hoy
+    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago){
+      $now = $this->fechaHoy();
+      return $alquilerInmueblePago->fechaSolicitud == $now;
+    });
+
+    //tomo los alquileres de muebles pagados
+    $alquileresMueblePagos = ReservaMueble::all()->where('numRecibo', '<>', null);
+
+    //filtro los alquileres de muebles que son distintos a la fecha de hoy
+    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago){
+      $now = $this->fechaHoy();
+      return $alquilerMueblePago->fechaSolicitud == $now;
+    });
+
+    //tomo los pagos de cuotas
+    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
+    
+    //filtro los pagos de cuotas que son distintos a la fecha de hoy
+    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada){
+      $now = $this->fechaHoy();
+      return $cuotaPagada->fechaPago == $now;
+    });
+
+    //calculo el monto de las cuotas pagadas
+    foreach($cuotasPagadas as $cuotaPagada) {
+      $cuotaController = new CuotaController;
+
+      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
+      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
+      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
+
+      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+    }
+
+    return view('informe.ingresosEgresos.ingresosEgresosDiarios', compact('movExtras', 
+                                                                          'alquileresInmueblePagos',
+                                                                          'alquileresMueblePagos',
+                                                                          'cuotasPagadas'));
+  }
+
+  /**
+   * Generates a pdf of Ingresos y Egresos Diarios.
    *
    * @return \Illuminate\Http\Response
    */
-  public function pdfIngresosEgresos()
+  public function pdfIngresosEgresosDiarios()
+  {
+    //tomo los movimientos extra
+    $movExtras = MovExtras::all();
+    
+    //filtro los movimientos extra que son distintos a la fecha de hoy
+    $movExtras = $movExtras->filter(function($movExtra){
+      $now = $this->fechaHoy();
+      return $movExtra->fecha == $now;
+    });
+
+    //tomo los alquileres de inmuebles pagados
+    $alquileresInmueblePagos = ReservaInmueble::all()->where('numRecibo', '<>', null);
+
+    //filtro los alquileres de inmuebles que son distintos a la fecha de hoy
+    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago){
+      $now = $this->fechaHoy();
+      return $alquilerInmueblePago->fechaSolicitud == $now;
+    });
+
+    //tomo los alquileres de muebles pagados
+    $alquileresMueblePagos = ReservaMueble::all()->where('numRecibo', '<>', null);
+
+    //filtro los alquileres de muebles que son distintos a la fecha de hoy
+    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago){
+      $now = $this->fechaHoy();
+      return $alquilerMueblePago->fechaSolicitud == $now;
+    });
+
+    //tomo los pagos de cuotas
+    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
+    
+    //filtro los pagos de cuotas que son distintos a la fecha de hoy
+    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada){
+      $now = $this->fechaHoy();
+      return $cuotaPagada->fechaPago == $now;
+    });
+
+    //calculo el monto de las cuotas pagadas
+    foreach($cuotasPagadas as $cuotaPagada) {
+      $cuotaController = new CuotaController;
+
+      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
+      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
+      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
+
+      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+    }
+
+    $pdf = PDF::loadView('pdf.ingresosEgresosDiarios', ['movExtras' => $movExtras,
+                                                        'alquileresInmueblePagos' => $alquileresInmueblePagos,
+                                                        'alquileresMueblePagos' => $alquileresMueblePagos,
+                                                        'cuotasPagadas' => $cuotasPagadas]);
+
+    return $pdf->download('ingresos-egresos-diarios.pdf');
+  }
+
+  /**
+   * Shows a list of Ingresos/Egresos Semanales
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getIngresosEgresosSemanales()
+  {
+    //
+  }
+
+  /**
+   * Generates a pdf of Ingresos y Egresos Semanales.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function pdfIngresosEgresosSemanales()
+  {
+    //
+  }
+
+  /**
+   * Shows a list of Ingresos/Egresos Mensuales
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getIngresosEgresosMensuales()
+  {
+    //
+  }
+
+  /**
+   * Generates a pdf of Ingresos y Egresos Mensuales.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function pdfIngresosEgresosMensuales()
   {
     //
   }
