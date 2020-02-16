@@ -63,7 +63,7 @@
   
           </tbody>
         </table>
-      </div>
+    </div>
   
       <div class="card-footer">
         <form action="{{url('/informe/pdf_ingresos_egresos_diarios')}}" method="get" style="display:inline">
@@ -74,7 +74,7 @@
         </form>
       </div>
   
-    </div>
   </div>
+ </div>
 
 @stop
