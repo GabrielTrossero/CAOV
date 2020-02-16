@@ -65,13 +65,9 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
     Route::group(['prefix' => 'cuota'], function()
     {
         Route::get('/', 'CuotaController@index');
-        Route::get('createMontoCuota', 'CuotaController@createMontoCuota');
-        Route::post('createMontoCuota', 'CuotaController@storeMontoCuota');
-        Route::get('showMontoCuota', 'CuotaController@getShowMontoCuota');
         Route::get('showCreateCuota', 'CuotaController@showCreateCuota'); //listado de socios para crear cuota
         Route::get('createCuota/{id}', 'CuotaController@createCuota');
         Route::post('createCuota', 'CuotaController@storeCuota');
-        Route::post('storeMontoCuota', 'CuotaController@show');
         Route::get('show', 'CuotaController@getShow'); //listado de cuotas
         Route::get('show/{id}', 'CuotaController@getShowId');
         Route::get('edit/{id}', 'CuotaController@edit');
@@ -149,6 +145,15 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
 
             Route::get('pagos', 'InformeController@getPagos');
             Route::get('pdf_pagos', 'InformeController@pdfPagos');
+        });
+
+        //Rutas para Cuota
+        Route::group(['prefix' => 'cuota'], function()
+        {
+            Route::get('createMontoCuota', 'CuotaController@createMontoCuota');
+            Route::post('createMontoCuota', 'CuotaController@storeMontoCuota');
+            Route::get('showMontoCuota', 'CuotaController@getShowMontoCuota');
+            Route::post('storeMontoCuota', 'CuotaController@show');
         });
 
         //Rutas de Inmuebles
