@@ -10,6 +10,7 @@ use App\MontoCuota;
 use App\ComprobanteCuota;
 use App\Socio;
 use App\SocioComprobante;
+use App\GrupoFamiliar;
 use Carbon\Carbon;
 
 class CuotaController extends Controller
@@ -106,6 +107,26 @@ class CuotaController extends Controller
    */
   public function showCreateCuota()
   {
+    $grupoF = new GrupoFamiliarController;  //creo una instancia del controlador de GrupoFamiliar
+
+    //elimino todos los integrantes que pasan a tener 18 este año
+    $grupos = GrupoFamiliar::all();
+    $integrantesEliminados = 0;
+
+    foreach ($grupos as $grupo) {
+      $integrantesEliminados += $grupoF->verificarCadetesMayores($grupo);
+    }
+
+
+    //una vez actualizados los integrantes, elimino los grupos que pudieron quedar con un integrante
+    $grupos = GrupoFamiliar::all();
+    $gruposEliminados = 0;
+
+    foreach ($grupos as $grupo) {
+      $gruposEliminados += $grupoF->verificarCantidadIntegrantes($grupo);
+    }
+
+
     //recupero todas los socios
     $socios = Socio::all();
 
@@ -115,8 +136,7 @@ class CuotaController extends Controller
       $socio->edad = $this->calculaEdad($socio);
     }
 
-    //retorno los socios a la vista
-    return view('cuota.listarSociosCreate', compact('socios'));
+    return view('cuota.listarSociosCreate', compact('socios', 'integrantesEliminados', 'gruposEliminados'));
   }
 
 
@@ -288,6 +308,26 @@ class CuotaController extends Controller
    */
   public function getShow()
   {
+    $grupoF = new GrupoFamiliarController;  //creo una instancia del controlador de GrupoFamiliar
+
+    //elimino todos los integrantes que pasan a tener 18 este año
+    $grupos = GrupoFamiliar::all();
+    $integrantesEliminados = 0;
+
+    foreach ($grupos as $grupo) {
+      $integrantesEliminados += $grupoF->verificarCadetesMayores($grupo);
+    }
+
+
+    //una vez actualizados los integrantes, elimino los grupos que pudieron quedar con un integrante
+    $grupos = GrupoFamiliar::all();
+    $gruposEliminados = 0;
+
+    foreach ($grupos as $grupo) {
+      $gruposEliminados += $grupoF->verificarCantidadIntegrantes($grupo);
+    }
+
+
     //recupero todas las cuotas
     $c = ComprobanteCuota::all();
 
@@ -304,7 +344,7 @@ class CuotaController extends Controller
     });
 
     //retorno las cuotas a la vista
-    return view('cuota.listado', compact('cuotas'));
+    return view('cuota.listado', compact('cuotas', 'integrantesEliminados', 'gruposEliminados'));
   }
 
 
@@ -544,6 +584,26 @@ class CuotaController extends Controller
      */
     public function showSocios()
     {
+      $grupoF = new GrupoFamiliarController;  //creo una instancia del controlador de GrupoFamiliar
+
+      //elimino todos los integrantes que pasan a tener 18 este año
+      $grupos = GrupoFamiliar::all();
+      $integrantesEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $integrantesEliminados += $grupoF->verificarCadetesMayores($grupo);
+      }
+
+
+      //una vez actualizados los integrantes, elimino los grupos que pudieron quedar con un integrante
+      $grupos = GrupoFamiliar::all();
+      $gruposEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $gruposEliminados += $grupoF->verificarCantidadIntegrantes($grupo);
+      }
+
+
       //recupero todas los socios
       $socios = Socio::all();
 
@@ -554,7 +614,7 @@ class CuotaController extends Controller
       }
 
       //retorno los socios a la vista
-      return view('cuota.listarSocios', compact('socios'));
+      return view('cuota.listarSocios', compact('socios', 'integrantesEliminados', 'gruposEliminados'));
     }
 
 
@@ -605,12 +665,11 @@ class CuotaController extends Controller
      */
     public function generateCuotasAuto()
     {
-      //variable que cuenta la cantidad de cuotas generadas
-      $count = 0;
-      //recupero todos los socios para generarle la cuota este mes en caso que corresponda
-      $socios = Socio::all();
+      $cuotasCreadas = new \Illuminate\Database\Eloquent\Collection; //colección donde voy a almacenar todas las cuotas generadas para enviarlas a la vista
 
-      $fechaActual =  Carbon::Now();  //obtengo la fecha actual
+      $socios = Socio::all(); //recupero todos los socios para generarle la cuota este mes en caso que corresponda
+
+      $fechaActual =  Carbon::now();  //obtengo la fecha actual
       $fechaActual = $fechaActual->subDays($fechaActual->day - 1);  //y le resto los días del mes, para que siempre sea el 1er dia del mes
       $fechaActual = $fechaActual->toDateString();
 
@@ -642,7 +701,7 @@ class CuotaController extends Controller
               $cuota->idMontoCuota = $monto['id'];
 
               $cuota->save();
-              // $count++;   las del vitalicio no se las voy a contar
+              //las del vitalicio no se las voy a contar
             }
 
             elseif ($socio->idGrupoFamiliar) {
@@ -650,7 +709,6 @@ class CuotaController extends Controller
               $cuota->idMontoCuota = $monto['id'];
 
               $cuota->save();
-              $count++;
 
               //identifico la cuota generada para relacionarla con los adherentes
               $cuotaRetornada = ComprobanteCuota::where('idSocio', $socio->id)->where('fechaMesAnio', $cuota->fechaMesAnio)->first();
@@ -664,6 +722,9 @@ class CuotaController extends Controller
                   $socioComprobante->save();
                 }
               }
+
+              $cuotaRetornada = ComprobanteCuota::where('idSocio', $socio->id)->where('fechaMesAnio', $cuota->fechaMesAnio)->get(); //recupero la cuota recien generada
+              $cuotasCreadas = $cuotasCreadas->merge($cuotaRetornada); //almaceno la cuota en el array a retornar
             }
 
             elseif ($socio->edad < 18){
@@ -671,7 +732,9 @@ class CuotaController extends Controller
               $cuota->idMontoCuota = $monto['id'];
 
               $cuota->save();
-              $count++;
+
+              $cuotaRetornada = ComprobanteCuota::where('idSocio', $socio->id)->where('fechaMesAnio', $cuota->fechaMesAnio)->get(); //recupero la cuota recien generada
+              $cuotasCreadas = $cuotasCreadas->merge($cuotaRetornada); //almaceno la cuota en el array a retornar
             }
 
             else{
@@ -679,19 +742,37 @@ class CuotaController extends Controller
               $cuota->idMontoCuota = $monto['id'];
 
               $cuota->save();
-              $count++;
+
+              $cuotaRetornada = ComprobanteCuota::where('idSocio', $socio->id)->where('fechaMesAnio', $cuota->fechaMesAnio)->get(); //recupero la cuota recien generada
+              $cuotasCreadas = $cuotasCreadas->merge($cuotaRetornada); //almaceno la cuota en el array a retornar
             }
 
           }
         }
       }
 
-      if ($count == 0) {
-        return redirect()->back()->with('sinCuotasGeneradas', 'No se generó ninguna cuota.');
+      $grupoF = new GrupoFamiliarController;  //creo una instancia del controlador de GrupoFamiliar
+
+      //elimino todos los integrantes que pasan a tener 18 este año
+      $grupos = GrupoFamiliar::all();
+      $integrantesEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $integrantesEliminados += $grupoF->verificarCadetesMayores($grupo);
       }
-      else {
-        return redirect()->back()->with('conCuotasGeneradas', 'Se generaron '. $count .' cuota/s.');
+
+
+      //una vez actualizados los integrantes, elimino los grupos que pudieron quedar con un integrante
+      $grupos = GrupoFamiliar::all();
+      $gruposEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $gruposEliminados += $grupoF->verificarCantidadIntegrantes($grupo);
       }
+
+
+      //retorno las cuotas a la vista
+      return view('cuota.listarCuotasCreadas', compact('cuotasCreadas', 'integrantesEliminados', 'gruposEliminados'));
     }
 
 

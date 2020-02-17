@@ -5,7 +5,7 @@
 <div class="cuadro">
   <div class="card">
     <div class="card-header">
-      <label class="col-md-8 col-form-label"><b>Listado de Cuotas</b></label>
+      <label class="col-md-8 col-form-label"><b>Listado de Cuotas Creadas</b></label>
     </div>
     <div class="card-body border">
       @if ($integrantesEliminados > 0)
@@ -31,7 +31,7 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($cuotas as $cuota)
+          @foreach ($cuotasCreadas as $cuota)
             <tr>
               <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
@@ -47,12 +47,8 @@
 
               <td>{{ '$'.$cuota->montoCuota->montoMensual }}</td>
 
-              @if ($cuota->fechaPago)
-                <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
-                <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
-              @else
+
                 <td>{{ 'Sin Fecha de Pago' }}</td>
-              @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
             </tr>
@@ -62,5 +58,13 @@
     </div>
   </div>
 </div>
+
+@if ($cuotasCreadas->count() == 0)
+  <script type="text/javascript">
+    window.onload = () => { //para que el script se muestre despúes de cargar el html
+            alert('No hay cuotas pendientes para generar.')
+        }
+  </script>
+@endif
 
 @stop

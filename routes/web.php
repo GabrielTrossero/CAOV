@@ -79,6 +79,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('showSocios', 'CuotaController@showSocios'); //listado de socios para buscar cuotas
         Route::get('showSocioCuotas/{id}', 'CuotaController@showSocioCuotas'); //listado de cuotas de tal socio
         Route::post('generateCuotasAuto', 'CuotaController@generateCuotasAuto');
+        Route::get('generateCuotasAuto', 'CuotaController@generateCuotasAuto');
     });
 /*
     //Rutas para Pago de Cuota

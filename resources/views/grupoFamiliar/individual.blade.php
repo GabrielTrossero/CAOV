@@ -27,7 +27,7 @@
             @else
               <td>No</td>
             @endif
-            @if ($grupo->pareja == $socio->id))
+            @if ($grupo->pareja == $socio->id)
               <td>Si</td>
             @else
               <td>No</td>

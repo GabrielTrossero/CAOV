@@ -8,6 +8,17 @@
       <label class="col-md-8 col-form-label"><b>Listado de Socios - Buscar Cuotas</b></label>
     </div>
     <div class="card-body border">
+      @if ($integrantesEliminados > 0)
+        <div class="alert alert-warning">
+          {{ 'Atención: se han eliminado '. $integrantesEliminados .' cadete/s de diferentes grupos por cumplir 18 años y pasar a ser activo/s.' }}
+        </div>
+      @endif
+      @if ($gruposEliminados > 0)
+        <div class="alert alert-warning">
+          {{ 'Atención: se han eliminado '. $gruposEliminados .' grupo/s por tener un solo integrante.' }}
+        </div>
+      @endif
+
       <table id="idDataTable" class="table table-striped">
         <thead>
           <tr>

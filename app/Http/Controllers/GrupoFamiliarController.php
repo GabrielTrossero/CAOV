@@ -24,12 +24,32 @@ class GrupoFamiliarController extends Controller
 
        /**
      * Actualiza grupo familiar, eliminando grupos o borrando los integrantes activos
-     * 
+     *
      * @param App\GrupoFamiliar $grupo
      * @return int
      */
-    public function actualizaGrupoIndividual($grupo)
+    public function verificarCadetesMayores($grupo)
     {
+      //veo si hay socios que son cadetes y pasan a ser mayores este año
+      $socios = $grupo->socios;
+      $eliminados = 0;
+
+      foreach ($socios as $socio) {
+        if (($this->calculaEdad($socio) >= 18) && ($socio->id != $grupo->titular) && ($socio->id != $grupo->pareja)) {
+          $socio->idGrupoFamiliar = null;
+          $socio->save();
+
+          $eliminados += 1;
+        }
+      }
+
+      return $eliminados;
+    }
+
+
+    public function verificarCantidadIntegrantes($grupo)
+    {
+      //veo si el grupo tiene menos de 2 integrantes para eliminarlo
       if (sizeof($grupo->socios) < 2) {
         $socio = Socio::find($grupo->titular);
         $socio->idGrupoFamiliar = null;
@@ -39,40 +59,10 @@ class GrupoFamiliarController extends Controller
 
         return 1;
       }
-      else{
-        $socios = $grupo->socios;
-        $eliminados = 0;
-
-        foreach ($socios as $socio) {
-          if (($this->calculaEdad($socio) >= 18) && ($socio->id != $grupo->titular) && ($socio->id != $grupo->pareja)) {
-            $socio->idGrupoFamiliar = null;
-            $socio->save();
-
-            $eliminados += 1;
-          }
-        }
-
-        return $eliminados;
-      }
 
       return 0;
     }
 
-    /**
-     * Actualiza todos los grupos familiares
-     * 
-     * @return int
-     */
-    public function actualizaGrupos(){
-      $grupos = GrupoFamiliar::all();
-      $respuesta = 0;
-
-      foreach ($grupos as $grupo) {
-        $respuesta += $this->actualizaGrupoIndividual($grupo);
-      }
-
-      return $respuesta;
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -81,8 +71,23 @@ class GrupoFamiliarController extends Controller
      */
     public function create()
     {
-      //actualizo los grupos familiares
-      $actualizados = $this->actualizaGrupos();
+      //elimino todos los integrantes que pasan a tener 18 este año
+      $grupos = GrupoFamiliar::all();
+      $integrantesEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $integrantesEliminados += $this->verificarCadetesMayores($grupo);
+      }
+
+
+      //una vez actualizados los integrantes, elimino los grupos que pudieron quedar con un integrante
+      $grupos = GrupoFamiliar::all();
+      $gruposEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $gruposEliminados += $this->verificarCantidadIntegrantes($grupo);
+      }
+
 
       //tomo los socios
       $socios = Socio::where('idGrupoFamiliar', null)->get();
@@ -91,16 +96,11 @@ class GrupoFamiliarController extends Controller
       $socios = $socios->filter(function ($socio){
         return $this->calculaEdad($socio) >= 18;
       });
-      
-      if ($actualizados) {
-        $gruposActualizados = 'Atención: se han actualizado grupos familiares. Puede ser que haya grupos de solo 1 integrante eliminados.';
-        return view('grupoFamiliar.agregar', compact('socios', 'gruposActualizados'));
-      }
-      else{
-        //redirijo a la vista de agregar con los socios
-        return view('grupoFamiliar.agregar', compact('socios'));
-      }
+
+      return view('grupoFamiliar.agregar', compact('socios', 'integrantesEliminados', 'gruposEliminados'));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -160,10 +160,17 @@ class GrupoFamiliarController extends Controller
       //tomo el grupo para pasarlo a la vista individual del mismo
       $grupoRetornado = GrupoFamiliar::where('titular', $request->titular)->first();
 
-      //actualizo el id del grupo familiar del titular
+      //le asigno al titular el id del grupo
       $socio = Socio::find($request->titular);
       $socio->idGrupoFamiliar = $grupoRetornado->id;
       $socio->save();
+
+      //le asigno a la pareja el id del grupo
+      if (isset($request->pareja)) {
+        $socio = Socio::find($request->pareja);
+        $socio->idGrupoFamiliar = $grupoRetornado->id;
+        $socio->save();
+      }
 
       //redirijo a la vista individual del grupo
       return redirect()->action('GrupoFamiliarController@getShowId', $grupoRetornado->id);
@@ -176,20 +183,27 @@ class GrupoFamiliarController extends Controller
      */
     public function getShow()
     {
-      //actualizo los grupos familiares
-      $actualizados = $this->actualizaGrupos();
+      //elimino todos los integrantes que pasan a tener 18 este año
+      $grupos = GrupoFamiliar::all();
+      $integrantesEliminados = 0;
 
-      //tomo los grupos familiares
+      foreach ($grupos as $grupo) {
+        $integrantesEliminados += $this->verificarCadetesMayores($grupo);
+      }
+
+
+      //una vez actualizados los integrantes, elimino los grupos que pudieron quedar con un integrante
+      $grupos = GrupoFamiliar::all();
+      $gruposEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $gruposEliminados += $this->verificarCantidadIntegrantes($grupo);
+      }
+
+      //tomo los grupos familiares actualizados
       $grupos = GrupoFamiliar::all();
 
-      if ($actualizados) {
-        $gruposActualizados = 'Atención: se han actualizado grupos familiares. Puede ser que haya grupos de solo 1 integrante eliminados.';
-        return view('grupoFamiliar.listado', compact('grupos', 'gruposActualizados'));
-      }
-      else{
-        //redirijo al listado de grupos familiares
-        return view('grupoFamiliar.listado', compact('grupos'));
-      }
+      return view('grupoFamiliar.listado', compact('grupos', 'integrantesEliminados', 'gruposEliminados'));
     }
 
     /**
@@ -231,7 +245,7 @@ class GrupoFamiliarController extends Controller
           return $this->calculaEdad($socio) < 18;
         });
 
-        
+
 
         //redirijo a la vista de edicion del grupo familiar
         return view('grupoFamiliar.editar', compact('grupo', 'sociosSinGrupo', 'sociosPareja'));
@@ -247,10 +261,10 @@ class GrupoFamiliarController extends Controller
         /*asigna a $edad, la edad del socio calculada a partir de su fecha de nacimiento
           $edad = Carbon::parse($socio->fechaNac)->age;
         */
-        
+
         // calcula la edad del socio segun su categoria
         $edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
-      
+
         //retorna la edad del socio
         return $edad;
     }
