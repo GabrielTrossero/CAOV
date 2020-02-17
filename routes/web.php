@@ -129,8 +129,20 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
             Route::get('cantidad_socios_deporte', 'InformeController@getCantidadSociosDeporte');
             Route::get('pdf_cantidad_socios_deporte', 'InformeController@pdfCantidadSociosDeporte');
 
+            //al menu de ingresos/egresos
             Route::get('ingresos_egresos', 'InformeController@getIngresosEgresos');
-            Route::get('pdf_ingresos_egresos', 'InformeController@pdfIngresosEgresos');
+
+            //ingresos/egresos diarios
+            Route::get('ingresos_egresos_diarios', 'InformeController@getIngresosEgresosDiarios');
+            Route::get('pdf_ingresos_egresos_diarios', 'InformeController@pdfIngresosEgresosDiarios');
+
+            //ingresos/egresos semanales
+            Route::get('ingresos_egresos_semanales', 'InformeController@getIngresosEgresosSemanales');
+            Route::get('pdf_ingresos_egresos_semanales', 'InformeController@pdfIngresosEgresosSemanales');
+
+            //ingresos/egresos mensuales
+            Route::get('ingresos_egresos_mensuales', 'InformeController@getIngresosEgresosMensuales');
+            Route::get('pdf_ingresos_egresos_mensuales', 'InformeController@pdfIngresosEgresosMensuales');
 
             Route::get('pagos', 'InformeController@getPagos');
             Route::get('pdf_pagos', 'InformeController@pdfPagos');
