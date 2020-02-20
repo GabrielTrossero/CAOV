@@ -27,19 +27,5 @@
 
 </div>
 
-@if (\Session::has('sinCuotasGeneradas'))
-  <script type="text/javascript">
-    window.onload = () => { //para que el script se muestre despúes de cargar el html
-            alert('{!! \Session::get('sinCuotasGeneradas') !!}')
-        }
-  </script>
-@elseif (\Session::has('conCuotasGeneradas'))
-  <script type="text/javascript">
-    window.onload = () => {
-            alert('{!! \Session::get('conCuotasGeneradas') !!}')
-        }
-  </script>
-@endif
-
 
 @stop
