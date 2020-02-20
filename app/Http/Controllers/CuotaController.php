@@ -12,6 +12,7 @@ use App\Socio;
 use App\SocioComprobante;
 use App\GrupoFamiliar;
 use Carbon\Carbon;
+use PDF;
 
 class CuotaController extends Controller
 {
@@ -571,8 +572,27 @@ class CuotaController extends Controller
 
       $comprobanteCuota->save();
 
+      //calculo el monto para pasarlo a la vista
+      $interesPorIntegrantes = $this->montoInteresGrupoFamiliar($comprobanteCuota);
+      $interesMesesAtrasados = $this->montoInteresAtraso($comprobanteCuota);
+      $montoMensual = $comprobanteCuota->montoCuota->montoMensual;
+
+      $comprobanteCuota->interesPorIntegrantes = $interesPorIntegrantes;
+      $comprobanteCuota->interesMesesAtrasados = $interesMesesAtrasados;
+      $comprobanteCuota->montoMensual = $montoMensual;
+      $comprobanteCuota->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+
+      /*
+        Agregar el envío de mail con el detalle del pago
+      */
+
+      $pdf = PDF::loadView('pdf.comprobantes.cuota', ['comprobante' => $comprobanteCuota]);
+
+      return $pdf->download('comprobante-cuota.pdf');
+      /*
       //redirijo para mostrar la cuota ingresada
       return redirect()->action('CuotaController@getShowId', $comprobanteCuota->id);
+      */
     }
 
 

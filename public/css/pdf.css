@@ -12,6 +12,19 @@ header {
     padding-top: 17px;
 }
 
+h3 {
+    font-size: 12px;
+}
+
+li {
+    padding: 7px 0px;    
+}
+
+#firma {
+    padding-top: 40px;
+    padding-right: 35px;
+}
+
 table { 
     border-collapse: collapse; 
 } 
