@@ -10,6 +10,7 @@ use App\Mueble;
 use App\MedioDePago;
 use App\ReservaInmueble;
 use App\Inmueble;
+use PDF;
 
 class PagoAlquilerController extends Controller
 {
@@ -100,8 +101,21 @@ class PagoAlquilerController extends Controller
               'numRecibo' => $request->numRecibo
             ]);
 
+      //tomo la reserva pagada
+      $reservaPagada = ReservaMueble::find($request->id);
+
+      /*
+        Agregar el envío de mail con el detalle del recibo del alquiler del mueble
+      */
+      
+      $pdf = PDF::loadView('pdf.comprobantes.mueble', ['recibo' => $reservaPagada]);
+
+      return $pdf->download('comprobante-alquiler-mueble.pdf');
+
+      /*
       //redirijo a la vista individual
       return redirect()->action('AlquilerMuebleController@getShowId', $request->id);
+      */
     }
 
     /**
@@ -155,7 +169,20 @@ class PagoAlquilerController extends Controller
               'numRecibo' => $request->numRecibo
             ]);
 
+      //tomo la reserva pagada
+      $reservaPagada = ReservaInmueble::find($request->id);
+
+      /*
+        Agregar el envío de mail con el detalle del recibo del alquiler del inmueble
+      */
+      
+      $pdf = PDF::loadView('pdf.comprobantes.inmueble', ['recibo' => $reservaPagada]);
+
+      return $pdf->download('comprobante-alquiler-inmueble.pdf');
+      
+      /*
       //redirijo a la vista individual
       return redirect()->action('AlquilerInmuebleController@getShowId', $request->id);
+      */
     }
 }
