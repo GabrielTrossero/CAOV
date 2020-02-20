@@ -40,6 +40,12 @@
     <script src="{{ asset('js/datatable.js') }}"></script>
     <script src="{{ asset('js/disponibilidad-alquileres.js') }}"></script>
 
+    <!-- Link de js para ordenar por fecha en dataTable -->
+    <script type="text/javascript" src<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+
+
 
     <script src="http://momentjs.com/downloads/moment.min.js"></script>
 

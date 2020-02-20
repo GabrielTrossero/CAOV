@@ -50,7 +50,7 @@
               @endif
 
               @if ($socio->fechaUltimoPago)
-                <td>{{ date("d/m/Y", strtotime($socio->fechaUltimoPago)) }}</td>
+                <td>{{ date("m/Y", strtotime($socio->fechaUltimoPago)) }}</td>
               @else
                 <td> - </td>
               @endif
