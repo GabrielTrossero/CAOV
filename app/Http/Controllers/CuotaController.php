@@ -296,6 +296,23 @@ class CuotaController extends Controller
       }
     }
 
+    //si se genera la cuota como pagada, se devuelve el pdf del comprobante
+    if (isset($request->fechaPago)) {
+      //calculo el monto para pasarlo a la vista
+      $interesPorIntegrantes = $this->montoInteresGrupoFamiliar($cuotaRetornada);
+      $interesMesesAtrasados = $this->montoInteresAtraso($cuotaRetornada);
+      $montoMensual = $cuotaRetornada->montoCuota->montoMensual;
+
+      $cuotaRetornada->interesPorIntegrantes = $interesPorIntegrantes;
+      $cuotaRetornada->interesMesesAtrasados = $interesMesesAtrasados;
+      $cuotaRetornada->montoMensual = $montoMensual;
+      $cuotaRetornada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+
+      $pdf = PDF::loadView('pdf.comprobantes.cuota', ['comprobante' => $cuotaRetornada]);
+
+      return $pdf->download('comprobante-cuota.pdf');
+    }
+
     //redirijo para mostrar la cuota ingresada
     return redirect()->action('CuotaController@getShowId', $cuotaRetornada->id);
   }
