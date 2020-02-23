@@ -3,30 +3,29 @@
 @section('title', 'Comprobante Cuota')
 
 @section('content')
-    <h1>Comprobante de Pago de Cuota</h1>
+    <h4>Comprobante de Pago de Cuota</h4>
     <hr>
-    <table align="center">
-        <thead>
-            <tr>
-                <th>Numero de Socio</th>
-                <th>Apellido y Nombres</th>
-                <th>Mes/Año</th>
-                <th>Fecha de Pago</th>
-                <th>Monto Base</th>
-                <th>Interés</th>
-                <th>Monto Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ $comprobante->socio->numSocio }}</td>
-                <td>{{ $comprobante->socio->persona->apellido . ", " . $comprobante->socio->persona->nombres }}</td>
-                <td>{{ date("m/Y", strtotime($comprobante->fechaMesAnio)) }}</td>
-                <td>{{ date("d/m/Y", strtotime($comprobante->fechaPago)) }}</td>
-                <td>${{ $comprobante->montoMensual }}</td>
-                <td>${{ $comprobante->interesPorIntegrantes + $comprobante->interesMesesAtrasados }}</td>
-                <td>${{ $comprobante->montoTotal }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <ul>
+      <li>Número de Socio: {{ $comprobante->socio->numSocio }}</li>
+      <br>
+      <li>Apellido y Nombres: {{ $comprobante->socio->persona->apellido . ", " . $comprobante->socio->persona->nombres }}</li>
+      <br>
+      <li>DNI: {{ $comprobante->socio->persona->DNI }}</li>
+      <br>
+      <li>Domicilio: {{ $comprobante->socio->persona->domicilio }}</li>
+      <br>
+      <li>Telefono: {{ $comprobante->socio->persona->telefono }}</li>
+      <br>
+      <li>Mes/Año: {{ date("m/Y", strtotime($comprobante->fechaMesAnio)) }}</li>
+      <br>
+      <li>Fecha de Pago: {{ date("d/m/Y", strtotime($comprobante->fechaPago)) }}</li>
+      <br>
+      <li>Monto Base: ${{ $comprobante->montoMensual }}</li>
+      <br>
+      <li>Intereses: ${{ $comprobante->interesPorIntegrantes + $comprobante->interesMesesAtrasados }}</li>
+      <br>
+      <li>Monto Total: ${{ $comprobante->montoTotal }}</li>
+    </ul>
+
+
 @endsection

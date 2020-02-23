@@ -3,7 +3,9 @@
 @section('title', 'Cantidad de Socios')
 
 @section('content')
-    <h1>Cantidad de Socios</h1>
-    <hr>
-    <h2>El club cuenta con {{ $cantidadSocios }} socios.</h2>
+    <h3>Cantidad de Socios:</h3>
+    <ul>
+      El club cuenta con {{ $cantidadSocios }} socios.
+    </ul>
+
 @endsection

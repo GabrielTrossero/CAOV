@@ -27,14 +27,14 @@ class AlquilerMuebleController extends Controller
 
     /**
      * Devuelve información acerca de la disponibilidad de horarios en tal fecha
-     * 
-     * 
+     *
+     *
      */
     public function postDisponibilidad(){
       $muebleSeleccionado = Input::get('mueble');
       $alquileres = ReservaMueble::all()->where('idMueble', $muebleSeleccionado);
       $fecha = Carbon::parse(Input::get('fecha'))->format('Y-m-d');
-   
+
       $fechasReservadas = array();
 
       foreach($alquileres as $alquiler){
@@ -120,8 +120,8 @@ class AlquilerMuebleController extends Controller
         return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización son erróneas, por favor revise las mismas');
       }
 
-      //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del inmueble a alquilar.
-      //Por lo tanto obtengo todas las reservas de dicho Inmueble, donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
+      //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del mueble a alquilar.
+      //Por lo tanto obtengo todas las reservas de dicho Mueble, donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
       $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
                                      ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
@@ -129,8 +129,8 @@ class AlquilerMuebleController extends Controller
         return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
       }
 
-      //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del inmueble a alquilar
-      //Por lo tanto obtengo todas las reservas de dicho Inmueble, donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
+      //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del mueble a alquilar
+      //Por lo tanto obtengo todas las reservas de dicho Mueble, donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
       $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
                                      ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
@@ -138,7 +138,7 @@ class AlquilerMuebleController extends Controller
         return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
       }
 
-      //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del inmueble a alquilar
+      //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del mueble a alquilar
       //(si alguna reserva está entre medio de las que ingresó)
       $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
                                      ->where('id', '<>', $request->id)

@@ -3,9 +3,13 @@
 @section('title', 'Socios Deudores')
 
 @section('content')
-    <h1>Socios deudores</h1>
-    <table  align="center">
-        <thead>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <br>
+    <h4 align="center">Socios deudores</h4>
+    <div class="tam_letra_x-small">
+      <table class="table table-striped">
             <tr>
                 <th>DNI</th>
                 <th>Numero de Socio</th>
@@ -15,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-            
+
            @foreach ($cuotasNoPagadas as $cuotaNoPagada)
               <tr>
                 <td>{{ $cuotaNoPagada->DNI }}</td>
@@ -25,7 +29,10 @@
                 <td>{{ $cuotaNoPagada->count }}</td>
               </tr>
            @endforeach
-            
+
         </tbody>
-    </table>
+      </table>
+    </div>
+
+
 @endsection

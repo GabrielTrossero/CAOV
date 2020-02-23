@@ -3,9 +3,10 @@
 @section('title', 'Comprobante de Mueble')
 
 @section('content')
-    <h1>Comprobante de Pago de Alquiler de Mueble ({{ $recibo->mueble->nombre }})</h1>
+    <h4>Comprobante de Pago de Alquiler de Mueble ({{ $recibo->mueble->nombre }})</h4>
     <hr>
-    <h2>Fecha de Solicitud: {{ date("d/m/Y", strtotime($recibo->fechaSolicitud)) }}</h2>
+    Fecha de Solicitud: {{ date("d/m/Y", strtotime($recibo->fechaSolicitud)) }}
+    <br>
     <ul>
         <li>APELLIDO Y NOMBRE: {{ $recibo->persona->apellido . ", " . $recibo->persona->nombres }}</li>
         <br>
@@ -25,20 +26,24 @@
         <br>
         <li>CANTIDAD ALQUILADA: {{ $recibo->cantidad }}</li>
         <br>
-        <li>COSTO DE ALQUILER DEL SALON: ${{ $recibo->costoTotal }}</li>
+        <li>COSTO DEL ALQUILER: ${{ $recibo->costoTotal }}</li>
         <br>
         <li>OBSERVACION: {{ $recibo->observacion }}</li>
     </ul>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <div id="firma" align="right">Firma y aclaración</div>
-    <br>
-    <br>
-    @if (isset($recibo->numRecibo))
-        <h2>NUMERO DE RECIBO: {{ $recibo->numRecibo }}</h2>
-    @else
-        <h2>NUMERO DE RECIBO: {{ "-" }}</h2>
-    @endif
+
+    <footer>
+      <div align="right">
+        ........................................
+      </div>
+      <label>
+        @if (isset($recibo->numRecibo))
+            NUMERO DE RECIBO: {{ $recibo->numRecibo }}
+        @else
+            NUMERO DE RECIBO: {{ "-" }}
+        @endif
+      </label>
+      <label id="firma">Firma y aclaración</label>
+    </footer>
+
+
 @endsection

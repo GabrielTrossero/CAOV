@@ -19,14 +19,14 @@
             <th>Activo</th>
           </tr>
         </thead>
-        
+
         <tbody>
           <tr>
             <td>{{ $socio->persona->DNI }}</td>
             <td>{{ $socio->numSocio }}</td>
             <td>{{ $socio->persona->apellido }}</td>
             <td>{{ $socio->persona->nombres }}</td>
-  
+
             @if ($socio->vitalicio == 's')
               <td>{{ 'Vitalicio' }}</td>
             @elseif ($socio->idGrupoFamiliar)
@@ -36,22 +36,22 @@
             @else
               <td>{{ 'Activo' }}</td>
             @endif
-  
+
             <td>
               @foreach ($socio->deportes as $deporte)
                 {{ $deporte->nombre }}
                 <br>
               @endforeach
             </td>
-  
+
             <td>{{ date("d/m/Y", strtotime($socio->fechaNac)) }}</td>
-  
+
             @if ($socio->activo)
               <td>Si</td>
             @else
               <td>No</td>
             @endif
-  
+
           </tr>
         </tbody>
 
@@ -63,7 +63,7 @@
   &nbsp;&nbsp;
 
   <div class="card">
-    <div class="card-header">Listado de Cuotas</label></div>
+    <div class="card-header">Cuotas No Pagadas</label></div>
     <div class="card-body border">
 
         <table class="table">
@@ -78,7 +78,7 @@
           <tbody>
             @foreach ($cuotasNoPagadas as $cuotaNoPagada)
             <tr>
-              
+
               <td>{{date("m/Y", strtotime($cuotaNoPagada->fechaMesAnio))}}</td>
               <td>{{ '$'.$cuotaNoPagada->montoCuota->montoMensual }}</td>
 
@@ -94,7 +94,7 @@
             </tr>
             @endforeach
           </tbody>
-          
+
       </table>
     </div>
     <div class="card-footer">
@@ -107,7 +107,7 @@
       </form>
     </div>
   </div>
-  
+
 </div>
 
 
