@@ -39,11 +39,13 @@ $(document).ready(function () {
                 console.log(fechasReservadas);
                 for (let i = 0; i < fechasReservadas.length; i++) {
                     let elem = fechasReservadas[i];
-                    mensaje += "\n" + elem[1] + " hasta " + elem[2];
+                    mensaje += "\n" + elem[1] + " hasta " + elem[2] + ". " + "Cantidad: " + elem[3];
                 }
-
+                
                 if (fechasReservadas.length == 0) {
                     mensaje += "\nNo hay reservas para el mueble en la fecha seleccionada";       
+                } else {
+                    mensaje += "\nStock restante: " + data.stockRestante;
                 }
 
                 alert(mensaje);

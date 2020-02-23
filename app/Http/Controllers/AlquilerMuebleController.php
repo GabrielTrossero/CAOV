@@ -34,6 +34,9 @@ class AlquilerMuebleController extends Controller
       $muebleSeleccionado = Input::get('mueble');
       $alquileres = ReservaMueble::all()->where('idMueble', $muebleSeleccionado);
       $fecha = Carbon::parse(Input::get('fecha'))->format('Y-m-d');
+
+      $mueble = Mueble::find($muebleSeleccionado);
+      $stockRestante = $mueble->cantidad;
    
       $fechasReservadas = array();
 
@@ -41,11 +44,13 @@ class AlquilerMuebleController extends Controller
         $alquiler->soloFecha = Carbon::parse($alquiler->fechaHoraInicio)->format('Y-m-d');
 
         if ($alquiler->soloFecha == $fecha) {
-          $fechasReservadas[] = array($alquiler->soloFecha, $alquiler->fechaHoraInicio, $alquiler->fechaHoraFin);
+          $fechasReservadas[] = array($alquiler->soloFecha, $alquiler->fechaHoraInicio, $alquiler->fechaHoraFin, $alquiler->cantidad);
+          $stockRestante -= $alquiler->cantidad;
         }
       }
 
-      return response()->json(['fechasReservadas' => $fechasReservadas]);
+      return response()->json(['fechasReservadas' => $fechasReservadas,
+                               'stockRestante' => $stockRestante]);
     }
 
     /**
