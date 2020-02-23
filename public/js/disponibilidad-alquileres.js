@@ -43,10 +43,10 @@ $(document).ready(function () {
                 }
                 
                 if (fechasReservadas.length == 0) {
-                    mensaje += "\nNo hay reservas para el mueble en la fecha seleccionada";       
-                } else {
-                    mensaje += "\nStock restante: " + data.stockRestante;
+                    mensaje += "\nNo hay reservas para el mueble en la fecha seleccionada";  
                 }
+                
+                mensaje += "\nStock restante: " + data.stockRestante;
 
                 alert(mensaje);
             })
