@@ -35,12 +35,9 @@ class AlquilerMuebleController extends Controller
       $alquileres = ReservaMueble::all()->where('idMueble', $muebleSeleccionado);
       $fecha = Carbon::parse(Input::get('fecha'))->format('Y-m-d');
 
-<<<<<<< HEAD
-=======
       $mueble = Mueble::find($muebleSeleccionado);
       $stockRestante = $mueble->cantidad;
-   
->>>>>>> 858633520d8e8f5b516be9e1943cb281b065e796
+
       $fechasReservadas = array();
 
       foreach($alquileres as $alquiler){
