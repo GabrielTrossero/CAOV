@@ -11,6 +11,8 @@ use App\MedioDePago;
 use App\ReservaInmueble;
 use App\Inmueble;
 use PDF;
+use Mail;
+use App\Mail\SendMail;
 
 class PagoAlquilerController extends Controller
 {
@@ -103,10 +105,45 @@ class PagoAlquilerController extends Controller
 
       //tomo la reserva pagada
       $reservaPagada = ReservaMueble::find($request->id);
+      
+      //envío de mail con el detalle del recibo del alquiler del mueble
+      if (isset($reservaPagada->persona->email)) {
+        $numSocio = null;
+        if($reservaPagada->persona->socio) {
+          $numSocio = $reservaPagada->persona->socio->numSocio;
+        }
 
-      /*
-        Agregar el envío de mail con el detalle del recibo del alquiler del mueble
-      */
+        $arrayReserva = array(
+          'emailTo' => $reservaPagada->persona->email,
+          'muebleNombre' => $reservaPagada->mueble->nombre,
+          'fechaSolicitud' => $reservaPagada->fechaSolicitud,
+          'apellido_nombres' => $reservaPagada->persona->apellido.", ".$reservaPagada->persona->nombres,
+          'domicilio' => $reservaPagada->persona->domicilio,
+          'DNI' => $reservaPagada->persona->DNI,
+          'numSocio' => $numSocio,
+          'fechaHoraInicio' => $reservaPagada->fechaHoraInicio,
+          'fechaHoraFin' => $reservaPagada->fechaHoraFin,
+          'cantidad' => $reservaPagada->cantidad,
+          'costoTotal' => $reservaPagada->costoTotal,
+          'observacion' => $reservaPagada->observacion,
+          'numRecibo' => $reservaPagada->numRecibo
+        );
+
+        Mail::to($arrayReserva['emailTo'])->send(new SendMail($arrayReserva, 'mueble'));
+        
+        /* NO USADO
+        Mail::send('emails.mueble', ['data' => $arrayReserva], function ($message) use ($arrayReserva) {
+          $message->to($arrayReserva['emailTo'])->from('dreherfrancisco@gmail.com')->subject('Hola');
+        });
+        */
+
+        /* NO USADO
+        Mail::send('emails.mueble', $arrayReserva, function ($message) use ($arrayReserva) {
+          $message->from('comprobantes.caov@gmail.com', 'Club Atlético Oro Verde');
+          $message->to($arrayReserva['emailTo']);
+          $message->subject('Pago de Alquiler de Muebles'); 
+        });*/
+      }
       
       $pdf = PDF::loadView('pdf.comprobantes.mueble', ['recibo' => $reservaPagada]);
 
@@ -172,9 +209,34 @@ class PagoAlquilerController extends Controller
       //tomo la reserva pagada
       $reservaPagada = ReservaInmueble::find($request->id);
 
-      /*
-        Agregar el envío de mail con el detalle del recibo del alquiler del inmueble
-      */
+      //envío de mail con el detalle del recibo del alquiler del inmueble
+      if (isset($reservaPagada->persona->email)) {
+        $numSocio = null;
+        if($reservaPagada->persona->socio) {
+          $numSocio = $reservaPagada->persona->socio->numSocio;
+        }
+
+        $arrayReserva = array(
+          'emailTo' => $reservaPagada->persona->email,
+          'inmuebleNombre' => $reservaPagada->inmueble->nombre,
+          'fechaSolicitud' => $reservaPagada->fechaSolicitud,
+          'apellido_nombres' => $reservaPagada->persona->apellido.", ".$reservaPagada->persona->nombres,
+          'domicilio' => $reservaPagada->persona->domicilio,
+          'DNI' => $reservaPagada->persona->DNI,
+          'numSocio' => $numSocio,
+          'fechaHoraInicio' => $reservaPagada->fechaHoraInicio,
+          'fechaHoraFin' => $reservaPagada->fechaHoraFin,
+          'tipoEvento' => $reservaPagada->tipoEvento,
+          'cantAsistentes' => $reservaPagada->cantAsistentes,
+          'tieneServicioLimpieza' => $reservaPagada->tieneServicioLimpieza,
+          'tieneMusica' => $reservaPagada->tieneMusica,
+          'tieneReglamento' => $reservaPagada->tieneReglamento,
+          'costoTotal' => $reservaPagada->costoTotal,
+          'numRecibo' => $reservaPagada->numRecibo
+        );
+
+        Mail::to($arrayReserva['emailTo'])->send(new SendMail($arrayReserva, 'inmueble'));
+      }
       
       $pdf = PDF::loadView('pdf.comprobantes.inmueble', ['recibo' => $reservaPagada]);
 

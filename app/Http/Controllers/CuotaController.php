@@ -13,6 +13,8 @@ use App\SocioComprobante;
 use App\GrupoFamiliar;
 use Carbon\Carbon;
 use PDF;
+use Mail;
+use App\Mail\SendMail;
 
 class CuotaController extends Controller
 {
@@ -308,6 +310,11 @@ class CuotaController extends Controller
       $cuotaRetornada->montoMensual = $montoMensual;
       $cuotaRetornada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
 
+      //si posee mail el socio titular, envia el mail con el detalle de la cuota pagada
+      if(!is_null($cuotaRetornada->socio->persona->email)) {
+        $this->enviaMailCuotaPagada($cuotaRetornada);
+      }
+
       $pdf = PDF::loadView('pdf.comprobantes.cuota', ['comprobante' => $cuotaRetornada]);
 
       return $pdf->download('comprobante-cuota.pdf');
@@ -599,9 +606,10 @@ class CuotaController extends Controller
       $comprobanteCuota->montoMensual = $montoMensual;
       $comprobanteCuota->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
 
-      /*
-        Agregar el envío de mail con el detalle del pago
-      */
+      //si posee mail el socio titular, envia el mail con el detalle de la cuota pagada
+      if(!is_null($comprobanteCuota->socio->persona->email)) {
+        $this->enviaMailCuotaPagada($comprobanteCuota);
+      }
 
       $pdf = PDF::loadView('pdf.comprobantes.cuota', ['comprobante' => $comprobanteCuota]);
 
@@ -1077,6 +1085,31 @@ class CuotaController extends Controller
     }
 
     return $socio;
+  }
+
+  /**
+   * envia mail con el detalle de la cuota pagada
+   * 
+   * @param App\ComprobanteCuota $cuotaPagada
+   * 
+   * @return void
+   */
+  public function enviaMailCuotaPagada($cuotaPagada) {
+    $numSocio = $cuotaPagada->idSocio;
+    
+    $arrayCuota = array(
+      'emailTo' => $cuotaPagada->socio->persona->email,
+      'apellido_nombres' => $cuotaPagada->socio->persona->apellido.", ".$cuotaPagada->socio->persona->nombres,
+      'numSocio' => $numSocio,
+      'fechaMesAnio' => $cuotaPagada->fechaMesAnio,
+      'fechaPago' => $cuotaPagada->fechaPago,
+      'montoMensual' => $cuotaPagada->montoMensual,
+      'interesPorIntegrantes' => $cuotaPagada->interesPorIntegrantes,
+      'interesMesesAtrasados' => $cuotaPagada->interesMesesAtrasados,
+      'montoTotal' => $cuotaPagada->montoTotal
+    );
+
+    Mail::to($arrayCuota['emailTo'])->send(new SendMail($arrayCuota, 'cuota'));
   }
 
 }
