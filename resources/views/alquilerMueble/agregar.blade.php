@@ -19,7 +19,7 @@
                                 <input type="text" id="tipo" value="mueble" hidden>
                                 <button type="button" id="chequear"><i class="fas fa-check" style="color:blue"></i></button>
                             </form>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             <label for="cantMueble" class="col-md-4 col-form-label text-md-right">{{ __('Ingrese la Cantidad') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="cantMueble" id="cantMueble" class="form-control" value="{{ old('cantMueble') }}" required>
+                                <input type="number" name="cantMueble" id="cantMueble" class="form-control" value="{{ old('cantMueble') }}" min="1" required>
 
                                 <span class="text-danger">{{$errors->first('cantMueble')}}</span>
                             </div>
@@ -94,8 +94,8 @@
 
                                 <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
 
-                                @if (\Session::has('solapamientoFechas'))
-                                  <span class="text-danger">{!! \Session::get('solapamientoFechas') !!}</span>
+                                @if (\Session::has('sinStock'))
+                                  <span class="text-danger">{!! \Session::get('sinStock') !!}</span>
                                 @endif
                             </div>
                         </div>

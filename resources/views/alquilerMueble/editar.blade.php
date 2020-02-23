@@ -19,7 +19,7 @@
                                 <input type="text" id="tipo" value="mueble" hidden>
                                 <button type="button" id="chequear"><i class="fas fa-check" style="color:blue"></i></button>
                             </form>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -101,8 +101,8 @@
 
                                 <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
 
-                                @if (\Session::has('solapamientoFechas'))
-                                  <span class="text-danger">{!! \Session::get('solapamientoFechas') !!}</span>
+                                @if (\Session::has('sinStock'))
+                                  <span class="text-danger">{!! \Session::get('sinStock') !!}</span>
                                 @endif
                             </div>
                         </div>

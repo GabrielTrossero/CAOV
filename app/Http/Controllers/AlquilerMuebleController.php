@@ -125,35 +125,42 @@ class AlquilerMuebleController extends Controller
         return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización son erróneas, por favor revise las mismas');
       }
 
-      //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del mueble a alquilar.
-      //Por lo tanto obtengo todas las reservas de dicho Mueble, donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
-      $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+
+      $alquileresSolapados = new \Illuminate\Database\Eloquent\Collection; //colección donde voy a almacenar todas las reservas que interceptan con la que se quiere generar para finalmente verificar el stock
+
+      //obtengo todas las reservas de dicho Mueble, donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
+      $alquiler = ReservaMueble::where('idMueble', $request->tipoMueble)
                                      ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
-      if (sizeof($solapamientoFechas) != 0) {
-        return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
-      }
+      $alquileresSolapados = $alquileresSolapados->merge($alquiler);  //lo almaceno en la colección "global"
 
-      //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del mueble a alquilar
-      //Por lo tanto obtengo todas las reservas de dicho Mueble, donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
-      $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+
+      //obtengo todas las reservas de dicho Mueble, donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
+      $alquiler = ReservaMueble::where('idMueble', $request->tipoMueble)
                                      ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
-      if (sizeof($solapamientoFechas) != 0) {
-        return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
-      }
+      $alquileresSolapados = $alquileresSolapados->merge($alquiler);  //lo almaceno en la colección "global"
+
 
       //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del mueble a alquilar
       //(si alguna reserva está entre medio de las que ingresó)
-      $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+      $alquiler = ReservaMueble::where('idMueble', $request->tipoMueble)
                                      ->where('id', '<>', $request->id)
                                      ->where('fechaHoraInicio', '<=', $request->fechaHoraInicio)
                                      ->where('fechaHoraFin','>=', $request->fechaHoraFin)
                                      ->get();
 
+      $alquileresSolapados = $alquileresSolapados->merge($alquiler);  //lo almaceno en la colección "global"
 
-      if (sizeof($solapamientoFechas) != 0) {
-        return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+      $cantidadStock = 0;
+      foreach ($alquileresSolapados as $alquiler) { //sumo el stock que se debería tener en ese periodo
+        $cantidadStock += $alquiler->cantidad;
+      }
+
+      $mueble = Mueble::where('id', $request->tipoMueble)->first();  //busco el mueble a alquilar
+
+      if (($cantidadStock + $request->cantMueble) > $mueble->cantidad) { //si supera la cantidad del stock muestro error
+        return redirect()->back()->withInput()->with('sinStock', 'No hay Stock suficiente para esa hora. Consulte disponibilidad más arriba.');
       }
 
 
@@ -307,45 +314,44 @@ class AlquilerMuebleController extends Controller
           return redirect()->back()->withInput()->withErrors($validacion->errors());
         }
 
-        //tomo la reserva del inmueble
-        $reservaOriginal = ReservaMueble::find($request->id);
 
-        //valido si la fecha y hora de finalizacion es menor a la de inicio
-        if ($request->fechaHoraInicio >= $request->fechaHoraFin) {
-          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y  Finalización son erróneas, por favor revise las mismas');
-        }
+        $alquileresSolapados = new \Illuminate\Database\Eloquent\Collection; //colección donde voy a almacenar todas las reservas que interceptan con la que se quiere generar para finalmente verificar el stock
 
-        //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del inmueble a alquilar
-        //Por lo tanto obtengo todas las reservas de dicho Inmueble (omitiendo la que estoy actualizando), donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
-        $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+        //obtengo todas las reservas de dicho Mueble, donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
+        $alquiler = ReservaMueble::where('idMueble', $request->tipoMueble)
                                        ->where('id', '<>', $request->id)
                                        ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
-        if (sizeof($solapamientoFechas) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
-        }
+        $alquileresSolapados = $alquileresSolapados->merge($alquiler);  //lo almaceno en la colección "global"
 
-        //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del inmueble a alquilar
-        //Por lo tanto obtengo todas las reservas de dicho Inmueble(omitiendo la que estoy actualizando), donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
-        $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+
+        //obtengo todas las reservas de dicho Mueble, donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
+        $alquiler = ReservaMueble::where('idMueble', $request->tipoMueble)
                                        ->where('id', '<>', $request->id)
                                        ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
-        if (sizeof($solapamientoFechas) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
-        }
+        $alquileresSolapados = $alquileresSolapados->merge($alquiler);  //lo almaceno en la colección "global"
 
-        //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del inmueble a alquilar
+
+        //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio y fin en la BD, del mueble a alquilar
         //(si alguna reserva está entre medio de las que ingresó)
-        $solapamientoFechas = ReservaMueble::where('idMueble', $request->tipoMueble)
+        $alquiler = ReservaMueble::where('idMueble', $request->tipoMueble)
                                        ->where('id', '<>', $request->id)
                                        ->where('fechaHoraInicio', '<=', $request->fechaHoraInicio)
                                        ->where('fechaHoraFin','>=', $request->fechaHoraFin)
                                        ->get();
 
+        $alquileresSolapados = $alquileresSolapados->merge($alquiler);  //lo almaceno en la colección "global"
 
-        if (sizeof($solapamientoFechas) != 0) {
-          return redirect()->back()->withInput()->with('solapamientoFechas', 'La Fecha y Hora de Inicio y Finalización se solapan con otra Reserva, por favor revise la misma');
+        $cantidadStock = 0;
+        foreach ($alquileresSolapados as $alquiler) { //sumo el stock que se debería tener en ese periodo
+          $cantidadStock += $alquiler->cantidad;
+        }
+
+        $mueble = Mueble::where('id', $request->tipoMueble)->first();  //busco el mueble a alquilar
+
+        if (($cantidadStock + $request->cantMueble) > $mueble->cantidad) { //si supera la cantidad del stock muestro error
+          return redirect()->back()->withInput()->with('sinStock', 'No hay Stock suficiente para esa hora. Consulte disponibilidad más arriba.');
         }
 
 
