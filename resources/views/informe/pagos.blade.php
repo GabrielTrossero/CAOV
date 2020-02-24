@@ -21,16 +21,16 @@
           @foreach ($cuotasPagadas as $cuotaPagada)
             <tr>
               <td>-</td>
-              <td>{{ $cuotaPagada->fechaPago }}</td>
+              <td>{{ date("d/m/Y", strtotime($cuotaPagada->fechaPago)) }}</td>
               <td>Cuota</td>
               <td>${{ $cuotaPagada->montoTotal }}</td>
             </tr>
           @endforeach
-          
+
           @foreach ($reservasInmueble as $reservaInmueble)
             <tr>
               <td>{{ $reservaInmueble->numRecibo }}</td>
-              <td>{{ $reservaInmueble->fechaSolicitud }}</td>
+              <td>{{ date("d/m/Y", strtotime($reservaInmueble->fechaSolicitud)) }}</td>
               <td>Alquiler de {{ $reservaInmueble->inmueble->nombre }}</td>
               <td>${{ $reservaInmueble->costoTotal }}</td>
             </tr>
@@ -39,8 +39,8 @@
           @foreach ($reservasMueble as $reservaMueble)
             <tr>
               <td>{{ $reservaMueble->numRecibo }}</td>
-              <td>{{ $reservaMueble->fechaSolicitud }}</td>
-              <td>Alquiler de {{ $reservaMueble->cantidad . " " . $reservaMueble->mueble->nombre}}</td>
+              <td>{{ date("d/m/Y", strtotime($reservaMueble->fechaSolicitud)) }}</td>
+              <td>{{ $reservaMueble->mueble->nombre . " - " . $reservaMueble->cantidad }} Unidade/s</td>
               <td>${{ $reservaMueble->costoTotal }}</td>
             </tr>
           @endforeach

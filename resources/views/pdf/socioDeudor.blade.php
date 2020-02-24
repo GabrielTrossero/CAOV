@@ -13,7 +13,7 @@
         <thead>
             <tr>
                 <th>DNI</th>
-                <th>Numero de Socio</th>
+                <th>N° de Socio</th>
                 <th>Apellido</th>
                 <th>Nombres</th>
                 <th>Categoria (actual)</th>
