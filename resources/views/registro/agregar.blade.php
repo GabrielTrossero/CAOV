@@ -6,16 +6,19 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-              @if (\Session::has('success'))
-                <div class="alert alert-success">
-                    {!! \Session::get('success') !!}
-                </div>
-              @endif
                 <div class="card-header">{{ __('Agregar Registro') }}</div>
+
+                @if (\Session::has('success'))
+                  <div class="alert alert-success">
+                      {!! \Session::get('success') !!}
+                  </div>
+                @endif
 
                 <div class="card-body">
                     <form method="POST" action="{{ url("/registro/") }}">
                         {{ csrf_field() }}
+
+                        <input type="hidden" name="id" value="{{ Auth::user()->id }}">
 
                         <div class="form-group row">
                             <label for="numRecibo" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Recibo') }}</label>
@@ -62,24 +65,6 @@
                                   <option value="2">Egreso</option>
                                 </select>
                                 <span class="text-danger">{{$errors->first('tipoRegistro')}}</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="usuario" class="col-md-4 col-form-label text-md-right">{{ __('Usuario') }}</label>
-
-                            <div class="col-md-6">
-                                <select name="usuario" id="usuario" class="form-control" required>
-                                  @foreach ($usuarios as $usuario)
-                                    <option value="{{ $usuario->id }}">{{ $usuario->persona->DNI . " - " . $usuario->persona->nombres . " " . $usuario->persona->apellido }}</option>
-                                  @endforeach
-                                </select>
-
-                                <span class="text-danger">{{$errors->first('usuario')}}</span>
-
-                                @if (\Session::has('validarUsuario'))
-                                  <span class="text-danger">{!! \Session::get('validarUsuario') !!}</span>
-                                @endif
                             </div>
                         </div>
 

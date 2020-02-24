@@ -21,7 +21,7 @@ class RegistroController extends Controller
     $usuarios = User::all();
 
     //devuelvo la vista para agregar un registro
-    return view('registro.agregar', compact('usuarios'));
+    return view('registro.agregar');
   }
 
   /**
@@ -42,8 +42,7 @@ class RegistroController extends Controller
       'descripcion.required' => 'Es necesario ingresar una Descripcion',
       'descripcion.max' => 'Ingrese una Descripcion de menos de 100 caracteres',
       'tipoRegistro.required' => 'Es necesario un Tipo de Registro',
-      'tipoRegistro.in' => 'Ingrese un Tipo de Registro válido',
-      'usuario.required' => 'Es necesario un Usuario'
+      'tipoRegistro.in' => 'Ingrese un Tipo de Registro válido'
     ];
 
     //valido los datos ingresados
@@ -52,8 +51,7 @@ class RegistroController extends Controller
     'fecha' => 'required',
     'monto' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
     'descripcion' => 'required|max:100',
-    'tipoRegistro' => 'required|in:1,2',
-    'usuario' => 'required'
+    'tipoRegistro' => 'required|in:1,2'
     ], $messages);
 
     //si la validación falla vuelvo hacia atras con los errores
@@ -63,10 +61,10 @@ class RegistroController extends Controller
 
 
     //valido que el Usuario exista
-    $validarUsuario = User::where('id', $request->usuario)->first();
+    $validarUsuario = User::where('id', $request->id)->first();
 
     if (!isset($validarUsuario)) {
-      return redirect()->back()->withInput()->with('validarUsuario', 'Error al seleccionar un Usuario.');
+      return redirect()->back()->withInput()->with('validarUsuario', 'Error en el Usuario.');
     }
 
 
@@ -78,7 +76,7 @@ class RegistroController extends Controller
     $movimiento->descripcion = $request->descripcion;
     $movimiento->fecha = $request->fecha;
     $movimiento->monto = $request->monto;
-    $movimiento->idUser = $request->usuario;
+    $movimiento->idUser = $request->id;
 
     $movimiento->save();
 
