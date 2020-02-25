@@ -223,6 +223,15 @@
                 </button>
               </a>
             </td>
+          @elseif (isset($cuota->fechaPago))
+            <td>
+              <form action="{{url('/cuota/pdf_pago_cuota/'.$cuota->id)}}" method="get" style="display:inline">
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-primary tam_letra_small">
+                  Generar PDF
+                </button>
+              </form>
+            </td>
           @else
             <td>
               <a href="{{ url('/cuota/pago/'.$cuota->id) }}">

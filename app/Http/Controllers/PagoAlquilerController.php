@@ -145,14 +145,8 @@ class PagoAlquilerController extends Controller
         });*/
       }
       
-      $pdf = PDF::loadView('pdf.comprobantes.mueble', ['recibo' => $reservaPagada]);
-
-      return $pdf->download('comprobante-alquiler-mueble.pdf');
-
-      /*
       //redirijo a la vista individual
-      return redirect()->action('AlquilerMuebleController@getShowId', $request->id);
-      */
+      return redirect()->action('AlquilerMuebleController@getShowId', $request->id); 
     }
 
     /**
@@ -238,13 +232,40 @@ class PagoAlquilerController extends Controller
         Mail::to($arrayReserva['emailTo'])->send(new SendMail($arrayReserva, 'inmueble'));
       }
       
-      $pdf = PDF::loadView('pdf.comprobantes.inmueble', ['recibo' => $reservaPagada]);
-
-      return $pdf->download('comprobante-alquiler-inmueble.pdf');
-      
-      /*
       //redirijo a la vista individual
       return redirect()->action('AlquilerInmuebleController@getShowId', $request->id);
-      */
+      
+    }
+
+    /**
+     * genera el pdf para el id de la reserva del inmueble pagada dada
+     * 
+     * @param Request $request
+     * 
+     * @return PDF
+     */
+    public function generarPdfInmueble($id) {
+      //tomo la reserva pagada
+      $reservaPagada = ReservaInmueble::find($id);
+      
+      $pdf = PDF::loadView('pdf.comprobantes.inmueble', ['recibo' => $reservaPagada]);
+      
+      return $pdf->download('comprobante-alquiler-inmueble.pdf');
+    }
+
+    /**
+     * genera el pdf para el id de la reserva del mueble pagada dada
+     * 
+     * @param Request $request
+     * 
+     * @return PDF
+     */
+    public function generarPdfMueble($id) {
+      //tomo la reserva pagada
+      $reservaPagada = ReservaMueble::find($id);
+      
+      $pdf = PDF::loadView('pdf.comprobantes.mueble', ['recibo' => $reservaPagada]);
+      
+      return $pdf->download('comprobante-alquiler-mueble.pdf');
     }
 }

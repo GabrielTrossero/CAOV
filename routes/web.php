@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('showSocioCuotas/{id}', 'CuotaController@showSocioCuotas'); //listado de cuotas de tal socio
         Route::post('generateCuotasAuto', 'CuotaController@generateCuotasAuto');
         Route::get('generateCuotasAuto', 'CuotaController@generateCuotasAuto');
+        Route::get('pdf_pago_cuota/{id}', 'CuotaController@generarPdfCuota');
     });
 /*
     //Rutas para Pago de Cuota
@@ -97,8 +98,10 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('/', 'PagoAlquilerController@index');
         Route::get('listamueble', 'PagoAlquilerController@getShowMueble');
         Route::get('listainmueble', 'PagoAlquilerController@getShowInmueble');
+        Route::get('pdf_alquiler_mueble/{id}', 'PagoAlquilerController@generarPdfMueble');
         Route::get('pagomueble/{id}', 'PagoAlquilerController@getPagoMueble');
         Route::post('pagomueble', 'PagoAlquilerController@postPagoMueble');
+        Route::get('pdf_alquiler_inmueble/{id}', 'PagoAlquilerController@generarPdfInmueble');
         Route::get('pagoinmueble/{id}', 'PagoAlquilerController@getPagoInmueble');
         Route::post('pagoinmueble', 'PagoAlquilerController@postPagoInmueble');
     });

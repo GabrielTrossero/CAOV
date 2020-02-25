@@ -5,7 +5,7 @@
     </head>
     <body>
         <header>
-          <a href="{{ url('/') }}"><img src="{!! asset('images/logo2.png') !!}" id="logo"> </a>
+          <!--<a href="{{ url('/') }}"><img src="{!! asset('images/logo2.png') !!}" id="logo"> </a>-->
           <div id="titulo">
             Club Atletico Oro Verde
           </div>

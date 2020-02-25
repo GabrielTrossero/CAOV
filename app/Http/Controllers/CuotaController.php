@@ -314,10 +314,6 @@ class CuotaController extends Controller
       if(!is_null($cuotaRetornada->socio->persona->email)) {
         $this->enviaMailCuotaPagada($cuotaRetornada);
       }
-
-      $pdf = PDF::loadView('pdf.comprobantes.cuota', ['comprobante' => $cuotaRetornada]);
-
-      return $pdf->download('comprobante-cuota.pdf');
     }
 
     //redirijo para mostrar la cuota ingresada
@@ -611,16 +607,9 @@ class CuotaController extends Controller
         $this->enviaMailCuotaPagada($comprobanteCuota);
       }
 
-      $pdf = PDF::loadView('pdf.comprobantes.cuota', ['comprobante' => $comprobanteCuota]);
-
-      return $pdf->download('comprobante-cuota.pdf');
-      /*
       //redirijo para mostrar la cuota ingresada
       return redirect()->action('CuotaController@getShowId', $comprobanteCuota->id);
-      */
     }
-
-
 
     /**
      * Listar socios para ver sus cuotas
@@ -1112,4 +1101,28 @@ class CuotaController extends Controller
     Mail::to($arrayCuota['emailTo'])->send(new SendMail($arrayCuota, 'cuota'));
   }
 
+  /**
+     * genera el pdf para el id de la cuota pagada dada
+     * 
+     * @param Request $request
+     * 
+     * @return PDF
+     */
+    public function generarPdfCuota($id) {
+      //tomo la reserva pagada
+      $comprobanteCuota = ComprobanteCuota::find($id);
+
+      $interesPorIntegrantes = $this->montoInteresGrupoFamiliar($comprobanteCuota);
+      $interesMesesAtrasados = $this->montoInteresAtraso($comprobanteCuota);
+      $montoMensual = $comprobanteCuota->montoCuota->montoMensual;
+
+      $comprobanteCuota->interesPorIntegrantes = $interesPorIntegrantes;
+      $comprobanteCuota->interesMesesAtrasados = $interesMesesAtrasados;
+      $comprobanteCuota->montoMensual = $montoMensual;
+      $comprobanteCuota->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+      
+      $pdf = PDF::loadView('pdf.comprobantes.cuota', ['comprobante' => $comprobanteCuota]);
+      
+      return $pdf->download('comprobante-cuota.pdf');
+    }
 }

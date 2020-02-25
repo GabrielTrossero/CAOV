@@ -68,12 +68,14 @@
             </button>
           </a>
         @else
-          <a style="text-decoration:none" href="{{ url('/alquilerinmueble/show/'.$reservaInmueble->id) }}">
-            <button type="button" class="btn btn-outline-primary" style="display:inline" onClick="alert('El alquiler ya ha sido pagado')">
-              Pagar Alquiler
+          <form action="{{url('/pagoalquiler/pdf_alquiler_inmueble/'.$reservaInmueble->id)}}" method="get" style="display:inline">
+            {{ csrf_field() }}
+            <button type="submit" class="btn btn-outline-danger" style="display:inline">
+              Generar PDF
             </button>
-          </a>
+          </form>
         @endif
+        
 
         &nbsp;&nbsp;
         <a style="text-decoration:none" href="{{ url('/alquilerinmueble/edit/'.$reservaInmueble->id) }}">
