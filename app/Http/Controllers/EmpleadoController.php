@@ -32,8 +32,18 @@ class EmpleadoController extends Controller
         //tomo los tipos de usuarios para pasar a la vista
         $tiposUsuarios = TipoUsuario::all();
 
+        $personas = Persona::all();
+
+        //filtro las personas para quedarme con las que no son users
+        $personas = $personas->filter(function ($value, $key) {
+          if ($value->user == null) {
+            return true;
+          }
+          else return false;
+        });
+
         //redirijo a la vista para agregar un empleado
-        return view('empleado.agregar', compact('tiposUsuarios'));
+        return view('empleado.agregar', compact('tiposUsuarios', 'personas'));
     }
 
     /**
@@ -44,8 +54,6 @@ class EmpleadoController extends Controller
      */
     public function store(Request $request)
     {
-        $empleado = new User;
-
         //mensajes de error que se mostraran por pantalla
         $messages = [
           'username.required' => 'Es necesario ingresar nombre de usuario.',
@@ -55,10 +63,7 @@ class EmpleadoController extends Controller
           'email.email' => 'El Email no es único o válido.',
           'email.unique' => 'El Email no es único o válido.',
           'email.max' => 'El Email no es único o válido.',
-          'DNI.required' => 'Es necesario ingresar un DNI válido.',
-          'DNI.min' => 'Es necesario ingresar un DNI válido.',
-          'DNI.max' => 'Es necesario ingresar un DNI válido.',
-          'DNI.exists' => 'Es necesario que dicho Empleado esté cargado como Persona.',
+          'idPersona.required' => 'Es necesario ingresar una Persona.',
           'password.required' => 'Es necesario ingresar una Contraseña.',
           'password.min' => 'La Contraseña debe tener como mínimo 8 caracteres.',
           'password.max' => 'Ingrese una Contraseña válida.',
@@ -73,13 +78,7 @@ class EmpleadoController extends Controller
         $validacion = Validator::make($request->all(), [
           'username' => 'required|min:8|max:75|unique:users',
           'email' => 'email|unique:users|max:75',
-          'DNI' => ['required',
-            'min:8',
-            'max:8',
-            //hace select count(*) from persona where DNI = $request->DNI
-            //para verificar que exista dicha persona
-            Rule::exists('persona')
-          ],
+          'idPersona' => 'required',
           'password' => 'required|min:8|max:80',
           'passwordRepeat' => 'required|min:8|max:80|same:password',
           'idTipoUsuario' => 'required'
@@ -91,18 +90,25 @@ class EmpleadoController extends Controller
         }
 
 
-        //obtengo la persona correspondiente al DNI ingresado
-        $persona = Persona::where('DNI', $request->DNI)->first();
+        //obtengo la persona correspondiente
+        $persona = Persona::where('id', $request->idPersona)->first();
 
-        //valido que ya no haiga otro Empleado con dicha idPersona
-        $validarIdPersona = User::where('idPersona', $persona->id)->first();
+        //valido que la persona exista
+        if (!isset($persona)) {
+          return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
+        }
+        else {
+          //valido que ya no haya otro Empleado con dicho idPersona
+          $socio = User::where('idPersona', $persona->id)->first();
 
-        if(isset($validarIdPersona)){
-          return redirect()->back()->withInput()->with('validarIdPersona', 'Error, ya dicho Empleado.');
+          if(isset($socio)){
+            return redirect()->back()->withInput()->with('validarSocioNoExiste', 'Error, dicho Empleado ya existe.');
+          }
         }
 
 
         //almaceno el usuario
+        $empleado = new User;
         $empleado->username = $request->username;
         $empleado->email = $request->email;
         $empleado->password = bcrypt($request->password);
@@ -159,10 +165,20 @@ class EmpleadoController extends Controller
         //tomo el usuario
         $usuario = User::find($id);
 
+        $personas = Persona::all();
+
+        //filtro las personas para quedarme con las que no son users
+        $personas = $personas->filter(function ($value, $key) {
+          if ($value->user == null) {
+            return true;
+          }
+          else return false;
+        });
+
         //tomo los tipos de usuarios
         $tiposUsuarios = TipoUsuario::all();
 
-        return view('empleado.editar', compact(['usuario', 'tiposUsuarios']));
+        return view('empleado.editar', compact(['usuario', 'tiposUsuarios', 'personas']));
     }
 
     /**
@@ -183,10 +199,7 @@ class EmpleadoController extends Controller
           'email.email' => 'El Email no es único o válido.',
           'email.unique' => 'El Email no es único o válido.',
           'email.max' => 'El Email no es único o válido.',
-          'DNI.required' => 'Es necesario ingresar un DNI válido.',
-          'DNI.min' => 'Es necesario ingresar un DNI válido.',
-          'DNI.max' => 'Es necesario ingresar un DNI válido.',
-          'DNI.exists' => 'Es necesario que dicho Empleado esté cargado como Persona.',
+          'idPersona.required' => 'Es necesario ingresar una Persona.',
           'password.max' => 'Ingrese una Contraseña válida.',
           'passwordRepeat.required_with' => 'Es necesario repetir la Contraseña.',
           'passwordRepeat.same' => 'La Contraseñas no coinciden.',
@@ -207,13 +220,7 @@ class EmpleadoController extends Controller
             'max:75',
             Rule::unique('users')->ignore($request->id)
           ],
-          'DNI' => ['required',
-            'min:8',
-            'max:8',
-            //hace select count(*) from persona where DNI = $request->DNI
-            //para verificar que exista dicha persona
-            Rule::exists('persona')
-          ],
+          'idPersona' => 'required',
           'password' => 'max:80',
           'passwordRepeat' => 'required_with:password|max:80|same:password',
           'idTipoUsuario' => 'required'
@@ -225,18 +232,24 @@ class EmpleadoController extends Controller
         }
 
 
-        //obtengo la persona correspondiente al DNI ingresado
-        $persona = Persona::where('DNI', $request->DNI)->first();
+        //obtengo la persona correspondiente
+        $persona = Persona::where('id', $request->idPersona)->first();
 
-        //obtengo el Empleado actual (sin actualizar)
-        $empleado = User::where('id', $request->id)->first();
+        //valido que la persona exista
+        if (!isset($persona)) {
+          return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
+        }
+        else {
+          //obtengo el Empleado actual (sin actualizar)
+          $empleado = User::where('id', $request->id)->first();
 
-        //valido que ya no haiga otro Empleado con dicha idPersona
-        $validarIdPersona = User::where('idPersona', $persona->id)
-                                ->where('id', '!=', $empleado->id)->first();
+          //valido que ya no haya otro Empleado con dicho idPersona
+          $empleado = User::where('idPersona', $persona->id)
+                                  ->where('id', '!=', $empleado->id)->first();
 
-        if(isset($validarIdPersona)){
-          return redirect()->back()->withInput()->with('validarIdPersona', 'Error, ya dicho Empleado.');
+          if(isset($empleado)){
+            return redirect()->back()->withInput()->with('validarEmpleadoNoExiste', 'Error, dicho Empleado ya existe.');
+          }
         }
 
 

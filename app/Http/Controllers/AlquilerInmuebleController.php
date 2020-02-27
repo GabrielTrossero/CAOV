@@ -27,14 +27,14 @@ class AlquilerInmuebleController extends Controller
 
     /**
      * Devuelve información acerca de la disponibilidad de horarios en tal fecha
-     * 
-     * 
+     *
+     *
      */
     public function postDisponibilidad(){
       $inmuebleSeleccionado = Input::get('inmueble');
       $alquileres = ReservaInmueble::all()->where('idInmueble', $inmuebleSeleccionado);
       $fecha = Carbon::parse(Input::get('fecha'))->format('Y-m-d');
-   
+
       $fechasReservadas = array();
 
       foreach($alquileres as $alquiler){
@@ -61,8 +61,11 @@ class AlquilerInmuebleController extends Controller
         //tomo los medios de pago
         $mediosDePago = MedioDePago::all();
 
+        //tomo todas las personas para mostrarlas en el select
+        $personas = Persona::all();
+
         //redirijo a la vista de agregar con los inmuebles
-        return view('alquilerinmueble.agregar', compact('inmuebles', 'mediosDePago'));
+        return view('alquilerinmueble.agregar', compact('inmuebles', 'mediosDePago', 'personas'));
     }
 
     /**
@@ -77,17 +80,14 @@ class AlquilerInmuebleController extends Controller
 
         //mensajes de error que se mostraran por pantalla
         $messages = [
-          'DNI.required' => 'Es necesario ingresar un DNI válido.',
-          'DNI.min' => 'Es necesario ingresar un DNI válido.',
-          'DNI.max' => 'Es necesario ingresar un DNI válido.',
-          'DNI.exists' => 'Es necesario que dicho Socio esté cargado como Persona.',
+          'idPersona.required' => 'Es necesario ingresar una Persona.',
           'inmueble.required' => 'Es necesario ingresar un Inmueble',
           'fechaSol.required' => 'Es necesario ingresar una Fecha de Solicitud',
           'fechaHoraInicio.required' => 'Es necesario ingresar una Fecha y Hora de Inicio',
           'fechaHoraFin.required' => 'Es necesario ingresar una Fecha y Hora de Finalización',
           'observacion.max' => 'Ingrese una Observacion de menos de 100 caracteres',
           'costoReserva.required' => 'Es necesario ingresar un Costo de Reserva',
-          'costoReserva.regex' => 'Es necesario ingresar un Costo de Reserva positivo mayor a 0 (cero)',
+          'costoReserva.regex' => 'Es necesario ingresar un Costo de Reserva positivo mayor o igual a 0 (cero)',
           'costoTotal.required' => 'Es necesario ingresar un Costo Total',
           'costoTotal.regex' => 'Es necesario ingresar un Costo Total positivo mayor a 0 (cero)',
           'medioPago.required' => 'Es necesario ingresar un Medio de Pago',
@@ -106,19 +106,13 @@ class AlquilerInmuebleController extends Controller
 
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
-          'DNI' => ['required',
-            'min:8',
-            'max:8',
-            //hace select count(*) from persona where DNI = $request->DNI
-            //para verificar que exista dicha persona
-            Rule::exists('persona')
-          ],
+          'idPersona' => 'required',
           'inmueble' => 'required',
           'fechaSol' => 'required',
           'fechaHoraInicio' => 'required',
           'fechaHoraFin' => 'required',
           'observacion' => 'max:100',
-          'costoReserva' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
+          'costoReserva' => 'required|regex:/^[0-9]+/',
           'costoTotal' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
           'medioPago' =>'required|in:1',
           'tipoEvento' => 'required|max:75',
@@ -131,6 +125,15 @@ class AlquilerInmuebleController extends Controller
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
           return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+
+        //obtengo la persona correspondiente
+        $persona = Persona::where('id', $request->idPersona)->first();
+
+        //valido que la persona exista
+        if (!isset($persona)) {
+          return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
         }
 
 
@@ -178,9 +181,6 @@ class AlquilerInmuebleController extends Controller
           return redirect()->back()->withInput()->with('validarInmueble', 'Error al seleccionar un Inmueble.');
         }
 
-
-        //obtengo la persona correspondiente al DNI ingresado
-        $persona = Persona::where('DNI', $request->DNI)->first();
 
         //alamceno el nuevo registro en la BD
         $reservaInmueble = new ReservaInmueble;
@@ -254,8 +254,11 @@ class AlquilerInmuebleController extends Controller
         //tomo los medios de pago
         $mediosDePago = MedioDePago::all();
 
+        //tomo todas las personas para mostrarlas en el select
+        $personas = Persona::all();
+
         //redirijo a la vista de editar con la reserva del inmueble
-        return view('alquilerinmueble.editar', compact('reservaInmueble', 'inmuebles', 'mediosDePago'));
+        return view('alquilerinmueble.editar', compact('reservaInmueble', 'inmuebles', 'mediosDePago', 'personas'));
     }
 
     /**
@@ -271,17 +274,14 @@ class AlquilerInmuebleController extends Controller
 
       //mensajes de error que se mostraran por pantalla
       $messages = [
-        'DNI.required' => 'Es necesario ingresar un DNI válido.',
-        'DNI.min' => 'Es necesario ingresar un DNI válido.',
-        'DNI.max' => 'Es necesario ingresar un DNI válido.',
-        'DNI.exists' => 'Es necesario que dicho Socio esté cargado como Persona.',
+        'idPersona.required' => 'Es necesario ingresar una Persona.',
         'inmueble.required' => 'Es necesario ingresar un Inmueble',
         'fechaSol.required' => 'Es necesario ingresar una Fecha de Solicitud',
         'fechaHoraInicio.required' => 'Es necesario ingresar una Fecha y Hora de Inicio',
         'fechaHoraFin.required' => 'Es necesario ingresar una Fecha y Hora de Finalización',
         'observacion.max' => 'Ingrese una Observacion de menos de 100 caracteres',
         'costoReserva.required' => 'Es necesario ingresar un Costo de Reserva',
-        'costoReserva.regex' => 'Es necesario ingresar un Costo de Reserva positivo mayor a 0 (cero)',
+        'costoReserva.regex' => 'Es necesario ingresar un Costo de Reserva positivo mayor o igual a 0 (cero)',
         'costoTotal.required' => 'Es necesario ingresar un Costo Total',
         'costoTotal.regex' => 'Es necesario ingresar un Costo Total positivo mayor a 0 (cero)',
         'medioPago.required' => 'Es necesario ingresar un Medio de Pago',
@@ -300,19 +300,13 @@ class AlquilerInmuebleController extends Controller
 
       //valido los datos ingresados
       $validacion = Validator::make($request->all(),[
-        'DNI' => ['required',
-          'min:8',
-          'max:8',
-          //hace select count(*) from persona where DNI = $request->DNI
-          //para verificar que exista dicha persona
-          Rule::exists('persona')
-        ],
+        'idPersona' => 'required',
         'inmueble' => 'required',
         'fechaSol' => 'required',
         'fechaHoraInicio' => 'required',
         'fechaHoraFin' => 'required',
         'observacion' => 'max:100',
-        'costoReserva' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
+        'costoReserva' => 'required|regex:/^[0-9]+/',
         'costoTotal' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
         'medioPago' =>'required|in:1,2',
         'tipoEvento' => 'required|max:75',
@@ -377,8 +371,14 @@ class AlquilerInmuebleController extends Controller
         }
 
 
-        //obtengo la persona correspondiente al DNI ingresado
-        $persona = Persona::where('DNI', $request->DNI)->first();
+        //obtengo la persona correspondiente
+        $persona = Persona::where('id', $request->idPersona)->first();
+
+        //valido que la persona exista
+        if (!isset($persona)) {
+          return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
+        }
+
 
         //almaceno los nuevos datos en la BD
         $reservaOriginal->fechaSolicitud = $request->fechaSol;

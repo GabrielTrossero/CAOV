@@ -20,7 +20,7 @@
                                 <input type="text" id="tipo" value="inmueble" hidden>
                                 <button type="button" id="chequear"><i class="fas fa-check" style="color:blue"></i></button>
                             </form>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -40,12 +40,21 @@
                         {{ csrf_field() }}
 
                         <div class="form-group row">
-                            <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Solicitante') }}</label>
+                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNI" id="DNI" class="form-control" required maxlength="8" value="{{ old('DNI') }}">
+                                <select class="form-control" name="idPersona" id="idPersona">
+                                  <option selected disabled>Seleccionar Persona</option>
+                                  @foreach ($personas as $persona)
+                                    <option value="{{$persona->id}}">{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                  @endforeach
+                                </select>
 
-                                <span class="text-danger">{{$errors->first('DNI')}}</span>
+                                <span class="text-danger">{{$errors->first('idPersona')}}</span>
+
+                                @if (\Session::has('validarPersonaExiste'))
+                                  <span class="text-danger">{!! \Session::get('validarPersonaExiste') !!}</span>
+                                @endif
                             </div>
                         </div>
 

@@ -63,15 +63,24 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Persona') }}</label>
+                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') ?? $socio->persona->DNI }}" min="0" required>
+                                <select class="form-control" name="idPersona" id="idPersona">
+                                  <option disabled>Seleccionar Persona</option>
+                                  <option value="{{$socio->idPersona}}" selected>{{ $socio->persona->DNI ." - ". $socio->persona->apellido .", ". $socio->persona->nombres }}</option>
 
-                                <span class="text-danger">{{$errors->first('DNI')}}</span>
+                                  @foreach ($personas as $persona)
+                                    <option value="{{$persona->id}}">{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                  @endforeach
+                                </select>
 
-                                @if (\Session::has('validarIdPersona'))
-                                  <span class="text-danger">{!! \Session::get('validarIdPersona') !!}</span>
+                                <span class="text-danger">{{$errors->first('idPersona')}}</span>
+
+                                @if (\Session::has('validarPersonaExiste'))
+                                  <span class="text-danger">{!! \Session::get('validarPersonaExiste') !!}</span>
+                                @elseif (\Session::has('validarSocioNoExiste'))
+                                  <span class="text-danger">{!! \Session::get('validarSocioNoExiste') !!}</span>
                                 @endif
                             </div>
                         </div>

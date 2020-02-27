@@ -27,7 +27,7 @@
                                       @else
                                         <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
                                       @endif
-                                      
+
                                     @endforeach
                                 </select>
                                 <span class="text-danger">{!! \Session::get('errorIguales') !!}</span>
@@ -73,14 +73,14 @@
 
                                   <optgroup id="miembros-actuales" label="Miembros Actuales">
                                     @foreach ($grupo->socios as $socio)
-                                      <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->apellido .", ". $socio->persona->nombres }}</option>
                                     @endforeach
 
                                   </optgroup>
 
                                   <optgroup id="socios-sin-grupo" label="Socios sin Grupo Familiar">
                                     @foreach ($sociosSinGrupo as $socioSinGrupo)
-                                      <option value="{{ $socioSinGrupo->id }}">{{ $socioSinGrupo->persona->DNI." - ".$socioSinGrupo->persona->nombres." ".$socioSinGrupo->persona->apellido }}</option>
+                                      <option value="{{ $socioSinGrupo->id }}">{{ $socioSinGrupo->persona->DNI." - ".$socioSinGrupo->persona->apellido .", ". $socioSinGrupo->persona->nombres }}</option>
                                     @endforeach
                                   </optgroup>
 

@@ -66,8 +66,11 @@ class AlquilerMuebleController extends Controller
         //obtnego todos los medios de pagos
         $mediosDePagos = MedioDePago::all();
 
+        //tomo todas las personas para mostrarlas en el select
+        $personas = Persona::all();
+
         //se los envio a la vista
-        return view('alquilerMueble.agregar', compact(['muebles','mediosDePagos']));
+        return view('alquilerMueble.agregar', compact(['muebles','mediosDePagos', 'personas']));
     }
 
     /**
@@ -80,10 +83,7 @@ class AlquilerMuebleController extends Controller
     {
       //mensajes de error que se mostraran por pantalla
       $messages = [
-        'DNI.required' => 'Es necesario ingresar un DNI válido.',
-        'DNI.exists' => 'Error, ingrese el DNI de una Persona cargada en el sistema.',
-        'DNI.min' => 'Es necesario ingresar un DNI válido.',
-        'DNI.max' => 'Es necesario ingresar un DNI válido.',
+        'idPersona.required' => 'Es necesario ingresar una Persona.',
         'fechaSolicitud.required' => 'Es necesario ingresar una Fecha.',
         'tipoMueble.required' => 'Seleccione un Mueble.',
         'cantMueble.required' => 'Es necesario ingresar una Cantidad.',
@@ -97,14 +97,7 @@ class AlquilerMuebleController extends Controller
 
       //valido los datos ingresados
       $validacion = Validator::make($request->all(), [
-        'DNI' => [
-          'required',
-          'min:8',
-          'max:8',
-          //hace select count(*) from persona where DNI = $request->DNI
-          //para verificar que exista dicha persona
-          Rule::exists('persona')
-        ],
+        'idPersona' => 'required',
         'fechaSolicitud' => 'required',
         'tipoMueble' => 'required',
         'cantMueble' => 'required',
@@ -119,6 +112,16 @@ class AlquilerMuebleController extends Controller
       if($validacion->fails()){
         return redirect()->back()->withInput()->withErrors($validacion->errors());
       }
+
+
+      //obtengo la persona correspondiente
+      $persona = Persona::where('id', $request->idPersona)->first();
+
+      //valido que la persona exista
+      if (!isset($persona)) {
+        return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
+      }
+
 
       //valido si la fecha y hora de finalizacion es menor a la de inicio
       if ($request->fechaHoraInicio >= $request->fechaHoraFin) {
@@ -172,8 +175,6 @@ class AlquilerMuebleController extends Controller
       }
 
 
-      //obtengo la persona correspondiente al DNI ingresado
-      $persona = Persona::where('DNI', $request->DNI)->first();
 
       //alamceno el nuevo registro en la BD
       $reserva = new ReservaMueble;
@@ -260,8 +261,11 @@ class AlquilerMuebleController extends Controller
         //obtengo la reserva a editar
         $reserva = ReservaMueble::find($id);
 
+        //tomo todas las personas para mostrarlas en el select
+        $personas = Persona::all();
+
         //se lo envío a la vista
-        return view('alquilerMueble.editar', compact(['muebles','mediosDePagos','reserva']));
+        return view('alquilerMueble.editar', compact(['muebles','mediosDePagos','reserva', 'personas']));
     }
 
     /**
@@ -275,10 +279,7 @@ class AlquilerMuebleController extends Controller
     {
         //mensajes de error que se mostraran por pantalla
         $messages = [
-          'DNI.required' => 'Es necesario ingresar un DNI válido.',
-          'DNI.exists' => 'Error, ingrese el DNI de una Persona cargada en el sistema.',
-          'DNI.min' => 'Es necesario ingresar un DNI válido.',
-          'DNI.max' => 'Es necesario ingresar un DNI válido.',
+          'idPersona.required' => 'Es necesario ingresar una Persona.',
           'fechaSolicitud.required' => 'Es necesario ingresar una Fecha.',
           'tipoMueble.required' => 'Seleccione un Mueble.',
           'cantMueble.required' => 'Es necesario ingresar una Cantidad.',
@@ -291,14 +292,7 @@ class AlquilerMuebleController extends Controller
 
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
-          'DNI' => [
-            'required',
-            'min:8',
-            'max:8',
-            //hace select count(*) from persona where DNI = $request->DNI
-            //para verificar que exista dicha persona
-            Rule::exists('persona')
-          ],
+          'idPersona' => 'required',
           'fechaSolicitud' => 'required',
           'tipoMueble' => 'required',
           'cantMueble' => 'required',
@@ -363,8 +357,13 @@ class AlquilerMuebleController extends Controller
         }
 
 
-        //obtengo la persona correspondiente al DNI ingresado
-        $persona = Persona::where('DNI', $request->DNI)->first();
+        //obtengo la persona correspondiente
+        $persona = Persona::where('id', $request->idPersona)->first();
+
+        //valido que la persona exista
+        if (!isset($persona)) {
+          return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
+        }
 
         //actualizo dicho registro
         ReservaMueble::where('id', $request->id)

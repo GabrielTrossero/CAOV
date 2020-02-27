@@ -39,8 +39,18 @@ class SocioController extends Controller
         //almaceno todos deportes
         $deportes = Deporte::all();
 
+        $personas = Persona::all();
+
+        //filtro las personas para quedarme con las que no son socio
+        $personas = $personas->filter(function ($value, $key) {
+          if ($value->socio == null) {
+            return true;
+          }
+          else return false;
+        });
+
         //los envio a la vista del formulario
-        return view('socio.agregar', compact(['grupos','deportes']));
+        return view('socio.agregar', compact(['grupos','deportes', 'personas']));
     }
 
     /**
@@ -51,10 +61,6 @@ class SocioController extends Controller
      */
     public function store(Request $request)
     {
-        $socio = new Socio;
-        $persona = new Persona;
-        $socioRetornado = new Socio;
-
         //mensajes de error que se mostraran por pantalla
         $messages = [
           'numSocio.required' => 'Es necesario ingresar un Número de Socio.',
@@ -65,10 +71,7 @@ class SocioController extends Controller
           'vitalicio.min' => 'Ingrese una opción válida.',
           'vitalicio.max' => 'Ingrese una opción válida.',
           'vitalicio.in' => 'Ingrese una opción válida.',
-          'DNI.required' => 'Es necesario ingresar un DNI válido.',
-          'DNI.min' => 'Es necesario ingresar un DNI válido.',
-          'DNI.max' => 'Es necesario ingresar un DNI válido.',
-          'DNI.exists' => 'Es necesario que dicho Socio esté cargado como Persona.',
+          'idPersona.required' => 'Es necesario ingresar una Persona.',
           'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
         ];
 
@@ -78,13 +81,7 @@ class SocioController extends Controller
         'fechaNac' => 'required',
         'oficio' => 'max:75',
         'vitalicio' => 'required|min:1|max:1|in:s,n',
-        'DNI' => ['required',
-          'min:8',
-          'max:8',
-          //hace select count(*) from persona where DNI = $request->DNI
-          //para verificar que exista dicha persona
-          Rule::exists('persona')
-        ],
+        'idPersona' => 'required',
         'idGrupoFamiliar' => 'required'
         ], $messages);
 
@@ -108,21 +105,28 @@ class SocioController extends Controller
                 return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
               }
         }
-        
 
 
-        //obtengo la persona correspondiente al DNI ingresado
-        $persona = Persona::where('DNI', $request->DNI)->first();
 
-        //valido que ya no haiga otro Socio con dicha idPersona
-        $validarIdPersona = Socio::where('idPersona', $persona->id)->first();
+        //obtengo la persona correspondiente
+        $persona = Persona::where('id', $request->idPersona)->first();
 
-        if(isset($validarIdPersona)){
-          return redirect()->back()->withInput()->with('validarIdPersona', 'Error, ya dicho Socio.');
+        //valido que la persona exista
+        if (!isset($persona)) {
+          return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
+        }
+        else {
+          //valido que ya no haya otro Socio con dicho idPersona
+          $socio = Socio::where('idPersona', $persona->id)->first();
+
+          if(isset($socio)){
+            return redirect()->back()->withInput()->with('validarSocioNoExiste', 'Error, dicho Socio ya existe.');
+          }
         }
 
 
         //almaceno al socio y el deporte que realiza
+        $socio = new Socio;
         $socio->numSocio = $request->numSocio;
         $socio->fechaNac = $request->fechaNac;
         $socio->oficio = $request->oficio;
@@ -219,6 +223,16 @@ class SocioController extends Controller
         //busco el socio
         $socio = Socio::find($id);
 
+        $personas = Persona::all();
+
+        //filtro las personas para quedarme con las que no son socio
+        $personas = $personas->filter(function ($value, $key) {
+          if ($value->socio == null) {
+            return true;
+          }
+          else return false;
+        });
+
         //almaceno todos los grupos familiares
         $grupos = GrupoFamiliar::all();
 
@@ -229,7 +243,7 @@ class SocioController extends Controller
         $socioDeporte = SocioDeporte::all();
 
         //se lo envío a la vista
-        return view('socio.editar', compact(['socio','grupos','deportes','socioDeporte']));
+        return view('socio.editar', compact(['socio', 'personas', 'grupos','deportes','socioDeporte']));
     }
 
     /**
@@ -251,18 +265,11 @@ class SocioController extends Controller
         'vitalicio.min' => 'Ingrese una opción válida.',
         'vitalicio.max' => 'Ingrese una opción válida.',
         'vitalicio.in' => 'Ingrese una opción válida.',
-        'DNI.required' => 'Es necesario ingresar un DNI válido.',
-        'DNI.min' => 'Es necesario ingresar un DNI válido.',
-        'DNI.max' => 'Es necesario ingresar un DNI válido.',
-        'DNI.exists' => 'Es necesario que dicho Socio esté cargado como Persona.',
+        'idPersona.required' => 'Es necesario ingresar una Persona.',
         'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
         'activo.required' => 'Es necesario ingresar el Estado del Socio.',
         'activo.in' => 'Es necesario ingresar valores válidos para el Estado del Socio.'
       ];
-
-      //para cargar el id de la persona a traves del DNI ingresado
-      $persona = new Persona;
-      $persona = Persona::where('DNI', $request->DNI)->first();
 
       //valido los datos ingresados
       $validacion = Validator::make($request->all(),[
@@ -272,13 +279,7 @@ class SocioController extends Controller
       ],
       'oficio' => 'max:75',
       'vitalicio' => 'required|min:1|max:1|in:s,n',
-      'DNI' => ['required',
-        'min:8',
-        'max:8',
-        //hace select count(*) from persona where DNI = $request->DNI
-        //para verificar que exista dicha persona
-        Rule::exists('persona')
-      ],
+      'idPersona' => 'required',
       'idGrupoFamiliar' => 'required',
       'activo' => 'required|in:0,1'
       ], $messages);
@@ -305,29 +306,37 @@ class SocioController extends Controller
       }
 
 
-      //obtengo la persona correspondiente al DNI ingresado
-      $persona = Persona::where('DNI', $request->DNI)->first();
+      //obtengo la persona correspondiente
+      $persona = Persona::where('id', $request->idPersona)->first();
 
-      //obtengo el socio actual (sin actualizar)
-      $socio = Socio::where('id', $request->id)->first();
+      //valido que la persona exista
+      if (!isset($persona)) {
+        return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
+      }
+      else {
+        //obtengo el Socio actual (sin actualizar)
+        $socio = Socio::where('id', $request->id)->first();
 
-      //valido que ya no haya otro Socio con dicha idPersona, exepto el actual
-      $validarIdPersona = Socio::where('idPersona', $persona->id)
-                              ->where('id', '!=', $socio->id)->first();
+        //valido que ya no haya otro Socio con dicho idPersona
+        $socio = User::where('idPersona', $persona->id)
+                                ->where('id', '!=', $socio->id)->first();
 
-      if(isset($validarIdPersona)){
-        return redirect()->back()->withInput()->with('validarIdPersona', 'Error, ya dicho Socio.');
+        if(isset($socio)){
+          return redirect()->back()->withInput()->with('validarSocioNoExiste', 'Error, dicho Socio ya existe.');
+        }
       }
 
+      //obtengo el socio correspondiente
+      $socio = Socio::where('id', $request->id)->first();
       $idGrupo = $socio->idGrupoFamiliar;
-      
+
       //si se decide que el socio no tiene grupo
       if (is_null($request->idGrupoFamiliar)) {
         //si el socio tiene grupo y es pareja, setea el atributo pareja del grupo a null
         if (isset($socio->idGrupoFamiliar) && ($socio->grupoFamiliar->pareja == $socio->id)) {
           $grupo = GrupoFamiliar::find($socio->idGrupoFamiliar);
           $grupo->pareja = null;
-          $grupo->save(); 
+          $grupo->save();
         }
 
         //si el socio no es el titular, se asigna null al atributo idGrupoFamiliar
