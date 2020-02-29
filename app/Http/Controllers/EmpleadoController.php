@@ -60,6 +60,7 @@ class EmpleadoController extends Controller
           'username.unique' => 'Ya existe dicho nombre.',
           'username.min' => 'El nombre debe contener al menos 8 caracteres.',
           'username.max' => 'Ingrese un nombre de usuario válido.',
+          'email.required' => 'Es necesario ingresar una dirección de email.',
           'email.email' => 'El Email no es único o válido.',
           'email.unique' => 'El Email no es único o válido.',
           'email.max' => 'El Email no es único o válido.',
@@ -77,7 +78,7 @@ class EmpleadoController extends Controller
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
           'username' => 'required|min:8|max:75|unique:users',
-          'email' => 'email|unique:users|max:75',
+          'email' => 'required|email|unique:users|max:75',
           'idPersona' => 'required',
           'password' => 'required|min:8|max:80',
           'passwordRepeat' => 'required|min:8|max:80|same:password',
@@ -196,6 +197,7 @@ class EmpleadoController extends Controller
           'username.unique' => 'Ya existe dicho nombre.',
           'username.min' => 'El nombre debe contener al menos 8 caracteres.',
           'username.max' => 'Ingrese un nombre de usuario válido.',
+          'email.required' => 'Es necesario ingresar una dirección de email.',
           'email.email' => 'El Email no es único o válido.',
           'email.unique' => 'El Email no es único o válido.',
           'email.max' => 'El Email no es único o válido.',
@@ -216,6 +218,7 @@ class EmpleadoController extends Controller
             Rule::unique('users')->ignore($request->id)
           ],
           'email' => [
+            'required',
             'email',
             'max:75',
             Rule::unique('users')->ignore($request->id)
