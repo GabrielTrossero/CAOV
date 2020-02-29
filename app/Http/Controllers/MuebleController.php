@@ -153,7 +153,12 @@ class MuebleController extends Controller
 
       //verifico si hay que agregar, restar o no hacer nada
       if ($request->accionCantidad == 1) {
-        $request->cantidadModificar = $mueble->cantidad - $request->cantidadModificar;
+        if($request->cantidadModificar > $mueble->cantidad){ //verifico para que no quede negativa la cantidad
+          return redirect()->back()->withInput()->with('validarCantidad', 'Error, la cantidad del Mueble no puede ser negativa.');
+        }
+        else {
+          $request->cantidadModificar = $mueble->cantidad - $request->cantidadModificar;
+        }
       }
       elseif ($request->accionCantidad == 2) {
         $request->cantidadModificar = $mueble->cantidad + $request->cantidadModificar;

@@ -55,6 +55,10 @@
                                 <input type="number" name="cantidadModificar" id="cantidadModificar" class="form-control" value="{{ old('cantidadModificar') }}" min="1">
 
                                 <span class="text-danger">{{$errors->first('cantidadModificar')}}</span>
+
+                                @if (\Session::has('validarCantidad'))
+                                  <span class="text-danger">{!! \Session::get('validarCantidad') !!}</span>
+                                @endif
                             </div>
                         </div>
 
