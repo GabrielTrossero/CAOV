@@ -72,7 +72,7 @@ class SocioController extends Controller
           'vitalicio.max' => 'Ingrese una opción válida.',
           'vitalicio.in' => 'Ingrese una opción válida.',
           'idPersona.required' => 'Es necesario ingresar una Persona.',
-          'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
+          'idGrupoFamiliar.required_if' => 'Es necesario ingresar una opción.',
         ];
 
         //valido los datos ingresados
@@ -82,7 +82,7 @@ class SocioController extends Controller
         'oficio' => 'max:75',
         'vitalicio' => 'required|min:1|max:1|in:s,n',
         'idPersona' => 'required',
-        'idGrupoFamiliar' => 'required'
+        'idGrupoFamiliar' => 'required_if:vitalicio,==,n'
         ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
@@ -266,7 +266,7 @@ class SocioController extends Controller
         'vitalicio.max' => 'Ingrese una opción válida.',
         'vitalicio.in' => 'Ingrese una opción válida.',
         'idPersona.required' => 'Es necesario ingresar una Persona.',
-        'idGrupoFamiliar.required' => 'Es necesario ingresar una opción.',
+        'idGrupoFamiliar.required_if' => 'Es necesario ingresar una opción.',
         'activo.required' => 'Es necesario ingresar el Estado del Socio.',
         'activo.in' => 'Es necesario ingresar valores válidos para el Estado del Socio.'
       ];
@@ -280,7 +280,7 @@ class SocioController extends Controller
       'oficio' => 'max:75',
       'vitalicio' => 'required|min:1|max:1|in:s,n',
       'idPersona' => 'required',
-      'idGrupoFamiliar' => 'required',
+      'idGrupoFamiliar' => 'required_if:vitalicio,==,n',
       'activo' => 'required|in:0,1'
       ], $messages);
 
@@ -318,8 +318,8 @@ class SocioController extends Controller
         $socio = Socio::where('id', $request->id)->first();
 
         //valido que ya no haya otro Socio con dicho idPersona
-        $socio = User::where('idPersona', $persona->id)
-                                ->where('id', '!=', $socio->id)->first();
+        $socio = Socio::where('idPersona', $persona->id)
+                        ->where('id', '!=', $socio->id)->first();
 
         if(isset($socio)){
           return redirect()->back()->withInput()->with('validarSocioNoExiste', 'Error, dicho Socio ya existe.');
@@ -332,6 +332,11 @@ class SocioController extends Controller
 
       //si se decide que el socio no tiene grupo
       if (is_null($request->idGrupoFamiliar)) {
+        //si el socio es titular redirijo con error
+        if(isset($socio->idGrupoFamiliar) && ($socio->grupoFamiliar->titular == $socio->id)) {
+          return redirect()->back()->withInput()->with('esSocioTitular', 'Error, dicho Socio es el titular del grupo familiar. Para eliminarlo, edite su condición en el mismo.');
+        }
+
         //si el socio tiene grupo y es pareja, setea el atributo pareja del grupo a null
         if (isset($socio->idGrupoFamiliar) && ($socio->grupoFamiliar->pareja == $socio->id)) {
           $grupo = GrupoFamiliar::find($socio->idGrupoFamiliar);
@@ -340,7 +345,7 @@ class SocioController extends Controller
         }
 
         //si el socio no es el titular, se asigna null al atributo idGrupoFamiliar
-        if ($socio->id != $socio->grupoFamiliar->titular) {
+        if (isset($socio->idGrupoFamiliar) && ($socio->id != $socio->grupoFamiliar->titular)) {
           $idGrupo = null;
         }
       }

@@ -117,6 +117,10 @@
                               @if (\Session::has('validarGrupoFamiliar'))
                                 <span class="text-danger">{!! \Session::get('validarGrupoFamiliar') !!}</span>
                               @endif
+
+                              @if (\Session::has('esSocioTitular'))
+                                <span class="text-danger">{!! \Session::get('esSocioTitular') !!}</span>
+                              @endif
                             </div>
                         </div>
 
