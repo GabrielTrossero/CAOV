@@ -25,7 +25,12 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ old('numRecibo') }}" required>
+
                                 <span class="text-danger">{{$errors->first('numRecibo')}}</span>
+
+                                @if (\Session::has('validarNumRecibo'))
+                                  <span class="text-danger">{!! \Session::get('validarNumRecibo') !!}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -34,6 +39,7 @@
 
                             <div class="col-md-6">
                                 <input type="date" name="fecha" id="fecha" class="form-control" value="{{ old( 'fecha') }}" required>
+
                                 <span class="text-danger">{{$errors->first('fecha')}}</span>
                             </div>
                         </div>
@@ -43,6 +49,7 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="monto" id="monto" class="form-control" value="{{ old( 'monto') }}" required>
+
                                 <span class="text-danger">{{$errors->first('monto')}}</span>
                             </div>
                         </div>
@@ -52,6 +59,7 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="descripcion" id="descripcion" class="form-control" value="{{ old( 'descripcion') }}" required>
+
                                 <span class="text-danger">{{$errors->first('descripcion')}}</span>
                             </div>
                         </div>
@@ -64,6 +72,7 @@
                                   <option value="1" selected>Ingreso</option>
                                   <option value="2">Egreso</option>
                                 </select>
+                                
                                 <span class="text-danger">{{$errors->first('tipoRegistro')}}</span>
                             </div>
                         </div>

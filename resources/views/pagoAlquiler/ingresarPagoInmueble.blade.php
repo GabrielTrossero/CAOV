@@ -208,6 +208,10 @@
                                 <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ $reservaInmueble->numRecibo }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('numRecibo')}}</span>
+
+                                @if (\Session::has('validarNumRecibo'))
+                                  <span class="text-danger">{!! \Session::get('validarNumRecibo') !!}</span>
+                                @endif
                             </div>
                         </div>
 

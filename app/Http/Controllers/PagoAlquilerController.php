@@ -10,48 +10,13 @@ use App\Mueble;
 use App\MedioDePago;
 use App\ReservaInmueble;
 use App\Inmueble;
+use App\MovExtras;
 use PDF;
 use Mail;
 use App\Mail\SendMail;
 
 class PagoAlquilerController extends Controller
 {
-    /**
-    * Display the list of Alquileres to choose which of them will be paid.
-    *
-    * @return \Illuminate\Http\Response
-    */
-    public function index()
-    {
-      return view('pagoAlquiler.menu');
-    }
-
-    /**
-    * Display the resource list
-    *
-   * @return \Illuminate\Http\Response
-    */
-    public function getShowMueble()
-    {
-      //obtengo todas las reservas, menos las que ya tienen N° de recibo, o sea, están pagadas
-      $alquileresMuebles = ReservaMueble::where('numRecibo', null)->get();
-
-      return view('pagoAlquiler.listaMuebles', compact('alquileresMuebles'));
-    }
-
-    /**
-    * Display the resource list
-    *
-    * @return \Illuminate\Http\Response
-    */
-    public function getShowInmueble()
-    {
-      //obtengo todas las reservas, menos las que ya tienen N° de recibo, o sea, están pagadas
-      $reservasInmuebles = ReservaInmueble::where('numRecibo', null)->get();
-
-      return view('pagoAlquiler.listaInmuebles', compact('reservasInmuebles'));
-    }
-
     /**
     * Show the options on the specified resource
     *
@@ -97,6 +62,31 @@ class PagoAlquilerController extends Controller
         return redirect()->back()->withInput()->withErrors($validacion->errors());
       }
 
+
+      //compruebo que el numRecibo no se repita en AlquilerInmueble y en Registros, y en AqluilerMueble compruebo que no haya otro con el mismo numRecibo y ademas con el mismo tipo de idMueble (porque en los alquileres de muebles si se puede repetir el numRecibo)
+      $alquileresMueble = ReservaMueble::where('numRecibo', $request->numRecibo)->get();
+      $alquileresInmueble = ReservaInmueble::all();
+      $registros = MovExtras::all();
+
+      foreach ($alquileresMueble as $alquilerMueble) {
+        if ($alquilerMueble->mueble->id == $request->tipoMueble) {
+          return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, ya se ha hecho otra reserva de '. $alquilerMueble->mueble->nombre .' para dicho Numero de Recibo');
+        }
+      }
+
+      foreach ($alquileresInmueble as $alquilerInmueble) {
+        if ($alquilerInmueble->numRecibo == $request->numRecibo) {
+          return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Inmueble.');
+        }
+      }
+
+      foreach ($registros as $registro) {
+        if ($registro->numRecibo == $request->numRecibo) {
+          return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
+        }
+      }
+
+
       //actualizo dicho registro
       ReservaMueble::where('id', $request->id)
             ->update([
@@ -105,7 +95,7 @@ class PagoAlquilerController extends Controller
 
       //tomo la reserva pagada
       $reservaPagada = ReservaMueble::find($request->id);
-      
+
       //envío de mail con el detalle del recibo del alquiler del mueble
       if (isset($reservaPagada->persona->email)) {
         $numSocio = null;
@@ -130,7 +120,7 @@ class PagoAlquilerController extends Controller
         );
 
         Mail::to($arrayReserva['emailTo'])->send(new SendMail($arrayReserva, 'mueble'));
-        
+
         /* NO USADO
         Mail::send('emails.mueble', ['data' => $arrayReserva], function ($message) use ($arrayReserva) {
           $message->to($arrayReserva['emailTo'])->from('dreherfrancisco@gmail.com')->subject('Hola');
@@ -141,12 +131,12 @@ class PagoAlquilerController extends Controller
         Mail::send('emails.mueble', $arrayReserva, function ($message) use ($arrayReserva) {
           $message->from('comprobantes.caov@gmail.com', 'Club Atlético Oro Verde');
           $message->to($arrayReserva['emailTo']);
-          $message->subject('Pago de Alquiler de Muebles'); 
+          $message->subject('Pago de Alquiler de Muebles');
         });*/
       }
-      
+
       //redirijo a la vista individual
-      return redirect()->action('AlquilerMuebleController@getShowId', $request->id); 
+      return redirect()->action('AlquilerMuebleController@getShowId', $request->id);
     }
 
     /**
@@ -194,6 +184,33 @@ class PagoAlquilerController extends Controller
         return redirect()->back()->withInput()->withErrors($validacion->errors());
       }
 
+
+
+      //compruebo que el numRecibo no se repita
+      $alquileresMueble = ReservaMueble::all();
+      $alquileresInmueble = ReservaInmueble::all();
+      $registros = MovExtras::all();
+
+      foreach ($alquileresMueble as $alquilerMueble) {
+        if ($alquilerMueble->numRecibo == $request->numRecibo) {
+          return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Mueble.');
+        }
+      }
+
+      foreach ($alquileresInmueble as $alquilerInmueble) {
+        if ($alquilerInmueble->numRecibo == $request->numRecibo) {
+          return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Inmueble.');
+        }
+      }
+
+      foreach ($registros as $registro) {
+        if ($registro->numRecibo == $request->numRecibo) {
+          return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
+        }
+      }
+
+
+
       //actualizo dicho registro
       ReservaInmueble::where('id', $request->id)
             ->update([
@@ -231,41 +248,41 @@ class PagoAlquilerController extends Controller
 
         Mail::to($arrayReserva['emailTo'])->send(new SendMail($arrayReserva, 'inmueble'));
       }
-      
+
       //redirijo a la vista individual
       return redirect()->action('AlquilerInmuebleController@getShowId', $request->id);
-      
+
     }
 
     /**
      * genera el pdf para el id de la reserva del inmueble pagada dada
-     * 
+     *
      * @param Request $request
-     * 
+     *
      * @return PDF
      */
     public function generarPdfInmueble($id) {
       //tomo la reserva pagada
       $reservaPagada = ReservaInmueble::find($id);
-      
+
       $pdf = PDF::loadView('pdf.comprobantes.inmueble', ['recibo' => $reservaPagada]);
-      
+
       return $pdf->download('comprobante-alquiler-inmueble.pdf');
     }
 
     /**
      * genera el pdf para el id de la reserva del mueble pagada dada
-     * 
+     *
      * @param Request $request
-     * 
+     *
      * @return PDF
      */
     public function generarPdfMueble($id) {
       //tomo la reserva pagada
       $reservaPagada = ReservaMueble::find($id);
-      
+
       $pdf = PDF::loadView('pdf.comprobantes.mueble', ['recibo' => $reservaPagada]);
-      
+
       return $pdf->download('comprobante-alquiler-mueble.pdf');
     }
 }

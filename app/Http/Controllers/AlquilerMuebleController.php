@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rule;
 use App\ReservaMueble;
+use App\ReservaInmueble;
+use App\MovExtras;
 use App\MedioDePago;
 use App\Mueble;
 use App\Persona;
@@ -364,6 +366,31 @@ class AlquilerMuebleController extends Controller
         if (!isset($persona)) {
           return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
         }
+
+
+        //compruebo que el numRecibo no se repita en AlquilerInmueble y en Registros, y en AqluilerMueble compruebo que no haya otro con el mismo numRecibo y ademas con el mismo tipo de idMueble (porque en los alquileres de muebles si se puede repetir el numRecibo)
+        $alquileresMueble = ReservaMueble::where('numRecibo', $request->numRecibo)->get();
+        $alquileresInmueble = ReservaInmueble::all();
+        $registros = MovExtras::all();
+
+        foreach ($alquileresMueble as $alquilerMueble) {
+          if (($alquilerMueble->mueble->id == $request->tipoMueble) && ($alquilerMueble->id != $request->id)) {
+            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, ya se ha hecho otra reserva de '. $alquilerMueble->mueble->nombre .' para dicho Numero de Recibo');
+          }
+        }
+
+        foreach ($alquileresInmueble as $alquilerInmueble) {
+          if ($alquilerInmueble->numRecibo == $request->numRecibo) {
+            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Inmueble.');
+          }
+        }
+
+        foreach ($registros as $registro) {
+          if ($registro->numRecibo == $request->numRecibo) {
+            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
+          }
+        }
+
 
         //actualizo dicho registro
         ReservaMueble::where('id', $request->id)

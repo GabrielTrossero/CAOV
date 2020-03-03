@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rule;
 use App\Inmueble;
 use App\ReservaInmueble;
+use App\ReservaMueble;
+use App\MovExtras;
 use App\MedioDePago;
 use App\Persona;
 use Carbon\Carbon;
@@ -378,6 +380,31 @@ class AlquilerInmuebleController extends Controller
         if (!isset($persona)) {
           return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
         }
+
+
+        //compruebo que el numRecibo no se repita
+        $alquileresMueble = ReservaMueble::all();
+        $alquileresInmueble = ReservaInmueble::all();
+        $registros = MovExtras::all();
+
+        foreach ($alquileresMueble as $alquilerMueble) {
+          if ($alquilerMueble->numRecibo == $request->numRecibo) {
+            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Mueble.');
+          }
+        }
+
+        foreach ($alquileresInmueble as $alquilerInmueble) {
+          if (($alquilerInmueble->numRecibo == $request->numRecibo) && ($alquilerInmueble->id != $request->id)) {
+            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Inmueble.');
+          }
+        }
+
+        foreach ($registros as $registro) {
+          if ($registro->numRecibo == $request->numRecibo) {
+            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
+          }
+        }
+
 
 
         //almaceno los nuevos datos en la BD

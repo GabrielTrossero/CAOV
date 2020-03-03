@@ -14,6 +14,8 @@
 
                         <input type="hidden" name="id" value="{{ $reserva->id }}">
 
+                        <input type="hidden" name="tipoMueble" value="{{ $reserva->idMueble }}">
+
                         <div class="form-group row">
                             <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Solicitante') }}</label>
 
@@ -129,6 +131,10 @@
                                 <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ $reserva->numRecibo }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('numRecibo')}}</span>
+
+                                @if (\Session::has('validarNumRecibo'))
+                                  <span class="text-danger">{!! \Session::get('validarNumRecibo') !!}</span>
+                                @endif
                             </div>
                         </div>
 
