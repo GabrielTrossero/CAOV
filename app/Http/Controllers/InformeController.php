@@ -196,28 +196,6 @@ class InformeController extends Controller
    */
   public function getIngresosEgresos()
   {
-    /*
-      //tomo todos los movimientos extras
-      $movExtras = MovExtras::all();
-
-      //tomo los alquileres de inmueble pagados
-      $alquileresInmueblePagos = ReservaInmueble::selectRaw('MONTH(fechaHoraInicio) as mes, YEAR(fechaHoraInicio) as anio, SUM(costoTotal) as total')
-                                                  ->where('numRecibo','<>',null)
-                                                  ->groupBy(DB::raw('mes, anio'))->get();
-
-      //tomo los alquileres de mueble pagados
-      $alquileresMueblePagos = ReservaMueble::selectRaw('MONTH(fechaHoraInicio) as mes, YEAR(fechaHoraInicio) as anio, SUM(costoTotal) as total')              
-                                              ->where('numRecibo','<>',null)
-                                              ->groupBy(DB::raw('mes, anio'))->get();
-
-      //tomo los pagos de cuotas
-      $cuotasPagadas = ComprobanteCuota::selectRaw("MONTH(comprobantecuota.fechaPago) as mes, YEAR(comprobantecuota.fechaPago) as anio, SUM(CASE WHEN comprobantecuota.tipo = 'a' THEN montocuota.monto - (montocuota.monto * (montocuota.dtoAnio / 100)) WHEN comprobantecuota.tipo = 's' THEN montocuota.monto -(montocuota.monto * (montocuota.dtoSemestre / 100)) WHEN comprobantecuota.tipo = 'm' THEN montocuota.monto END) as total")
-                                         ->join('montocuota','montocuota.id','=','comprobantecuota.idMontoCuota')
-                                         ->groupBy(DB::raw('mes, anio'))->get();
-
-      //redirijo a la vistas con los datos de ingresos/egresos
-      return view('informe.ingresosEgresos', compact('movExtras', 'alquileresInmueblePagos', 'alquileresMueblePagos', 'cuotasPagadas'));
-    */
     return view('informe.ingresosEgresos');
   }
 

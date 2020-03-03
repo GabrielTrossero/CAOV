@@ -854,7 +854,9 @@ class CuotaController extends Controller
    */
   private function ultimoMesPagado($socio){
     $fecha = new ComprobanteCuota;
-    $fecha = ComprobanteCuota::select('fechaMesAnio')->where('idSocio', $socio->id)->where('inhabilitada', false)->orderBy('fechaMesAnio', 'DESC')->first();
+    $fecha = ComprobanteCuota::select('fechaMesAnio')->where('idSocio', $socio->id)
+                               ->where('inhabilitada', false)->orderBy('fechaMesAnio', 'DESC')
+                               ->where('fechaPago', '<>', null)->first();
 
     $socio->fechaUltimoPago = $fecha['fechaMesAnio'];
 

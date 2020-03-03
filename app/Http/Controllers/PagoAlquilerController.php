@@ -120,19 +120,6 @@ class PagoAlquilerController extends Controller
         );
 
         Mail::to($arrayReserva['emailTo'])->send(new SendMail($arrayReserva, 'mueble'));
-
-        /* NO USADO
-        Mail::send('emails.mueble', ['data' => $arrayReserva], function ($message) use ($arrayReserva) {
-          $message->to($arrayReserva['emailTo'])->from('dreherfrancisco@gmail.com')->subject('Hola');
-        });
-        */
-
-        /* NO USADO
-        Mail::send('emails.mueble', $arrayReserva, function ($message) use ($arrayReserva) {
-          $message->from('comprobantes.caov@gmail.com', 'Club Atlético Oro Verde');
-          $message->to($arrayReserva['emailTo']);
-          $message->subject('Pago de Alquiler de Muebles');
-        });*/
       }
 
       //redirijo a la vista individual

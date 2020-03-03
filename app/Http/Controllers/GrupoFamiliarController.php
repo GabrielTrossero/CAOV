@@ -258,10 +258,6 @@ class GrupoFamiliarController extends Controller
      */
     private function calculaEdad($socio)
     {
-        /*asigna a $edad, la edad del socio calculada a partir de su fecha de nacimiento
-          $edad = Carbon::parse($socio->fechaNac)->age;
-        */
-
         // calcula la edad del socio segun su categoria
         $edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
 
