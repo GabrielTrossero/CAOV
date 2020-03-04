@@ -18,6 +18,17 @@
                           <input type="hidden" name="id" value="{{ $reservaInmueble->id }}">
                         @endif
 
+                        <!--para mostrar las distintas alertas-->
+                        <div class="form-group row">
+                            <label class="col-md-1 col-form-label text-md-right"></label>
+                            <div class="col-md-10">
+
+                              <div class="alert alert-warning">
+                                {{ 'ACLARACIÓN: El costo Total incluye el costo de la Reserva.' }}
+                              </div>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Solicitante') }}</label>
 
@@ -212,6 +223,17 @@
                                 @if (\Session::has('validarNumRecibo'))
                                   <span class="text-danger">{!! \Session::get('validarNumRecibo') !!}</span>
                                 @endif
+                            </div>
+                        </div>
+
+                        <!--para mostrar las distintas alertas-->
+                        <div class="form-group row">
+                            <label class="col-md-1 col-form-label text-md-right"></label>
+                            <div class="col-md-10">
+
+                              <div class="alert alert-danger" align="center">
+                                {{ 'MONTO A PAGAR: $'. ($reservaInmueble->costoTotal - $reservaInmueble->costoReserva) }}
+                              </div>
                             </div>
                         </div>
 

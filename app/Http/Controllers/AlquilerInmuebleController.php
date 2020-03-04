@@ -184,6 +184,12 @@ class AlquilerInmuebleController extends Controller
         }
 
 
+        //valido que el costo de la reserva no sea mayor al del costo total
+        if ($request->costoReserva > $request->costoTotal) {
+          return redirect()->back()->withInput()->with('validarMonto', 'Error, el costo de la Reserva no puede ser mayor al costo Total del alquiler.');
+        }
+
+
         //alamceno el nuevo registro en la BD
         $reservaInmueble = new ReservaInmueble;
 
@@ -403,6 +409,12 @@ class AlquilerInmuebleController extends Controller
           if ($registro->numRecibo == $request->numRecibo) {
             return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
           }
+        }
+
+
+        //valido que el costo de la reserva no sea mayor al del costo total
+        if ($request->costoReserva > $request->costoTotal) {
+          return redirect()->back()->withInput()->with('validarMonto', 'Error, el costo de la Reserva no puede ser mayor al costo Total del alquiler.');
         }
 
 

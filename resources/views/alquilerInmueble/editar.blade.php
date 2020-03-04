@@ -40,6 +40,17 @@
 
                         <input type="hidden" name="id" value="{{ $reservaInmueble->id }}">
 
+                        <!--para mostrar las distintas alertas-->
+                        <div class="form-group row">
+                            <label class="col-md-1 col-form-label text-md-right"></label>
+                            <div class="col-md-10">
+
+                              <div class="alert alert-warning">
+                                {{ 'ACLARACIÓN: El costo Total incluye el costo de la Reserva.' }}
+                              </div>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
 
@@ -134,6 +145,10 @@
                                 <input type="number" name="costoReserva" id="costoReserva" class="form-control" required value="{{ old('costoReserva') ?? $reservaInmueble->costoReserva }}">
 
                                 <span class="text-danger">{{$errors->first('costoReserva')}}</span>
+
+                                @if (\Session::has('validarMonto'))
+                                  <span class="text-danger">{!! \Session::get('validarMonto') !!}</span>
+                                @endif
                             </div>
                         </div>
 
