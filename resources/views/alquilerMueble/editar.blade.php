@@ -171,7 +171,11 @@
                             <label for="numRecibo" class="col-md-4 col-form-label text-md-right">{{ __('N° Recibo') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ old('numRecibo') ?? $reserva->numRecibo }}" min="0">
+                                @if($reserva->numRecibo == null)
+                                  <input type="number" name="numRecibo" id="numRecibo" class="form-control" placeholder="El alquiler no ha sido pagado" disabled>
+                                @else
+                                  <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ old('numRecibo') ?? $reserva->numRecibo }}" min="0">
+                                @endif
 
                                 <span class="text-danger">{{$errors->first('numRecibo')}}</span>
 

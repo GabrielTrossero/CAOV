@@ -388,26 +388,29 @@ class AlquilerInmuebleController extends Controller
         }
 
 
-        //compruebo que el numRecibo no se repita
-        $alquileresMueble = ReservaMueble::all();
-        $alquileresInmueble = ReservaInmueble::all();
-        $registros = MovExtras::all();
+        if ($request->numRecibo != null) {  //porque no es necesario comprobar cuando el alquiler no se ha pagado o se borra el numRecibo
 
-        foreach ($alquileresMueble as $alquilerMueble) {
-          if ($alquilerMueble->numRecibo == $request->numRecibo) {
-            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Mueble.');
+          //compruebo que el numRecibo no se repita
+          $alquileresMueble = ReservaMueble::all();
+          $alquileresInmueble = ReservaInmueble::all();
+          $registros = MovExtras::all();
+
+          foreach ($alquileresMueble as $alquilerMueble) {
+            if ($alquilerMueble->numRecibo == $request->numRecibo) {
+              return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Mueble.');
+            }
           }
-        }
 
-        foreach ($alquileresInmueble as $alquilerInmueble) {
-          if (($alquilerInmueble->numRecibo == $request->numRecibo) && ($alquilerInmueble->id != $request->id)) {
-            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Inmueble.');
+          foreach ($alquileresInmueble as $alquilerInmueble) {
+            if (($alquilerInmueble->numRecibo == $request->numRecibo) && ($alquilerInmueble->id != $request->id)) {
+              return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Inmueble.');
+            }
           }
-        }
 
-        foreach ($registros as $registro) {
-          if ($registro->numRecibo == $request->numRecibo) {
-            return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
+          foreach ($registros as $registro) {
+            if ($registro->numRecibo == $request->numRecibo) {
+              return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
+            }
           }
         }
 
