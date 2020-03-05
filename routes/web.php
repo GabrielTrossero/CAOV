@@ -82,14 +82,6 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('generateCuotasAuto', 'CuotaController@generateCuotasAuto');
         Route::get('pdf_pago_cuota/{id}', 'CuotaController@generarPdfCuota');
     });
-/*
-    //Rutas para Pago de Cuota
-    Route::group(['prefix' => 'pagocuota'], function()
-    {
-        Route::get('show', 'PagoCuotaController@getShow');
-        Route::get('pago/{id}', 'PagoCuotaController@getPago');
-        Route::post('pago', 'PagoCuotaController@postPago');
-    });*/
 
 
     //Rutas para Pago de Alquiler
@@ -106,11 +98,15 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::post('pagoinmueble', 'PagoAlquilerController@postPagoInmueble');
     });
 
+
     //Rutas para Registros
     Route::group(['prefix' => 'registro'], function()
     {
         Route::get('/', 'RegistroController@index');
-        Route::post('/', 'RegistroController@postRegistro');
+        Route::get('create', 'RegistroController@create');
+        Route::post('create', 'RegistroController@store');
+        Route::get('show', 'RegistroController@getShow');
+        Route::get('delete/{id}', 'RegistroController@destroy');
     });
 
     //Grupo de Rutas con el Middleware "admin"
