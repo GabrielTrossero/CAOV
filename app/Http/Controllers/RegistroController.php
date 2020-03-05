@@ -13,11 +13,22 @@ use Illuminate\Support\Facades\Validator;
 class RegistroController extends Controller
 {
   /**
-   * Display the form to add a Registro.
+   * Display a listing of the resource.
    *
    * @return \Illuminate\Http\Response
    */
   public function index()
+  {
+      return view('registro.menu');
+  }
+
+
+  /**
+   * Display the form to add a Registro.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create()
   {
     //tomo los usuarios
     $usuarios = User::all();
@@ -32,7 +43,7 @@ class RegistroController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function postRegistro(Request $request)
+  public function store(Request $request)
   {
     //determino los mensajes de error de validación
     $messages = [
@@ -108,5 +119,48 @@ class RegistroController extends Controller
 
     //redirijo al formulario para agregar nuevos registros, con mensaje de exito incluido
     return redirect()->back()->with('success', 'Registro creado con éxito!');
+  }
+
+
+  /**
+   * Display the resource list
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function getShow()
+  {
+      //tomo todos los registros
+      $movimientos = MovExtras::all();
+
+      //los envio a la vista
+      return view('registro.listado', compact('movimientos'));
+  }
+
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy($id)
+  {
+    //compruebo que el registro exista
+    $movimiento = MovExtras::find($id);
+    if (!$movimiento) {
+      return redirect()->back()->withInput()->with('validarEliminar', 'ERROR: seleccione un Registro válido.');
+    }
+
+    //elimino el registro con tal id
+    MovExtras::destroy($id);
+
+    //compruebo que el registro se haya eliminado
+    $movimiento = MovExtras::find($id);
+    if ($movimiento) {
+      return redirect()->back()->withInput()->with('validarEliminar', 'ERROR: el Registro no se eliminó.');
+    }
+
+    //redirijo al listado
+    return redirect()->action('RegistroController@getShow');
   }
 }

@@ -15,7 +15,7 @@
                 @endif
 
                 <div class="card-body">
-                    <form method="POST" action="{{ url("/registro/") }}">
+                    <form method="POST" action="{{ url("/registro/create") }}">
                         {{ csrf_field() }}
 
                         <input type="hidden" name="id" value="{{ Auth::user()->id }}">
@@ -72,7 +72,7 @@
                                   <option value="1" selected>Ingreso</option>
                                   <option value="2">Egreso</option>
                                 </select>
-                                
+
                                 <span class="text-danger">{{$errors->first('tipoRegistro')}}</span>
                             </div>
                         </div>
