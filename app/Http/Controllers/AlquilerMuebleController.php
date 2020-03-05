@@ -35,23 +35,35 @@ class AlquilerMuebleController extends Controller
     public function postDisponibilidad(){
       $muebleSeleccionado = Input::get('mueble');
       $alquileres = ReservaMueble::all()->where('idMueble', $muebleSeleccionado);
-      $fecha = Carbon::parse(Input::get('fecha'))->format('Y-m-d');
+      $fechaInicio = Carbon::parse(Input::get('fechaInicio'))->format('Y-m-d H:i:s');
+      $fechaFin = Carbon::parse(Input::get('fechaFin'))->format('Y-m-d H:i:s');
 
       $mueble = Mueble::find($muebleSeleccionado);
       $stockRestante = $mueble->cantidad;
 
       $fechasReservadas = array();
+      $fechasSolapadas = array();
 
       foreach($alquileres as $alquiler){
         $alquiler->soloFecha = Carbon::parse($alquiler->fechaHoraInicio)->format('Y-m-d');
+        $soloFecha = Carbon::parse($fechaInicio)->format('Y-m-d');
 
-        if ($alquiler->soloFecha == $fecha) {
+        if($soloFecha == $alquiler->soloFecha) {
           $fechasReservadas[] = array($alquiler->soloFecha, $alquiler->fechaHoraInicio, $alquiler->fechaHoraFin, $alquiler->cantidad);
+        }
+
+        //con estos 2 atributos compruebo con la fecha de inicio y fin pasadas como parámetros
+        $alquiler->fechaInicio = Carbon::parse($alquiler->fechaHoraInicio)->format('Y-m-d H:i:s');
+        $alquiler->fechaFin = Carbon::parse($alquiler->fechaHoraFin)->format('Y-m-d H:i:s');
+
+        if ((($fechaFin > $alquiler->fechaInicio) && ($fechaFin < $alquiler->fechaFin)) || (($fechaInicio > $alquiler->fechaInicio) && ($fechaFin < $alquiler->fechaFin)) || (($fechaInicio > $alquiler->fechaInicio) && ($fechaInicio < $alquiler->fechaFin))) {
+          $fechasSolapadas[] = array($alquiler->soloFecha, $alquiler->fechaInicio, $alquiler->fechaFin, $alquiler->cantidad);
           $stockRestante -= $alquiler->cantidad;
         }
       }
 
       return response()->json(['fechasReservadas' => $fechasReservadas,
+                               'fechasSolapadas' => $fechasSolapadas,
                                'stockRestante' => $stockRestante]);
     }
 
