@@ -17,12 +17,10 @@
                         <input type="hidden" name="tipoMueble" value="{{ $reserva->idMueble }}">
 
                         <div class="form-group row">
-                            <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI del Solicitante') }}</label>
+                            <label for="persona" class="col-md-4 col-form-label text-md-right">{{ __('Solicitante') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{ $reserva->persona->DNI }}" min="0" disabled>
-
-                                <span class="text-danger">{{$errors->first('DNI')}}</span>
+                                <input type="text" name="persona" id="persona" class="form-control" value="{{ $reserva->persona->DNI .' - '. $reserva->persona->apellido .', '. $reserva->persona->nombres }}" disabled>
                             </div>
                         </div>
 
@@ -31,8 +29,6 @@
 
                             <div class="col-md-6">
                                 <input type="date" name="fechaSolicitud" id="fechaSolicitud" class="form-control" value="{{ $reserva->fechaSolicitud }}" disabled>
-
-                                <span class="text-danger">{{$errors->first('fechaSolicitud')}}</span>
                             </div>
                         </div>
 
@@ -50,8 +46,6 @@
                                   @endif
                                 @endforeach
                               </select>
-
-                              <span class="text-danger">{{$errors->first('tipoMueble')}}</span>
                             </div>
                         </div>
 
@@ -60,8 +54,6 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="cantMueble" id="cantMueble" class="form-control" value="{{ $reserva->cantidad }}" min="1" disabled>
-
-                                <span class="text-danger">{{$errors->first('cantMueble')}}</span>
                             </div>
                         </div>
 
@@ -70,8 +62,6 @@
 
                             <div class="col-md-6">
                                 <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" value="{{ $reserva->fechaHoraInicio }}" disabled>
-
-                                <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
                             </div>
                         </div>
 
@@ -80,8 +70,6 @@
 
                             <div class="col-md-6">
                                 <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control" value="{{ $reserva->fechaHoraFin }}" disabled>
-
-                                <span class="text-danger">{{$errors->first('fechaHoraFin')}}</span>
                             </div>
                         </div>
 
@@ -90,8 +78,6 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="costo" id="costo" class="form-control" value="{{ $reserva->costoTotal }}" min="0" disabled>
-
-                                <span class="text-danger">{{$errors->first('costo')}}</span>
                             </div>
                         </div>
 
@@ -109,8 +95,6 @@
                                     @endif
                                   @endforeach
                                 </select>
-
-                                <span class="text-danger">{{$errors->first('medioPago')}}</span>
                             </div>
                         </div>
 
@@ -119,8 +103,6 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="observacion" id="observacion" class="form-control" value="{{ $reserva->observacion }}" maxlength="100" disabled>
-
-                                <span class="text-danger">{{$errors->first('observacion')}}</span>
                             </div>
                         </div>
 
@@ -128,7 +110,7 @@
                             <label for="numRecibo" class="col-md-4 col-form-label text-md-right">{{ __('N° Recibo') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ $reserva->numRecibo }}" min="0" required>
+                                <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ old('numRecibo') ?? $reserva->numRecibo }}" min="0" required>
 
                                 <span class="text-danger">{{$errors->first('numRecibo')}}</span>
 
