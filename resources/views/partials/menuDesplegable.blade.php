@@ -15,12 +15,14 @@
           <li><a href="{{ url('/grupofamiliar') }}"> Grupos Familiares </a></li>
         </ul>
       </li>
-      <li class="submenu"><a href="#"> <i class="icono fas fa-warehouse"></i> &nbsp; Inventario/Salones</a>
-        <ul class="children">
-          <li><a href="{{ url('/inmueble') }}"> Inmueble </a></li>
-          <li><a href="{{ url('/mueble') }}"> Mueble </a></li>
-        </ul>
-      </li>
+      @if (Auth::user()->idTipoUsuario == 1)
+        <li class="submenu"><a href="#"> <i class="icono fas fa-warehouse"></i> &nbsp; Inventario/Salones</a>
+          <ul class="children">
+            <li><a href="{{ url('/inmueble') }}"> Inmueble </a></li>
+            <li><a href="{{ url('/mueble') }}"> Mueble </a></li>
+          </ul>
+        </li>
+      @endif
       <li><a href="{{ url('/cuota') }}"> <i class="icono fas fa-hands-helping"></i> &nbsp; Cuotas</a></li>
       <li class="submenu"><a href="#"> <i class="icono fas fa-handshake"></i></i> &nbsp; Alquileres</a>
         <ul class="children">
