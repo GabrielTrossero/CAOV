@@ -310,8 +310,8 @@ class SocioController extends Controller
               return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
             }
             else {
-              //obtengo el Socio actual (sin actualizar)
-              $socio = Socio::where('id', $request->id)->first();
+              $socio = Socio::where('id', $request->id)->first(); //obtengo el Socio actual (sin actualizar)
+
               if ($request->idGrupoFamiliar != $socio->idGrupoFamiliar) {  //si se quiere cambiar de grupo
                 //solo puedo agragar cadetes al grupo desde acá, asi que compruebo que sea cadete
                 $edad = Carbon::now()->year - Carbon::parse($request->fechaNac)->year;
@@ -345,7 +345,6 @@ class SocioController extends Controller
 
       //obtengo el socio correspondiente
       $socio = Socio::where('id', $request->id)->first();
-      $idGrupo = $socio->idGrupoFamiliar;
 
       //si se decide que el socio no tiene grupo
       if (is_null($request->idGrupoFamiliar)) {
@@ -363,14 +362,15 @@ class SocioController extends Controller
 
         //si el socio no es el titular, se asigna null al atributo idGrupoFamiliar
         if (isset($socio->idGrupoFamiliar) && ($socio->id != $socio->grupoFamiliar->titular)) {
-          $idGrupo = null;
+          $socio->idGrupoFamiliar = null;
         }
       }
+
 
       Socio::where('id', $request->id)
             ->update([
               'fechaNac' => $request->fechaNac,
-              'idGrupoFamiliar' => $idGrupo,
+              'idGrupoFamiliar' => $request->idGrupoFamiliar,
               'idPersona' => $persona->id,
               'numSocio' => $request->numSocio,
               'oficio' => $request->oficio,
