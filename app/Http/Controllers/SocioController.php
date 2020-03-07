@@ -104,6 +104,12 @@ class SocioController extends Controller
               elseif (!isset($validarGrupoFamiliar)) {
                 return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
               }
+              else {  //solo puedo agragar cadetes al grupo desde acá, asi que compruebo que sea cadete
+                $edad = Carbon::now()->year - Carbon::parse($request->fechaNac)->year;
+                if ($edad >= 18) {
+                  return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Solo se pueden agregar Cadetes desde esta pestaña. Para agregar una persona mayor a un grupo, dirigirse a Grupo Familiar luego de generar dicho Socio.');
+                }
+              }
         }
 
 
@@ -302,6 +308,17 @@ class SocioController extends Controller
             }
             elseif (!isset($validarGrupoFamiliar)) {
               return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
+            }
+            else {
+              //obtengo el Socio actual (sin actualizar)
+              $socio = Socio::where('id', $request->id)->first();
+              if ($request->idGrupoFamiliar != $socio->idGrupoFamiliar) {  //si se quiere cambiar de grupo
+                //solo puedo agragar cadetes al grupo desde acá, asi que compruebo que sea cadete
+                $edad = Carbon::now()->year - Carbon::parse($request->fechaNac)->year;
+                if ($edad >= 18) {
+                  return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Solo se pueden agregar Cadetes desde esta pestaña. Para agregar una persona mayor a un grupo, dirigirse a Grupo Familiar.');
+                }
+              }
             }
       }
 
