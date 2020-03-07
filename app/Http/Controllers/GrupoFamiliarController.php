@@ -90,7 +90,7 @@ class GrupoFamiliarController extends Controller
 
 
       //tomo los socios
-      $socios = Socio::where('idGrupoFamiliar', null)->get();
+      $socios = Socio::where('idGrupoFamiliar', null)->where('vitalicio', 'n')->get();
 
       //filtro los socios mayores de edad
       $socios = $socios->filter(function ($socio){
@@ -233,7 +233,7 @@ class GrupoFamiliarController extends Controller
         $grupo = GrupoFamiliar::find($id);
 
         //tomo los socios sin grupo familiar
-        $sociosSinGrupo = Socio::where('idGrupoFamiliar', null)->get();
+        $sociosSinGrupo = Socio::where('idGrupoFamiliar', null)->where('vitalicio', 'n')->get();
 
         //tomo socios mayores de edad sin grupo para posible pareja
         $sociosPareja = $sociosSinGrupo->filter(function ($socio){

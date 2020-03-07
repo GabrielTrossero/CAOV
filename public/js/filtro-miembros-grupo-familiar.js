@@ -12,6 +12,8 @@ selectAccion.change(function(){
   var accion = $("#accionMiembro option:selected").val();
   accion = parseInt(accion);
 
+  var miembroSeleccionado = $("#miembro option:selected");
+
   if (accion == 0) {
     selectMiembros.css('display', 'none');
   }
@@ -19,10 +21,16 @@ selectAccion.change(function(){
     selectMiembros.css('display', 'block');
     miembrosActuales.css('display', 'none');
     sociosSinGrupo.css('display', 'block');
+
+    miembroSeleccionado.prop("selected", false);
+    $("#socios-sin-grupo option:first").prop("selected", true);
   }
   else if (accion == 2) {
     selectMiembros.css('display', 'block');
     miembrosActuales.css('display', 'block');
     sociosSinGrupo.css('display', 'none');
+
+    miembroSeleccionado.prop("selected", false);
+    $("#miembros-actuales option:first").prop("selected", true);
   }
 });
