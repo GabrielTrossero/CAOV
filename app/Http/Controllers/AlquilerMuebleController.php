@@ -56,10 +56,14 @@ class AlquilerMuebleController extends Controller
         $alquiler->fechaInicio = Carbon::parse($alquiler->fechaHoraInicio)->format('Y-m-d H:i:s');
         $alquiler->fechaFin = Carbon::parse($alquiler->fechaHoraFin)->format('Y-m-d H:i:s');
 
-        if ((($fechaFin > $alquiler->fechaInicio) && ($fechaFin < $alquiler->fechaFin)) || (($fechaInicio > $alquiler->fechaInicio) && ($fechaFin < $alquiler->fechaFin)) || (($fechaInicio > $alquiler->fechaInicio) && ($fechaInicio < $alquiler->fechaFin))) {
+        if ((($fechaFin > $alquiler->fechaInicio) && ($fechaFin < $alquiler->fechaFin)) || (($fechaInicio > $alquiler->fechaInicio) && ($fechaFin < $alquiler->fechaFin)) || (($fechaInicio < $alquiler->fechaInicio) && ($fechaFin > $alquiler->fechaFin)) || (($fechaInicio > $alquiler->fechaInicio) && ($fechaInicio < $alquiler->fechaFin))) {
           $fechasSolapadas[] = array($alquiler->soloFecha, $alquiler->fechaInicio, $alquiler->fechaFin, $alquiler->cantidad);
           $stockRestante -= $alquiler->cantidad;
         }
+      }
+
+      if ($stockRestante < 0) {
+        $stockRestante = 0;
       }
 
       return response()->json(['fechasReservadas' => $fechasReservadas,
