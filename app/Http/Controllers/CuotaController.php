@@ -25,7 +25,26 @@ class CuotaController extends Controller
    */
   public function index()
   {
-    return view('cuota.menu');
+    //tomo todos los montoCuota y verifico que exista uno de cada tipo
+    $montosCuotas = MontoCuota::all();
+
+    $activo = false;
+    $cadete = false;
+    $grupoF = false;
+
+    foreach ($montosCuotas as $montoCuota) {
+      if ($montoCuota->tipo == 'a') {
+        $activo = true;
+      }
+      elseif ($montoCuota->tipo == 'c') {
+        $cadete = true;
+      }
+      elseif ($montoCuota->tipo == 'g') {
+        $grupoF = true;
+      }
+    }
+
+    return view('cuota.menu', compact('activo', 'cadete', 'grupoF'));
   }
 
 
@@ -79,7 +98,7 @@ class CuotaController extends Controller
     $montoCuota->create($request->all());
 
     //recupero todos los montos de cuotas para mostrarlos en la vista
-    $montosCuotas = MontoCuota::all();
+    $montosCuotas = MontoCuota::where('tipo', '!=', 'v')->get();
 
     //redirijo para mostrar el monto ingresado
     return view('cuota.listadoMontoCuota' , compact('montosCuotas'));
@@ -95,7 +114,7 @@ class CuotaController extends Controller
   public function getShowMontoCuota()
   {
     //busco todos los montos de cuotas
-    $montosCuotas = MontoCuota::all();
+    $montosCuotas = MontoCuota::where('tipo', '!=', 'v')->get();
 
     //redirijo a la vista para listar todos los montos de cuotas pasando el array 'montoCuota'
     return view('cuota.listadoMontoCuota' , compact('montosCuotas'));
@@ -1080,14 +1099,14 @@ class CuotaController extends Controller
 
   /**
    * envia mail con el detalle de la cuota pagada
-   * 
+   *
    * @param App\ComprobanteCuota $cuotaPagada
-   * 
+   *
    * @return void
    */
   public function enviaMailCuotaPagada($cuotaPagada) {
     $numSocio = $cuotaPagada->idSocio;
-    
+
     $arrayCuota = array(
       'emailTo' => $cuotaPagada->socio->persona->email,
       'apellido_nombres' => $cuotaPagada->socio->persona->apellido.", ".$cuotaPagada->socio->persona->nombres,
@@ -1105,9 +1124,9 @@ class CuotaController extends Controller
 
   /**
      * genera el pdf para el id de la cuota pagada dada
-     * 
+     *
      * @param Request $request
-     * 
+     *
      * @return PDF
      */
     public function generarPdfCuota($id) {
@@ -1122,9 +1141,9 @@ class CuotaController extends Controller
       $comprobanteCuota->interesMesesAtrasados = $interesMesesAtrasados;
       $comprobanteCuota->montoMensual = $montoMensual;
       $comprobanteCuota->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
-      
+
       $pdf = PDF::loadView('pdf.comprobantes.cuota', ['comprobante' => $comprobanteCuota]);
-      
+
       return $pdf->download('comprobante-cuota.pdf');
     }
 }

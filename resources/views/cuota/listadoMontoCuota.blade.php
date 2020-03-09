@@ -39,7 +39,7 @@
                 <td>{{ '-' }}</td>
               @endif
 
-              <td>{{ '$'.$montoCuota->montoInteresMensual.' por mes, a partir del mes N° '.$montoCuota->cantidadMeses.' atraso' }}</td>
+              <td>{{ '$'.$montoCuota->montoInteresMensual.' por mes, a partir del mes N° '.$montoCuota->cantidadMeses.' de atraso' }}</td>
             </tr>
           @endforeach
 

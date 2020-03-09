@@ -9,7 +9,19 @@
     <a href="{{ url('cuota/showMontoCuota') }}"><i class="icono3 far fa-list-alt"></i> &nbsp; Listar Montos para Cuotas</a>
     <br>
   @endif
-  <a href="{{ url('cuota/showCreateCuota') }}"><i class="icono3 fas fa-file-medical"></i> &nbsp; Generar Adelanto de Cuota</a>
+
+  <!--si hay algun tipo de montoCuota faltante, no dejo generar adelantos de cuotas-->
+  @if (($activo == false) || ($cadete == false) || ($grupoF == false))
+    <a href="javascript:funcion()"><i class="icono3 fas fa-file-medical"></i> &nbsp; Generar Adelanto de Cuota</a>
+    <script>
+      function funcion(){
+        alert('Hay uno o más tipos de socios que no tienen Monto Cuota. Por favor, generar Monto/s Cuota/s correspondientes.');
+      }
+    </script>
+  @else
+    <a href="{{ url('cuota/showCreateCuota') }}"><i class="icono3 fas fa-file-medical"></i> &nbsp; Generar Adelanto de Cuota</a>
+  @endif
+
   <br>
   <a href="{{ url('cuota/show') }}"><i class="icono3 fas fa-list-ol"></i> &nbsp; Listar Cuotas</a>
   <br>
@@ -26,6 +38,19 @@
   </form>
 
 </div>
+
+
+<!--si hay algun tipo de montoCuota faltante, no dejo generar las cuotas-->
+@if (($activo == false) || ($cadete == false) || ($grupoF == false))
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $("form").submit(function(e){
+            alert('Hay uno o más tipos de socios que no tienen Monto Cuota. Por favor, generar Monto/s Cuota/s correspondientes.');
+            return false;
+        });
+    });
+  </script>
+@endif
 
 
 @stop
