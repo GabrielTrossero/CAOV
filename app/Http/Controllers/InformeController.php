@@ -210,63 +210,157 @@ class InformeController extends Controller
   }
 
   /**
+   * Calcula el monto total de una Cuota pagada
+   * 
+   * @param App\ComprobanteCuota $cuotaPagada
+   * 
+   * @return App\ComprobanteCuota
+   */
+  public function calculaMontoCuotaPagada($cuotaPagada)
+  {
+    $cuotaController = new CuotaController;
+
+    $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
+    $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
+    $montoMensual = $cuotaPagada->montoCuota->montoMensual;
+
+    $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+
+    return $cuotaPagada;
+  }
+
+  /**
+   * Muestra el listado general de los Ingresos y Egresos Diarios con su Total
+   * 
+   */
+  public function getIngresosEgresosDiariosGeneral() 
+  {
+    // Tomo los Registros (movimientos extra) diarios con su total
+    $movExtras = MovExtras::select(DB::raw('fecha, sum(monto) as total, tipo'))
+                            ->groupBy('fecha', 'tipo')
+                            ->get();
+
+    // Tomo las reservas de Inmuebles diarias con su total
+    $reservasInmueble = ReservaInmueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+                             ->where('numRecibo', '<>', null)
+                             ->groupBy('fechaSolicitud')
+                             ->get();
+
+    // Tomo las reservas de Muebles diarias con su total
+    $reservasMueble = ReservaMueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+                             ->where('numRecibo', '<>', null)
+                             ->groupBy('fechaSolicitud')
+                             ->get();
+
+    // Tomo las Cuotas pagadas diarias 
+    $cuotasPagadas = ComprobanteCuota::all()
+                                       ->where('fechaPago', '<>', null)
+                                       ->where('inhabilitada', false);
+
+    // Calculo el Monto Total de cada Cuota Pagada
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
+    }
+
+    // Acumulo los Montos de las Cuotas Pagadas en un array asociativo con KEY fecha
+    $totales = array();
+
+    // Inicializo los valores del array en 0 (cero)
+    foreach ($movExtras as $movExtra) {
+      $totales[$movExtra->fecha] = 0;
+    }
+
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $totales[$reservaInmueble->fechaSolicitud] = 0;
+    }
+
+    foreach ($reservasMueble as $reservaMueble) {
+      $totales[$reservaMueble->fechaSolicitud] = 0;
+    }
+
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $totales[$cuotaPagada->fechaPago] = 0;
+    }
+
+    // Acumulo los totales
+    foreach ($movExtras as $movExtra) {
+      if($movExtra->tipo == 1) {
+        $totales[$movExtra->fecha] += $movExtra->total;
+      } elseif ($movExtra->tipo == 2) {
+        $totales[$movExtra->fecha] -= $movExtra->total;
+      }
+    }
+
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $totales[$reservaInmueble->fechaSolicitud] += $reservaInmueble->total;
+    }
+
+    foreach ($reservasMueble as $reservaMueble) {
+      $totales[$reservaMueble->fechaSolicitud] += $reservaMueble->total;
+    }
+
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $totales[$cuotaPagada->fechaPago] += $cuotaPagada->montoTotal;
+    }
+
+    return view('informe.ingresosEgresos.ingresosEgresosDiariosGenerales', compact('totales'));
+  }
+
+  /**
    * Shows a list of Ingresos/Egresos diarios
+   * 
+   * @param string $fecha
    * 
    * @return \Illuminate\Http\Response
    */
-  public function getIngresosEgresosDiarios()
+  public function getIngresosEgresosDiarios($fecha)
   {
     //tomo los movimientos extra
     $movExtras = MovExtras::all();
     
     //filtro los movimientos extra que son distintos a la fecha de hoy
-    $movExtras = $movExtras->filter(function($movExtra){
-      $now = $this->fechaHoy()->format('Y-m-d');
-      return $movExtra->fecha == $now;
+    $movExtras = $movExtras->filter(function($movExtra) use ($fecha) {
+      //$now = $this->fechaHoy()->format('Y-m-d');
+      return $movExtra->fecha == $fecha;
     });
 
     //tomo los alquileres de inmuebles pagados
     $alquileresInmueblePagos = ReservaInmueble::all()->where('numRecibo', '<>', null);
 
     //filtro los alquileres de inmuebles que son distintos a la fecha de hoy
-    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago){
-      $now = $this->fechaHoy()->format('Y-m-d');
-      return $alquilerInmueblePago->fechaSolicitud == $now;
+    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago) use ($fecha) {
+      //$now = $this->fechaHoy()->format('Y-m-d');
+      return $alquilerInmueblePago->fechaSolicitud == $fecha;
     });
 
     //tomo los alquileres de muebles pagados
     $alquileresMueblePagos = ReservaMueble::all()->where('numRecibo', '<>', null);
 
     //filtro los alquileres de muebles que son distintos a la fecha de hoy
-    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago){
-      $now = $this->fechaHoy()->format('Y-m-d');
-      return $alquilerMueblePago->fechaSolicitud == $now;
+    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago) use ($fecha) {
+      //$now = $this->fechaHoy()->format('Y-m-d');
+      return $alquilerMueblePago->fechaSolicitud == $fecha;
     });
 
     //tomo los pagos de cuotas
     $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
     
     //filtro los pagos de cuotas que son distintos a la fecha de hoy
-    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada){
-      $now = $this->fechaHoy()->format('Y-m-d');
-      return $cuotaPagada->fechaPago == $now;
+    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada) use ($fecha) {
+      //$now = $this->fechaHoy()->format('Y-m-d');
+      return $cuotaPagada->fechaPago == $fecha;
     });
 
     //calculo el monto de las cuotas pagadas
     foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
     return view('informe.ingresosEgresos.ingresosEgresosDiarios', compact('movExtras', 
                                                                           'alquileresInmueblePagos',
                                                                           'alquileresMueblePagos',
-                                                                          'cuotasPagadas'));
+                                                                          'cuotasPagadas',
+                                                                          'fecha'));
   }
 
   /**
@@ -276,57 +370,75 @@ class InformeController extends Controller
    */
   public function pdfIngresosEgresosDiarios()
   {
-    //tomo los movimientos extra
-    $movExtras = MovExtras::all();
-    
-    //filtro los movimientos extra que son distintos a la fecha de hoy
-    $movExtras = $movExtras->filter(function($movExtra){
-      $now = $this->fechaHoy()->format('Y-m-d');
-      return $movExtra->fecha == $now;
-    });
+    // Tomo los Registros (movimientos extra) diarios con su total
+    $movExtras = MovExtras::select(DB::raw('fecha, sum(monto) as total, tipo'))
+                            ->groupBy('fecha', 'tipo')
+                            ->get();
 
-    //tomo los alquileres de inmuebles pagados
-    $alquileresInmueblePagos = ReservaInmueble::all()->where('numRecibo', '<>', null);
+    // Tomo las reservas de Inmuebles diarias con su total
+    $reservasInmueble = ReservaInmueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+                             ->where('numRecibo', '<>', null)
+                             ->groupBy('fechaSolicitud')
+                             ->get();
 
-    //filtro los alquileres de inmuebles que son distintos a la fecha de hoy
-    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago){
-      $now = $this->fechaHoy()->format('Y-m-d');
-      return $alquilerInmueblePago->fechaSolicitud == $now;
-    });
+    // Tomo las reservas de Muebles diarias con su total
+    $reservasMueble = ReservaMueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+                             ->where('numRecibo', '<>', null)
+                             ->groupBy('fechaSolicitud')
+                             ->get();
 
-    //tomo los alquileres de muebles pagados
-    $alquileresMueblePagos = ReservaMueble::all()->where('numRecibo', '<>', null);
+    // Tomo las Cuotas pagadas diarias 
+    $cuotasPagadas = ComprobanteCuota::all()
+                                       ->where('fechaPago', '<>', null)
+                                       ->where('inhabilitada', false);
 
-    //filtro los alquileres de muebles que son distintos a la fecha de hoy
-    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago){
-      $now = $this->fechaHoy()->format('Y-m-d');
-      return $alquilerMueblePago->fechaSolicitud == $now;
-    });
-
-    //tomo los pagos de cuotas
-    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
-    
-    //filtro los pagos de cuotas que son distintos a la fecha de hoy
-    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada){
-      $now = $this->fechaHoy()->format('Y-m-d');
-      return $cuotaPagada->fechaPago == $now;
-    });
-
-    //calculo el monto de las cuotas pagadas
-    foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+    // Calculo el Monto Total de cada Cuota Pagada
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
-    $pdf = PDF::loadView('pdf.ingresosEgresosDiarios', ['movExtras' => $movExtras,
-                                                        'alquileresInmueblePagos' => $alquileresInmueblePagos,
-                                                        'alquileresMueblePagos' => $alquileresMueblePagos,
-                                                        'cuotasPagadas' => $cuotasPagadas]);
+    // Acumulo los Montos de las Cuotas Pagadas en un array asociativo con KEY fecha
+    $totales = array();
+
+    // Inicializo los valores del array en 0 (cero)
+    foreach ($movExtras as $movExtra) {
+      $totales[$movExtra->fecha] = 0;
+    }
+
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $totales[$reservaInmueble->fechaSolicitud] = 0;
+    }
+
+    foreach ($reservasMueble as $reservaMueble) {
+      $totales[$reservaMueble->fechaSolicitud] = 0;
+    }
+
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $totales[$cuotaPagada->fechaPago] = 0;
+    }
+
+    // Acumulo los totales
+    foreach ($movExtras as $movExtra) {
+      if($movExtra->tipo == 1) {
+        $totales[$movExtra->fecha] += $movExtra->total;
+      } elseif ($movExtra->tipo == 2) {
+        $totales[$movExtra->fecha] -= $movExtra->total;
+      }
+    }
+
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $totales[$reservaInmueble->fechaSolicitud] += $reservaInmueble->total;
+    }
+
+    foreach ($reservasMueble as $reservaMueble) {
+      $totales[$reservaMueble->fechaSolicitud] += $reservaMueble->total;
+    }
+
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $totales[$cuotaPagada->fechaPago] += $cuotaPagada->montoTotal;
+    }
+
+    $pdf = PDF::loadView('pdf.ingresosEgresosDiarios', ['totales' => $totales]);
 
     return $pdf->download('ingresos-egresos-diarios.pdf');
   }
@@ -388,13 +500,7 @@ class InformeController extends Controller
 
     //calculo el monto de las cuotas pagadas
     foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
     return view('informe.ingresosEgresos.ingresosEgresosSemanales', compact('movExtras', 
@@ -460,13 +566,7 @@ class InformeController extends Controller
 
     //calculo el monto de las cuotas pagadas
     foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
     $pdf = PDF::loadView('pdf.ingresosEgresosSemanales', ['movExtras' => $movExtras,
@@ -534,13 +634,7 @@ class InformeController extends Controller
 
     //calculo el monto de las cuotas pagadas
     foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
     return view('informe.ingresosEgresos.ingresosEgresosMensuales', compact('movExtras', 
@@ -606,13 +700,7 @@ class InformeController extends Controller
 
     //calculo el monto de las cuotas pagadas
     foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
     $pdf = PDF::loadView('pdf.ingresosEgresosMensuales', ['movExtras' => $movExtras,
@@ -634,13 +722,7 @@ class InformeController extends Controller
     $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
     
     foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
     //tomo los alquileres de inmuebles
@@ -667,13 +749,7 @@ class InformeController extends Controller
     $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
     
     foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
     //tomo los alquileres de inmuebles
