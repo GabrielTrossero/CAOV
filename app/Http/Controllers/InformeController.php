@@ -748,58 +748,178 @@ class InformeController extends Controller
   }
 
   /**
-   * Shows a list of Ingresos/Egresos Mensuales
+   * Muestra el listado general de los Ingresos y Egresos Semanales con su Total
    * 
    * @return \Illuminate\Http\Response
    */
-  public function getIngresosEgresosMensuales()
+  public function getIngresosEgresosMensualesGeneral()
   {
+    // Tomo los Registros (movimientos extra) diarios con su total
+    $movExtras = MovExtras::select(DB::raw('fecha, sum(monto) as total, tipo'))
+                            ->groupBy('fecha', 'tipo')
+                            ->get();
+
+    // Tomo las reservas de Inmuebles diarias con su total
+    $reservasInmueble = ReservaInmueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+                             ->where('numRecibo', '<>', null)
+                             ->groupBy('fechaSolicitud')
+                             ->get();
+
+    // Tomo las reservas de Muebles diarias con su total
+    $reservasMueble = ReservaMueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+                             ->where('numRecibo', '<>', null)
+                             ->groupBy('fechaSolicitud')
+                             ->get();
+
+    // Tomo las Cuotas pagadas diarias 
+    $cuotasPagadas = ComprobanteCuota::all()
+                                       ->where('fechaPago', '<>', null)
+                                       ->where('inhabilitada', false);
+
+    // Calculo el Monto Total de cada Cuota Pagada
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
+    }
+
+    // Acumulo los Montos de las Cuotas Pagadas en un array asociativo con KEY fecha
+    $totales = array();
+
+    // Inicializo los valores del array en 0 (cero)
+    foreach ($movExtras as $movExtra) {
+      $fecha = Carbon::parse($movExtra->fecha);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+    }
+
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+    }
+
+    foreach ($reservasMueble as $reservaMueble) {
+      $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+    }
+
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $fecha = Carbon::parse($cuotaPagada->fechaPago);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+    }
+
+    // Acumulo los totales
+    foreach ($movExtras as $movExtra) {
+      $fecha = Carbon::parse($movExtra->fecha);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      if($movExtra->tipo == 1) {
+        $totales[$mes." - ".$anio]["total"] += $movExtra->total;
+      } elseif ($movExtra->tipo == 2) {
+        $totales[$mes." - ".$anio]["total"] -= $movExtra->total;
+      }
+    }
+
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio]["total"] += $reservaInmueble->total;
+    }
+
+    foreach ($reservasMueble as $reservaMueble) {
+      $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio]["total"] += $reservaMueble->total;
+    }
+
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $fecha = Carbon::parse($cuotaPagada->fechaPago);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio]["total"] += $cuotaPagada->montoTotal;
+    }
+
+    return view('informe.ingresosEgresos.ingresosEgresosMensualesGenerales', compact('totales'));
+  }
+
+  /**
+   * Shows a list of Ingresos/Egresos Mensuales
+   * 
+   * @param string $mes
+   * @param string $anio
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getIngresosEgresosMensuales($mes, $anio)
+  {
+    $mes = intval($mes);
+    $anio = intval($anio);
+
     //tomo los movimientos extra
     $movExtras = MovExtras::all();
     
     //filtro los movimientos extra que son mayores a 30 dias
-    $movExtras = $movExtras->filter(function($movExtra){
-      $now = $this->fechaHoy();
+    $movExtras = $movExtras->filter(function($movExtra) use ($mes, $anio) {
+      //$now = $this->fechaHoy();
       $fechaFormateada = Carbon::parse($movExtra->fecha);
-      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+      $mesConsulta = $fechaFormateada->month;
+      $anioConsulta = $fechaFormateada->year;
 
-      return $diferenciaEnDias <= 30;
+      return (($mesConsulta == $mes) && ($anioConsulta == $anio));
     });
 
     //tomo los alquileres de inmuebles pagados
     $alquileresInmueblePagos = ReservaInmueble::all()->where('numRecibo', '<>', null);
 
     //filtro los alquileres de inmuebles que son mayores a 30 dias
-    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago){
-      $now = $this->fechaHoy();
+    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago) use ($mes, $anio) {
+      //$now = $this->fechaHoy();
       $fechaFormateada = Carbon::parse($alquilerInmueblePago->fechaSolicitud);
-      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+      $mesConsulta = $fechaFormateada->month;
+      $anioConsulta = $fechaFormateada->year;
 
-      return $diferenciaEnDias <= 30;
+      return (($mesConsulta == $mes) && ($anioConsulta == $anio));
     });
 
     //tomo los alquileres de muebles pagados
     $alquileresMueblePagos = ReservaMueble::all()->where('numRecibo', '<>', null);
 
     //filtro los alquileres de muebles que son mayores a 30 dias
-    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago){
-      $now = $this->fechaHoy();
+    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago) use ($mes, $anio) {
+      //$now = $this->fechaHoy();
       $fechaFormateada = Carbon::parse($alquilerMueblePago->fechaSolicitud);
-      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+      $mesConsulta = $fechaFormateada->month;
+      $anioConsulta = $fechaFormateada->year;
 
-      return $diferenciaEnDias <= 30;
+      return (($mesConsulta == $mes) && ($anioConsulta == $anio));
     });
 
     //tomo los pagos de cuotas
     $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
     
     //filtro los pagos de cuotas que son mayores a 30 dias
-    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada){
-      $now = $this->fechaHoy();
+    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada) use ($mes, $anio) {
+      //$now = $this->fechaHoy();
       $fechaFormateada = Carbon::parse($cuotaPagada->fechaPago);
-      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+      $mesConsulta = $fechaFormateada->month;
+      $anioConsulta = $fechaFormateada->year;
 
-      return $diferenciaEnDias <= 30;
+      return (($mesConsulta == $mes) && ($anioConsulta == $anio));
     });
 
     //calculo el monto de las cuotas pagadas
@@ -807,10 +927,13 @@ class InformeController extends Controller
       $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
+    $mesAnio = $mes." - ".$anio;
+
     return view('informe.ingresosEgresos.ingresosEgresosMensuales', compact('movExtras', 
                                                                             'alquileresInmueblePagos',
                                                                             'alquileresMueblePagos',
-                                                                            'cuotasPagadas'));
+                                                                            'cuotasPagadas',
+                                                                            'mesAnio'));
   }
 
   /**
@@ -820,63 +943,110 @@ class InformeController extends Controller
    */
   public function pdfIngresosEgresosMensuales()
   {
-    //tomo los movimientos extra
-    $movExtras = MovExtras::all();
-    
-    //filtro los movimientos extra que son mayores a 30 dias
-    $movExtras = $movExtras->filter(function($movExtra){
-      $now = $this->fechaHoy();
-      $fechaFormateada = Carbon::parse($movExtra->fecha);
-      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+    // Tomo los Registros (movimientos extra) diarios con su total
+    $movExtras = MovExtras::select(DB::raw('fecha, sum(monto) as total, tipo'))
+                            ->groupBy('fecha', 'tipo')
+                            ->get();
 
-      return $diferenciaEnDias <= 30;
-    });
+    // Tomo las reservas de Inmuebles diarias con su total
+    $reservasInmueble = ReservaInmueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+                             ->where('numRecibo', '<>', null)
+                             ->groupBy('fechaSolicitud')
+                             ->get();
 
-    //tomo los alquileres de inmuebles pagados
-    $alquileresInmueblePagos = ReservaInmueble::all()->where('numRecibo', '<>', null);
+    // Tomo las reservas de Muebles diarias con su total
+    $reservasMueble = ReservaMueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+                             ->where('numRecibo', '<>', null)
+                             ->groupBy('fechaSolicitud')
+                             ->get();
 
-    //filtro los alquileres de inmuebles que son mayores a 30 dias
-    $alquileresInmueblePagos = $alquileresInmueblePagos->filter(function($alquilerInmueblePago){
-      $now = $this->fechaHoy();
-      $fechaFormateada = Carbon::parse($alquilerInmueblePago->fechaSolicitud);
-      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
+    // Tomo las Cuotas pagadas diarias 
+    $cuotasPagadas = ComprobanteCuota::all()
+                                       ->where('fechaPago', '<>', null)
+                                       ->where('inhabilitada', false);
 
-      return $diferenciaEnDias <= 30;
-    });
-
-    //tomo los alquileres de muebles pagados
-    $alquileresMueblePagos = ReservaMueble::all()->where('numRecibo', '<>', null);
-
-    //filtro los alquileres de muebles que son mayores a 30 dias
-    $alquileresMueblePagos = $alquileresMueblePagos->filter(function($alquilerMueblePago){
-      $now = $this->fechaHoy();
-      $fechaFormateada = Carbon::parse($alquilerMueblePago->fechaSolicitud);
-      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
-
-      return $diferenciaEnDias <= 30;
-    });
-
-    //tomo los pagos de cuotas
-    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
-    
-    //filtro los pagos de cuotas que son mayores a 30 dias
-    $cuotasPagadas = $cuotasPagadas->filter(function($cuotaPagada){
-      $now = $this->fechaHoy();
-      $fechaFormateada = Carbon::parse($cuotaPagada->fechaPago);
-      $diferenciaEnDias = $now->diffInDays($fechaFormateada);
-
-      return $diferenciaEnDias <= 30;
-    });
-
-    //calculo el monto de las cuotas pagadas
-    foreach($cuotasPagadas as $cuotaPagada) {
+    // Calculo el Monto Total de cada Cuota Pagada
+    foreach ($cuotasPagadas as $cuotaPagada) {
       $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
-    $pdf = PDF::loadView('pdf.ingresosEgresosMensuales', ['movExtras' => $movExtras,
-                                                          'alquileresInmueblePagos' => $alquileresInmueblePagos,
-                                                          'alquileresMueblePagos' => $alquileresMueblePagos,
-                                                          'cuotasPagadas' => $cuotasPagadas]);
+    // Acumulo los Montos de las Cuotas Pagadas en un array asociativo con KEY fecha
+    $totales = array();
+
+    // Inicializo los valores del array en 0 (cero)
+    foreach ($movExtras as $movExtra) {
+      $fecha = Carbon::parse($movExtra->fecha);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+    }
+
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+    }
+
+    foreach ($reservasMueble as $reservaMueble) {
+      $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+    }
+
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $fecha = Carbon::parse($cuotaPagada->fechaPago);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+    }
+
+    // Acumulo los totales
+    foreach ($movExtras as $movExtra) {
+      $fecha = Carbon::parse($movExtra->fecha);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      if($movExtra->tipo == 1) {
+        $totales[$mes." - ".$anio]["total"] += $movExtra->total;
+      } elseif ($movExtra->tipo == 2) {
+        $totales[$mes." - ".$anio]["total"] -= $movExtra->total;
+      }
+    }
+
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio]["total"] += $reservaInmueble->total;
+    }
+
+    foreach ($reservasMueble as $reservaMueble) {
+      $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio]["total"] += $reservaMueble->total;
+    }
+
+    foreach ($cuotasPagadas as $cuotaPagada) {
+      $fecha = Carbon::parse($cuotaPagada->fechaPago);
+      $mes = $fecha->month;
+      $anio = $fecha->year;
+
+      $totales[$mes." - ".$anio]["total"] += $cuotaPagada->montoTotal;
+    }
+
+    // Ordeno por semana/anio descendiente
+    krsort($totales);
+
+    $pdf = PDF::loadView('pdf.ingresosEgresosMensuales', ['totales' => $totales]);
 
     return $pdf->download('ingresos-egresos-mensuales.pdf');
   }

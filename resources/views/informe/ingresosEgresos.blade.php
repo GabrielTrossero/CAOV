@@ -7,7 +7,7 @@
   <br>
   <a href="{{ url('informe/ingresos_egresos_semanales_generales') }}"><i class="icono3 fas fa-hand-holding-usd"></i> &nbsp; Ingresos/Egresos Semanales</a>
   <br>
-  <a href="{{ url('informe/ingresos_egresos_mensuales') }}"><i class="icono3 fas fa-hand-holding-usd"></i> &nbsp; Ingresos/Egresos Mensuales</a>
+  <a href="{{ url('informe/ingresos_egresos_mensuales_generales') }}"><i class="icono3 fas fa-hand-holding-usd"></i> &nbsp; Ingresos/Egresos Mensuales</a>
 </div>
 
 @stop
