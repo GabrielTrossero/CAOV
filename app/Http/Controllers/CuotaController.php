@@ -718,6 +718,27 @@ class CuotaController extends Controller
      */
     public function generateCuotasAuto()
     {
+      $grupoF = new GrupoFamiliarController;  //creo una instancia del controlador de GrupoFamiliar
+
+      //elimino todos los integrantes que pasan a tener 18 este año
+      $grupos = GrupoFamiliar::all();
+      $integrantesEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $integrantesEliminados += $grupoF->verificarCadetesMayores($grupo);
+      }
+
+
+      //una vez actualizados los integrantes, elimino los grupos que pudieron quedar con un integrante
+      $grupos = GrupoFamiliar::all();
+      $gruposEliminados = 0;
+
+      foreach ($grupos as $grupo) {
+        $gruposEliminados += $grupoF->verificarCantidadIntegrantes($grupo);
+      }
+
+
+
       $cuotasCreadas = new \Illuminate\Database\Eloquent\Collection; //colección donde voy a almacenar todas las cuotas generadas para enviarlas a la vista
 
       $socios = Socio::all(); //recupero todos los socios para generarle la cuota este mes en caso que corresponda
@@ -804,24 +825,6 @@ class CuotaController extends Controller
         }
       }
 
-      $grupoF = new GrupoFamiliarController;  //creo una instancia del controlador de GrupoFamiliar
-
-      //elimino todos los integrantes que pasan a tener 18 este año
-      $grupos = GrupoFamiliar::all();
-      $integrantesEliminados = 0;
-
-      foreach ($grupos as $grupo) {
-        $integrantesEliminados += $grupoF->verificarCadetesMayores($grupo);
-      }
-
-
-      //una vez actualizados los integrantes, elimino los grupos que pudieron quedar con un integrante
-      $grupos = GrupoFamiliar::all();
-      $gruposEliminados = 0;
-
-      foreach ($grupos as $grupo) {
-        $gruposEliminados += $grupoF->verificarCantidadIntegrantes($grupo);
-      }
 
 
       //retorno las cuotas a la vista
@@ -879,6 +882,12 @@ class CuotaController extends Controller
 
     $socio->fechaUltimoPago = $fecha['fechaMesAnio'];
 
+    //compruebo si hay una cuota en la que el socio esté como adherente y sea más actual que la obtenida anteriormente
+    foreach ($socio->comprobantes as $comprobante) {
+      if ($comprobante->fechaMesAnio > $socio->fechaUltimoPago) {
+        $socio->fechaUltimoPago = $comprobante->fechaMesAnio;
+      }
+    }
     return $socio;
   }
 
