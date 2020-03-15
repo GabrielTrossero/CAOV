@@ -19,6 +19,7 @@
             <th>Numero de Recibo</th>
             <th>Descripcion</th>
             <th>Fecha</th>
+            <th>Tipo</th>
             <th>Monto</th>
             <th>Eliminar</th>
           </tr>
@@ -29,6 +30,11 @@
               <td>{{ $movimiento->numRecibo }}</td>
               <td>{{ $movimiento->descripcion }}</td>
               <td>{{ date("d/m/Y", strtotime($movimiento->fecha)) }}</td>
+              @if ($movimiento->tipo == "1")
+                <td>{{ 'Ingreso' }}</td>
+              @elseif ($movimiento->tipo == "2")
+                <td>{{ 'Egreso' }}</td>
+              @endif
               <td>${{ $movimiento->monto }}</td>
               <td><a href="{{ url('/registro/delete/'.$movimiento->id) }}" style="color:red";> <i class="fas fa-trash"></i></a> </td>
             </tr>
