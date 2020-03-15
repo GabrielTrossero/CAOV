@@ -5,7 +5,7 @@
 <div class="cuadro">
     <div class="card">
       <div class="card-header">
-        <label class="col-md-8 col-form-label"><b>Listado de Ingresos/Egresos Semanales</b></label>
+        <label class="col-md-8 col-form-label"><b>Listado de Ingresos/Egresos Semanales <span style="color: red;">{{ $semanaAnio }} (Semana - Año)</span></b></label>
       </div>
       <div class="card-body border">
         <table id="idDataTable" class="table table-striped">
@@ -48,7 +48,7 @@
                 <td>{{ $alquilerMueble->numRecibo }}</td>
                 <td>{{ 'Alquileres de Muebles' }}</td>
                 <td>{{ date("d/m/Y", strtotime($alquilerMueble->fechaSolicitud)) }}</td>
-                <td>{{ '$'.$alquilerMueble->total }}</td>
+                <td>{{ '$'.$alquilerMueble->costoTotal }}</td>
               </tr>
             @endforeach
             @foreach ($cuotasPagadas as $cuota)
@@ -64,15 +64,6 @@
           </tbody>
         </table>
     </div>
-  
-      <div class="card-footer">
-        <form action="{{url('/informe/pdf_ingresos_egresos_semanales')}}" method="get" style="display:inline">
-          {{ csrf_field() }}
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Generar PDF
-          </button>
-        </form>
-      </div>
   
   </div>
  </div>

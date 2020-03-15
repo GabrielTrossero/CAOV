@@ -137,7 +137,8 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
             Route::get('pdf_ingresos_egresos_diarios', 'InformeController@pdfIngresosEgresosDiarios');
 
             //ingresos/egresos semanales
-            Route::get('ingresos_egresos_semanales', 'InformeController@getIngresosEgresosSemanales');
+            Route::get('ingresos_egresos_semanales_generales', 'InformeController@getIngresosEgresosSemanalesGeneral');
+            Route::get('ingresos_egresos_semanales/{semana}/{anio}', 'InformeController@getIngresosEgresosSemanales');
             Route::get('pdf_ingresos_egresos_semanales', 'InformeController@pdfIngresosEgresosSemanales');
 
             //ingresos/egresos mensuales
