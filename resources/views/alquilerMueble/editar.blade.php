@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-
+<!--
 <div class="cuadro" style="padding-top:25px; padding-bottom:25px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -22,6 +22,39 @@
 
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<div class="cuadro" style="padding-top:25px; padding-bottom:25px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Consultar Disponibilidad de Mueble') }}</div>
+                <div class="card-body">
+                     
+                            <form action="#" id="form-check">
+                                <input type="text" id="action" value="{{ url('alquilermueble/disponibilidad') }}'" hidden>
+                                <div class="form-group row">
+                                    <label for="chequear-fecha-hora-inicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio') }}</label>
+                                    <div class="col-md-6">
+                                        <input type="datetime-local" name="chequear-fecha-hora-inicio" id="chequear-fecha-hora-inicio" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="chequear-fecha-hora-fin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización') }}</label>
+                                    <div class="col-md-6">
+                                        <input type="datetime-local" name="chequear-fecha-hora-fin" id="chequear-fecha-hora-fin" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <input type="text" id="token" value="{{ csrf_token() }}" hidden>
+                                <input type="text" id="tipo" value="mueble" hidden>
+                                <button type="button" id="chequear" class="col-md-1 offset-md-5"><i class="fas fa-check" style="color:blue"></i></button>
+                            </form>
+
+                       
                 </div>
             </div>
         </div>

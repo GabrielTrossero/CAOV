@@ -9,10 +9,11 @@ $(document).ready(function () {
         if (tipoAlquiler == "inmueble") {
             let fechaIngresada = $("#chequear-fecha").val();
             let inmuebleSeleccionado = $("#inmueble").val();
+            let nombreInmueble = $("#inmueble option:selected").html();
             
             $.post('/alquilerinmueble/disponibilidad', {fecha: fechaIngresada, _token: token, inmueble: inmuebleSeleccionado})
             .done(function(data){
-                let mensaje = "Horarios Reservados:";
+                let mensaje = "Horarios Reservados para " + nombreInmueble + ":";
                 fechasReservadas = data.fechasReservadas;
                 
                 for (let i = 0; i < fechasReservadas.length; i++) {
@@ -33,13 +34,14 @@ $(document).ready(function () {
         }
         else if (tipoAlquiler == "mueble") {
             let muebleSeleccionado = $("#tipoMueble").val();
+            let nombreMueble = $("#tipoMueble option:selected").html();
             let fechaHoraInicio = $('#chequear-fecha-hora-inicio').val();
             let fechaHoraFin = $('#chequear-fecha-hora-fin').val();
 
             if (fechaHoraInicio && fechaHoraFin) {
                $.post('/alquilermueble/disponibilidad', {fechaInicio: fechaHoraInicio, fechaFin: fechaHoraFin, _token: token, mueble: muebleSeleccionado})
                 .done(function(data){
-                    let mensaje = "Horarios Reservados:";
+                    let mensaje = "Horarios Reservados para " + nombreMueble + ":";
                     let fechasReservadas = data.fechasReservadas;
                     let fechasSolapadas = data.fechasSolapadas;
 
