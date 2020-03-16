@@ -247,10 +247,16 @@ class AlquilerMuebleController extends Controller
 
         //busco las reservas relacionadas a la anterior, exeptuando la anterior, para mostrarlas en el 2do cuadro de la vista
         $reservasRelacionadas = ReservaMueble::where('numRecibo', $reserva->numRecibo)
-                                            ->where('id', '!=', $id)->get();
+                                            ->where('id', '!=', $id)
+                                            ->where('numRecibo', '!=', null)->get();
 
         //busco los contratos que tengan el mismo número de recibo para mostrarlo en el 3er cuadro de la vista
-        $infoRecibo = ReservaMueble::where('numRecibo', $reserva->numRecibo)->get();
+        if ($reserva->numRecibo == null) {  //si no está pagada, no está relacionada con otras, entonces muestro esa nomas
+          $infoRecibo = ReservaMueble::where('id', $reserva->id)->get();
+        }
+        else {
+          $infoRecibo = ReservaMueble::where('numRecibo', $reserva->numRecibo)->where('numRecibo', '!=', null)->get();
+        }
 
         //calculo el costo total del recibo
         $total = 0;
