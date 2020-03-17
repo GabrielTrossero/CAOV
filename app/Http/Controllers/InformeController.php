@@ -487,7 +487,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
     foreach ($reservasInmueble as $reservaInmueble) {
@@ -495,7 +495,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
     foreach ($reservasMueble as $reservaMueble) {
@@ -503,7 +503,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
     foreach ($cuotasPagadas as $cuotaPagada) {
@@ -511,7 +511,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
     // Acumulo los totales
@@ -521,9 +521,9 @@ class InformeController extends Controller
       $anio = $fecha->year;
 
       if($movExtra->tipo == 1) {
-        $totales[$semana." - ".$anio]["total"] += $movExtra->total;
+        $totales[$anio." - ".$semana]["total"] += $movExtra->total;
       } elseif ($movExtra->tipo == 2) {
-        $totales[$semana." - ".$anio]["total"] -= $movExtra->total;
+        $totales[$anio." - ".$semana]["total"] -= $movExtra->total;
       }
     }
 
@@ -532,7 +532,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio]["total"] += $reservaInmueble->total;
+      $totales[$anio." - ".$semana]["total"] += $reservaInmueble->total;
     }
 
     foreach ($reservasMueble as $reservaMueble) {
@@ -540,7 +540,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio]["total"] += $reservaMueble->total;
+      $totales[$anio." - ".$semana]["total"] += $reservaMueble->total;
     }
 
     foreach ($cuotasPagadas as $cuotaPagada) {
@@ -548,7 +548,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio]["total"] += $cuotaPagada->montoTotal;
+      $totales[$anio." - ".$semana]["total"] += $cuotaPagada->montoTotal;
     }
 
     return view('informe.ingresosEgresos.ingresosEgresosSemanalesGenerales', compact('totales'));
@@ -675,7 +675,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
     foreach ($reservasInmueble as $reservaInmueble) {
@@ -683,7 +683,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
     foreach ($reservasMueble as $reservaMueble) {
@@ -691,7 +691,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
     foreach ($cuotasPagadas as $cuotaPagada) {
@@ -699,7 +699,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
     // Acumulo los totales
@@ -709,9 +709,9 @@ class InformeController extends Controller
       $anio = $fecha->year;
 
       if($movExtra->tipo == 1) {
-        $totales[$semana." - ".$anio]["total"] += $movExtra->total;
+        $totales[$anio." - ".$semana]["total"] += $movExtra->total;
       } elseif ($movExtra->tipo == 2) {
-        $totales[$semana." - ".$anio]["total"] -= $movExtra->total;
+        $totales[$anio." - ".$semana]["total"] -= $movExtra->total;
       }
     }
 
@@ -720,7 +720,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio]["total"] += $reservaInmueble->total;
+      $totales[$anio." - ".$semana]["total"] += $reservaInmueble->total;
     }
 
     foreach ($reservasMueble as $reservaMueble) {
@@ -728,7 +728,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio]["total"] += $reservaMueble->total;
+      $totales[$anio." - ".$semana]["total"] += $reservaMueble->total;
     }
 
     foreach ($cuotasPagadas as $cuotaPagada) {
@@ -736,7 +736,7 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
-      $totales[$semana." - ".$anio]["total"] += $cuotaPagada->montoTotal;
+      $totales[$anio." - ".$semana]["total"] += $cuotaPagada->montoTotal;
     }
 
     // Ordeno por semana/anio descendiente
@@ -790,7 +790,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
     foreach ($reservasInmueble as $reservaInmueble) {
@@ -798,7 +798,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
     foreach ($reservasMueble as $reservaMueble) {
@@ -806,7 +806,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
     foreach ($cuotasPagadas as $cuotaPagada) {
@@ -814,7 +814,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
     // Acumulo los totales
@@ -824,9 +824,9 @@ class InformeController extends Controller
       $anio = $fecha->year;
 
       if($movExtra->tipo == 1) {
-        $totales[$mes." - ".$anio]["total"] += $movExtra->total;
+        $totales[$anio." - ".$mes]["total"] += $movExtra->total;
       } elseif ($movExtra->tipo == 2) {
-        $totales[$mes." - ".$anio]["total"] -= $movExtra->total;
+        $totales[$anio." - ".$mes]["total"] -= $movExtra->total;
       }
     }
 
@@ -835,7 +835,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio]["total"] += $reservaInmueble->total;
+      $totales[$anio." - ".$mes]["total"] += $reservaInmueble->total;
     }
 
     foreach ($reservasMueble as $reservaMueble) {
@@ -843,7 +843,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio]["total"] += $reservaMueble->total;
+      $totales[$anio." - ".$mes]["total"] += $reservaMueble->total;
     }
 
     foreach ($cuotasPagadas as $cuotaPagada) {
@@ -851,7 +851,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio]["total"] += $cuotaPagada->montoTotal;
+      $totales[$anio." - ".$mes]["total"] += $cuotaPagada->montoTotal;
     }
 
     return view('informe.ingresosEgresos.ingresosEgresosMensualesGenerales', compact('totales'));
@@ -979,7 +979,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
     foreach ($reservasInmueble as $reservaInmueble) {
@@ -987,7 +987,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
     foreach ($reservasMueble as $reservaMueble) {
@@ -995,7 +995,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
     foreach ($cuotasPagadas as $cuotaPagada) {
@@ -1003,7 +1003,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
     // Acumulo los totales
@@ -1013,9 +1013,9 @@ class InformeController extends Controller
       $anio = $fecha->year;
 
       if($movExtra->tipo == 1) {
-        $totales[$mes." - ".$anio]["total"] += $movExtra->total;
+        $totales[$anio." - ".$mes]["total"] += $movExtra->total;
       } elseif ($movExtra->tipo == 2) {
-        $totales[$mes." - ".$anio]["total"] -= $movExtra->total;
+        $totales[$anio." - ".$mes]["total"] -= $movExtra->total;
       }
     }
 
@@ -1024,7 +1024,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio]["total"] += $reservaInmueble->total;
+      $totales[$anio." - ".$mes]["total"] += $reservaInmueble->total;
     }
 
     foreach ($reservasMueble as $reservaMueble) {
@@ -1032,7 +1032,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio]["total"] += $reservaMueble->total;
+      $totales[$anio." - ".$mes]["total"] += $reservaMueble->total;
     }
 
     foreach ($cuotasPagadas as $cuotaPagada) {
@@ -1040,7 +1040,7 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
-      $totales[$mes." - ".$anio]["total"] += $cuotaPagada->montoTotal;
+      $totales[$anio." - ".$mes]["total"] += $cuotaPagada->montoTotal;
     }
 
     // Ordeno por semana/anio descendiente

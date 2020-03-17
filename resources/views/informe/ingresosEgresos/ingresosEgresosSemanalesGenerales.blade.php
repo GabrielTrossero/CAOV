@@ -11,7 +11,7 @@
         <table id="idDataTable" class="table table-striped">
           <thead>
             <tr>
-              <th>Fecha (Semana - Año)</th>
+              <th>Fecha (Año - Semana)</th>
               <th>Balance</th>
               <th>Mas Información</th>
             </tr>

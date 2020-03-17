@@ -12,7 +12,7 @@
       <table class="table table-striped">
         <thead>
             <tr>
-              <th>Fecha (Semana - Año)</th>
+              <th>Fecha (Año - Semana)</th>
               <th>Balance</th>
             </tr>
           </thead>
