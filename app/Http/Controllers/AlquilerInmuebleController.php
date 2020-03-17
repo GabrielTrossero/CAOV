@@ -147,6 +147,7 @@ class AlquilerInmuebleController extends Controller
         //valido solapamiento entre fechas ingresadas y las fechas y horas de inicio en la BD, del inmueble a alquilar.
         //Por lo tanto obtengo todas las reservas de dicho Inmueble, donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
         $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
+                                       ->where('fechaHoraInicio', '<>', $request->fechaHoraFin)
                                        ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
         if (sizeof($solapamientoFechas) != 0) {
@@ -156,6 +157,7 @@ class AlquilerInmuebleController extends Controller
         //valido solapamiento entre fechas ingresadas y las fechas y horas de fin en la BD, del inmueble a alquilar
         //Por lo tanto obtengo todas las reservas de dicho Inmueble, donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
         $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
+                                       ->where('fechaHoraFin', '<>', $request->fechaHoraInicio)
                                        ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
         if (sizeof($solapamientoFechas) != 0) {
@@ -341,6 +343,7 @@ class AlquilerInmuebleController extends Controller
         //Por lo tanto obtengo todas las reservas de dicho Inmueble (omitiendo la que estoy actualizando), donde la fechaHora de inicio esté entre la fechaHora de inicio y fin que ingresé
         $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
                                        ->where('id', '<>', $request->id)
+                                       ->where('fechaHoraInicio', '<>', $request->fechaHoraFin)
                                        ->whereBetween('fechaHoraInicio', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
         if (sizeof($solapamientoFechas) != 0) {
@@ -351,6 +354,7 @@ class AlquilerInmuebleController extends Controller
         //Por lo tanto obtengo todas las reservas de dicho Inmueble(omitiendo la que estoy actualizando), donde la fechaHora de fin esté entre la fechaHora de inicio y fin que ingresé
         $solapamientoFechas = ReservaInmueble::where('idInmueble', $request->inmueble)
                                        ->where('id', '<>', $request->id)
+                                       ->where('fechaHoraFin', '<>', $request->fechaHoraInicio)
                                        ->whereBetween('fechaHoraFin', [$request->fechaHoraInicio, $request->fechaHoraFin])->get();
 
         if (sizeof($solapamientoFechas) != 0) {
