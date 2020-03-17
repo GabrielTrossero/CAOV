@@ -487,6 +487,10 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
+
       $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
@@ -495,6 +499,10 @@ class InformeController extends Controller
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
 
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
+
       $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
 
@@ -502,6 +510,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
@@ -510,6 +522,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($cuotaPagada->fechaPago);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
@@ -519,6 +535,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($movExtra->fecha);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       if($movExtra->tipo == 1) {
         $totales[$anio." - ".$semana]["total"] += $movExtra->total;
@@ -531,6 +551,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana]["total"] += $reservaInmueble->total;
     }
@@ -539,6 +563,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana]["total"] += $reservaMueble->total;
     }
@@ -547,6 +575,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($cuotaPagada->fechaPago);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana]["total"] += $cuotaPagada->montoTotal;
     }
@@ -674,6 +706,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($movExtra->fecha);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
@@ -682,6 +718,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
@@ -690,6 +730,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
@@ -698,6 +742,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($cuotaPagada->fechaPago);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
     }
@@ -707,6 +755,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($movExtra->fecha);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       if($movExtra->tipo == 1) {
         $totales[$anio." - ".$semana]["total"] += $movExtra->total;
@@ -719,6 +771,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana]["total"] += $reservaInmueble->total;
     }
@@ -727,6 +783,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana]["total"] += $reservaMueble->total;
     }
@@ -735,6 +795,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($cuotaPagada->fechaPago);
       $semana = $fecha->weekOfYear;
       $anio = $fecha->year;
+      
+      if ($semana < 10) {
+        $semana = "0".$semana;
+      }
 
       $totales[$anio." - ".$semana]["total"] += $cuotaPagada->montoTotal;
     }
@@ -790,6 +854,10 @@ class InformeController extends Controller
       $mes = $fecha->month;
       $anio = $fecha->year;
 
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
+
       $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
 
@@ -797,6 +865,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
@@ -805,6 +877,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
@@ -813,6 +889,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($cuotaPagada->fechaPago);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
@@ -822,6 +902,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($movExtra->fecha);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       if($movExtra->tipo == 1) {
         $totales[$anio." - ".$mes]["total"] += $movExtra->total;
@@ -834,6 +918,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes]["total"] += $reservaInmueble->total;
     }
@@ -842,6 +930,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes]["total"] += $reservaMueble->total;
     }
@@ -850,6 +942,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($cuotaPagada->fechaPago);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes]["total"] += $cuotaPagada->montoTotal;
     }
@@ -978,6 +1074,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($movExtra->fecha);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
@@ -986,6 +1086,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
@@ -994,6 +1098,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
@@ -1002,6 +1110,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($cuotaPagada->fechaPago);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
     }
@@ -1011,6 +1123,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($movExtra->fecha);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       if($movExtra->tipo == 1) {
         $totales[$anio." - ".$mes]["total"] += $movExtra->total;
@@ -1023,6 +1139,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaInmueble->fechaSolicitud);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes]["total"] += $reservaInmueble->total;
     }
@@ -1031,6 +1151,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($reservaMueble->fechaSolicitud);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes]["total"] += $reservaMueble->total;
     }
@@ -1039,6 +1163,10 @@ class InformeController extends Controller
       $fecha = Carbon::parse($cuotaPagada->fechaPago);
       $mes = $fecha->month;
       $anio = $fecha->year;
+      
+      if ($mes < 10) {
+        $mes = "0".$mes;
+      }
 
       $totales[$anio." - ".$mes]["total"] += $cuotaPagada->montoTotal;
     }
