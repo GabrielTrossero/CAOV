@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\GrupoFamiliar;
 use App\Socio;
-use App\User;
 use Carbon\Carbon;
 
 class GrupoFamiliarController extends Controller
