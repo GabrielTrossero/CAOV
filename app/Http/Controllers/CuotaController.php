@@ -705,6 +705,7 @@ class CuotaController extends Controller
 
       //envío el socio para mostrar su info
       $socio = Socio::find($id);
+      $socio->edad = $this->calculaEdad($socio); //le seteo la edad
 
       //retorno las cuotas a la vista
       return view('cuota.listarCuotasSocio', compact('cuotas', 'socio'));
