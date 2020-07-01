@@ -516,7 +516,9 @@ class CuotaController extends Controller
   {
     ComprobanteCuota::where('id', $request->id)
           ->update([
-            'inhabilitada' => true
+            'inhabilitada' => true,
+            'fechaPago' => null,
+            'idMedioDePago' => null
           ]);
 
     //redirijo para mostrar la cuota actualizada

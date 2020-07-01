@@ -217,11 +217,11 @@
             </td>
           @elseif ($cuota->inhabilitada)
             <td>
-              <a href="{{ url('/cuota/show/'.$cuota->id) }}">
+
                 <button type="button" class="btn btn-primary tam_letra_small" onClick="alert('No se puede pagar la Cuota, ya que la misma está inhabilitada')">
                   Pagar
                 </button>
-              </a>
+              
             </td>
           @elseif (isset($cuota->fechaPago))
             <td>
@@ -253,11 +253,11 @@
             </button>
           </a>
         @else
-          <a style="text-decoration:none" href="{{ url('/cuota/show/'.$cuota->id) }}">
+
             <button type="button" class="btn btn-outline-warning" style="display:inline" onClick="alert('No se puede editar la Cuota, ya que la misma debe estar pagada y habilitada')">
               Editar Cuota
             </button>
-          </a>
+
         @endif
 
         &nbsp;&nbsp;
@@ -267,6 +267,14 @@
             <input type="hidden" name="id" value="{{ $cuota->id }}">
               <button type="submit" class="btn btn-outline-danger" style="display:inline">
                 Habilitar Cuota
+              </button>
+          </form>
+        @elseif ($cuota->fechaPago != '')
+          <form action="{{url('/cuota/disable')}}" method="post" style="display:inline" onsubmit="return confirm('La cuota está Pagada. Si la Inhabilita, se borrará la fecha de pago. ¿Desea Inhabilitarla?');">
+            {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $cuota->id }}">
+              <button type="submit" class="btn btn-outline-danger" style="display:inline">
+                Inhabilitar Cuota
               </button>
           </form>
         @else
