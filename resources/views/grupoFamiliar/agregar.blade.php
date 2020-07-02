@@ -61,7 +61,7 @@
                   </table>
                   <div class="offset-md-5">
                       <button type="submit" class="btn btn-outline-primary">
-                          {{ __('Agregar') }}
+                          {{ __('Guardar') }}
                       </button>
                   </div>
                 </form>

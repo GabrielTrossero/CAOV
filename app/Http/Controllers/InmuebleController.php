@@ -167,6 +167,14 @@ class InmuebleController extends Controller
      */
     public function destroy(Request $request)
     {
+        $inmueble = Inmueble::find($request->id);
+        $cantidadAlquileresInmueble = sizeof($inmueble->reservasDeInmueble);
+
+        if($cantidadAlquileresInmueble > 0)
+        {
+          return redirect()->back()->with('inmuebleTieneAlquileres', 'El Inmueble que se quiere eliminar tiene Alquileres asociados.');
+        }
+        
         //elimino el registro con tal id
         $inmueble = Inmueble::destroy($request->id);
 

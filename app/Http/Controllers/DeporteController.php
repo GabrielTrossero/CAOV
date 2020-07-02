@@ -160,8 +160,16 @@ class DeporteController extends Controller
      */
     public function destroy(Request $request)
     {
-        $deporte = Deporte::destroy($request->id);
+      $deporte = Deporte::find($request->id);
+      $cantidadSociosDeporte = sizeof($deporte->socios);
 
-        return redirect()->action('DeporteController@getShow');
+      if($cantidadSociosDeporte > 0)
+      {
+        return redirect()->back()->with('deporteTieneSocios', 'El Deporte que se quiere eliminar tiene Socios anotados.');
+      }
+
+      $deporte = Deporte::destroy($request->id);
+
+      return redirect()->action('DeporteController@getShow');
     }
 }

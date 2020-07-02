@@ -18,7 +18,7 @@
             <th>Costo Reserva</th>
             <th>Costo Total</th>
             <th>N° Recibo</th>
-            <th>Ver Alquiler</th>
+            <th>Más Información</th>
           </tr>
         </thead>
         <tbody>

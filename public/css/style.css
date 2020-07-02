@@ -145,6 +145,23 @@ nav.mostrar{
 	text-align: center;
 }
 
+.icono-eliminar {
+	display: inline;
+	background-color: transparent;
+	margin-left: 10%; 
+	cursor: pointer; 
+	border: none; 
+	outline: none;
+}
+
+.icono-editar-anchor {
+	text-decoration: transparent !important;
+}
+
+.icono-editar {
+	color:rgb(199, 199, 51);
+}
+
 .card-footer{
 	text-align: center;
 }

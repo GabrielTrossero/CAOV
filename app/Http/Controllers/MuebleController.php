@@ -186,6 +186,14 @@ class MuebleController extends Controller
      */
     public function destroy(Request $request)
     {
+      $mueble = Mueble::find($request->id);
+      $cantidadAlquileresMueble = sizeof($mueble->reservasDeMueble);
+
+      if($cantidadAlquileresMueble > 0)
+      {
+        return redirect()->back()->with('muebleTieneAlquileres', 'El Mueble que se quiere eliminar tiene Alquileres asociados.');
+      }
+        
       //elimino el registro con tal id
       $mueble = Mueble::destroy($request->id);
 
