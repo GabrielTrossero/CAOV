@@ -113,11 +113,28 @@ class CuotaController extends Controller
    */
   public function getShowMontoCuota()
   {
-    //busco todos los montos de cuotas
-    $montosCuotas = MontoCuota::where('tipo', '!=', 'v')->get();
+    //MONTOS ACTUALES
+    $montosActuales = new \Illuminate\Database\Eloquent\Collection; //colección donde voy a almacenar todas los montoCuotas para enviarlas a la vista
+
+    //tomo los montocuotas actuales (uno de cada tipo)
+    $monto = MontoCuota::where('tipo', 'g')->orderBy('fechaCreacion', 'DESC')->take(1)->get();//el take me obtine el primero, pero en forma d evector (a diferencia del first())
+    $montosActuales = $montosActuales->merge($monto);
+
+    $monto = MontoCuota::where('tipo', 'a')->orderBy('fechaCreacion', 'DESC')->take(1)->get();
+    $montosActuales = $montosActuales->merge($monto);
+
+    $monto = MontoCuota::where('tipo', 'c')->orderBy('fechaCreacion', 'DESC')->take(1)->get();
+    $montosActuales = $montosActuales->merge($monto);
+
+
+    //MONTOS HISTORICOS
+    //busco todos los montos de cuotas (excepto vitalicio)
+    $montosHistoricos = MontoCuota::where('tipo', '!=', 'v')->get();
+
+    $montosHistoricos = $montosHistoricos->diff($montosActuales);
 
     //redirijo a la vista para listar todos los montos de cuotas pasando el array 'montoCuota'
-    return view('cuota.listadoMontoCuota' , compact('montosCuotas'));
+    return view('cuota.listadoMontoCuota' , compact('montosActuales', 'montosHistoricos'));
   }
 
 
