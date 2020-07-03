@@ -101,10 +101,8 @@ class CuotaController extends Controller
     $montosCuotas = MontoCuota::where('tipo', '!=', 'v')->get();
 
     //redirijo para mostrar el monto ingresado
-    return view('cuota.listadoMontoCuota' , compact('montosCuotas'));
+    return redirect()->action('CuotaController@getShowMontoCuota');
   }
-
-
 
   /**
    * Display the resource list
@@ -137,7 +135,82 @@ class CuotaController extends Controller
     return view('cuota.listadoMontoCuota' , compact('montosActuales', 'montosHistoricos'));
   }
 
+  /**
+   * Shows the MontoCuota edit form
+   * 
+   * @param int $id
+   */
+  public function editMontoCuota($id) 
+  {
+    $montoCuota = MontoCuota::find($id);
 
+    return view('cuota.editarMontoCuota', compact('montoCuota'));
+  }
+
+  /**
+   * Updates the MontoCuota register
+   *
+   * @param Request $request
+   * 
+   * @return void
+   */
+  public function updateMontoCuota(Request $request)
+  {
+    //mensajes de error que se mostraran por pantalla
+    $messages = [
+      'tipo.required' => 'Es necesario ingresar un tipo.',
+      'tipo.in' => 'Dicha opción no es válida.',
+      'montoMensual.required' => 'Es necesario ingresar un monto mensual.',
+      'montoInteresMensual.required' => 'Es necesario ingresar un monto mensual.',
+      'cantidadMeses.required' => 'Es necesario ingresar una cantidad.'
+    ];
+
+    //valido los datos ingresados
+    $validacion = Validator::make($request->all(), [
+      'tipo' => 'required|in:a,c,g',
+      'montoMensual' => 'required',
+      'montoInteresMensual' => 'required',
+      'cantidadMeses' => 'required'
+    ], $messages);
+
+    //si la validacion falla vuelvo hacia atras con los errores
+    if($validacion->fails()){
+      return redirect()->back()->withInput()->withErrors($validacion->errors());
+    }
+
+    $montoCuota = MontoCuota::find($request->id);
+
+    $montoCuota->tipo = $request->tipo;
+    $montoCuota->montoMensual = $request->montoMensual;
+    $montoCuota->montoInteresGrupoFamiliar = $request->montoInteresGrupoFamiliar;
+    $montoCuota->cantidadIntegrantes = $request->cantidadIntegrantes;
+    $montoCuota->montoInteresMensual = $request->montoInteresMensual;
+    $montoCuota->cantidadMeses = $request->cantidadMeses;
+
+    $montoCuota->save();
+
+    return redirect()->action('CuotaController@getShowMontoCuota');
+  }
+
+  /**
+   * Destroys a MontoCuota register passed by ID
+   * 
+   * @param Request $request
+   */
+  public function destroyMontoCuota(Request $request)
+  {
+    $montoCuota = MontoCuota::find($request->id);
+    $cantidadCuotasAsociadasAlMonto = sizeof($montoCuota->comprobantesDeCuotas);
+
+    if($cantidadCuotasAsociadasAlMonto > 0)
+    {
+      return redirect()->back()->with('montoCuotaTieneCuotas', 'El Monto de Cuota que se quiere eliminar tiene Cuotas asociadas.');
+    }
+
+    $montoCuota = MontoCuota::destroy($montoCuota->id);
+
+    return redirect()->action('CuotaController@getShowMontoCuota');
+  }
 
   /**
    * Show the form for creating a new resource.
@@ -404,8 +477,6 @@ class CuotaController extends Controller
     return view('cuota.listado', compact('cuotas', 'integrantesEliminados', 'gruposEliminados'));
   }
 
-
-
   /**
    * Display the specified resource.
    *
@@ -440,8 +511,6 @@ class CuotaController extends Controller
     //se lo envío a la vista
     return view('cuota.individual', ['cuota' => $cuota]);
   }
-
-
 
   /**
    * Show the form for editing the specified resource.

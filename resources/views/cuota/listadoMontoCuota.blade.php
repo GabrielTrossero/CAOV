@@ -7,6 +7,10 @@
     <div class="card-header row"> <!--row me permite mantener los dos label en la misma linea-->
       <label class="col-md-9 col-form-label" id="nomTablaActual"><b>Listado de Montos de Cuotas (Activas)</b></label>
       <label class="col-md-9 col-form-label" id="nomTablaHistorica" style="display:none"><b>Listado de Montos de Cuotas (Historicas)</b></label>
+      @if (\Session::has('montoCuotaTieneCuotas'))
+        <br>
+        <span class="text-danger">{!! \Session::get('montoCuotaTieneCuotas') !!}</span>
+      @endif
       <label class="col-md-3 col-form-label">
         <select class="form-control" id="filtroTabla">
           <option value="activa" selected>Activas</option>
@@ -23,6 +27,7 @@
             <th>Monto Mensual</th>
             <th>Interés Grupo Familiar</th>
             <th>Interés por retraso</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -46,6 +51,20 @@
               @endif
 
               <td>{{ '$'.$montoCuota->montoInteresMensual.' por mes, a partir del mes N° '.$montoCuota->cantidadMeses.' de atraso' }}</td>
+              <td>
+                @if (sizeof($montoCuota->comprobantesDeCuotas) == 0)
+                  <a class="icono-editar-anchor" href="{{ url('/cuota/editMontoCuota/'.$montoCuota->id) }}">
+                    <i class="fas fa-edit icono-editar" title="Editar"></i>
+                  </a>
+                  <form action="{{url('/cuota/deleteMontoCuota')}}" method="post" style="display:inline">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="id" value="{{ $montoCuota->id }}">
+                    <button class="icono-eliminar" type="submit">
+                      <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
+                    </button>
+                </form>
+                @endif
+              </td>
             </tr>
           @endforeach
         </tbody>
@@ -61,6 +80,7 @@
             <th>Monto Mensual</th>
             <th>Interés Grupo Familiar</th>
             <th>Interés por retraso</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -84,6 +104,20 @@
               @endif
 
               <td>{{ '$'.$montoCuota->montoInteresMensual.' por mes, a partir del mes N° '.$montoCuota->cantidadMeses.' de atraso' }}</td>
+              <td>
+                @if (sizeof($montoCuota->comprobantesDeCuotas) == 0)
+                  <a class="icono-editar-anchor" href="{{ url('/cuota/editMontoCuota/'.$montoCuota->id) }}">
+                    <i class="fas fa-edit icono-editar" title="Editar"></i>
+                  </a>
+                  <form action="{{url('/cuota/deleteMontoCuota')}}" method="post" style="display:inline">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="id" value="{{ $montoCuota->id }}">
+                    <button class="icono-eliminar" type="submit">
+                      <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
+                    </button>
+                </form>
+                @endif
+              </td>
             </tr>
           @endforeach
         </tbody>

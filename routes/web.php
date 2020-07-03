@@ -157,6 +157,9 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
             Route::post('createMontoCuota', 'CuotaController@storeMontoCuota');
             Route::get('showMontoCuota', 'CuotaController@getShowMontoCuota');
             Route::post('storeMontoCuota', 'CuotaController@show');
+            Route::get('editMontoCuota/{id}', 'CuotaController@editMontoCuota');
+            Route::post('editMontoCuota', 'CuotaController@updateMontoCuota');
+            Route::post('deleteMontoCuota', 'CuotaController@destroyMontoCuota');
         });
 
         //Rutas de Inmuebles
