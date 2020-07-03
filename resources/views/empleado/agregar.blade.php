@@ -13,7 +13,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group row">
-                            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Nombre de Usuario') }}</label>
+                            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Nombre de Usuario *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" name="username" id="username" class="form-control" value="{{ old('username') }}" minlength="8" maxlength="75" required>
@@ -25,7 +25,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Email') }}</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Email *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" maxlength="75" required>
@@ -35,7 +35,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona *') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-control" name="idPersona" id="idPersona">
@@ -56,7 +56,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="password" name="password" id="password" class="form-control" minlength="8" maxlength="80" required>
@@ -66,7 +66,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="passwordRepeat" class="col-md-4 col-form-label text-md-right">{{ __('Repetir Contraseña') }}</label>
+                            <label for="passwordRepeat" class="col-md-4 col-form-label text-md-right">{{ __('Repetir Contraseña *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="password" name="passwordRepeat" id="passwordRepeat" class="form-control" minlength="8" maxlength="80" required>
@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="idTipoUsuario" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Usuario') }}</label>
+                            <label for="idTipoUsuario" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Usuario *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="idTipoUsuario" id="idTipoUsuario" class="form-control" required>

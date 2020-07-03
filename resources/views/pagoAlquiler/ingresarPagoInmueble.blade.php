@@ -183,7 +183,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="numRecibo" class="col-md-4 col-form-label text-md-right">{{ __('N° Recibo') }}</label>
+                            <label for="numRecibo" class="col-md-4 col-form-label text-md-right">{{ __('N° Recibo *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ old('numRecibo') ?? $reservaInmueble->numRecibo }}" min="0" required>

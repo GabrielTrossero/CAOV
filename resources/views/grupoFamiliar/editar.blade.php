@@ -16,7 +16,7 @@
                         <input type="hidden" name="id" value="{{ $grupo->id }}">
 
                         <div class="form-group row">
-                            <label for="titular" class="col-md-4 col-form-label text-md-right">{{ __('Titular') }}</label>
+                            <label for="titular" class="col-md-4 col-form-label text-md-right">{{ __('Titular *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="titular" id="titular" class="form-control">

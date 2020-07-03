@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona *') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-control" name="idPersona" id="idPersona">
@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="inmueble" class="col-md-4 col-form-label text-md-right">{{ __('Inmueble') }}</label>
+                            <label for="inmueble" class="col-md-4 col-form-label text-md-right">{{ __('Inmueble *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="inmueble" id="inmueble" class="form-control" required>
@@ -88,7 +88,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaSol" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Solicitud') }}</label>
+                            <label for="fechaSol" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Solicitud *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="date" name="fechaSol" id="fechaSol" class="form-control" required value="{{ old('fechaSol')  }}">
@@ -98,7 +98,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaHoraInicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio') }}</label>
+                            <label for="fechaHoraInicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="datetime-local" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" required value="{{ old('fechaHoraInicio') }}">
@@ -112,7 +112,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización') }}</label>
+                            <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="datetime-local" name="fechaHoraFin" id="fechaHoraFin" class="form-control" required value="{{ old('fechaHoraFin') }}">
@@ -132,7 +132,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="costoReserva" class="col-md-4 col-form-label text-md-right">{{ __('Costo de la Reserva') }}</label>
+                            <label for="costoReserva" class="col-md-4 col-form-label text-md-right">{{ __('Costo de la Reserva *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="costoReserva" id="costoReserva" class="form-control" required value="{{ old('costoReserva') }}">
@@ -146,7 +146,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="costoTotal" class="col-md-4 col-form-label text-md-right">{{ __('Costo Total') }}</label>
+                            <label for="costoTotal" class="col-md-4 col-form-label text-md-right">{{ __('Costo Total *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="costoTotal" id="costoTotal" class="form-control" required value="{{ old('costoTotal') }}">
@@ -156,7 +156,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
+                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control" required>
@@ -170,7 +170,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="tipoEvento" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Evento') }}</label>
+                            <label for="tipoEvento" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Evento *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" name="tipoEvento" id="tipoEvento" class="form-control" required value="{{ old('tipoEvento') }}">
@@ -180,7 +180,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="cantAsistentes" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad de Asistentes') }}</label>
+                            <label for="cantAsistentes" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad de Asistentes *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="cantAsistentes" id="cantAsistentes" class="form-control" required value="{{ old('cantAsistentes') }}">
@@ -190,7 +190,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="servicioLimp" class="col-md-4 col-form-label text-md-right">{{ __('Servicio de Limpieza') }}</label>
+                            <label for="servicioLimp" class="col-md-4 col-form-label text-md-right">{{ __('Servicio de Limpieza *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="servicioLimp" id="servicioLimp" class="form-control" required>
@@ -203,7 +203,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="musica" class="col-md-4 col-form-label text-md-right">{{ __('Música') }}</label>
+                            <label for="musica" class="col-md-4 col-form-label text-md-right">{{ __('Música *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="musica" id="musica" class="form-control" required>
@@ -216,7 +216,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="reglamento" class="col-md-4 col-form-label text-md-right">{{ __('Reglamento') }}</label>
+                            <label for="reglamento" class="col-md-4 col-form-label text-md-right">{{ __('Reglamento *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="reglamento" id="reglamento" class="form-control" required>

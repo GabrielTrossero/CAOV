@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaPago" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Pago') }}</label>
+                            <label for="fechaPago" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Pago *(si es Pagada)') }}</label>
 
                             <div class="col-md-6">
                                 <input type="date" name="fechaPago" id="fechaPago" class="form-control" valor="{{ $cuota->fechaPago }}" value="{{ $cuota->fechaPago }}"  mesAnio="{{$cuota->fechaMesAnio}}" cantMaxMeses="{{$cuota->montoCuota->cantidadMeses}}" interes="{{$cuota->montoCuota->montoInteresMensual}}" >
@@ -60,7 +60,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
+                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago *(si es Pagada)') }}</label>
 
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control" required>
@@ -72,7 +72,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="pagada" class="col-md-4 col-form-label text-md-right">{{ __('Pagada') }}</label>
+                            <label for="pagada" class="col-md-4 col-form-label text-md-right">{{ __('Pagada *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="pagada" id="pagada" class="form-control" required>

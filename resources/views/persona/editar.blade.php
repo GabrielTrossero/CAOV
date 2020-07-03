@@ -15,7 +15,7 @@
                         <input type="hidden" name="id" value="{{ $persona->id }}">
 
                         <div class="form-group row">
-                            <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI') }}</label>
+                            <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="DNI" id="DNI" class="form-control" value="{{ old('DNI') ?? $persona->DNI }}" min="0" required>
@@ -25,7 +25,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nombres') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nombres *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" name="nombres" id="nombres" class="form-control" value="{{ old('nombres') ?? $persona->nombres }}" maxlength="100" required>
@@ -35,7 +35,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="apellido" class="col-md-4 col-form-label text-md-right">{{ __('Apellido') }}</label>
+                            <label for="apellido" class="col-md-4 col-form-label text-md-right">{{ __('Apellido *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" name="apellido" id="apellido" class="form-control" value="{{ old('apellido') ?? $persona->apellido }}" maxlength="100" required>
