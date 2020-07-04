@@ -7,11 +7,12 @@ $(document).ready(function () {
         let token = $("#token").val();
 
         if (tipoAlquiler == "inmueble") {
-            let fechaIngresada = $("#chequear-fecha").val();
+            let fechaInicioIngresada = $("#chequear-fecha-inicio").val();
+            let fechaFinIngresada = $("#chequear-fecha-fin").val();
             let inmuebleSeleccionado = $("#inmueble").val();
             let nombreInmueble = $("#inmueble option:selected").html();
             
-            $.post('/alquilerinmueble/disponibilidad', {fecha: fechaIngresada, _token: token, inmueble: inmuebleSeleccionado})
+            $.post('/alquilerinmueble/disponibilidad', {fechaInicio: fechaInicioIngresada, fechaFin: fechaFinIngresada, _token: token, inmueble: inmuebleSeleccionado})
             .done(function(data){
                 let mensaje = "Horarios Reservados para " + nombreInmueble + ":";
                 fechasReservadas = data.fechasReservadas;

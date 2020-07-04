@@ -15,7 +15,8 @@
                         <div class="col-md-6">
                             <form action="#" id="form-check">
                                 <input type="text" id="action" value="{{ url('alquilerinmueble/disponibilidad') }}'" hidden>
-                                <input type="date" name="chequear-fecha" id="chequear-fecha" class="form-control" value="">
+                                <input type="date" name="chequear-fecha-inicio" id="chequear-fecha-inicio" class="form-control" value="">
+                                <input type="date" name="chequear-fecha-fin" id="chequear-fecha-fin" class="form-control" value="">
                                 <input type="text" id="token" value="{{ csrf_token() }}" hidden>
                                 <input type="text" id="tipo" value="inmueble" hidden>
                                 <button type="button" id="chequear"><i class="fas fa-check" style="color:blue"></i></button>

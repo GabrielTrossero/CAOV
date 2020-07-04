@@ -35,15 +35,21 @@ class AlquilerInmuebleController extends Controller
     public function postDisponibilidad(){
       $inmuebleSeleccionado = Input::get('inmueble');
       $alquileres = ReservaInmueble::all()->where('idInmueble', $inmuebleSeleccionado);
-      $fecha = Carbon::parse(Input::get('fecha'))->format('Y-m-d');
+      $fechaInicio = Carbon::parse(Input::get('fechaInicio'))->format('Y-m-d');
+      $fechaFin = Carbon::parse(Input::get('fechaFin'))->format('Y-m-d');
 
       $fechasReservadas = array();
 
       foreach($alquileres as $alquiler){
-        $alquiler->soloFecha = Carbon::parse($alquiler->fechaHoraInicio)->format('Y-m-d');
+        $alquiler->soloFechaInicio = Carbon::parse($alquiler->fechaHoraInicio)->format('Y-m-d');
+        $alquiler->soloFechaFin = Carbon::parse($alquiler->fechaHoraFin)->format('Y-m-d');
 
-        if ($alquiler->soloFecha == $fecha) {
-          $fechasReservadas[] = array($alquiler->soloFecha, $alquiler->fechaHoraInicio, $alquiler->fechaHoraFin);
+        if (($alquiler->soloFechaInicio >= $fechaInicio && $alquiler->soloFechaInicio <= $fechaFin) 
+            || ($alquiler->soloFechaFin <= $fechaFin && $alquiler->soloFechaFin >= $fechaInicio)
+            || ($alquiler->soloFechaInicio < $fechaInicio && $alquiler->soloFechaFin > $fechaFin)) {
+          $fechasReservadas[] = array($alquiler->soloFechaInicio, 
+                                      $alquiler->fechaHoraInicio, 
+                                      $alquiler->fechaHoraFin);
         }
       }
 
