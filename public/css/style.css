@@ -154,12 +154,31 @@ nav.mostrar{
 	outline: none;
 }
 
+.icono-eliminar-disabled {
+	display: inline;
+	background-color: transparent;
+	margin-left: 10%;
+	border: none; 
+	outline: none;
+	cursor: not-allowed;
+}
+
 .icono-editar-anchor {
 	text-decoration: transparent !important;
 }
 
+.icono-editar-anchor-disabled {
+	text-decoration: transparent !important;
+	pointer-events: visible;
+}
+
 .icono-editar {
 	color:rgb(199, 199, 51);
+}
+
+.icono-editar-disabled {
+	color: darkslategray;
+	cursor: not-allowed;
 }
 
 .card-footer{

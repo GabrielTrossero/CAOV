@@ -169,7 +169,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
             Route::get('create', 'InmuebleController@create');
             Route::post('create', 'InmuebleController@store');
             Route::get('show', 'InmuebleController@getShow');
-            Route::get('show/{id}', 'InmuebleController@getShowId');
+            //Route::get('show/{id}', 'InmuebleController@getShowId');
             Route::get('edit/{id}', 'InmuebleController@edit');
             Route::post('edit', 'InmuebleController@update');
             Route::post('delete', 'InmuebleController@destroy');
@@ -182,7 +182,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
             Route::get('create', 'MuebleController@create');
             Route::post('create', 'MuebleController@store');
             Route::get('show', 'MuebleController@getShow');
-            Route::get('show/{id}', 'MuebleController@getShowId');
+            //Route::get('show/{id}', 'MuebleController@getShowId');
             Route::get('edit/{id}', 'MuebleController@edit');
             Route::post('edit', 'MuebleController@update');
             Route::post('delete', 'MuebleController@destroy');
@@ -217,7 +217,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
             Route::get('create', 'DeporteController@create');
             Route::post('create', 'DeporteController@store');
             Route::get('show', 'DeporteController@getShow');
-            Route::get('show/{id}', 'DeporteController@getShowId');
+            //Route::get('show/{id}', 'DeporteController@getShowId');
             Route::get('edit/{id}', 'DeporteController@edit');
             Route::post('edit', 'DeporteController@update');
             Route::post('delete', 'DeporteController@destroy');

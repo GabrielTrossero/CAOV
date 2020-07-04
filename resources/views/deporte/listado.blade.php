@@ -26,14 +26,24 @@
               <td>
                 <a class="icono-editar-anchor" href="{{ url('/deporte/edit/'.$deporte->id) }}">
                     <i class="fas fa-edit icono-editar" title="Editar"></i>
-                 </a>
-                 <form action="{{url('/deporte/delete')}}" method="post" style="display:inline">
-                   {{ csrf_field() }}
-                   <input type="hidden" name="id" value="{{ $deporte->id }}">
-                   <button class="icono-eliminar" type="submit">
-                     <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
-                   </button>
-                 </form> 
+                </a>
+                @if (sizeof($deporte->socios) == 0)
+                  <form action="{{url('/deporte/delete')}}" method="post" style="display:inline">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="id" value="{{ $deporte->id }}">
+                    <button class="icono-eliminar" type="submit">
+                      <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
+                    </button>
+                  </form> 
+                @else
+                  <form style="display:inline">
+                    <button class="icono-eliminar-disabled" type="submit" disabled>
+                      <i class="fas fa-trash" style="color: darkslategray;" title="Tiene socios anotados"></i>
+                    </button>
+                  </form>
+                @endif
+                  
+                 
               </td>
             </tr>
           @endforeach
