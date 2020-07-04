@@ -17,4 +17,46 @@ $(document).ready(function() {
         "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
       }
     });
+
+    $('#idDataTable3').DataTable({
+      //para cambiar el lenguaje a español
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    });
+
+    $('#idDataTable4').DataTable({
+      //para cambiar el lenguaje a español
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    });
+
+    $('#idDataTable5').DataTable({
+      //para cambiar el lenguaje a español
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    });
+
+    $('#idDataTable6').DataTable({
+      //para cambiar el lenguaje a español
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    });
+
+    $('#idDataTable7').DataTable({
+      //para cambiar el lenguaje a español
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    });
+
+    $('#idDataTable8').DataTable({
+      //para cambiar el lenguaje a español
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    });
 } );

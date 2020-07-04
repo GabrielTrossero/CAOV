@@ -18,6 +18,8 @@
         </select>
       </label>
     </div>
+
+    <!--tabla actual-->
     <div class="card-body border" id="tablaActual">
       <table id="idDataTable" class="table table-striped">
         <thead>
@@ -71,6 +73,7 @@
       </table>
     </div>
 
+    <!--tabla historica-->
     <div class="card-body border" id="tablaHistorica" style="display:none">
       <table id="idDataTable2" class="table table-striped">
         <thead>
@@ -127,6 +130,6 @@
 </div>
 
 
-<script src="{!! asset('js/filtrarTablasMontoCuota.js') !!}"></script> <!--conexion a js que es utilizada para filtar las tablas-->
+<script src="{!! asset('js/filtrarTablas/montoCuota.js') !!}"></script> <!--conexion a js que es utilizada para filtar las tablas-->
 
 @stop

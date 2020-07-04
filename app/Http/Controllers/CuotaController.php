@@ -104,6 +104,8 @@ class CuotaController extends Controller
     return redirect()->action('CuotaController@getShowMontoCuota');
   }
 
+
+
   /**
    * Display the resource list
    *
@@ -135,6 +137,8 @@ class CuotaController extends Controller
     return view('cuota.listadoMontoCuota' , compact('montosActuales', 'montosHistoricos'));
   }
 
+
+
   /**
    * Shows the MontoCuota edit form
    * 
@@ -146,6 +150,8 @@ class CuotaController extends Controller
 
     return view('cuota.editarMontoCuota', compact('montoCuota'));
   }
+
+
 
   /**
    * Updates the MontoCuota register
@@ -192,6 +198,8 @@ class CuotaController extends Controller
     return redirect()->action('CuotaController@getShowMontoCuota');
   }
 
+
+
   /**
    * Destroys a MontoCuota register passed by ID
    * 
@@ -211,6 +219,8 @@ class CuotaController extends Controller
 
     return redirect()->action('CuotaController@getShowMontoCuota');
   }
+
+
 
   /**
    * Show the form for creating a new resource.
@@ -458,24 +468,79 @@ class CuotaController extends Controller
     }
 
 
-    //recupero todas las cuotas
-    $c = ComprobanteCuota::all();
+    //CUOTAS HISTORICAS
+    $cuotasHistoricas = ComprobanteCuota::all(); //recupero todas las cuotas
 
-    //le agrego a cada cuota los montos que se usan en la columna "Monto Total"
-    foreach ($c as $cuota) {
-      $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
-      $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
-    }
+    $cuotasHistoricas = $this->accionDeGetShow($cuotasHistoricas);
 
-    $cuotas = $c->filter(function ($value, $key) {  //funcion para filtrar y no eviarle las cuotas de vitalicios
-        if ($value->montoCuota->tipo != 'v')
-          return true;
-        else false;
+
+    //CUOTAS DEL MES
+    //obtengo las cuotas generadas este mes
+    $cuotasMes = ComprobanteCuota::whereMonth('fechaMesAnio', Carbon::now()->month)
+                                  ->whereYear('fechaMesAnio', Carbon::now()->year)->get();
+
+    $cuotasMes = $this->accionDeGetShow($cuotasMes);
+
+
+    //CUOTAS IMPAGAS
+    $cuotasImpagas = ComprobanteCuota::where('inhabilitada', 0)->where('fechaPago', null)->get();
+
+    $cuotasImpagas = $this->accionDeGetShow($cuotasImpagas);
+
+
+    //CUOTAS ATRASADAS
+    //obtengo las cuotas que están atrasadas (todavía no se pagaron y tienen intereses de atraso)
+    $cuotasAtrasadas = $cuotasImpagas;
+    
+    //funcion para filtrar y enviar solo las cuotas que se pagarán fuera de término
+    $cuotasAtrasadas = $cuotasAtrasadas->filter(function ($value, $key) {
+      if ($this->tendraInteresAtraso($value) > 0)
+        return true;
+      else false;
     });
 
+
+    //CUOTAS INHABILITADAS
+    $cuotasInhabilitadas = ComprobanteCuota::where('inhabilitada', 1)->get();
+
+    $cuotasInhabilitadas = $this->accionDeGetShow($cuotasInhabilitadas);
+
+
+    //CUOTAS PAGADAS
+    $cuotasPagadas = ComprobanteCuota::where('fechaPago', '!=', null)->where('inhabilitada', 0)->get();
+
+    $cuotasPagadas = $this->accionDeGetShow($cuotasPagadas);
+
+
+    //CUOTAS PAGADA MES
+    //obtengo las cuotas que fueron pagadas este mes
+    $cuotasPagadasMes = ComprobanteCuota::where('fechaPago', '!=', null)
+                                        ->where('inhabilitada', 0)
+                                        ->whereMonth('fechaPago', Carbon::now()->month)
+                                        ->whereYear('fechaPago', Carbon::now()->year)->get();
+
+    $cuotasPagadasMes = $this->accionDeGetShow($cuotasPagadasMes);
+
+
+    //CUOTAS PAGADA FUERA DE TERMINO
+    $cuotasFueraDeTermino = $cuotasPagadas;
+
+    //funcion para filtrar y enviar solo las cuotas con intereses
+    $cuotasFueraDeTermino = $cuotasFueraDeTermino->filter(function ($value, $key) {
+      if ($this->montoInteresAtraso($value) > 0)
+        return true;
+      else false;
+    });
+
+
     //retorno las cuotas a la vista
-    return view('cuota.listado', compact('cuotas', 'integrantesEliminados', 'gruposEliminados'));
+    return view('cuota.listado', compact('cuotasHistoricas', 'cuotasMes', 'cuotasImpagas',
+                                'cuotasAtrasadas', 'cuotasInhabilitadas', 'cuotasPagadas',
+                                'cuotasPagadasMes', 'cuotasFueraDeTermino', 'integrantesEliminados',
+                                'gruposEliminados'));
   }
+
+
 
   /**
    * Display the specified resource.
@@ -511,6 +576,8 @@ class CuotaController extends Controller
     //se lo envío a la vista
     return view('cuota.individual', ['cuota' => $cuota]);
   }
+
+
 
   /**
    * Show the form for editing the specified resource.
@@ -1093,6 +1160,8 @@ class CuotaController extends Controller
     }
   }
 
+  
+
   /**
    * Calcula el monto a pagar por cantidad de integrantes
    *
@@ -1109,6 +1178,35 @@ class CuotaController extends Controller
     if (($cuota->adherentes->count()+1) > $cuota->montoCuota->cantidadIntegrantes) {
       $montoPagar = (($cuota->adherentes->count()+1) - $cuota->montoCuota->cantidadIntegrantes) * $cuota->montoCuota->montoInteresGrupoFamiliar;
       return $montoPagar;
+    }
+    else {
+      return 0;
+    }
+  }
+
+
+
+  /**
+   * Calcula la cantidad de meses de atraso respecto a la fecha actual
+   *
+   * @param App\ComprobanteCuota $cuota
+   * @return int
+   */
+  private function tendraInteresAtraso($cuota){
+    //calculo la diferencia de meses entre el mesAnio y la fecha actual
+    if ($cuota->fechaMesAnio < Carbon::now()) {
+      $date = Carbon::parse($cuota->fechaMesAnio);
+      $now = Carbon::parse($cuota->fechaPago);
+      $mesesAtraso = $date->diffInMonths($now);
+    }
+    else {
+      $mesesAtraso = 0;
+    }
+
+    //compruebo si la cantidad de meses de atraso supera la cantidad máxima de meses de atraso permitida
+    if ($mesesAtraso > $cuota->montoCuota->cantidadMeses) {
+      $mesesFueraDeTermino = $mesesAtraso - $cuota->montoCuota->cantidadMeses;
+      return $mesesFueraDeTermino;
     }
     else {
       return 0;
@@ -1195,6 +1293,8 @@ class CuotaController extends Controller
     return $socio;
   }
 
+
+
   /**
    * envia mail con el detalle de la cuota pagada
    *
@@ -1220,6 +1320,8 @@ class CuotaController extends Controller
     Mail::to($arrayCuota['emailTo'])->send(new SendMail($arrayCuota, 'cuota'));
   }
 
+
+
   /**
      * genera el pdf para el id de la cuota pagada dada
      *
@@ -1244,4 +1346,27 @@ class CuotaController extends Controller
 
       return $pdf->download('comprobante-cuota.pdf');
     }
+
+
+
+  /**
+   * funcion que se utiliza en GetShow()
+   * @param  App\Cuota $cuotas
+   * @return App\Cuota $cuotas
+   */
+  private function accionDeGetShow($cuotas){
+    //le agrego a cada cuota los montos que se usan en la columna "Monto Total"
+    foreach ($cuotas as $cuota) {
+      $cuota->montoInteresAtraso = $this->montoInteresAtraso($cuota);
+      $cuota->montoInteresGrupoFamiliar = $this->montoInteresGrupoFamiliar($cuota);
+    }
+
+    $cuotas = $cuotas->filter(function ($value, $key) {  //funcion para filtrar y no eviarle las cuotas de vitalicios
+        if ($value->montoCuota->tipo != 'v')
+          return true;
+        else false;
+    });
+
+    return $cuotas;
+  }
 }
