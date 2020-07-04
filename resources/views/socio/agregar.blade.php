@@ -13,7 +13,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group row">
-                            <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Socio') }}</label>
+                            <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Socio *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') }}" required>
@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaNac" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Nacimiento') }}</label>
+                            <label for="fechaNac" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Nacimiento *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="date" name="fechaNac" id="fechaNac" class="form-control" value="{{ old('fechaNac') }}" required>
@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="vitalicio" class="col-md-4 col-form-label text-md-right">{{ __('Vitalicio') }}</label>
+                            <label for="vitalicio" class="col-md-4 col-form-label text-md-right">{{ __('Vitalicio *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="vitalicio" id="vitalicio" class="form-control">
@@ -56,7 +56,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona *') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-control" name="idPersona" id="idPersona">
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="idGrupoFamiliar" class="col-md-4 col-form-label text-md-right">{{ __('Grupo Familiar') }}</label>
+                            <label for="idGrupoFamiliar" class="col-md-4 col-form-label text-md-right">{{ __('Grupo Familiar *(si no es Vitalicio)') }}</label>
 
                             <div class="col-md-6">
                               <select name="idGrupoFamiliar" id="idGrupoFamiliar" class="form-control">

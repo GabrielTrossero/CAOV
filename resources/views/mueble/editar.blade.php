@@ -15,7 +15,7 @@
                         <input type="hidden" name="id" value="{{ $mueble->id }}">
 
                         <div class="form-group row">
-                            <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
+                            <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') ?? $mueble->nombre }}" maxlength="75" required>
@@ -35,7 +35,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="accionCantidad" class="col-md-4 col-form-label text-md-right">{{ __('Sumar o Restar cantidad del mueble') }}</label>
+                            <label for="accionCantidad" class="col-md-4 col-form-label text-md-right">{{ __('Sumar o Restar cantidad del mueble *(si se Resta/Suma)') }}</label>
 
                             <div class="col-md-6">
                                 <select name="accionCantidad" id="accionCantidad" class="form-control" required>

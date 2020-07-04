@@ -65,6 +65,15 @@
                       <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
                     </button>
                 </form>
+                @else
+                  <a class="icono-editar-anchor-disabled">
+                    <i class="fas fa-edit icono-editar-disabled" title="Acción no disponible"></i>
+                  </a>
+                  <form style="display:inline">
+                    <button class="icono-eliminar-disabled" type="submit" disabled>
+                      <i class="fas fa-trash" style="color: darkslategray;" title="Acción no disponible"></i>
+                    </button>
+                  </form>
                 @endif
               </td>
             </tr>
@@ -118,7 +127,16 @@
                     <button class="icono-eliminar" type="submit">
                       <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
                     </button>
-                </form>
+                  </form>
+                @else
+                  <a class="icono-editar-anchor-disabled">
+                    <i class="fas fa-edit icono-editar-disabled" title="Tiene cuotas asociadas"></i>
+                  </a>
+                  <form style="display:inline">
+                    <button class="icono-eliminar-disabled" type="submit" disabled>
+                      <i class="fas fa-trash" style="color: darkslategray;" title="Acción no disponible"></i>
+                    </button>
+                  </form>
                 @endif
               </td>
             </tr>

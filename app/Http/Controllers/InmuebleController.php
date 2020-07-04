@@ -66,7 +66,7 @@ class InmuebleController extends Controller
       $inmuebleRetornado = Inmueble::where('nombre', $request->nombre)->first();
 
       //redirijo para mostrar el mueble ingresado
-      return redirect()->action('InmuebleController@getShowId', $inmuebleRetornado->id);
+      return redirect()->action('InmuebleController@getShow');
     }
 
     /**
@@ -156,7 +156,7 @@ class InmuebleController extends Controller
               ]);
 
         //retorno a la vista el socio actualizado
-        return redirect()->action('InmuebleController@getShowId', $request->id);
+        return redirect()->action('InmuebleController@getShow');
     }
 
     /**

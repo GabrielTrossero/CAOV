@@ -13,7 +13,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group row">
-                            <label for="tipo" class="col-md-4 col-form-label text-md-right">{{ __('Tipo') }}</label>
+                            <label for="tipo" class="col-md-4 col-form-label text-md-right">{{ __('Tipo *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="tipo" id="tipo" class="form-control">
@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="montoMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Mensual') }}</label>
+                            <label for="montoMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Mensual *') }}</label>
 
                             <div class="col-md-6">
                               <input type="number" name="montoMensual" id="montoMensual" class="form-control" min="0" value="{{ old('montoMensual') }}" placeholder="Ingresar monto" required>
@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="montoInteresMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Interes Mensual') }}</label>
+                            <label for="montoInteresMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Interes Mensual *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="montoInteresMensual" id="montoInteresMensual" class="form-control" value="{{ old('montoInteresMensual') }}" min="0" placeholder="Ingresar monto de interes por atraso" required>
@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="cantidadMeses" class="col-md-4 col-form-label text-md-right">{{ __('Aplicado despúes de cuantos meses') }}</label>
+                            <label for="cantidadMeses" class="col-md-4 col-form-label text-md-right">{{ __('Aplicado despúes de cuantos meses *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="cantidadMeses" id="cantidadMeses" class="form-control" value="{{ old('cantidadMeses') }}" min="0" placeholder="N° de meses" required>

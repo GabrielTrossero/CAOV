@@ -31,7 +31,7 @@
                         <th>N° Socio</th>
                         <th>Apellido</th>
                         <th>Nombres</th>
-                        <th>Seleccionar Titular</th>
+                        <th>Seleccionar Titular *</th>
                         <th>Seleccionar Pareja</th>
                       </tr>
                     </thead>

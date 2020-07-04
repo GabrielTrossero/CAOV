@@ -74,7 +74,7 @@
                         <input type="hidden" name="id" value="{{ $reserva->id }}">
 
                         <div class="form-group row">
-                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona *') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-control" name="idPersona" id="idPersona">
@@ -95,7 +95,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaSolicitud" class="col-md-4 col-form-label text-md-right">{{ __('Fecha Actual') }}</label>
+                            <label for="fechaSolicitud" class="col-md-4 col-form-label text-md-right">{{ __('Fecha Actual *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="date" name="fechaSolicitud" id="fechaSolicitud" class="form-control" value="{{ old('fechaSolicitud') ?? $reserva->fechaSolicitud }}" required>
@@ -105,7 +105,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="tipoMueble" class="col-md-4 col-form-label text-md-right">{{ __('Seleccione el Mueble') }}</label>
+                            <label for="tipoMueble" class="col-md-4 col-form-label text-md-right">{{ __('Seleccione el Mueble *') }}</label>
 
                             <div class="col-md-6">
                               <select name="tipoMueble" id="tipoMueble" class="form-control" required>
@@ -128,7 +128,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="cantMueble" class="col-md-4 col-form-label text-md-right">{{ __('Ingrese la Cantidad') }}</label>
+                            <label for="cantMueble" class="col-md-4 col-form-label text-md-right">{{ __('Ingrese la Cantidad *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="cantMueble" id="cantMueble" class="form-control" value="{{ old('cantMueble') ?? $reserva->cantidad }}" min="1" required>
@@ -138,7 +138,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaHoraInicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio') }}</label>
+                            <label for="fechaHoraInicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" value="{{ old('fechaHoraInicio') ?? $reserva->fechaHoraInicio }}" required>
@@ -152,7 +152,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización') }}</label>
+                            <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización*') }}</label>
 
                             <div class="col-md-6">
                                 <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control" value="{{ old('fechaHoraFin') ?? $reserva->fechaHoraFin }}" required>
@@ -162,7 +162,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="costo" class="col-md-4 col-form-label text-md-right">{{ __('Costo ($)') }}</label>
+                            <label for="costo" class="col-md-4 col-form-label text-md-right">{{ __('Costo ($) *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="costo" id="costo" class="form-control" value="{{ old('costo') ?? $reserva->costoTotal }}" min="0" required>
@@ -172,7 +172,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
+                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago *') }}</label>
 
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control" required>

@@ -13,7 +13,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group row">
-                            <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
+                            <label for="nombre" class="col-md-4 col-form-label text-md-right">{{ __('Nombre *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}" maxlength="75" required>
@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="cantidad" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad') }}</label>
+                            <label for="cantidad" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="cantidad" id="cantidad" class="form-control" min="1" required>

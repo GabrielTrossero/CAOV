@@ -17,7 +17,7 @@
           <tr>
             <th>Nombre</th>
             <th>Cantidad</th>
-            <th>Más Información</th>
+            <th>Acciones</th>
           </tr>
         </thead>
           <tbody>
@@ -30,13 +30,21 @@
                   <a class="icono-editar-anchor" href="{{ url('/mueble/edit/'.$mueble->id) }}">
                     <i class="fas fa-edit icono-editar" title="Editar"></i>
                  </a>
-                 <form action="{{url('/mueble/delete')}}" method="post" style="display:inline">
-                   {{ csrf_field() }}
-                   <input type="hidden" name="id" value="{{ $mueble->id }}">
-                   <button class="icono-eliminar" type="submit">
-                     <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
+                 @if (sizeof($mueble->reservasDeMueble) == 0)
+                  <form action="{{url('/mueble/delete')}}" method="post" style="display:inline">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="id" value="{{ $mueble->id }}">
+                    <button class="icono-eliminar" type="submit">
+                      <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
                    </button>
-                 </form> 
+                  </form>
+                @else
+                  <form style="display:inline">
+                    <button class="icono-eliminar-disabled" type="submit" disabled>
+                      <i class="fas fa-trash" style="color: darkslategray;" title="Tiene alquileres asociados"></i>
+                    </button>
+                  </form>
+                @endif 
                 </td>
               </tr>
 

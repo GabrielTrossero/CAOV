@@ -66,7 +66,7 @@ class MuebleController extends Controller
         $muebleRetornado = Mueble::where('nombre', $request->nombre)->first();
 
         //redirijo para mostrar el mueble ingresado
-        return redirect()->action('MuebleController@getShowId', $muebleRetornado->id);
+        return redirect()->action('MuebleController@getShow');
     }
 
     /**
@@ -175,7 +175,7 @@ class MuebleController extends Controller
             ]);
 
       //retorno a la vista el socio actualizado
-      return redirect()->action('MuebleController@getShowId', $request->id);
+      return redirect()->action('MuebleController@getShow');
     }
 
     /**

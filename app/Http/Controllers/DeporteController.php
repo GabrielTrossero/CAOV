@@ -64,8 +64,7 @@ class DeporteController extends Controller
 
         $deporteRetornado = Deporte::where('nombre', $request->nombre)->first();
 
-        return redirect()->action('DeporteController@getShowId', $deporteRetornado->id);
-
+        return redirect()->action('DeporteController@getShow');
     }
 
     /**
@@ -149,7 +148,7 @@ class DeporteController extends Controller
               ]);
 
         //redirijo a la vista individual
-        return redirect()->action('DeporteController@getShowId', $request->id);
+        return redirect()->action('DeporteController@getShow');
     }
 
     /**
