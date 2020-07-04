@@ -77,7 +77,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Tipo Socio (Cobrado)</th>
             <th>Más Información</th>
           </tr>
@@ -101,7 +101,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               @if ($cuota->montoCuota->tipo == 'c')
