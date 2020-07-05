@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('edit/{id}', 'PersonaController@edit');
         Route::post('edit', 'PersonaController@update');
         Route::post('delete', 'PersonaController@destroy');
+        Route::get('createFromInmueble', 'PersonaController@createFromAlquilerInmueble');
+        Route::get('createFromMueble', 'PersonaController@createFromAlquilerMueble');
     });
 
     //Rutas de Socios

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Persona;
+use App\Mueble;
+use App\Inmueble;
+use App\MedioDePago;
 use Illuminate\Validation\Rule;
 
 class PersonaController extends Controller
@@ -29,6 +32,32 @@ class PersonaController extends Controller
     {
         //redirijo a la vista para agregar una persona
         return view('persona.agregar');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFromAlquilerInmueble()
+    {
+      $redirect = "inmueble";
+
+      //redirijo a la vista para agregar una persona
+      return view('persona.agregar', compact('redirect'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFromAlquilerMueble()
+    {
+      $redirect = "mueble";
+
+      //redirijo a la vista para agregar una persona
+      return view('persona.agregar', compact('redirect'));
     }
 
     /**
@@ -77,6 +106,20 @@ class PersonaController extends Controller
         $persona->create($request->all());
 
         $personaRetornada = Persona::where('DNI', $request->DNI)->first();
+
+        if(isset($request->redirect)){
+          $mediosDePago = MedioDePago::all();
+          $personas = Persona::all();
+
+          if($request->redirect == "mueble"){
+            $muebles = Mueble::all();
+            return view('alquilerMueble.agregar', compact('muebles','mediosDePago', 'personas', 'personaRetornada'));
+          }
+          else if($request->redirect == "inmueble"){
+            $inmuebles = Inmueble::all();
+            return view('alquilerInmueble.agregar', compact('inmuebles', 'mediosDePago', 'personas', 'personaRetornada'));
+          }
+        }
 
         //redirijo para mostrar la persona ingresada
         return redirect()->action('PersonaController@getShowId', $personaRetornada->id);

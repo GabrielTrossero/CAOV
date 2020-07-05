@@ -61,7 +61,11 @@
                                 <select class="form-control" name="idPersona" id="idPersona">
                                   <option selected disabled>Seleccionar Persona</option>
                                   @foreach ($personas as $persona)
-                                    <option value="{{$persona->id}}">{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                    @if (isset($personaRetornada) && ($persona->id == $personaRetornada->id)))
+                                        <option value="{{$persona->id}}" selected>{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                    @else
+                                        <option value="{{$persona->id}}">{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                    @endif
                                   @endforeach
                                 </select>
 
@@ -71,6 +75,9 @@
                                   <span class="text-danger">{!! \Session::get('validarPersonaExiste') !!}</span>
                                 @endif
                             </div>
+                            <a href="{{ url('/persona/createFromInmueble') }}" title="Agregar Persona">
+                                <i class="fas fa-plus"></i>
+                            </a>
                         </div>
 
                         <div class="form-group row">

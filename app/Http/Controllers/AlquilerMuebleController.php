@@ -82,13 +82,13 @@ class AlquilerMuebleController extends Controller
         $muebles = Mueble::all();
 
         //obtnego todos los medios de pagos
-        $mediosDePagos = MedioDePago::all();
+        $mediosDePago = MedioDePago::all();
 
         //tomo todas las personas para mostrarlas en el select
         $personas = Persona::all();
 
         //se los envio a la vista
-        return view('alquilerMueble.agregar', compact(['muebles','mediosDePagos', 'personas']));
+        return view('alquilerMueble.agregar', compact('muebles','mediosDePago', 'personas'));
     }
 
     /**

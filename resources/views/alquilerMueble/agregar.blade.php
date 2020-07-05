@@ -52,7 +52,11 @@
                                 <select class="form-control" name="idPersona" id="idPersona">
                                   <option selected disabled>Seleccionar Persona</option>
                                   @foreach ($personas as $persona)
-                                    <option value="{{$persona->id}}">{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                    @if (isset($personaRetornada) && ($persona->id == $personaRetornada->id)))
+                                        <option value="{{$persona->id}}" selected>{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                    @else
+                                        <option value="{{$persona->id}}">{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                    @endif
                                   @endforeach
                                 </select>
 
@@ -62,6 +66,9 @@
                                   <span class="text-danger">{!! \Session::get('validarPersonaExiste') !!}</span>
                                 @endif
                             </div>
+                            <a href="{{ url('/persona/createFromMueble') }}" title="Agregar Persona">
+                                <i class="fas fa-plus"></i>
+                            </a>
                         </div>
 
                         <div class="form-group row">
@@ -141,7 +148,7 @@
 
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control" required>
-                                  @foreach ($mediosDePagos as $medioDePago)
+                                  @foreach ($mediosDePago as $medioDePago)
                                     <option value="{{ $medioDePago->id }}">{{ $medioDePago->nombre }}</option>
                                   @endforeach
                                 </select>
