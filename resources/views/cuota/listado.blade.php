@@ -47,7 +47,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -72,7 +72,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
@@ -92,7 +92,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -117,7 +117,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
@@ -137,7 +137,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -162,7 +162,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
@@ -182,7 +182,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -207,7 +207,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
@@ -227,7 +227,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -252,7 +252,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
@@ -272,7 +272,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -297,7 +297,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
@@ -317,7 +317,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -342,7 +342,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
@@ -362,7 +362,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -387,7 +387,7 @@
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
               @endif
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>

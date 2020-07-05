@@ -26,7 +26,7 @@
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
-            <th>Monto Total</th>
+            <th>Monto Pagado</th>
             <th>Más Información</th>
           </tr>
         </thead>
@@ -48,7 +48,7 @@
               <td>{{ '$'.$cuota->montoCuota->montoMensual }}</td>
 
 
-                <td>{{ 'Sin Fecha de Pago' }}</td>
+                <td>{{ '-' }}</td>
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
             </tr>
