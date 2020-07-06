@@ -79,7 +79,6 @@ class PersonaController extends Controller
           'apellido.max' => 'Ingrese un Apellido válido.',
           'domicilio.max' => 'Ingrese un Domicilio válido.',
           'telefono.max' => 'El número no puede tener más de 25 caracteres.',
-          'email.unique' => 'El email no es único o válido',
           'email.max' => 'El email no es único o válido'
         ];
 
@@ -90,12 +89,21 @@ class PersonaController extends Controller
           'apellido' => 'required|max:100',
           'domicilio' => 'max:100',
           'telefono' => 'max:25',
-          'email' => 'unique:persona|max:75'
+          'email' => 'max:75'
         ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
           return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+        //valido que el mail sea único (con Validator no funciona)
+        if ($request->email) {
+          $email = Persona::where('email', $request->email)->first();
+
+          if (isset($email)) {
+            return redirect()->back()->withInput()->with('validarMail', 'El email no es único o válido.');
+          }
         }
 
         //almaceno la persona
@@ -181,7 +189,6 @@ class PersonaController extends Controller
           'apellido.max' => 'Ingrese un Apellido válido.',
           'domicilio.max' => 'Ingrese un Domicilio válido.',
           'telefono.max' => 'El número no puede tener más de 25 caracteres.',
-          'email.unique' => 'El email no es único o válido',
           'email.max' => 'El email no es único o válido'
         ];
 
@@ -197,15 +204,22 @@ class PersonaController extends Controller
           'apellido' => 'required|max:100',
           'domicilio' => 'max:100',
           'telefono' => 'max:25',
-          'email' => [
-            'max:75',
-            Rule::unique('persona')->ignore($request->id),
-          ]
+          'email' => 'max:75'
         ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
           return redirect()->back()->withErrors($validacion->errors());
+        }
+
+        //valido que el mail sea único (con Validator no funciona)
+        if ($request->email) {
+          $email = Persona::where('email', $request->email)->first();
+
+          //si hay otra persona con ese mail, lo rechazo
+          if ((isset($email)) && ($email->id != $request->id)) {
+            return redirect()->back()->withInput()->with('validarMail', 'El email no es único o válido.');
+          }
         }
 
         Persona::where('id', $request->id)

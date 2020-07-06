@@ -73,6 +73,11 @@
                                 <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}">
 
                                 <span class="text-danger">{{$errors->first('email')}}</span>
+                                @if (\Session::has('validarMail'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarMail') !!}
+                                  </div>
+                                @endif
                             </div>
 
                         </div>
