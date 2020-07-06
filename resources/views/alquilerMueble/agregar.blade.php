@@ -104,7 +104,9 @@
 
                             <div class="col-md-6">
                                 <input type="number" name="cantMueble" id="cantMueble" class="form-control" value="{{ old('cantMueble') }}" min="1" required>
-
+                                @if (\Session::has('sinStock'))
+                                  <span class="text-danger">{!! \Session::get('sinStock') !!}</span>
+                                @endif
                                 <span class="text-danger">{{$errors->first('cantMueble')}}</span>
                             </div>
                         </div>
@@ -116,10 +118,9 @@
                                 <input type="datetime-local" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" value="{{ old('fechaHoraInicio') }}" required>
 
                                 <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
-
-                                @if (\Session::has('sinStock'))
-                                  <span class="text-danger">{!! \Session::get('sinStock') !!}</span>
-                                @endif
+                                @if (\Session::has('solapamientoFechas'))
+                                  <span class="text-danger">{!! \Session::get('solapamientoFechas') !!}</span>
+                                @endif  
                             </div>
                         </div>
 

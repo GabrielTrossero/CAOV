@@ -233,6 +233,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
     {
         Route::get('/', 'AlquilerMuebleController@index');
         Route::get('create', 'AlquilerMuebleController@create');
+        Route::get('create/{id}', 'AlquilerMuebleController@createFromPersona')->name('createMueble');
         Route::post('create', 'AlquilerMuebleController@store');
         Route::get('show', 'AlquilerMuebleController@getShow');
         Route::get('show/{id}', 'AlquilerMuebleController@getShowId');
@@ -247,6 +248,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
     {
         Route::get('/', 'AlquilerInmuebleController@index');
         Route::get('create', 'AlquilerInmuebleController@create');
+        Route::get('create/{id}', 'AlquilerInmuebleController@createFromPersona')->name('createInmueble');
         Route::post('create', 'AlquilerInmuebleController@store');
         Route::get('show', 'AlquilerInmuebleController@getShow');
         Route::get('show/{id}', 'AlquilerInmuebleController@getShowId');

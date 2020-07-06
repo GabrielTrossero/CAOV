@@ -92,6 +92,23 @@ class AlquilerMuebleController extends Controller
     }
 
     /**
+     * Devuelve el formulario de Agregar viniendo desde PersonaController
+     *
+     * @param int $id
+     * 
+     * @return void
+     */
+    public function createFromPersona($id)
+    {
+      $personaRetornada = Persona::find($id);
+      $mediosDePago = MedioDePago::all();
+      $personas = Persona::all();
+      $muebles = Mueble::all();
+
+      return view('alquilerMueble.agregar', compact('muebles', 'mediosDePago', 'personas', 'personaRetornada'));
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

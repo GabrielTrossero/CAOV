@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Persona;
-use App\Mueble;
-use App\Inmueble;
-use App\MedioDePago;
 use Illuminate\Validation\Rule;
 
 class PersonaController extends Controller
@@ -107,16 +104,11 @@ class PersonaController extends Controller
         $personaRetornada = Persona::where('DNI', $request->DNI)->first();
 
         if(isset($request->redirect)){
-          $mediosDePago = MedioDePago::all();
-          $personas = Persona::all();
-
           if($request->redirect == "mueble"){
-            $muebles = Mueble::all();
-            return view('alquilerMueble.agregar', compact('muebles','mediosDePago', 'personas', 'personaRetornada'));
+            return redirect()->route('createMueble', ['id' => $personaRetornada->id]);
           }
           else if($request->redirect == "inmueble"){
-            $inmuebles = Inmueble::all();
-            return view('alquilerInmueble.agregar', compact('inmuebles', 'mediosDePago', 'personas', 'personaRetornada'));
+            return redirect()->route('createInmueble', ['id' => $personaRetornada->id]);
           }
         }
 
