@@ -82,7 +82,6 @@ class PersonaController extends Controller
           'apellido.max' => 'Ingrese un Apellido válido.',
           'domicilio.max' => 'Ingrese un Domicilio válido.',
           'telefono.max' => 'El número no puede tener más de 25 caracteres.',
-          'email.email' => 'El email no es único o válido',
           'email.unique' => 'El email no es único o válido',
           'email.max' => 'El email no es único o válido'
         ];
@@ -94,7 +93,7 @@ class PersonaController extends Controller
           'apellido' => 'required|max:100',
           'domicilio' => 'max:100',
           'telefono' => 'max:25',
-          'email' => 'email|unique:persona|max:75'
+          'email' => 'unique:persona|max:75'
         ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
@@ -190,7 +189,6 @@ class PersonaController extends Controller
           'apellido.max' => 'Ingrese un Apellido válido.',
           'domicilio.max' => 'Ingrese un Domicilio válido.',
           'telefono.max' => 'El número no puede tener más de 25 caracteres.',
-          'email.email' => 'El email no es único o válido',
           'email.unique' => 'El email no es único o válido',
           'email.max' => 'El email no es único o válido'
         ];
@@ -208,8 +206,6 @@ class PersonaController extends Controller
           'domicilio' => 'max:100',
           'telefono' => 'max:25',
           'email' => [
-            'required',
-            'email',
             'max:75',
             Rule::unique('persona')->ignore($request->id),
           ]
