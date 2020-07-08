@@ -34,7 +34,6 @@
             <div class="card">
                 <div class="card-header">{{ __('Consultar Disponibilidad de Mueble') }}</div>
                 <div class="card-body">
-                     
                             <form action="#" id="form-check">
                                 <input type="text" id="action" value="{{ url('alquilermueble/disponibilidad') }}'" hidden>
                                 <div class="form-group row">
@@ -51,14 +50,35 @@
                                 </div>
                                 <input type="text" id="token" value="{{ csrf_token() }}" hidden>
                                 <input type="text" id="tipo" value="mueble" hidden>
-                                <button type="button" id="chequear" class="col-md-1 offset-md-5"><i class="fas fa-check" style="color:blue"></i></button>
+                                <div class="form-group row">
+                                    <div style="width: 100%; text-align: center;">
+                                        <div style="display: inline-block;">
+                                            <button type="button" id="chequear" class="btn btn-outline-primary" title="Comprobar disponibilidad">Enviar</button>
+                                        </div>
+                                        <div style="display: inline-block;">
+                                            <button type="button" id="ocultar-scheduler" class="btn btn-outline-warning offset-md-10" style="display: none" title="Ocultar calendario">Ocultar calendario</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
-
-                       
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="scheduler" class="dhx_cal_container" style='width:100%; height:100vh; display: none;'>
+	<div class="dhx_cal_navline">
+		<div class="dhx_cal_prev_button">&nbsp;</div>
+		<div class="dhx_cal_next_button">&nbsp;</div>
+		<div class="dhx_cal_today_button"></div>
+		<div class="dhx_cal_date"></div>
+		<div class="dhx_cal_tab" name="day_tab"></div>
+		<div class="dhx_cal_tab" name="week_tab"></div>
+		<div class="dhx_cal_tab" name="month_tab"></div>
+	</div>
+	<div class="dhx_cal_header"></div>
+	<div class="dhx_cal_data"></div>
 </div>
 
 <div class="cuadro" style="padding-top:15px;">

@@ -1,8 +1,40 @@
 $(document).ready(function () {
     let boton = $("#chequear");
-    boton.click(function () { 
-        
 
+    scheduler.locale = {
+        date:{
+            month_full:["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            month_short:["Ene", "Feb", "Mar", "Abr", "May", "Jun", 
+                "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            day_full:["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", 
+                "Viernes", "Sabado"],
+            day_short:["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"]
+        },
+        labels:{
+            dhx_cal_today_button:"Hoy",
+            day_tab:"Dia",
+            week_tab:"Semana",
+            month_tab:"Mes",
+            icon_save:"Guardar ",
+            icon_cancel:"Cancelar",
+            icon_details:"Detalles",
+            icon_edit:"Editar",
+            icon_delete:"Borrar",
+            section_description:"Descripción",
+            section_time:"Tiempo",
+        }
+    };
+
+    let sched = $("#scheduler");
+    let botonOcultarScheduler = $("#ocultar-scheduler");
+
+    botonOcultarScheduler.click(function () {
+        sched.css("display", "none");
+        botonOcultarScheduler.css("display", "none");
+    });
+
+    boton.click(function () { 
         let tipoAlquiler = $("#tipo").val();
         let token = $("#token").val();
 
@@ -14,20 +46,19 @@ $(document).ready(function () {
             
             $.post('/alquilerinmueble/disponibilidad', {fechaInicio: fechaInicioIngresada, fechaFin: fechaFinIngresada, _token: token, inmueble: inmuebleSeleccionado})
             .done(function(data){
-                let mensaje = "Horarios Reservados para " + nombreInmueble + ":";
-                fechasReservadas = data.fechasReservadas;
-                
+                let fechasReservadas = data.fechasReservadas;
+                let fechasScheduler = [];
+
                 for (let i = 0; i < fechasReservadas.length; i++) {
                     let elem = fechasReservadas[i];
-                    //alert(elem+"\n");
-                    mensaje += "\n" + elem[1] + " hasta " + elem[2];
+                    fechasScheduler[i] = {start_date: elem[1], end_date: elem[2], text: nombreInmueble.toString()};
                 }
 
-                if (fechasReservadas.length == 0) {
-                    mensaje += "\nNo hay reservas para el inmueble en la fecha seleccionada";       
-                }
-
-                alert(mensaje);
+                sched.css("display", "");
+                scheduler.clearAll();
+                scheduler.init('scheduler', Date.now());
+                scheduler.parse(fechasScheduler);
+                botonOcultarScheduler.css("display", "");
             })
             .catch(error => {
                 console.log(error)
@@ -42,32 +73,27 @@ $(document).ready(function () {
             if (fechaHoraInicio && fechaHoraFin) {
                $.post('/alquilermueble/disponibilidad', {fechaInicio: fechaHoraInicio, fechaFin: fechaHoraFin, _token: token, mueble: muebleSeleccionado})
                 .done(function(data){
-                    let mensaje = "Horarios Reservados para " + nombreMueble + ":";
                     let fechasReservadas = data.fechasReservadas;
                     let fechasSolapadas = data.fechasSolapadas;
-
-                    //console.log(fechasReservadas);
+                    let fechasScheduler = [];
 
                     for (let i = 0; i < fechasReservadas.length; i++) {
                         let elem = fechasReservadas[i];
-                        mensaje += "\n" + elem[1] + " hasta " + elem[2] + ". " + "Cantidad: " + elem[3];
-                    }
-                    
-                    if (fechasReservadas.length == 0) {
-                        mensaje += "\nNo hay reservas para el mueble en la fecha seleccionada";  
+                        fechasScheduler[i] = {start_date: elem[1], end_date: elem[2], text: nombreMueble+". Cantidad: "+elem[3]};
                     }
 
                     if (fechasSolapadas.length) {
-                        mensaje += "\n-----------------------------\nHorarios Solapados:";
                         for (let i = 0; i < fechasSolapadas.length; i++) {
                             let elem = fechasSolapadas[i];
-                            mensaje += "\n" + elem[1] + " hasta " + elem[2] + ". " + "Cantidad: " + elem[3];
+                            fechasScheduler[i] = {start_date: elem[1], end_date: elem[2], text: nombreMueble+". Cantidad: "+elem[3]};
                         }
                     }
-                    
-                    mensaje += "\nStock restante: " + data.stockRestante;
 
-                    alert(mensaje);
+                    sched.css("display", "");
+                    scheduler.clearAll();
+                    scheduler.init('scheduler', Date.now());
+                    scheduler.parse(fechasScheduler);
+                    botonOcultarScheduler.css("display", "");
                 })
                 .catch(error => {
                     console.log(error);

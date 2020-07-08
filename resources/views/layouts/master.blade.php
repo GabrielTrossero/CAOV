@@ -10,6 +10,8 @@
 
     <!--conexion a los estilos css-->
     <link rel="stylesheet" href="{!! asset('css/style.css') !!}">
+    <script src="{!! asset('scheduler/dhtmlxscheduler.js') !!}" ></script>
+    <link rel="stylesheet" href="{!! asset('scheduler/dhtmlxscheduler_material.css') !!}" type="text/css" charset="utf-8">
 
     <!--conexion para usar los iconos-->
     <script defer src="https://use.fontawesome.com/releases/v5.7.0/js/all.js" integrity="sha384-qD/MNBVMm3hVYCbRTSOW130+CWeRIKbpot9/gR1BHkd7sIct4QKhT1hOPd+2hO8K" crossorigin="anonymous"></script>
