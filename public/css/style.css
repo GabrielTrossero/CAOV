@@ -223,3 +223,9 @@ nav.mostrar{
 .tam_letra_small{/*para achicar el tamaño de letra a small*/
 	font-size: small;
 }
+
+
+.errorForm{/*para los estilos de los mensajes de error de los formularios*/
+	margin-bottom: 0rem;
+	padding: .1rem 1.25rem;
+}

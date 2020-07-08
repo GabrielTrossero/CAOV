@@ -19,6 +19,22 @@
                   </div>
                 @endif
 
+                @if ($errors->first('titular'))
+                  <div class="alert alert-danger">
+                    {{ $errors->first('titular') }}
+                  </div>
+                @endif
+                @if (\Session::has('errorIguales'))
+                  <div class="alert alert-danger">
+                    {!! \Session::get('errorIguales') !!}
+                  </div>
+                @endif
+                @if (\Session::has('errorMenoresEdad'))
+                  <div class="alert alert-danger">
+                    {!! \Session::get('errorMenoresEdad') !!}
+                  </div>
+                @endif
+
                 <form method="POST" action="{{ url('/grupofamiliar/create') }}">
                       {{ csrf_field() }}
                   <table id="idDataTable" class="table table-striped">
@@ -44,14 +60,15 @@
                           <td>{{ $socio->persona->apellido }}</td>
                           <td>{{ $socio->persona->nombres }}</td>
                           <td>
-                            <input type="radio" name="titular" value="{{ $socio->id }}" required>
-                            <span class="text-danger">{{$errors->first('titular')}}</span>
-                            <span class="text-danger">{!! \Session::get('errorIguales') !!}</span>
-                            <span class="text-danger">{!! \Session::get('errorMenoresEdad') !!}</span>
+                            <input type="radio" name="titular" value="{{ $socio->id }}" >
                           </td>
                           <td>
                             <input type="radio" name="pareja" value="{{ $socio->id }}">
-                            <span class="text-danger">{{$errors->first('pareja')}}</span>
+                            @if ($errors->first('pareja'))
+                              <div class="alert alert-danger errorForm">
+                                {{ $errors->first('pareja') }}
+                              </div>
+                            @endif
                           </td>
                         </tr>
                       @endforeach

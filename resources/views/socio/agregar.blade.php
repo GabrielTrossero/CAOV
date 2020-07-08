@@ -18,7 +18,11 @@
                             <div class="col-md-6">
                                 <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') }}" required>
 
-                                <span class="text-danger">{{$errors->first('numSocio')}}</span>
+                                @if ($errors->first('numSocio'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('numSocio') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -28,7 +32,11 @@
                             <div class="col-md-6">
                                 <input type="date" name="fechaNac" id="fechaNac" class="form-control" value="{{ old('fechaNac') }}" required>
 
-                                <span class="text-danger">{{$errors->first('fechaNac')}}</span>
+                                @if ($errors->first('fechaNac'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('fechaNac') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -38,7 +46,11 @@
                             <div class="col-md-6">
                                 <input type="text" name="oficio" id="oficio" class="form-control" value="{{ old('oficio') }}" maxlength="80">
 
-                                <span class="text-danger">{{$errors->first('oficio')}}</span>
+                                @if ($errors->first('oficio'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('oficio') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -51,7 +63,11 @@
                                   <option value="s">Si</option>
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('vitalicio')}}</span>
+                                @if ($errors->first('vitalicio'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('vitalicio') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -66,18 +82,24 @@
                                   @endforeach
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('idPersona')}}</span>
-
-                                @if (\Session::has('validarPersonaExiste'))
-                                  <span class="text-danger">{!! \Session::get('validarPersonaExiste') !!}</span>
+                                @if ($errors->first('idPersona'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('idPersona') }}
+                                  </div>
+                                @elseif (\Session::has('validarPersonaExiste'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarPersonaExiste') !!}
+                                  </div>
                                 @elseif (\Session::has('validarSocioNoExiste'))
-                                  <span class="text-danger">{!! \Session::get('validarSocioNoExiste') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarSocioNoExiste') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="idGrupoFamiliar" class="col-md-4 col-form-label text-md-right">{{ __('Grupo Familiar *(si no es Vitalicio)') }}</label>
+                            <label for="idGrupoFamiliar" class="col-md-4 col-form-label text-md-right">{{ __('Grupo Familiar *') }}</label>
 
                             <div class="col-md-6">
                               <select name="idGrupoFamiliar" id="idGrupoFamiliar" class="form-control">
@@ -87,10 +109,14 @@
                                 @endforeach
                               </select>
 
-                              <span class="text-danger">{{$errors->first('idGrupoFamiliar')}}</span>
-
-                              @if (\Session::has('validarGrupoFamiliar'))
-                                <span class="text-danger">{!! \Session::get('validarGrupoFamiliar') !!}</span>
+                              @if ($errors->first('idGrupoFamiliar'))
+                                <div class="alert alert-danger errorForm">
+                                  {{ $errors->first('idGrupoFamiliar') }}
+                                </div>
+                              @elseif (\Session::has('validarGrupoFamiliar'))
+                                <div class="alert alert-danger errorForm">
+                                  {!! \Session::get('validarGrupoFamiliar') !!}
+                                </div>
                               @endif
                             </div>
                         </div>
@@ -110,7 +136,9 @@
                               </div>
 
                               @if (\Session::has('validarDeporte'))
-                                <span class="text-danger">{!! \Session::get('validarDeporte') !!}</span>
+                                <div class="alert alert-danger errorForm">
+                                  {!! \Session::get('validarDeporte') !!}
+                                </div>
                               @endif
                             </div>
                         </div>

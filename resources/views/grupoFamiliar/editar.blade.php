@@ -30,8 +30,16 @@
 
                                     @endforeach
                                 </select>
-                                <span class="text-danger">{!! \Session::get('errorIguales') !!}</span>
-                                <span class="text-danger">{!! \Session::get('errorMenoresEdad') !!}</span>
+                                @if (\Session::has('errorIguales'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('errorIguales') !!}
+                                  </div>
+                                @endif
+                                @if (\Session::has('errorMenoresEdad'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('errorMenoresEdad') !!}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -61,7 +69,11 @@
                                   <option value="1">Agregar Miembro</option>
                                   <option value="2">Eliminar Miembro</option>
                                 </select>
-                                <span class="text-danger">{!! \Session::get('errorEliminacionTitular') !!}</span>
+                                @if (\Session::has('errorEliminacionTitular'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('errorEliminacionTitular') !!}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -85,7 +97,11 @@
                                   </optgroup>
 
                                 </select>
-                                <span class="text-danger">{!! \Session::get('errorEdadNuevoMiembro') !!}</span>
+                                @if (\Session::has('errorEdadNuevoMiembro'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('errorEdadNuevoMiembro') !!}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
