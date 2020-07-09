@@ -20,7 +20,11 @@
                             <div class="col-md-6">
                                 <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') ?? $inmueble->nombre }}" maxlength="75" required>
 
-                                <span class="text-danger">{{$errors->first('nombre')}}</span>
+                                @if ($errors->first('nombre'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('nombre') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -29,6 +33,12 @@
 
                             <div class="col-md-6">
                                 <input type="text" name="descripcion" id="descripcion" class="form-control" value="{{ old('descripcion') ?? $inmueble->descripcion }}" maxlength="75">
+
+                                @if ($errors->first('descripcion'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('descripcion') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 

@@ -7,10 +7,6 @@
     <div class="card-header row"> <!--row me permite mantener los dos label en la misma linea-->
       <label class="col-md-9 col-form-label" id="nomTablaActual"><b>Listado de Montos de Cuotas (Activas)</b></label>
       <label class="col-md-9 col-form-label" id="nomTablaHistorica" style="display:none"><b>Listado de Montos de Cuotas (Historicas)</b></label>
-      @if (\Session::has('montoCuotaTieneCuotas'))
-        <br>
-        <span class="text-danger">{!! \Session::get('montoCuotaTieneCuotas') !!}</span>
-      @endif
       <label class="col-md-3 col-form-label">
         <select class="form-control" id="filtroTabla">
           <option value="activa" selected>Activas</option>
@@ -21,6 +17,11 @@
 
     <!--tabla actual-->
     <div class="card-body border" id="tablaActual">
+      @if (\Session::has('montoCuotaTieneCuotas'))
+        <div class="alert alert-danger">
+          {!! \Session::get('montoCuotaTieneCuotas') !!}
+        </div>
+      @endif
       <table id="idDataTable" class="table table-striped">
         <thead>
           <tr>

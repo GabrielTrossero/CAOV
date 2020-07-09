@@ -15,22 +15,21 @@
     </button>
 
   </form>
-
-  @if (\Session::has('backupExitoso'))
-    <script type="text/javascript">
-      window.onload = () => { //para que el script se muestre despúes de cargar el html
-              alert('{!! \Session::get('backupExitoso') !!}')
-          }
-    </script>
-  @elseif (\Session::has('backupErroneo'))
-    <script type="text/javascript">
-      window.onload = () => {
-              alert('{!! \Session::get('backupErroneo') !!}')
-          }
-    </script>
-  @endif
   
 </div>
+
+<div class="col-md-8 backup">
+  @if (\Session::has('backupExitoso'))
+    <div class="alert alert-danger">
+      {!! \Session::get('backupExitoso') !!}
+    </div>
+  @elseif (\Session::has('backupErroneo'))
+    <div class="alert alert-danger">
+      {!! \Session::get('backupErroneo') !!}
+    </div>
+  @endif
+</div>
+
 
 
 @stop

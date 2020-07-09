@@ -77,7 +77,9 @@ class CuotaController extends Controller
       'tipo.required' => 'Es necesario ingresar un tipo.',
       'tipo.in' => 'Dicha opción no es válida.',
       'montoMensual.required' => 'Es necesario ingresar un monto mensual.',
-      'montoInteresMensual.required' => 'Es necesario ingresar un monto mensual.',
+      'montoInteresGrupoFamiliar.required_if' => 'Es necesario ingresar un monto de interés.',
+      'cantidadIntegrantes.required_if' => 'Es necesario ingresar la cantidad de integrantes.',
+      'montoInteresMensual.required' => 'Es necesario ingresar un monto de interés mensual.',
       'cantidadMeses.required' => 'Es necesario ingresar una cantidad.'
     ];
 
@@ -85,6 +87,8 @@ class CuotaController extends Controller
     $validacion = Validator::make($request->all(), [
       'tipo' => 'required|in:a,c,g',
       'montoMensual' => 'required',
+      'montoInteresGrupoFamiliar' => 'required_if:tipo,==,g',
+      'cantidadIntegrantes' => 'required_if:tipo,==,g',
       'montoInteresMensual' => 'required',
       'cantidadMeses' => 'required'
     ], $messages);
@@ -167,7 +171,9 @@ class CuotaController extends Controller
       'tipo.required' => 'Es necesario ingresar un tipo.',
       'tipo.in' => 'Dicha opción no es válida.',
       'montoMensual.required' => 'Es necesario ingresar un monto mensual.',
-      'montoInteresMensual.required' => 'Es necesario ingresar un monto mensual.',
+      'montoInteresGrupoFamiliar.required_if' => 'Es necesario ingresar un monto de interés.',
+      'cantidadIntegrantes.required_if' => 'Es necesario ingresar la cantidad de integrantes.',
+      'montoInteresMensual.required' => 'Es necesario ingresar un monto de interés mensual.',
       'cantidadMeses.required' => 'Es necesario ingresar una cantidad.'
     ];
 
@@ -175,6 +181,8 @@ class CuotaController extends Controller
     $validacion = Validator::make($request->all(), [
       'tipo' => 'required|in:a,c,g',
       'montoMensual' => 'required',
+      'montoInteresGrupoFamiliar' => 'required_if:tipo,==,g',
+      'cantidadIntegrantes' => 'required_if:tipo,==,g',
       'montoInteresMensual' => 'required',
       'cantidadMeses' => 'required'
     ], $messages);

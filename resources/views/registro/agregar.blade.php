@@ -26,10 +26,16 @@
                             <div class="col-md-6">
                                 <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ old('numRecibo') }}" required>
 
-                                <span class="text-danger">{{$errors->first('numRecibo')}}</span>
+                                @if ($errors->first('numRecibo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('numRecibo') }}
+                                  </div>
+                                @endif
 
                                 @if (\Session::has('validarNumRecibo'))
-                                  <span class="text-danger">{!! \Session::get('validarNumRecibo') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarNumRecibo') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>
@@ -40,7 +46,11 @@
                             <div class="col-md-6">
                                 <input type="date" name="fecha" id="fecha" class="form-control" value="{{ old( 'fecha') }}" required>
 
-                                <span class="text-danger">{{$errors->first('fecha')}}</span>
+                                @if ($errors->first('fecha'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('fecha') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -50,7 +60,11 @@
                             <div class="col-md-6">
                                 <input type="number" name="monto" id="monto" class="form-control" value="{{ old( 'monto') }}" required>
 
-                                <span class="text-danger">{{$errors->first('monto')}}</span>
+                                @if ($errors->first('monto'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('monto') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -60,7 +74,11 @@
                             <div class="col-md-6">
                                 <input type="text" name="descripcion" id="descripcion" class="form-control" value="{{ old( 'descripcion') }}" required>
 
-                                <span class="text-danger">{{$errors->first('descripcion')}}</span>
+                                @if ($errors->first('descripcion'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('descripcion') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -73,7 +91,11 @@
                                   <option value="2">Egreso</option>
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('tipoRegistro')}}</span>
+                                @if ($errors->first('tipoRegistro'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('tipoRegistro') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 

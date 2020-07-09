@@ -19,9 +19,11 @@
                             <div class="col-md-6">
                                 <input type="text" name="username" id="username" class="form-control" value="{{ old('username') ?? $usuario->username }}" minlength="8" maxlength="75" required>
 
-                                @foreach ($errors->get('username') as $message)
-                                  <span class="text-danger">{{$message}}</span>
-                                @endforeach
+                                @if ($errors->first('username'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('username') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -31,7 +33,11 @@
                             <div class="col-md-6">
                                 <input type="email" name="email" id="email" class="form-control" value="{{ old('email') ?? $usuario->email }}" maxlength="75" required>
 
-                                <span class="text-danger">{{$errors->first('email')}}</span>
+                                @if ($errors->first('email'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('email') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -48,12 +54,21 @@
                                   @endforeach
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('idPersona')}}</span>
+                                @if ($errors->first('idPersona'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('idPersona') }}
+                                  </div>
+                                @endif
 
                                 @if (\Session::has('validarPersonaExiste'))
                                   <span class="text-danger">{!! \Session::get('validarPersonaExiste') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarPersonaExiste') !!}
+                                  </div>
                                 @elseif (\Session::has('validarEmpleadoNoExiste'))
-                                  <span class="text-danger">{!! \Session::get('validarEmpleadoNoExiste') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarEmpleadoNoExiste') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>
@@ -64,7 +79,11 @@
                             <div class="col-md-6">
                                 <input type="password" name="password" id="password" class="form-control" minlength="8" maxlength="80">
 
-                                <span class="text-danger">{{$errors->first('password')}}</span>
+                                @if ($errors->first('password'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('password') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -74,7 +93,11 @@
                             <div class="col-md-6">
                                 <input type="password" name="passwordRepeat" id="passwordRepeat" class="form-control" minlength="8" maxlength="80">
 
-                                <span class="text-danger">{{$errors->first('passwordRepeat')}}</span>
+                                @if ($errors->first('passwordRepeat'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('passwordRepeat') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -93,7 +116,16 @@
                                   @endforeach
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('idTipoUsuario')}}</span>
+                                @if ($errors->first('idTipoUsuario'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('idTipoUsuario') }}
+                                  </div>
+                                @endif
+                                @if (\Session::has('validarTipoUsuario'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarTipoUsuario') !!}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 

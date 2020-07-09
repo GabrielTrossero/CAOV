@@ -157,6 +157,11 @@ class AlquilerMuebleController extends Controller
         return redirect()->back()->withInput()->with('validarPersonaExiste', 'Error al seleccionar la Persona.');
       }
 
+      
+      if($request->cantMueble < 1){ //verifico para que no ingrese una cantidad negativa
+        return redirect()->back()->withInput()->with('validarCantidad', 'La cantidad debe ser mayor a 0.');
+      }
+
 
       //valido si la fecha y hora de finalizacion es menor a la de inicio
       if ($request->fechaHoraInicio >= $request->fechaHoraFin) {
@@ -347,6 +352,11 @@ class AlquilerMuebleController extends Controller
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
           return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+
+        if($request->cantMueble < 1){ //verifico para que no ingrese una cantidad negativa
+          return redirect()->back()->withInput()->with('validarCantidad', 'La cantidad debe ser mayor a 0.');
         }
 
 

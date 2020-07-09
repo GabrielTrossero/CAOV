@@ -51,7 +51,11 @@
                             <div class="col-md-6">
                                 <input type="number" name="DNI" id="DNI" class="form-control" value="{{$socio->persona->DNI}}" disabled>
 
-                                <span class="text-danger">{{$errors->first('DNI')}}</span>
+                                @if ($errors->first('DNI'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('DNI') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -59,9 +63,13 @@
                             <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('N° Socio') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="DNI" id="DNI" class="form-control" value="{{$socio->numSocio}}" disabled>
+                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{$socio->numSocio}}" disabled>
 
-                                <span class="text-danger">{{$errors->first('numSocio')}}</span>
+                                @if ($errors->first('numSocio'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('numSocio') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -73,13 +81,21 @@
                               <div class="col-md-6">
                                   <input type="text" name="mes" id="mes" class="form-control" value="{{ date("m/Y", strtotime($socio->mesActual)) }}" disabled>
 
-                                  <span class="text-danger">{{$errors->first('mes')}}</span>
+                                  @if ($errors->first('mes'))
+                                    <div class="alert alert-danger errorForm">
+                                        {{ $errors->first('mes') }}
+                                    </div>
+                                  @endif
                               </div>
                             @else
                               <div class="col-md-6">
                                   <input type="text" name="mes" id="mes" class="form-control" value="{{ date("m/Y", strtotime($socio->ultimaCuota->fechaMesAnio."+ 1 month")) }}" disabled>
 
-                                  <span class="text-danger">{{$errors->first('mes')}}</span>
+                                  @if ($errors->first('mes'))
+                                    <div class="alert alert-danger errorForm">
+                                        {{ $errors->first('mes') }}
+                                    </div>
+                                  @endif
                               </div>
                             @endif
                         </div>
@@ -96,7 +112,11 @@
                                     <input type="text" name="categoria" id="categoria" class="form-control" value="Activo" disabled>
                                 @endif
 
-                                <span class="text-danger">{{$errors->first('categoria')}}</span>
+                                @if ($errors->first('categoria'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('categoria') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -112,7 +132,11 @@
                                   <input type="text" name="montoMensual" id="montoMensual" class="form-control" value="{{$socio->montoActivo}}" disabled>
                               @endif
 
-                              <span class="text-danger">{{$errors->first('montoMensual')}}</span>
+                              @if ($errors->first('montoMensual'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('montoMensual') }}
+                                  </div>
+                              @endif
                             </div>
                         </div>
 
@@ -168,7 +192,11 @@
                                 <option value="inhabilitada"> Inhabilitada </option>
                               </select>
 
-                              <span class="text-danger">{{$errors->first('estado')}}</span>
+                              @if ($errors->first('estado'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('estado') }}
+                                  </div>
+                              @endif
                             </div>
                         </div>
 
@@ -178,7 +206,11 @@
                             <div class="col-md-6">
                                 <input type="date" name="fechaPago" id="fechaPago" class="form-control" value="{{ old('fechaPago') }}" required>
 
-                                <span class="text-danger">{{$errors->first('fechaPago')}}</span>
+                                @if ($errors->first('fechaPago'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('fechaPago') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -190,7 +222,11 @@
                                   <option value="1">Efectivo</option>
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('medioPago')}}</span>
+                                @if ($errors->first('medioPago'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('medioPago') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 

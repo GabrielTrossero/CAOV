@@ -6,12 +6,13 @@
   <div class="card">
     <div class="card-header">
       <label><b>Listado de Deportes</b></label>
-      @if (\Session::has('deporteTieneSocios'))
-        <br>
-        <span class="text-danger">{!! \Session::get('deporteTieneSocios') !!}</span>
-      @endif
     </div>
     <div class="card-body border">
+      @if (\Session::has('deporteTieneSocios'))
+        <div class="alert alert-danger">
+          {!! \Session::get('deporteTieneSocios') !!}
+        </div>
+      @endif
       <table class="table table-striped">
         <thead>
           <tr>

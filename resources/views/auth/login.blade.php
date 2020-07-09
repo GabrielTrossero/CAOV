@@ -17,7 +17,11 @@
 
                             <div class="col-md-6">
                                 <input id="user" type="text" class="form-control" name="user" value="{{ old('user') }}" required autofocus>
-                                <span class="text-danger">{!! \Session::get('user') !!}</span>
+                                @if (\Session::has('user'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('user') !!}
+                                  </div>
+                                @endif
                                 <!--@if ($errors->has('user'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('user') }}</strong>
@@ -33,9 +37,9 @@
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                                 @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
+                                    <div class="alert alert-danger errorForm">
+                                        {{ $errors->first('password') }}
+                                    </div>
                                 @endif
                             </div>
                         </div>

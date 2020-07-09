@@ -23,7 +23,6 @@
                                   <div class="alert alert-danger">
                                       {{ 'ERROR: No puede pagar dicha cuota, ya que el socio debe alguna de un mes anterior.' }}
                                   </div>
-
                               @else
                                 @if (\Session::has('errorInhabilitada'))
                                     <div class="alert alert-danger">
@@ -62,7 +61,11 @@
                             <div class="col-md-6">
                                 <input type="date" name="fechaPago" id="fechaPago" class="form-control" value="{{ old('fechaPago') }}"  mesAnio="{{$cuota->fechaMesAnio}}" cantMaxMeses="{{$cuota->montoCuota->cantidadMeses}}" interes="{{$cuota->montoCuota->montoInteresMensual}}" required>
 
-                                <span class="text-danger">{{$errors->first('fechaPago')}}</span>
+                                @if ($errors->first('fechaPago'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('fechaPago') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -74,7 +77,11 @@
                                   <option value="1">Efectivo</option>
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('medioPago')}}</span>
+                                @if ($errors->first('medioPago'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('medioPago') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 

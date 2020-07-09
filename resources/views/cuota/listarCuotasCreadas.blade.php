@@ -18,6 +18,11 @@
           {{ 'Atención: se han eliminado '. $gruposEliminados .' grupo/s por tener un solo integrante.' }}
         </div>
       @endif
+      @if ($cuotasCreadas->count() == 0)
+        <div class="alert alert-danger">
+          {{ 'No hay cuotas pendientes para generar.' }}
+        </div>
+      @endif
       <table id="idDataTable" class="table table-striped">
         <thead>
           <tr>
@@ -58,13 +63,5 @@
     </div>
   </div>
 </div>
-
-@if ($cuotasCreadas->count() == 0)
-  <script type="text/javascript">
-    window.onload = () => { //para que el script se muestre despúes de cargar el html
-            alert('No hay cuotas pendientes para generar.')
-        }
-  </script>
-@endif
 
 @stop

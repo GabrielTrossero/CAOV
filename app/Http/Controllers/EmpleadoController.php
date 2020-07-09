@@ -107,6 +107,12 @@ class EmpleadoController extends Controller
           }
         }
 
+        //valido que el tipo de usuario exista
+        $tipoUsuario = TipoUsuario::find($request->idTipoUsuario);
+        if (!$tipoUsuario) {
+          return redirect()->back()->withInput()->with('validarTipoUsuario', 'Error al seleccionar el tipo de usuario.');
+        }
+
 
         //almaceno el usuario
         $empleado = new User;
@@ -253,6 +259,12 @@ class EmpleadoController extends Controller
           if(isset($empleado)){
             return redirect()->back()->withInput()->with('validarEmpleadoNoExiste', 'Error, dicho Empleado ya existe.');
           }
+        }
+
+        //valido que el tipo de usuario exista
+        $tipoUsuario = TipoUsuario::find($request->idTipoUsuario);
+        if (!$tipoUsuario) {
+          return redirect()->back()->withInput()->with('validarTipoUsuario', 'Error al seleccionar el tipo de usuario.');
         }
 
 

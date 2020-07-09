@@ -18,7 +18,11 @@
                             <div class="col-md-6">
                                 <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}" maxlength="75" required>
 
-                                <span class="text-danger">{{$errors->first('nombre')}}</span>
+                                @if ($errors->first('nombre'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('nombre') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -28,7 +32,16 @@
                             <div class="col-md-6">
                                 <input type="number" name="cantidad" id="cantidad" class="form-control" min="1" required>
 
-                                <span class="text-danger">{{$errors->first('cantidad')}}</span>
+                                @if ($errors->first('cantidad'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('cantidad') }}
+                                  </div>
+                                @endif
+                                @if (\Session::has('validarCantidad'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarCantidad') !!}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 

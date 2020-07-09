@@ -229,3 +229,14 @@ nav.mostrar{
 	margin-bottom: 0rem;
 	padding: .1rem 1.25rem;
 }
+
+
+.backup{
+	padding-left: 300px;
+}
+
+.backup .alert-danger{
+	color: white;
+	background-color: #dc3545;
+	border-color: #7b4545;
+}

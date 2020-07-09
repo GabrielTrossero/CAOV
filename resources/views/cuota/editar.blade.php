@@ -55,7 +55,11 @@
                             <div class="col-md-6">
                                 <input type="date" name="fechaPago" id="fechaPago" class="form-control" valor="{{ $cuota->fechaPago }}" value="{{ $cuota->fechaPago }}"  mesAnio="{{$cuota->fechaMesAnio}}" cantMaxMeses="{{$cuota->montoCuota->cantidadMeses}}" interes="{{$cuota->montoCuota->montoInteresMensual}}" >
 
-                                <span class="text-danger">{{$errors->first('fechaPago')}}</span>
+                                @if ($errors->first('fechaPago'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('fechaPago') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -67,7 +71,11 @@
                                   <option value="1">Efectivo</option>
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('medioPago')}}</span>
+                                @if ($errors->first('medioPago'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('medioPago') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -80,7 +88,11 @@
                                   <option value="n">No</option>
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('pagada')}}</span>
+                                @if ($errors->first('pagada'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('pagada') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 

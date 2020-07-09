@@ -52,12 +52,16 @@ class MuebleController extends Controller
         //valido los datos ingresados
         $validacion = Validator::make($request->all(), [
           'nombre' => 'required|max:75|unique:mueble',
-          'cantidad' => 'required|min:1'
+          'cantidad' => 'required'
         ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
         if($validacion->fails()){
           return redirect()->back()->withInput()->withErrors($validacion->errors());
+        }
+
+        if($request->cantidad < 1){ //verifico para que no ingrese una cantidad negativa
+          return redirect()->back()->withInput()->with('validarCantidad', 'La cantidad debe ser mayor a 0.');
         }
 
         //almaceno la persona
@@ -146,6 +150,11 @@ class MuebleController extends Controller
       //si la validacion falla vuelvo hacia atras con los errores
       if($validacion->fails()){
         return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      
+      if($request->cantidad < 1){ //verifico para que no ingrese una cantidad negativa
+        return redirect()->back()->withInput()->with('validarCantidad', 'La cantidad debe ser mayor a 0.');
       }
 
       //busco el registro

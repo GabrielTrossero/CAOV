@@ -22,7 +22,11 @@
                                   <option value="g">Grupo Familiar</option>
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('tipo')}}</span>
+                                @if ($errors->first('tipo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('tipo') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -32,7 +36,11 @@
                             <div class="col-md-6">
                               <input type="number" name="montoMensual" id="montoMensual" class="form-control" min="0" value="{{ old('montoMensual') }}" placeholder="Ingresar monto" required>
 
-                              <span class="text-danger">{{$errors->first('montoMensual')}}</span>
+                                @if ($errors->first('montoMensual'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('montoMensual') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -42,17 +50,25 @@
                             <div class="col-md-6">
                                 <input type="number" name="montoInteresGrupoFamiliar" id="montoInteresGrupoFamiliar" class="form-control" value="{{ old('montoInteresGrupoFamiliar') }}" min="0" placeholder="Ingresar monto de interés por integrante" disabled>
 
-                                <span class="text-danger">{{$errors->first('montoInteresGrupoFamiliar')}}</span>
+                                @if ($errors->first('montoInteresGrupoFamiliar'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('montoInteresGrupoFamiliar') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="cantidadIntegrantes" class="col-md-4 col-form-label text-md-right">{{ __('Aplicado despúes de cuantos integrantes') }}</label>
+                            <label for="cantidadIntegrantes" class="col-md-4 col-form-label text-md-right">{{ __('Aplicado después de cuantos integrantes') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="cantidadIntegrantes" id="cantidadIntegrantes" class="form-control" value="{{ old('cantidadIntegrantes') }}" min="0" placeholder="N° de integrantes" disabled>
 
-                                <span class="text-danger">{{$errors->first('cantidadIntegrantes')}}</span>
+                                @if ($errors->first('cantidadIntegrantes'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('cantidadIntegrantes') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -60,19 +76,27 @@
                             <label for="montoInteresMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Interes Mensual *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="montoInteresMensual" id="montoInteresMensual" class="form-control" value="{{ old('montoInteresMensual') }}" min="0" placeholder="Ingresar monto de interes por atraso" required>
+                                <input type="number" name="montoInteresMensual" id="montoInteresMensual" class="form-control" value="{{ old('montoInteresMensual') }}" min="0" placeholder="Ingresar monto de interés por atraso" required>
 
-                                <span class="text-danger">{{$errors->first('montoInteresMensual')}}</span>
+                                @if ($errors->first('montoInteresMensual'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('montoInteresMensual') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="cantidadMeses" class="col-md-4 col-form-label text-md-right">{{ __('Aplicado despúes de cuantos meses *') }}</label>
+                            <label for="cantidadMeses" class="col-md-4 col-form-label text-md-right">{{ __('Aplicado después de cuantos meses *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="cantidadMeses" id="cantidadMeses" class="form-control" value="{{ old('cantidadMeses') }}" min="0" placeholder="N° de meses" required>
 
-                                <span class="text-danger">{{$errors->first('cantidadMeses')}}</span>
+                                @if ($errors->first('cantidadMeses'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('cantidadMeses') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 

@@ -7,8 +7,9 @@
     <div class="card-header">
       <label class="col-md-8 col-form-label"><b>Listado de Inmuebles</b></label>
       @if (\Session::has('inmuebleTieneAlquileres'))
-        <br>
-        <span class="text-danger">{!! \Session::get('inmuebleTieneAlquileres') !!}</span>
+        <div class="alert alert-danger">
+          {!! \Session::get('inmuebleTieneAlquileres') !!}
+        </div>
       @endif
     </div>
     <div class="card-body border">

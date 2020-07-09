@@ -20,7 +20,11 @@
                             <div class="col-md-6">
                                 <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') ?? $mueble->nombre }}" maxlength="75" required>
 
-                                <span class="text-danger">{{$errors->first('nombre')}}</span>
+                                @if ($errors->first('nombre'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('nombre') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -30,7 +34,11 @@
                             <div class="col-md-6">
                                 <input type="number" name="cantidadActual" id="cantidadActual" class="form-control" value="{{ old('cantidadActual') ?? $mueble->cantidad }}" disabled>
 
-                                <span class="text-danger">{{$errors->first('cantidadActual')}}</span>
+                                @if ($errors->first('cantidadActual'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('cantidadActual') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -44,7 +52,11 @@
                                   <option value="2">Aumentar cantidad</option>
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('accionCantidad')}}</span>
+                                @if ($errors->first('accionCantidad'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('accionCantidad') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -54,10 +66,16 @@
                             <div class="col-md-6">
                                 <input type="number" name="cantidadModificar" id="cantidadModificar" class="form-control" value="{{ old('cantidadModificar') }}" min="1">
 
-                                <span class="text-danger">{{$errors->first('cantidadModificar')}}</span>
+                                @if ($errors->first('cantidadModificar'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('cantidadModificar') }}
+                                  </div>
+                                @endif
 
                                 @if (\Session::has('validarCantidad'))
-                                  <span class="text-danger">{!! \Session::get('validarCantidad') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarCantidad') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>

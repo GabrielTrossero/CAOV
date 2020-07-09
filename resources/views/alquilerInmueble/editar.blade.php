@@ -91,10 +91,16 @@
                                   @endforeach
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('idPersona')}}</span>
+                                @if ($errors->first('idPersona'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('idPersona') }}
+                                  </div>
+                                @endif
 
                                 @if (\Session::has('validarPersonaExiste'))
-                                  <span class="text-danger">{!! \Session::get('validarPersonaExiste') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarPersonaExiste') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>
@@ -103,7 +109,7 @@
                             <label for="inmueble" class="col-md-4 col-form-label text-md-right">{{ __('Inmueble *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="inmueble" id="inmueble" class="form-control" required>
+                                <select name="inmueble" id="inmueble" class="form-control" >
                                   @foreach ($inmuebles as $inmueble)
                                     @if ($inmueble->id == $reservaInmueble->idInmueble)
                                       <option value="{{ $inmueble->id }}" selected>{{ $inmueble->nombre }}</option>
@@ -113,10 +119,16 @@
                                   @endforeach
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('inmueble')}}</span>
+                                @if ($errors->first('inmueble'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('inmueble') }}
+                                  </div>
+                                @endif
 
                                 @if (\Session::has('validarInmueble'))
-                                  <span class="text-danger">{!! \Session::get('validarInmueble') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarInmueble') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>
@@ -125,9 +137,13 @@
                             <label for="fechaSol" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Solicitud *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaSol" id="fechaSol" class="form-control" required value="{{ old('fechaSol') ?? $reservaInmueble->fechaSolicitud }}">
+                                <input type="date" name="fechaSol" id="fechaSol" class="form-control"  value="{{ old('fechaSol') ?? $reservaInmueble->fechaSolicitud }}">
 
-                                <span class="text-danger">{{$errors->first('fechaSol')}}</span>
+                                @if ($errors->first('fechaSol'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('fechaSol') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -135,23 +151,33 @@
                             <label for="fechaHoraInicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" required value="{{ old('fechaHoraInicio') ?? $reservaInmueble->fechaHoraInicio }}">
+                                <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control"  value="{{ old('fechaHoraInicio') ?? $reservaInmueble->fechaHoraInicio }}">
 
-                                <span class="text-danger">{{$errors->first('fechaHoraInicio')}}</span>
+                                @if ($errors->first('fechaHoraInicio'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('fechaHoraInicio') }}
+                                  </div>
+                                @endif
 
                                 @if (\Session::has('solapamientoFechas'))
-                                  <span class="text-danger">{!! \Session::get('solapamientoFechas') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('solapamientoFechas') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización *') }}</label>
+                            <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización*')}}</label>
 
                             <div class="col-md-6">
-                                <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control" required value="{{ old('fechaHoraFin') ?? $reservaInmueble->fechaHoraFin }}">
+                                <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control"  value="{{ old('fechaHoraFin') ?? $reservaInmueble->fechaHoraFin }}">
 
-                                <span class="text-danger">{{$errors->first('fechaHoraFin')}}</span>
+                                @if ($errors->first('fechaHoraFin'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('fechaHoraFin') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -161,7 +187,11 @@
                             <div class="col-md-6">
                                 <input type="text" name="observacion" id="observacion" class="form-control" value="{{ old('observacion') ?? $reservaInmueble->observacion }}">
 
-                                <span class="text-danger">{{$errors->first('observacion')}}</span>
+                                @if ($errors->first('observacion'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('observacion') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -169,12 +199,18 @@
                             <label for="costoReserva" class="col-md-4 col-form-label text-md-right">{{ __('Costo de la Reserva *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costoReserva" id="costoReserva" class="form-control" required value="{{ old('costoReserva') ?? $reservaInmueble->costoReserva }}">
+                                <input type="number" name="costoReserva" id="costoReserva" class="form-control"  value="{{ old('costoReserva') ?? $reservaInmueble->costoReserva }}">
 
-                                <span class="text-danger">{{$errors->first('costoReserva')}}</span>
+                                @if ($errors->first('costoReserva'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('costoReserva') }}
+                                  </div>
+                                @endif
 
                                 @if (\Session::has('validarMonto'))
-                                  <span class="text-danger">{!! \Session::get('validarMonto') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarMonto') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>
@@ -183,9 +219,13 @@
                             <label for="costoTotal" class="col-md-4 col-form-label text-md-right">{{ __('Costo Total *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costoTotal" id="costoTotal" class="form-control" required value="{{ old('costoTotal') ?? $reservaInmueble->costoTotal }}">
+                                <input type="number" name="costoTotal" id="costoTotal" class="form-control"  value="{{ old('costoTotal') ?? $reservaInmueble->costoTotal }}">
 
-                                <span class="text-danger">{{$errors->first('costoTotal')}}</span>
+                                @if ($errors->first('costoTotal'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('costoTotal') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -193,7 +233,7 @@
                             <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="medioPago" id="medioPago" class="form-control" required>
+                                <select name="medioPago" id="medioPago" class="form-control" >
                                   @foreach ($mediosDePago as $medioDePago)
                                     @if ($medioDePago->id == $reservaInmueble->idMedioDePago)
                                       <option value="{{ $medioDePago->id }}" selected>{{ $medioDePago->nombre }}</option>
@@ -204,7 +244,11 @@
                                   @endforeach
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('medioPago')}}</span>
+                                @if ($errors->first('medioPago'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('medioPago') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -212,9 +256,13 @@
                             <label for="tipoEvento" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Evento *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="tipoEvento" id="tipoEvento" class="form-control" required value="{{ old('tipoEvento') ?? $reservaInmueble->tipoEvento }}">
+                                <input type="text" name="tipoEvento" id="tipoEvento" class="form-control"  value="{{ old('tipoEvento') ?? $reservaInmueble->tipoEvento }}">
 
-                                <span class="text-danger">{{$errors->first('tipoEvento')}}</span>
+                                @if ($errors->first('tipoEvento'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('tipoEvento') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -222,9 +270,13 @@
                             <label for="cantAsistentes" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad de Asistentes *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="cantAsistentes" id="cantAsistentes" class="form-control" required value="{{ old('cantAsistentes') ?? $reservaInmueble->cantAsistentes }}">
+                                <input type="number" name="cantAsistentes" id="cantAsistentes" class="form-control"  value="{{ old('cantAsistentes') ?? $reservaInmueble->cantAsistentes }}">
 
-                                <span class="text-danger">{{$errors->first('cantAsistentes')}}</span>
+                                @if ($errors->first('cantAsistentes'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('cantAsistentes') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -232,7 +284,7 @@
                             <label for="servicioLimp" class="col-md-4 col-form-label text-md-right">{{ __('Servicio de Limpieza *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="servicioLimp" id="servicioLimp" class="form-control" required>
+                                <select name="servicioLimp" id="servicioLimp" class="form-control" >
                                   @if ($reservaInmueble->tieneServicioLimpieza)
                                     <option value="0">No</option>
                                     <option value="1" selected>Si</option>
@@ -242,7 +294,11 @@
                                   @endif
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('servicioLimp')}}</span>
+                                @if ($errors->first('servicioLimp'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('servicioLimp') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -250,7 +306,7 @@
                             <label for="musica" class="col-md-4 col-form-label text-md-right">{{ __('Música *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="musica" id="musica" class="form-control" required>
+                                <select name="musica" id="musica" class="form-control" >
                                   @if ($reservaInmueble->tieneMusica)
                                     <option value="0">No</option>
                                     <option value="1" selected>Si</option>
@@ -260,7 +316,11 @@
                                   @endif
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('musica')}}</span>
+                                @if ($errors->first('musica'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('musica') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -269,7 +329,7 @@
 
                             <div class="col-md-6">
 
-                                <select name="reglamento" id="reglamento" class="form-control" required>
+                                <select name="reglamento" id="reglamento" class="form-control" >
                                   @if ($reservaInmueble->tieneReglamento)
                                     <option value="0">No</option>
                                     <option value="1" selected>Si</option>
@@ -280,7 +340,11 @@
 
                                 </select>
 
-                                <span class="text-danger">{{$errors->first('reglamento')}}</span>
+                                @if ($errors->first('reglamento'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('reglamento') }}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -297,7 +361,9 @@
                                 <span class="text-danger">{{$errors->first('numRecibo')}}</span>
 
                                 @if (\Session::has('validarNumRecibo'))
-                                  <span class="text-danger">{!! \Session::get('validarNumRecibo') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('validarNumRecibo') }}
+                                  </div>
                                 @endif
                             </div>
                         </div>

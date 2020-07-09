@@ -115,7 +115,9 @@
                                 <span class="text-danger">{{$errors->first('numRecibo')}}</span>
 
                                 @if (\Session::has('validarNumRecibo'))
-                                  <span class="text-danger">{!! \Session::get('validarNumRecibo') !!}</span>
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarNumRecibo') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>
