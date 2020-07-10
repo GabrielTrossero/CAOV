@@ -13,7 +13,7 @@
               <th>Tipo</th>
             @endif
             <th>DNI</th>
-            <th>Numero de Socio</th>
+            <th>Número de Socio</th>
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Categoria (actual)</th>
@@ -121,7 +121,7 @@
       <table class="table">
         <tr>
           <th>Estado Cuota</th>
-          <th>Mes/Anio</th>
+          <th>Mes/Año</th>
           <th>Fecha Pago</th>
           <th>Monto Base</th>
           <th>Interés por Atraso de Pago</th>

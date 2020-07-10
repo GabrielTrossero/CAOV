@@ -73,7 +73,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="montoInteresMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Interes Mensual *') }}</label>
+                            <label for="montoInteresMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Interés Mensual *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="montoInteresMensual" id="montoInteresMensual" class="form-control" value="{{ old('montoInteresMensual') }}" min="0" placeholder="Ingresar monto de interés por atraso" required>

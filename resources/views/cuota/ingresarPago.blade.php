@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaMesAnio" class="col-md-4 col-form-label text-md-right">{{ __('Mes/Anio Correspondiente') }}</label>
+                            <label for="fechaMesAnio" class="col-md-4 col-form-label text-md-right">{{ __('Mes/Año Correspondiente') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" name="fechaMesAnio" id="fechaMesAnio" class="form-control" value="{{ date("m/Y", strtotime($cuota->fechaMesAnio)) }}" disabled>

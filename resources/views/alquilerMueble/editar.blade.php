@@ -121,10 +121,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaSolicitud" class="col-md-4 col-form-label text-md-right">{{ __('Fecha Actual *') }}</label>
+                            <label for="fechaSolicitud" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Solicitud *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaSolicitud" id="fechaSolicitud" class="form-control" value="{{ old('fechaSolicitud') ?? $reserva->fechaSolicitud }}" >
+                                <input type="date" name="fechaSolicitud" id="fechaSolicitud" class="form-control" value="{{ old('fechaSolicitud') ?? $reserva->fechaSolicitud }}" required>
 
                                 @if ($errors->first('fechaSolicitud'))
                                   <div class="alert alert-danger errorForm">
@@ -138,7 +138,7 @@
                             <label for="tipoMueble" class="col-md-4 col-form-label text-md-right">{{ __('Seleccione el Mueble *') }}</label>
 
                             <div class="col-md-6">
-                              <select name="tipoMueble" id="tipoMueble" class="form-control" >
+                              <select name="tipoMueble" id="tipoMueble" class="form-control" required>
                                 @foreach ($muebles as $mueble)
                                   <!--para seleccionar por defecto la que tiene actualmente-->
                                   @if ($reserva->mueble->id == $mueble->id)
@@ -167,7 +167,7 @@
                             <label for="cantMueble" class="col-md-4 col-form-label text-md-right">{{ __('Ingrese la Cantidad *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="cantMueble" id="cantMueble" class="form-control" value="{{ old('cantMueble') ?? $reserva->cantidad }}" min="1" >
+                                <input type="number" name="cantMueble" id="cantMueble" class="form-control" value="{{ old('cantMueble') ?? $reserva->cantidad }}" min="1" required>
 
                                 @if ($errors->first('cantMueble'))
                                   <div class="alert alert-danger errorForm">
@@ -193,7 +193,7 @@
                             <label for="fechaHoraInicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" value="{{ old('fechaHoraInicio') ?? $reserva->fechaHoraInicio }}" >
+                                <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" value="{{ old('fechaHoraInicio') ?? $reserva->fechaHoraInicio }}" required>
 
                                 @if ($errors->first('fechaHoraInicio'))
                                   <div class="alert alert-danger errorForm">
@@ -213,7 +213,7 @@
                             <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización*') }}</label>
 
                             <div class="col-md-6">
-                                <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control" value="{{ old('fechaHoraFin') ?? $reserva->fechaHoraFin }}" >
+                                <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control" value="{{ old('fechaHoraFin') ?? $reserva->fechaHoraFin }}" required>
 
                                 @if ($errors->first('fechaHoraFin'))
                                   <div class="alert alert-danger errorForm">
@@ -227,7 +227,7 @@
                             <label for="costo" class="col-md-4 col-form-label text-md-right">{{ __('Costo *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costo" id="costo" class="form-control" value="{{ old('costo') ?? $reserva->costoTotal }}" min="0" >
+                                <input type="number" name="costo" id="costo" class="form-control" value="{{ old('costo') ?? $reserva->costoTotal }}" min="0" required>
 
                                 @if ($errors->first('costo'))
                                   <div class="alert alert-danger errorForm">
@@ -241,7 +241,7 @@
                             <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="medioPago" id="medioPago" class="form-control" >
+                                <select name="medioPago" id="medioPago" class="form-control" required>
                                   @foreach ($mediosDePagos as $medioDePago)
                                     <!--para seleccionar por defecto la que tiene actualmente-->
                                     @if ($reserva->medioDePago->id == $medioDePago->id)

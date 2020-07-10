@@ -15,7 +15,7 @@
                         <input type="hidden" name="id" value="{{ $socio->id }}">
 
                         <div class="form-group row">
-                            <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Socio *') }}</label>
+                            <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Número de Socio *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') ?? $socio->numSocio }}" min="0" required>

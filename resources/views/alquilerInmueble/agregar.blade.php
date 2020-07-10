@@ -18,7 +18,7 @@
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="chequear-fecha-hora-inicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio') }}</label>
+                          <label for="chequear-fecha-hora-inicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización') }}</label>
                           <div class="col-md-6">
                             <input type="date" name="chequear-fecha-fin" id="chequear-fecha-fin" class="form-control" value="">
                           </div>

@@ -101,7 +101,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="fechaSolicitud" class="col-md-4 col-form-label text-md-right">{{ __('Fecha Actual *') }}</label>
+                            <label for="fechaSolicitud" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Solicitud *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="date" name="fechaSolicitud" id="fechaSolicitud" class="form-control" value="{{ old('fechaSolicitud') }}" required>

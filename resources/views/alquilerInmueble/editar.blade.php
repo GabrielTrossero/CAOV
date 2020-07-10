@@ -17,7 +17,7 @@
                                   </div>
                                 </div>
                                 <div class="form-group row">
-                                  <label for="chequear-fecha-hora-inicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio') }}</label>
+                                  <label for="chequear-fecha-hora-inicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización') }}</label>
                                   <div class="col-md-6">
                                     <input type="date" name="chequear-fecha-fin" id="chequear-fecha-fin" class="form-control" value="">
                                   </div>
@@ -109,7 +109,7 @@
                             <label for="inmueble" class="col-md-4 col-form-label text-md-right">{{ __('Inmueble *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="inmueble" id="inmueble" class="form-control" >
+                                <select name="inmueble" id="inmueble" class="form-control" required>
                                   @foreach ($inmuebles as $inmueble)
                                     @if ($inmueble->id == $reservaInmueble->idInmueble)
                                       <option value="{{ $inmueble->id }}" selected>{{ $inmueble->nombre }}</option>
@@ -137,7 +137,7 @@
                             <label for="fechaSol" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Solicitud *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="date" name="fechaSol" id="fechaSol" class="form-control"  value="{{ old('fechaSol') ?? $reservaInmueble->fechaSolicitud }}">
+                                <input type="date" name="fechaSol" id="fechaSol" class="form-control" required value="{{ old('fechaSol') ?? $reservaInmueble->fechaSolicitud }}">
 
                                 @if ($errors->first('fechaSol'))
                                   <div class="alert alert-danger errorForm">
@@ -151,7 +151,7 @@
                             <label for="fechaHoraInicio" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Inicio *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control"  value="{{ old('fechaHoraInicio') ?? $reservaInmueble->fechaHoraInicio }}">
+                                <input type="datetime" name="fechaHoraInicio" id="fechaHoraInicio" class="form-control" required value="{{ old('fechaHoraInicio') ?? $reservaInmueble->fechaHoraInicio }}">
 
                                 @if ($errors->first('fechaHoraInicio'))
                                   <div class="alert alert-danger errorForm">
@@ -171,7 +171,7 @@
                             <label for="fechaHoraFin" class="col-md-4 col-form-label text-md-right">{{ __('Fecha y Hora de Finalización*')}}</label>
 
                             <div class="col-md-6">
-                                <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control"  value="{{ old('fechaHoraFin') ?? $reservaInmueble->fechaHoraFin }}">
+                                <input type="datetime" name="fechaHoraFin" id="fechaHoraFin" class="form-control" required value="{{ old('fechaHoraFin') ?? $reservaInmueble->fechaHoraFin }}">
 
                                 @if ($errors->first('fechaHoraFin'))
                                   <div class="alert alert-danger errorForm">
@@ -199,7 +199,7 @@
                             <label for="costoReserva" class="col-md-4 col-form-label text-md-right">{{ __('Costo de la Reserva *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costoReserva" id="costoReserva" class="form-control"  value="{{ old('costoReserva') ?? $reservaInmueble->costoReserva }}">
+                                <input type="number" name="costoReserva" id="costoReserva" class="form-control" required value="{{ old('costoReserva') ?? $reservaInmueble->costoReserva }}">
 
                                 @if ($errors->first('costoReserva'))
                                   <div class="alert alert-danger errorForm">
@@ -219,7 +219,7 @@
                             <label for="costoTotal" class="col-md-4 col-form-label text-md-right">{{ __('Costo Total *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costoTotal" id="costoTotal" class="form-control"  value="{{ old('costoTotal') ?? $reservaInmueble->costoTotal }}">
+                                <input type="number" name="costoTotal" id="costoTotal" class="form-control" required value="{{ old('costoTotal') ?? $reservaInmueble->costoTotal }}">
 
                                 @if ($errors->first('costoTotal'))
                                   <div class="alert alert-danger errorForm">
@@ -233,7 +233,7 @@
                             <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="medioPago" id="medioPago" class="form-control" >
+                                <select name="medioPago" id="medioPago" class="form-control" required>
                                   @foreach ($mediosDePago as $medioDePago)
                                     @if ($medioDePago->id == $reservaInmueble->idMedioDePago)
                                       <option value="{{ $medioDePago->id }}" selected>{{ $medioDePago->nombre }}</option>
@@ -256,7 +256,7 @@
                             <label for="tipoEvento" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Evento *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="tipoEvento" id="tipoEvento" class="form-control"  value="{{ old('tipoEvento') ?? $reservaInmueble->tipoEvento }}">
+                                <input type="text" name="tipoEvento" id="tipoEvento" class="form-control" required value="{{ old('tipoEvento') ?? $reservaInmueble->tipoEvento }}">
 
                                 @if ($errors->first('tipoEvento'))
                                   <div class="alert alert-danger errorForm">
@@ -270,7 +270,7 @@
                             <label for="cantAsistentes" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad de Asistentes *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="cantAsistentes" id="cantAsistentes" class="form-control"  value="{{ old('cantAsistentes') ?? $reservaInmueble->cantAsistentes }}">
+                                <input type="number" name="cantAsistentes" id="cantAsistentes" class="form-control" required value="{{ old('cantAsistentes') ?? $reservaInmueble->cantAsistentes }}">
 
                                 @if ($errors->first('cantAsistentes'))
                                   <div class="alert alert-danger errorForm">
@@ -284,7 +284,7 @@
                             <label for="servicioLimp" class="col-md-4 col-form-label text-md-right">{{ __('Servicio de Limpieza *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="servicioLimp" id="servicioLimp" class="form-control" >
+                                <select name="servicioLimp" id="servicioLimp" class="form-control" required>
                                   @if ($reservaInmueble->tieneServicioLimpieza)
                                     <option value="0">No</option>
                                     <option value="1" selected>Si</option>
@@ -306,7 +306,7 @@
                             <label for="musica" class="col-md-4 col-form-label text-md-right">{{ __('Música *') }}</label>
 
                             <div class="col-md-6">
-                                <select name="musica" id="musica" class="form-control" >
+                                <select name="musica" id="musica" class="form-control" required>
                                   @if ($reservaInmueble->tieneMusica)
                                     <option value="0">No</option>
                                     <option value="1" selected>Si</option>

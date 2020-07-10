@@ -9,7 +9,7 @@
 
 					<form action="{{ url('/logout') }}" method="POST">
 						@csrf
-						<button type="submit" class="btn btn-light ml-auto">Cerrar sesión</button>
+						<button type="submit" class="btn btn-light ml-auto"> <b>Cerrar sesión</b> </button>
 					</form>
 				</div>
 			@endauth

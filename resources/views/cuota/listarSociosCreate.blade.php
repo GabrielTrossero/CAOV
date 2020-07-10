@@ -23,7 +23,7 @@
         <thead>
           <tr>
             <th>DNI</th>
-            <th>Numero de Socio</th>
+            <th>Número de Socio</th>
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Categoria</th>
@@ -52,7 +52,7 @@
                 @endif
 
                 @if ($socio->fechaUltimoPago)
-                  <td>{{ date("d/m/Y", strtotime($socio->fechaUltimoPago)) }}</td>
+                  <td>{{ date("m/Y", strtotime($socio->fechaUltimoPago)) }}</td>
                 @else
                   <td> - </td>
                 @endif

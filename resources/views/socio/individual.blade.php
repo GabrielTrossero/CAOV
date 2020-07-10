@@ -9,7 +9,7 @@
       <table class="table">
         <tr>
           <th>DNI</th>
-          <th>Numero de Socio</th>
+          <th>Número de Socio</th>
           <th>Apellido</th>
           <th>Nombres</th>
           <th>Categoria</th>
