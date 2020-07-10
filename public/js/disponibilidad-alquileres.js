@@ -56,7 +56,7 @@ $(document).ready(function () {
 
                 sched.css("display", "");
                 scheduler.clearAll();
-                scheduler.init('scheduler', Date.now());
+                scheduler.init('scheduler', fechaInicioIngresada);
                 scheduler.parse(fechasScheduler);
                 botonOcultarScheduler.css("display", "");
             })
@@ -91,7 +91,7 @@ $(document).ready(function () {
 
                     sched.css("display", "");
                     scheduler.clearAll();
-                    scheduler.init('scheduler', Date.now());
+                    scheduler.init('scheduler', fechaHoraInicio);
                     scheduler.parse(fechasScheduler);
                     botonOcultarScheduler.css("display", "");
                 })
