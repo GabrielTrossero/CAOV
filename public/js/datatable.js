@@ -1,7 +1,8 @@
 $(document).ready(function() {
     //para ordenar correctamente por fecha dependiendo del formato
-    $.fn.dataTable.moment('d/MM/YYYY');
+    $.fn.dataTable.moment('DD/MM/YYYY');
     $.fn.dataTable.moment('MM/YYYY');
+    $.fn.dataTable.moment('DD/MM/YYYY HH:ss');
 
     //SE TIENEN VARIOS idDataTable PARA LOS CASOS EN QUE SE PUEDEN SELECCIONAR MÁS DE UNA TABLA
     $('#idDataTable').DataTable({
