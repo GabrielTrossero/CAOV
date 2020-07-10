@@ -58,6 +58,18 @@ class PersonaController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFromSocio()
+    {
+      $redirect = "socio";
+
+      return view('persona.agregar', compact('redirect'));
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -117,6 +129,9 @@ class PersonaController extends Controller
           }
           else if($request->redirect == "inmueble"){
             return redirect()->route('createInmueble', ['id' => $personaRetornada->id]);
+          }
+          else if($request->redirect == "socio"){
+            return redirect()->route('createSocio', ['id' => $personaRetornada->id]);
           }
         }
 

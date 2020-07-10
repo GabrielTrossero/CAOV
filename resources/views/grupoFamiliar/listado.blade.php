@@ -4,10 +4,11 @@
 
 <div class="cuadro">
   <div class="card">
-    <div class="card-header">
-      <table>
-        <label class="col-md-8 col-form-label"><b>Listado de Grupos Familiares</b></label>
-      </table>
+    <div class="card-header row">
+      <label class="col-md-9 col-form-label"><b>Listado de Grupos Familiares</b></label>
+      <button class="btn btn-primary col-md-2">
+        <a href="{{ url('/grupofamiliar/create') }}" style="text-decoration: none; color: white;">Agregar Grupo</a>
+      </button>
     </div>
     <div class="card-body border">
       @if ($integrantesEliminados > 0)

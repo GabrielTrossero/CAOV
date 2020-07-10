@@ -13,6 +13,42 @@
                         {{ csrf_field() }}
 
                         <div class="form-group row">
+                          <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona *') }}</label>
+
+                          <div class="col-md-6">
+                              <select class="form-control" name="idPersona" id="idPersona">
+                                <option selected disabled>Seleccionar Persona</option>
+                                @foreach ($personas as $persona)
+                                  @if (isset($personaRetornada) && ($persona->id == $personaRetornada->id)))
+                                    <option value="{{$persona->id}}" selected>{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                  @else
+                                    <option value="{{$persona->id}}">{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
+                                @endif
+                                @endforeach
+                              </select>
+
+                              @if ($errors->first('idPersona'))
+                                <div class="alert alert-danger errorForm">
+                                  {{ $errors->first('idPersona') }}
+                                </div>
+                              @elseif (\Session::has('validarPersonaExiste'))
+                                <div class="alert alert-danger errorForm">
+                                  {!! \Session::get('validarPersonaExiste') !!}
+                                </div>
+                              @elseif (\Session::has('validarSocioNoExiste'))
+                                <div class="alert alert-danger errorForm">
+                                  {!! \Session::get('validarSocioNoExiste') !!}
+                                </div>
+                              @endif
+                          </div>
+                          <div class="col-form-label">
+                            <a href="{{ url('/persona/createFromSocio') }}" title="Agregar Persona">
+                              <i class="fas fa-plus"></i>
+                            </a>
+                          </div>
+                      </div>
+
+                        <div class="form-group row">
                             <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Número de Socio *') }}</label>
 
                             <div class="col-md-6">
@@ -66,33 +102,6 @@
                                 @if ($errors->first('vitalicio'))
                                   <div class="alert alert-danger errorForm">
                                     {{ $errors->first('vitalicio') }}
-                                  </div>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="idPersona" class="col-md-4 col-form-label text-md-right">{{ __('Persona *') }}</label>
-
-                            <div class="col-md-6">
-                                <select class="form-control" name="idPersona" id="idPersona">
-                                  <option selected disabled>Seleccionar Persona</option>
-                                  @foreach ($personas as $persona)
-                                    <option value="{{$persona->id}}">{{ $persona->DNI .' - '. $persona->apellido .', '. $persona->nombres }}</option>
-                                  @endforeach
-                                </select>
-
-                                @if ($errors->first('idPersona'))
-                                  <div class="alert alert-danger errorForm">
-                                    {{ $errors->first('idPersona') }}
-                                  </div>
-                                @elseif (\Session::has('validarPersonaExiste'))
-                                  <div class="alert alert-danger errorForm">
-                                    {!! \Session::get('validarPersonaExiste') !!}
-                                  </div>
-                                @elseif (\Session::has('validarSocioNoExiste'))
-                                  <div class="alert alert-danger errorForm">
-                                    {!! \Session::get('validarSocioNoExiste') !!}
                                   </div>
                                 @endif
                             </div>
