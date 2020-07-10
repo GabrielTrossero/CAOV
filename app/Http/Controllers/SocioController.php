@@ -32,10 +32,8 @@ class SocioController extends Controller
      */
     public function create()
     {
-        //almaceno todos los grupos familiares
         $grupos = GrupoFamiliar::all();
 
-        //almaceno todos deportes
         $deportes = Deporte::all();
 
         $personas = Persona::all();
@@ -50,6 +48,29 @@ class SocioController extends Controller
 
         //los envio a la vista del formulario
         return view('socio.agregar', compact(['grupos','deportes', 'personas']));
+    }
+
+    /**
+     * Devuelve el formulario de Agregar viniendo desde PersonaController
+     *
+     * @param int $id
+     * 
+     * @return void
+     */
+    public function createFromPersona($id)
+    {
+      $personaRetornada = Persona::find($id);
+      $grupos = GrupoFamiliar::all();
+      $deportes = Deporte::all();
+      $personas = Persona::all();
+      $personas = $personas->filter(function ($value, $key) {
+        if ($value->socio == null) {
+          return true;
+        }
+        else return false;
+      });
+      
+      return view('socio.agregar', compact('grupos', 'deportes', 'personas', 'personaRetornada'));
     }
 
     /**

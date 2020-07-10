@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::post('delete', 'PersonaController@destroy');
         Route::get('createFromInmueble', 'PersonaController@createFromAlquilerInmueble');
         Route::get('createFromMueble', 'PersonaController@createFromAlquilerMueble');
+        Route::get('createFromSocio', 'PersonaController@createFromSocio');
     });
 
     //Rutas de Socios
@@ -40,6 +41,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
     {
         Route::get('/', 'SocioController@index');
         Route::get('create', 'SocioController@create');
+        Route::get('create/{id}', 'SocioController@createFromPersona')->name('createSocio');
         Route::post('create', 'SocioController@store');
         Route::get('show', 'SocioController@getShow');
         Route::get('show/{id}', 'SocioController@getShowId');
