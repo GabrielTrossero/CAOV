@@ -78,10 +78,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="miembro" class="col-md-4 col-form-label text-md-right">{{ __('Miembro') }}</label>
+                            <label for="miembros" class="col-md-4 col-form-label text-md-right">{{ __('Miembros') }}</label>
 
                             <div class="col-md-6">
-                                <select name="miembro" id="miembro" class="form-control">
+                                <select name="miembros[]" id="miembros" class="form-control" multiple>
 
                                   <optgroup id="miembros-actuales" label="Miembros Actuales">
                                     @foreach ($grupo->socios as $socio)

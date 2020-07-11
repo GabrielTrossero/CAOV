@@ -1,7 +1,7 @@
 'use strict'
 
 var selectAccion = $("#accionMiembro");
-var selectMiembros = $("#miembro");
+var selectMiembros = $("#miembros");
 var miembrosActuales = $("#miembros-actuales");
 var sociosSinGrupo = $("#socios-sin-grupo");
 
@@ -12,7 +12,7 @@ selectAccion.change(function(){
   var accion = $("#accionMiembro option:selected").val();
   accion = parseInt(accion);
 
-  var miembroSeleccionado = $("#miembro option:selected");
+  var miembroSeleccionado = $("#miembros option:selected");
 
   if (accion == 0) {
     selectMiembros.css('display', 'none');

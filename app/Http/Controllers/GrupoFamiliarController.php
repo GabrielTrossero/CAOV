@@ -92,11 +92,15 @@ class GrupoFamiliarController extends Controller
       $socios = Socio::where('idGrupoFamiliar', null)->where('vitalicio', 'n')->get();
 
       //filtro los socios mayores de edad
-      $socios = $socios->filter(function ($socio){
+      $sociosMayores = $socios->filter(function ($socio){
         return $this->calculaEdad($socio) >= 18;
       });
 
-      return view('grupoFamiliar.agregar', compact('socios', 'integrantesEliminados', 'gruposEliminados'));
+      $sociosMenores = $socios->filter(function ($socio){
+        return $this->calculaEdad($socio) < 18;
+      });
+
+      return view('grupoFamiliar.agregar', compact('sociosMenores', 'sociosMayores', 'integrantesEliminados', 'gruposEliminados'));
     }
 
 
@@ -170,6 +174,13 @@ class GrupoFamiliarController extends Controller
         $socio->idGrupoFamiliar = $grupoRetornado->id;
         $socio->save();
       }
+
+      foreach ($request->miembros as $miembro) {
+        $nuevoMiembro = Socio::find($miembro);
+        $nuevoMiembro->idGrupoFamiliar = $grupoRetornado->id;
+        $nuevoMiembro->save();
+      }
+
 
       //redirijo a la vista individual del grupo
       return redirect()->action('GrupoFamiliarController@getShowId', $grupoRetornado->id);
@@ -328,7 +339,9 @@ class GrupoFamiliarController extends Controller
         //convierto a int los valores de titular, accionMiembro y miembro de $request
         $idTitular = intval($request->titular);
         $accionMiembro = intval($request->accionMiembro);
-        $miembro = intval($request->miembro);
+        foreach ($request->miembros as $miembro) {
+          $miembro = intval($miembro);
+        }
 
         //si el numero de titular es distinto a cero y distinto al titular actual se actualiza el titular del grupo
         if (($idTitular != 0) && ($idTitular != $grupo->titular)){
@@ -339,33 +352,37 @@ class GrupoFamiliarController extends Controller
         }
 
 
-        if (($accionMiembro != 0) && ($miembro != 0)) {
+        if (($accionMiembro != 0) && ($request->miembros != null)) {
           if ($accionMiembro == 1) {
-            //tomo el socio que se agrega al grupo
-            $socio = Socio::find($miembro);
+            foreach ($request->miembros as $miembro) {
+              //tomo el socio que se agrega al grupo
+              $socio = Socio::find($miembro);
 
-            //valido si el socio a agregar es menor de edad
-            if($this->calculaEdad($socio) >= 18){
-              return redirect()->back()->withInput()->with('errorEdadNuevoMiembro', 'Se intenta agregar un Socio mayor de edad, por favor seleccione otro Socio.');
+              //valido si el socio a agregar es menor de edad
+              if($this->calculaEdad($socio) >= 18){
+                return redirect()->back()->withInput()->with('errorEdadNuevoMiembro', 'Se intenta agregar un Socio mayor de edad, por favor seleccione otro Socio.');
+              }
+
+              //actualizo el grupo familiar del socio agregado
+              $socio->idGrupoFamiliar = $grupo->id;
+              $socio->save();
             }
-
-            //actualizo el grupo familiar del socio agregado
-            $socio->idGrupoFamiliar = $grupo->id;
-            $socio->save();
           }
           elseif ($accionMiembro == 2) {
-            //tomo el socio que sale del grupo
-            $socio = Socio::find($miembro);
+            foreach ($request->miembros as $miembro) {
+              //tomo el socio que sale del grupo
+              $socio = Socio::find($miembro);
 
-            if ((isset($grupo->socioPareja)) && ($grupo->socioPareja->id == $socio->id)) {
-              $grupo->pareja = NULL;
-              $grupo->save();
-              $grupo->refresh();
+              if ((isset($grupo->socioPareja)) && ($grupo->socioPareja->id == $socio->id)) {
+                $grupo->pareja = NULL;
+                $grupo->save();
+                $grupo->refresh();
+              }
+
+              //actualizo el grupo familiar del socio que sale
+              $socio->idGrupoFamiliar = NULL;
+              $socio->save();
             }
-
-            //actualizo el grupo familiar del socio que sale
-            $socio->idGrupoFamiliar = NULL;
-            $socio->save();
           }
         }
 
