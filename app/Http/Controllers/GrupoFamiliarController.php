@@ -323,34 +323,15 @@ class GrupoFamiliarController extends Controller
           return redirect()->back()->withInput()->with('errorEliminacionTitular', 'Se intenta eliminar al Socio Titular, por favor seleccione otro Titular antes de esto.');
         }
 
-        //guardo el id del socio pareja en el grupo
-        if ($request->pareja != 0) {
-          $grupo->pareja = $request->pareja;
-          $pareja->idGrupoFamiliar = $grupo->id;
-          $pareja->save();
-
-        } else {
-          $grupo->pareja = NULL;
-        }
-
-        $grupo->save();
-        $grupo->refresh();
-
         //convierto a int los valores de titular, accionMiembro y miembro de $request
         $idTitular = intval($request->titular);
         $accionMiembro = intval($request->accionMiembro);
-        foreach ($request->miembros as $miembro) {
-          $miembro = intval($miembro);
+        if($accionMiembro != 0 && $request->miembros != null) {
+          foreach ($request->miembros as $miembro) {
+            $miembro = intval($miembro);
+          }
         }
-
-        //si el numero de titular es distinto a cero y distinto al titular actual se actualiza el titular del grupo
-        if (($idTitular != 0) && ($idTitular != $grupo->titular)){
-          $grupo->titular = $idTitular;
-          $titular->idGrupoFamiliar = $grupo->id;
-          $grupo->save();
-          $grupo->refresh();
-        }
-
+        $parejaEliminada = false;  
 
         if (($accionMiembro != 0) && ($request->miembros != null)) {
           if ($accionMiembro == 1) {
@@ -373,10 +354,15 @@ class GrupoFamiliarController extends Controller
               //tomo el socio que sale del grupo
               $socio = Socio::find($miembro);
 
-              if ((isset($grupo->socioPareja)) && ($grupo->socioPareja->id == $socio->id)) {
+              if($socio->id == $grupo->titular) {
+                return redirect()->back()->withInput()->with('errorEliminarTitular', 'Se intenta eliminar al Socio titular, por favor revise los socios seleccionados.');
+              }
+
+              if ((isset($grupo->socioPareja)) && ($grupo->pareja == $socio->id)) {
                 $grupo->pareja = NULL;
                 $grupo->save();
                 $grupo->refresh();
+                $parejaEliminada = true;
               }
 
               //actualizo el grupo familiar del socio que sale
@@ -384,6 +370,27 @@ class GrupoFamiliarController extends Controller
               $socio->save();
             }
           }
+        }
+
+        //guardo el id del socio pareja en el grupo
+        if ((!$parejaEliminada) && ($request->pareja != 0)) {
+          $grupo->pareja = $request->pareja;
+          $pareja->idGrupoFamiliar = $grupo->id;
+          $pareja->save();
+
+        } else {
+          $grupo->pareja = NULL;
+        }
+
+        $grupo->save();
+        $grupo->refresh();
+
+        //si el numero de titular es distinto a cero y distinto al titular actual se actualiza el titular del grupo
+        if (($idTitular != 0) && ($idTitular != $grupo->titular)){
+          $grupo->titular = $idTitular;
+          $titular->idGrupoFamiliar = $grupo->id;
+          $grupo->save();
+          $grupo->refresh();
         }
 
         //tomo todos los socios del grupo para validar sus edades

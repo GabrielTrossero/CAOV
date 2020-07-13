@@ -102,6 +102,11 @@
                                     {!! \Session::get('errorEdadNuevoMiembro') !!}
                                   </div>
                                 @endif
+                                @if (\Session::has('errorEliminarTitular'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('errorEliminarTitular') !!}
+                                  </div>
+                                @endif 
                             </div>
                         </div>
 
