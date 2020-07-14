@@ -32,14 +32,15 @@
                                       <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
                                     @endforeach
                                 </select>
-                                @if (\Session::has('errorIguales'))
+
+                                @if ($errors->first('titular'))
                                   <div class="alert alert-danger errorForm">
-                                    {!! \Session::get('errorIguales') !!}
+                                    {{ $errors->first('titular') }}
                                   </div>
                                 @endif
-                                @if (\Session::has('errorMenoresEdad'))
+                                @if (\Session::has('error'))
                                   <div class="alert alert-danger errorForm">
-                                    {!! \Session::get('errorMenoresEdad') !!}
+                                    {!! \Session::get('error') !!}
                                   </div>
                                 @endif
                             </div>
@@ -55,6 +56,17 @@
                                     <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
                                   @endforeach
                                 </select>
+
+                                @if ($errors->first('pareja'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('pareja') }}
+                                  </div>
+                                @endif
+                                @if (\Session::has('errorPareja'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('errorPareja') !!}
+                                  </div>
+                                @endif
                             </div>
                         </div>
 
@@ -67,9 +79,10 @@
                                     <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->apellido .", ". $socio->persona->nombres }}</option>
                                   @endforeach
                                 </select>
-                                @if (\Session::has('errorEdadNuevoMiembro'))
+
+                                @if (\Session::has('errorAdherente'))
                                   <div class="alert alert-danger errorForm">
-                                    {!! \Session::get('errorEdadNuevoMiembro') !!}
+                                    {!! \Session::get('errorAdherente') !!}
                                   </div>
                                 @endif
                             </div>

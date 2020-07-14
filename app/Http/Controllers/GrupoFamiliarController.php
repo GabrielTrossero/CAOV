@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use App\GrupoFamiliar;
 use App\Socio;
 use Carbon\Carbon;
@@ -118,7 +119,7 @@ class GrupoFamiliarController extends Controller
       $messages = [
         'titular.required' => 'Es necesario ingresar un Socio Titular.',
         'titular.unique' => 'El Titular ya pertenece a otro Grupo Familiar.',
-        'pareja.unique' => 'La Pareja del Titular ya pertenece a otro Grupo Familiar.'
+        'pareja.unique' => 'La Pareja ya pertenece a otro Grupo Familiar.'
       ];
 
       //valido los datos ingresados
@@ -136,49 +137,83 @@ class GrupoFamiliarController extends Controller
       //valido si los socios titular y pareja son distintos
       if($request->titular == $request->pareja)
       {
-        return redirect()->back()->withInput()->with('errorIguales', 'Los Socios para Titular y Pareja son la misma Persona, por favor revisar la selección.');
+        return redirect()->back()->withInput()->with('error', 'Los socios Titular y Pareja son la misma Persona, por favor revisar la selección.');
       }
 
       $titular = Socio::find($request->titular);
       $pareja = Socio::find($request->pareja);
 
+      //valido que el titular y la pareja (si es que ingresó pareja) están como socios
+      if ((!$titular) || (($request->pareja != 0) && (!$pareja))) {
+        return redirect()->back()->withInput()->with('error', 'Error al seleccionar el Titular o la Pareja.');
+      }
+
+      //verifico que el titular no esté como pareja de otro grupo
+      if (GrupoFamiliar::where('pareja', $titular->id)->first()) {
+        return redirect()->back()->withInput()->with('error', 'El Titular ya pertenece a otro Grupo Familiar.');
+      }
+
+      //verifico que la pareja no esté como pareja de otro grupo
+      if ($request->pareja) {
+        if (GrupoFamiliar::where('titular', $pareja->id)->first()) {
+          return redirect()->back()->withInput()->with('errorPareja', 'La Pareja ya pertenece a otro Grupo Familiar.');
+        }
+      }
+      
+      //verifico que los miembros no pertenezcan a otro grupo familiar
+      if ($request->miembros) {
+        foreach ($request->miembros as $miembro) {
+          $socio = Socio::find($miembro);
+          
+          //valido que sean menores de edad
+          if($this->calculaEdad($socio) >= 18){
+            return redirect()->back()->withInput()->with('errorAdherente', 'Los Adherentes (cadetes) deben ser menores de edad.');
+          }
+          if ($socio->idGrupoFamiliar) {
+            return redirect()->back()->withInput()->with('errorAdherente', 'Alguno de los miembros ya pertenece a un Grupo Familiar.');
+          }
+        }
+      }
+
       //valido si los socios titular y pareja son mayores de edad
       if(($this->calculaEdad($titular) < 18) || (isset($pareja) && ($this->calculaEdad($pareja) < 18)))
       {
-        return redirect()->back()->withInput()->with('errorMenoresEdad', 'Los socios Titular y Pareja deben ser mayores de 18 años');
+        return redirect()->back()->withInput()->with('error', 'Los socios Titular y Pareja deben ser mayores de 18 años');
       }
 
+
       //almaceno el grupo familiar en la BD
-                /*$grupo->create($request->all());*/
+      $grupo = new GrupoFamiliar;
       $grupo->titular = $request->titular;
 
-      if (isset($request->pareja)) {
+      //guardo el id del socio pareja en el grupo
+      if ($request->pareja != 0) {
         $grupo->pareja = $request->pareja;
-      } else {
+      }
+      else {
         $grupo->pareja = NULL;
       }
 
       $grupo->save();
 
+
       //tomo el grupo para pasarlo a la vista individual del mismo
       $grupoRetornado = GrupoFamiliar::where('titular', $request->titular)->first();
 
-      //le asigno al titular el id del grupo
-      $socio = Socio::find($request->titular);
-      $socio->idGrupoFamiliar = $grupoRetornado->id;
-      $socio->save();
-
-      //le asigno a la pareja el id del grupo
-      if (isset($request->pareja)) {
-        $socio = Socio::find($request->pareja);
-        $socio->idGrupoFamiliar = $grupoRetornado->id;
-        $socio->save();
+      //le guardo al grupo que pertenecen
+      $titular->idGrupoFamiliar = $grupoRetornado->id;
+      $titular->save();
+      if ($request->pareja != 0){
+        $pareja->idGrupoFamiliar = $grupoRetornado->id;
+        $pareja->save();
       }
 
-      foreach ($request->miembros as $miembro) {
-        $nuevoMiembro = Socio::find($miembro);
-        $nuevoMiembro->idGrupoFamiliar = $grupoRetornado->id;
-        $nuevoMiembro->save();
+      if ($request->miembros) {
+        foreach ($request->miembros as $miembro) {
+          $nuevoMiembro = Socio::find($miembro);
+          $nuevoMiembro->idGrupoFamiliar = $grupoRetornado->id;
+          $nuevoMiembro->save();
+        } 
       }
 
 
@@ -286,11 +321,19 @@ class GrupoFamiliarController extends Controller
     {
         $messages = [
           'titular.required' => 'Es necesario ingresar un Socio Titular.',
+          'titular.unique' => 'El Titular ya pertenece a otro Grupo Familiar.',
+          'pareja.unique' => 'La Pareja ya pertenece a otro Grupo Familiar.'
           ];
 
         //valido los datos ingresados
         $validacion = Validator::make($request->all(),[
-          'titular' => 'required',
+          'titular' => [
+            'required',
+            Rule::unique('grupofamiliar')->ignore($request->id),
+            ],
+          'pareja' => [
+            Rule::unique('grupofamiliar')->ignore($request->id)
+            ]
         ], $messages);
 
         //si la validacion falla vuelvo hacia atras con los errores
@@ -302,16 +345,33 @@ class GrupoFamiliarController extends Controller
         //valido si los socios titular y pareja son distintos
         if($request->titular == $request->pareja)
         {
-          return redirect()->back()->withInput()->with('errorIguales', 'Los Socios para Titular y Pareja son la misma Persona, por favor revisar la selección.');
+          return redirect()->back()->withInput()->with('error', 'Los Socios para Titular y Pareja son la misma Persona, por favor revisar la selección.');
         }
 
         $titular = Socio::find($request->titular);
         $pareja = Socio::find($request->pareja);
 
+        //valido que el titular y la pareja (si es que ingresó pareja) están como socios
+        if ((!$titular) || (($request->pareja != 0) && (!$pareja))) {
+          return redirect()->back()->withInput()->with('error', 'Error al seleccionar el Titular o la Pareja.');
+        }
+
+        //verifico que el titular no esté como pareja de otro grupo
+        if (GrupoFamiliar::where('pareja', $titular->id)->where('id', '!=', $request->id)->first()) {
+          return redirect()->back()->withInput()->with('error', 'El Titular ya pertenece a otro Grupo Familiar.');
+        }
+
+        //verifico que la pareja no esté como pareja de otro grupo
+        if ($request->pareja) {
+          if (GrupoFamiliar::where('titular', $pareja->id)->where('id', '!=', $request->id)->first()) {
+            return redirect()->back()->withInput()->with('errorPareja', 'La Pareja ya pertenece a otro Grupo Familiar.');
+          }
+        }
+
         //valido si los socios titular y pareja son mayores de edad
         if(($this->calculaEdad($titular) < 18) || (isset($pareja) && ($this->calculaEdad($pareja) < 18)))
         {
-          return redirect()->back()->withInput()->with('errorMenoresEdad', 'Los socios Titular y Pareja deben ser mayores de 18 años');
+          return redirect()->back()->withInput()->with('error', 'Los socios Titular y Pareja deben ser mayores de 18 años');
         }
 
         //tomo el grupo a actualizar
