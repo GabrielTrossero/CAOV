@@ -49,7 +49,7 @@
                 <td>{{ 'Ingreso' }}</td>
                 <td>{{ $alquilerMueble->numRecibo }}</td>
                 <td>{{ 'Alquileres de Muebles' }}</td>
-                <td>{{ '$'.$alquilerMueble->total }}</td>
+                <td>{{ '$'.$alquilerMueble->costoTotal }}</td>
               </tr>
             @endforeach
             @foreach ($cuotasPagadas as $cuota)
