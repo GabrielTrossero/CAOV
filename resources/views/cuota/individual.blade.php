@@ -217,11 +217,9 @@
             </td>
           @elseif ($cuota->inhabilitada)
             <td>
-
-                <button type="button" class="btn btn-primary tam_letra_small" onClick="alert('No se puede pagar la Cuota, ya que la misma está inhabilitada')">
-                  Pagar
-                </button>
-              
+              <button type="button" class="btn icono-editar-disabled tam_letra_small" title="No se puede pagar la Cuota, la misma está inhabilitada" disabled>
+                Pagar
+              </button>
             </td>
           @elseif (isset($cuota->fechaPago))
             <td>
@@ -246,18 +244,16 @@
 
       <div class="card-footer">
 
-        @if (($cuota->fechaPago != '') && ($cuota->inhabilitada == false))
+        @if (($cuota->fechaPago != null) && ($cuota->inhabilitada == false))
           <a style="text-decoration:none" href="{{ url('/cuota/edit/'.$cuota->id) }}">
             <button type="button" class="btn btn-outline-warning" style="display:inline">
               Editar Cuota
             </button>
           </a>
         @else
-
-            <button type="button" class="btn btn-outline-warning" style="display:inline" onClick="alert('No se puede editar la Cuota, ya que la misma debe estar pagada y habilitada')">
-              Editar Cuota
-            </button>
-
+          <button type="button" class="btn icono-editar-disabled" title="No se puede editar la Cuota, debe estar pagada y habilitada" style="display:inline" disabled>
+            Editar Cuota
+          </button>
         @endif
 
         &nbsp;&nbsp;
