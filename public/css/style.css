@@ -160,7 +160,7 @@ nav.mostrar{
 
 .icono-eliminar-disabled {
 	display: inline;
-	background-color: transparent;
+	background-color: transparent !important;
 	margin-left: 10%;
 	border: none; 
 	outline: none;
