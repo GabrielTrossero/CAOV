@@ -25,6 +25,10 @@ footer {
 	width: 100%;
 }
 
+button:disabled {
+	background-color: lightgray;
+}
+
 .icono{  /*para los estilos del los iconos*/
 	font-size: 20px;
 	color: white;

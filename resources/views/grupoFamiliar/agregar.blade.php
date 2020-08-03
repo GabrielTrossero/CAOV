@@ -90,7 +90,7 @@
                         <br>
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" id="guardar-grupo" class="btn icono-editar-disabled" title="El grupo debe tener al menos 2 integrantes" disabled>
                                     {{ __('Guardar') }}
                                 </button>
                             </div>
@@ -101,5 +101,7 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('js/comprobar-integrantes-grupo.js') }}"></script>
 
 @stop
