@@ -29,7 +29,7 @@
                     <i class="fas fa-edit icono-editar" title="Editar"></i>
                 </a>
                 @if (sizeof($deporte->socios) == 0)
-                  <form action="{{url('/deporte/delete')}}" method="post" style="display:inline">
+                  <form action="{{url('/deporte/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Deporte?');">
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $deporte->id }}">
                     <button class="icono-eliminar" type="submit">

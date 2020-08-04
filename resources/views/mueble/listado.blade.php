@@ -31,7 +31,7 @@
                     <i class="fas fa-edit icono-editar" title="Editar"></i>
                  </a>
                  @if (sizeof($mueble->reservasDeMueble) == 0)
-                  <form action="{{url('/mueble/delete')}}" method="post" style="display:inline">
+                  <form action="{{url('/mueble/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Mueble?');">
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $mueble->id }}">
                     <button class="icono-eliminar" type="submit">

@@ -59,13 +59,13 @@
                   <a class="icono-editar-anchor" href="{{ url('/cuota/editMontoCuota/'.$montoCuota->id) }}">
                     <i class="fas fa-edit icono-editar" title="Editar"></i>
                   </a>
-                  <form action="{{url('/cuota/deleteMontoCuota')}}" method="post" style="display:inline">
+                  <form action="{{url('/cuota/deleteMontoCuota')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Monto Cuota?');">
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $montoCuota->id }}">
                     <button class="icono-eliminar" type="submit">
                       <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
                     </button>
-                </form>
+                  </form>
                 @else
                   <a class="icono-editar-anchor-disabled">
                     <i class="fas fa-edit icono-editar-disabled" title="Acción no disponible"></i>
@@ -122,7 +122,7 @@
                   <a class="icono-editar-anchor" href="{{ url('/cuota/editMontoCuota/'.$montoCuota->id) }}">
                     <i class="fas fa-edit icono-editar" title="Editar"></i>
                   </a>
-                  <form action="{{url('/cuota/deleteMontoCuota')}}" method="post" style="display:inline">
+                  <form action="{{url('/cuota/deleteMontoCuota')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Monto Cuota?');">
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $montoCuota->id }}">
                     <button class="icono-eliminar" type="submit">

@@ -85,7 +85,7 @@
         </a>
 
         &nbsp;&nbsp;
-        <form action="{{url('/alquilerinmueble/delete')}}" method="post" style="display:inline">
+        <form action="{{url('/alquilerinmueble/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Alquiler?');">
           {{ csrf_field() }}
           <input type="hidden" name="id" value="{{ $reservaInmueble->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">

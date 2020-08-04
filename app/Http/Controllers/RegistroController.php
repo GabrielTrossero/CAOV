@@ -143,19 +143,19 @@ class RegistroController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy($id)
+  public function destroy(Request $request)
   {
     //compruebo que el registro exista
-    $movimiento = MovExtras::find($id);
+    $movimiento = MovExtras::find($request->id);
     if (!$movimiento) {
       return redirect()->back()->withInput()->with('validarEliminar', 'ERROR: seleccione un Registro válido.');
     }
 
     //elimino el registro con tal id
-    MovExtras::destroy($id);
+    MovExtras::destroy($request->id);
 
     //compruebo que el registro se haya eliminado
-    $movimiento = MovExtras::find($id);
+    $movimiento = MovExtras::find($request->id);
     if ($movimiento) {
       return redirect()->back()->withInput()->with('validarEliminar', 'ERROR: el Registro no se eliminó.');
     }

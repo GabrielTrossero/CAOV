@@ -110,7 +110,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('create', 'RegistroController@create');
         Route::post('create', 'RegistroController@store');
         Route::get('show', 'RegistroController@getShow');
-        Route::get('delete/{id}', 'RegistroController@destroy');
+        Route::post('delete', 'RegistroController@destroy');
     });
 
     //Grupo de Rutas con el Middleware "admin"

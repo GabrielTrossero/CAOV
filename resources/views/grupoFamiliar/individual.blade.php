@@ -48,7 +48,7 @@
         </a>
 
         &nbsp;&nbsp;
-        <form action="{{url('/grupofamiliar/delete')}}" method="post" style="display:inline">
+        <form action="{{url('/grupofamiliar/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Grupo Familiar?');">
           {{ csrf_field() }}
           <input type="hidden" name="id" value="{{ $grupo->id }}">
           <button type="submit" class="btn btn-outline-danger" style="display:inline">

@@ -36,7 +36,15 @@
                 <td>{{ 'Egreso' }}</td>
               @endif
               <td>${{ $movimiento->monto }}</td>
-              <td><a href="{{ url('/registro/delete/'.$movimiento->id) }}" style="color:red";> <i class="fas fa-trash"></i></a> </td>
+              <td>
+                <form action="{{url('/registro/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Registro?');">
+                  {{ csrf_field() }}
+                  <input type="hidden" name="id" value="{{ $movimiento->id }}">
+                  <button class="icono-eliminar" type="submit">
+                    <i class="fas fa-trash" style="color:red;" title="Eliminar"></i>
+                  </button>
+                </form>
+              </td>
             </tr>
           @endforeach
         </tbody>
