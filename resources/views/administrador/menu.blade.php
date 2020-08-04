@@ -18,7 +18,7 @@
   
 </div>
 
-<div class="col-md-8 backup">
+<div class="col-md-8 backup" style="text-align: center">
   @if (\Session::has('backupExitoso'))
     <div class="alert alert-danger">
       {!! \Session::get('backupExitoso') !!}
