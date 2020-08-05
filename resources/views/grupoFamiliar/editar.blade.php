@@ -77,7 +77,7 @@
 
                             <div class="col-md-6">
                                 <select name="accionMiembro" id="accionMiembro" class="form-control">
-                                  <option value="0">Ninguna</option>
+                                  <option value="0" selected>Ninguna</option>
                                   <option value="1">Agregar Miembro</option>
                                   <option value="2">Eliminar Miembro</option>
                                 </select>
@@ -126,7 +126,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" id="guardar-grupo" class="btn btn-primary">
                                     {{ __('Guardar') }}
                                 </button>
                             </div>
@@ -139,6 +139,7 @@
 </div>
 
 <!-- Script para filtrar los select para agregar/quitar miembros del grupo -->
+<script src="{{ asset('js/comprobar-integrantes-editar-grupo.js') }}"></script>
 <script src="{{ asset('js/filtro-miembros-grupo-familiar.js') }}"></script>
 
 @stop

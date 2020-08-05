@@ -102,6 +102,6 @@
     </div>
 </div>
 
-<script src="{{ asset('js/comprobar-integrantes-grupo.js') }}"></script>
+<script src="{{ asset('js/comprobar-integrantes-crear-grupo.js') }}"></script>
 
 @stop
