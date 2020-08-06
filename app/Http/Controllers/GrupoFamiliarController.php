@@ -472,6 +472,293 @@ class GrupoFamiliarController extends Controller
         return redirect()->action('GrupoFamiliarController@getShowId', $grupo->id);
     }
 
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+  */
+  public function editTitular($id)
+  {
+      //tomo el grupo familiar
+      $grupo = GrupoFamiliar::find($id);
+
+      //tomo los socios sin grupo familiar
+      $sociosSinGrupo = Socio::where('idGrupoFamiliar', null)->where('vitalicio', 'n')->get();
+
+      //tomo socios mayores de edad sin grupo para posible titular
+      $sociosTitular = $sociosSinGrupo->filter(function ($socio){
+        return $this->calculaEdad($socio) >= 18;
+      });
+
+
+      //redirijo a la vista de edicion del grupo familiar
+      return view('grupoFamiliar.editarTitular', compact('grupo', 'sociosTitular'));
+  }
+
+/**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function updateTitular(Request $request)
+  {
+      $messages = [
+        'titular.required' => 'Es necesario ingresar un Socio Titular.',
+        'titular.unique' => 'El Titular ya pertenece a otro Grupo Familiar.'
+        ];
+
+      //valido los datos ingresados
+      $validacion = Validator::make($request->all(),[
+        'titular' => [
+          'required',
+          Rule::unique('grupofamiliar')->ignore($request->id),
+          ]
+      ], $messages);
+
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails())
+      {
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      $titular = Socio::find($request->titular);
+
+      //valido que el titular está como socio
+      if (!$titular) {
+        return redirect()->back()->withInput()->with('error', 'Error al seleccionar el Titular.');
+      }
+
+      //verifico que el titular no esté como pareja de otro grupo
+      if (GrupoFamiliar::where('pareja', $titular->id)->where('id', '!=', $request->id)->first()) {
+        return redirect()->back()->withInput()->with('error', 'El Titular ya pertenece a otro Grupo Familiar.');
+      }
+
+      //valido si es mayor de edad
+      if(($this->calculaEdad($titular) < 18))
+      {
+        return redirect()->back()->withInput()->with('error', 'El Titular debe ser mayor de 18 años');
+      }
+
+      //tomo el grupo a actualizar
+      $grupo = GrupoFamiliar::find($request->id);
+
+      //si el numero de titular es distinto al titular actual, se actualiza el titular del grupo
+      if ($titular->id != $grupo->titular){
+        $titularViejo = Socio::find($grupo->titular);
+        $titularViejo->idGrupoFamiliar = null;
+        $titularViejo->save();
+        $grupo->titular = $titular->id;
+        $titular->idGrupoFamiliar = $grupo->id;
+        $titular->save();
+        $grupo->save();
+        $grupo->refresh();
+      }
+
+      //redirijo a la vista individual del grupo
+      return redirect()->action('GrupoFamiliarController@getShowId', $grupo->id);
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+  */
+  public function editPareja($id)
+  {
+      //tomo el grupo familiar
+      $grupo = GrupoFamiliar::find($id);
+
+      //tomo los socios sin grupo familiar
+      $sociosSinGrupo = Socio::where('idGrupoFamiliar', null)->where('vitalicio', 'n')->get();
+
+      //tomo socios mayores de edad sin grupo para posible pareja
+      $sociosPareja = $sociosSinGrupo->filter(function ($socio){
+        return $this->calculaEdad($socio) >= 18;
+      });
+
+
+      //redirijo a la vista
+      return view('grupoFamiliar.editarPareja', compact('grupo', 'sociosPareja'));
+  }
+
+/**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function updatePareja(Request $request)
+  {
+      $messages = [
+        'pareja.unique' => 'La Pareja ya pertenece a otro Grupo Familiar.'
+        ];
+
+      //valido los datos ingresados
+      $validacion = Validator::make($request->all(),[
+        'pareja' => [
+          Rule::unique('grupofamiliar')->ignore($request->id)
+          ]
+      ], $messages);
+
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails())
+      {
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      //si igresó pareja
+      if ($request->pareja != 0) {
+        $pareja = Socio::find($request->pareja);
+
+        //valido que la pareja está como socio
+        if (!$pareja) {
+          return redirect()->back()->withInput()->with('error', 'Error al seleccionar la Pareja.');
+        }
+
+        //verifico que la pareja no esté como titular de otro grupo
+        if ($request->pareja) {
+          if (GrupoFamiliar::where('titular', $pareja->id)->where('id', '!=', $request->id)->first()) {
+            return redirect()->back()->withInput()->with('error', 'La Pareja ya pertenece a otro Grupo Familiar.');
+          }
+        }
+
+        //valido si es mayor de edad
+        if(($this->calculaEdad($pareja) < 18))
+        {
+          return redirect()->back()->withInput()->with('error', 'La Pareja debe ser mayor de 18 años');
+        }
+
+        //tomo el grupo a actualizar
+        $grupo = GrupoFamiliar::find($request->id);
+
+        //si el numero de pareja es distinto a la pareja actual y antes tenía pareja, se actualiza
+        if (($pareja->id != $grupo->pareja)&&($grupo->pareja != 0)){
+          $parejaViejo = Socio::find($grupo->pareja);
+          $parejaViejo->idGrupoFamiliar = null;
+          $parejaViejo->save();
+          $grupo->pareja = $pareja->id;
+          $pareja->idGrupoFamiliar = $grupo->id;
+          $pareja->save();
+          $grupo->save();
+          $grupo->refresh();
+        }
+
+        //si el numero de pareja es distinto a la pareja actual y antes NO tenía pareja, se actualiza
+        elseif (($pareja->id != $grupo->pareja)&&($grupo->pareja == 0)){
+          $grupo->pareja = $pareja->id;
+          $pareja->idGrupoFamiliar = $grupo->id;
+          $pareja->save();
+          $grupo->save();
+          $grupo->refresh();
+        }
+      }
+
+      //si no ingresó pareja
+      else {
+        //tomo el grupo a actualizar
+        $grupo = GrupoFamiliar::find($request->id);
+
+        //si el numero de pareja es distinto a la pareja actual, se actualiza
+        if (0 != $grupo->pareja){
+          $parejaViejo = Socio::find($grupo->pareja);
+          $parejaViejo->idGrupoFamiliar = null;
+          $parejaViejo->save();
+          $grupo->pareja = null;
+          $grupo->save();
+          $grupo->refresh();
+        }
+      }
+      
+
+      //redirijo a la vista individual del grupo
+      return redirect()->action('GrupoFamiliarController@getShowId', $grupo->id);
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+  */
+  public function addMenor($id)
+  {
+      //tomo el grupo familiar
+      $grupo = GrupoFamiliar::find($id);
+
+      //tomo los socios sin grupo familiar
+      $sociosSinGrupo = Socio::where('idGrupoFamiliar', null)->where('vitalicio', 'n')->get();
+
+      //filtros los socios sin grupo familiar menores de edad
+      $sociosMenores = $sociosSinGrupo->filter(function ($socio){
+        return $this->calculaEdad($socio) < 18;
+      });
+
+
+      //redirijo a la vista
+      return view('grupoFamiliar.agregarMenor', compact('grupo', 'sociosMenores'));
+  }
+
+/**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function storeMenor(Request $request)
+  {
+      $messages = [
+        'menores.required' => 'Es necesario ingresar un Socio.',
+        ];
+
+      //valido los datos ingresados
+      $validacion = Validator::make($request->all(),[
+        'menores' => 'required'
+      ], $messages);
+
+      //si la validacion falla vuelvo hacia atras con los errores
+      if($validacion->fails())
+      {
+        return redirect()->back()->withInput()->withErrors($validacion->errors());
+      }
+
+      //verifico los miembros
+      if ($request->menores) {
+        foreach ($request->menores as $miembro) {
+          //tomo el socio que se agrega al grupo
+          $socio = Socio::find($miembro);
+
+          //valido que el titular esté como socio
+          if (!$socio) {
+            return redirect()->back()->withInput()->with('error', 'Error al seleccionar el Socio.');
+          }
+          
+          //valido que sean menores de edad
+          if($this->calculaEdad($socio) >= 18){
+            return redirect()->back()->withInput()->with('error', 'Los socios (cadetes) deben ser menores de edad.');
+          }
+
+          //valido que no pertenezcan a otro grupo
+          if ($socio->idGrupoFamiliar) {
+            return redirect()->back()->withInput()->with('error', 'Alguno de los miembros seleccionados ya pertenece a un Grupo Familiar.');
+          }
+
+          //actualizo el socio
+          $socio->idGrupoFamiliar = $request->id;
+          $socio->save();
+        }
+      }
+      
+
+      //redirijo a la vista individual del grupo
+      return redirect()->action('GrupoFamiliarController@getShowId', $request->id);
+  }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -486,4 +773,29 @@ class GrupoFamiliarController extends Controller
         //redirijo al listado
         return redirect()->action('GrupoFamiliarController@getShow');
     }
+
+    /**
+   * Destroys a Cadete register passed by ID
+   * 
+   * @param Request $request
+   */
+  public function destroyMenor(Request $request)
+  {
+    //busco el socio
+    $socio = Socio::find($request->id);
+
+    if($socio == null) {
+      return redirect()->back()->withInput()->with('errorEliminar', 'Error al eliminar el socio.');
+    }
+
+    //tomo el grupo familiar
+    $grupo = GrupoFamiliar::find($socio->idGrupoFamiliar);
+
+    $socio->idGrupoFamiliar = null;
+    $socio->save();
+
+    //retorno la vista
+    return view('grupoFamiliar.individual', compact('grupo'));
+  }
+  
 }

@@ -60,7 +60,14 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::get('show/{id}', 'GrupoFamiliarController@getShowId');
         Route::get('edit/{id}', 'GrupoFamiliarController@edit');
         Route::post('edit', 'GrupoFamiliarController@update');
+        Route::get('editTitular/{id}', 'GrupoFamiliarController@editTitular');
+        Route::post('editTitular', 'GrupoFamiliarController@updateTitular');
+        Route::get('editPareja/{id}', 'GrupoFamiliarController@editPareja');
+        Route::post('editPareja', 'GrupoFamiliarController@updatePareja');
+        Route::get('addMenor/{id}', 'GrupoFamiliarController@addMenor');
+        Route::post('addMenor', 'GrupoFamiliarController@storeMenor');
         Route::post('delete', 'GrupoFamiliarController@destroy');
+        Route::post('deleteMenor', 'GrupoFamiliarController@destroyMenor');
     });
 
 
