@@ -66,6 +66,7 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         Route::post('editPareja', 'GrupoFamiliarController@updatePareja');
         Route::get('addMenor/{id}', 'GrupoFamiliarController@addMenor');
         Route::post('addMenor', 'GrupoFamiliarController@storeMenor');
+        Route::post('cambiarRoles', 'GrupoFamiliarController@cambiarRoles');
         Route::post('delete', 'GrupoFamiliarController@destroy');
         Route::post('deleteMenor', 'GrupoFamiliarController@destroyMenor');
     });

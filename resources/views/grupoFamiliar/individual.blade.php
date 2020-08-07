@@ -86,6 +86,18 @@
           </button>
         </a>
 
+        @if (isset($grupo->pareja))
+          &nbsp;&nbsp;
+          <form action="{{url('/grupofamiliar/cambiarRoles')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea intercambiar los roles Titular y Pareja?');">
+            {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $grupo->id }}">
+            <button type="submit" class="btn btn-outline-secondary" title="Cambiar Titular por Pareja y viceversa" style="display:inline">
+              Intercambiar roles 
+            </button>
+          </form>
+        @endif
+        
+
         &nbsp;&nbsp;
         <form action="{{url('/grupofamiliar/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Grupo Familiar?');">
           {{ csrf_field() }}

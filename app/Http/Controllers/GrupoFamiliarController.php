@@ -798,4 +798,21 @@ class GrupoFamiliarController extends Controller
     return view('grupoFamiliar.individual', compact('grupo'));
   }
   
+  /**
+   * Cambia titular por pareja, y pareja por titular
+   * 
+   * @param Request $request
+   */
+  public function cambiarRoles(Request $request)
+  {
+    $grupo = GrupoFamiliar::find($request->id);
+    
+    $roleSwapper = $grupo->titular;
+    $grupo->titular = $grupo->pareja;
+    $grupo->pareja = $roleSwapper;
+
+    $grupo->save();
+
+    return redirect()->action('GrupoFamiliarController@getShowId', $request->id);
+  }
 }
