@@ -5,7 +5,7 @@ var nav = $('nav');
 var li = $('li');
 
 //por defecto el nav activo
-nav.toggleClass('mostrar');
+//nav.toggleClass('mostrar');
 
 //para el boton de abrir o cerrar el menu
 $('#mostrar-nav').click(function() { //cuando se haga click a mostrar-nav que se ejecute la funcion
