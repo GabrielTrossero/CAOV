@@ -80,6 +80,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!--tabla Mes-->
@@ -125,6 +135,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!--tabla Impagas-->
@@ -170,6 +190,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!--tabla Atrasada-->
@@ -215,6 +245,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!--tabla Inhabilitada-->
@@ -260,6 +300,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!--tabla Pagada-->
@@ -305,6 +355,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!--tabla PagadaMes-->
@@ -350,6 +410,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!--tabla PagadaFueraDeTermino-->
@@ -395,6 +465,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

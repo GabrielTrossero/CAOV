@@ -242,46 +242,55 @@
         </tr>
       </table>
 
-      <div class="card-footer">
-
-        @if (($cuota->fechaPago != null) && ($cuota->inhabilitada == false))
-          <a style="text-decoration:none" href="{{ url('/cuota/edit/'.$cuota->id) }}">
-            <button type="button" class="btn btn-outline-warning" style="display:inline">
-              Editar Cuota
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota/show') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
             </button>
           </a>
-        @else
-          <button type="button" class="btn icono-editar-disabled" title="No se puede editar la Cuota, debe estar pagada y habilitada" style="display:inline" disabled>
-            Editar Cuota
-          </button>
-        @endif
+        </div>
 
-        &nbsp;&nbsp;
-        @if ($cuota->inhabilitada)
-          <form action="{{url('/cuota/enable')}}" method="post" style="display:inline">
-            {{ csrf_field() }}
-            <input type="hidden" name="id" value="{{ $cuota->id }}">
-              <button type="submit" class="btn btn-outline-danger" style="display:inline">
-                Habilitar Cuota
+        <div class="col-md-10 text-md-center">
+          @if (($cuota->fechaPago != null) && ($cuota->inhabilitada == false))
+            <a style="text-decoration:none" href="{{ url('/cuota/edit/'.$cuota->id) }}">
+              <button type="button" class="btn btn-outline-warning" style="display:inline">
+                Editar Cuota
               </button>
-          </form>
-        @elseif ($cuota->fechaPago != '')
-          <form action="{{url('/cuota/disable')}}" method="post" style="display:inline" onsubmit="return confirm('La cuota está Pagada. Si la Inhabilita, se borrará la fecha de pago. ¿Desea Inhabilitarla?');">
-            {{ csrf_field() }}
-            <input type="hidden" name="id" value="{{ $cuota->id }}">
-              <button type="submit" class="btn btn-outline-danger" style="display:inline">
-                Inhabilitar Cuota
-              </button>
-          </form>
-        @else
-          <form action="{{url('/cuota/disable')}}" method="post" style="display:inline">
-            {{ csrf_field() }}
-            <input type="hidden" name="id" value="{{ $cuota->id }}">
-              <button type="submit" class="btn btn-outline-danger" style="display:inline">
-                Inhabilitar Cuota
-              </button>
-          </form>
-        @endif
+            </a>
+          @else
+            <button type="button" class="btn icono-editar-disabled" title="No se puede editar la Cuota, debe estar pagada y habilitada" style="display:inline" disabled>
+              Editar Cuota
+            </button>
+          @endif
+
+          &nbsp;&nbsp;
+          @if ($cuota->inhabilitada)
+            <form action="{{url('/cuota/enable')}}" method="post" style="display:inline">
+              {{ csrf_field() }}
+              <input type="hidden" name="id" value="{{ $cuota->id }}">
+                <button type="submit" class="btn btn-outline-danger" style="display:inline">
+                  Habilitar Cuota
+                </button>
+            </form>
+          @elseif ($cuota->fechaPago != '')
+            <form action="{{url('/cuota/disable')}}" method="post" style="display:inline" onsubmit="return confirm('La cuota está Pagada. Si la Inhabilita, se borrará la fecha de pago. ¿Desea Inhabilitarla?');">
+              {{ csrf_field() }}
+              <input type="hidden" name="id" value="{{ $cuota->id }}">
+                <button type="submit" class="btn btn-outline-danger" style="display:inline">
+                  Inhabilitar Cuota
+                </button>
+            </form>
+          @else
+            <form action="{{url('/cuota/disable')}}" method="post" style="display:inline">
+              {{ csrf_field() }}
+              <input type="hidden" name="id" value="{{ $cuota->id }}">
+                <button type="submit" class="btn btn-outline-danger" style="display:inline">
+                  Inhabilitar Cuota
+                </button>
+            </form>
+          @endif
+        </div>
       </div>
 
     </div>

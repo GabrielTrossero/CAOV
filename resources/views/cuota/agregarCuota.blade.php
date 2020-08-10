@@ -231,7 +231,15 @@
                         </div>
 
                         <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-md-1 offset-md-4">
+                              <a style="text-decoration:none" href="{{ url('/cuota/showCreateCuota') }}">
+                                <button type="button" class="btn btn-secondary">
+                                  Volver
+                                </button>
+                              </a>
+                            </div>
+
+                            <div class="offset-md-1">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Guardar') }}
                                 </button>

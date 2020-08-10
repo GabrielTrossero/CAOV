@@ -165,23 +165,29 @@
                             </div>
                         </div>
 
-                        @if ($cuota->compruebaCuota == false)
-                          <div class="form-group row mb-0">
-                              <div class="col-md-6 offset-md-4">
+                        <div class="form-group row mb-0">
+                          <div class="col-md-1 offset-md-4">
+                            <a style="text-decoration:none" href="{{ url('/cuota/show/'.$cuota->id) }}">
+                              <button type="button" class="btn btn-secondary">
+                                Volver
+                              </button>
+                            </a>
+                          </div>
+
+                          @if ($cuota->compruebaCuota == false)
+                              <div class="offset-md-1">
                                   <button type="submit" class="btn btn-primary" disabled>
                                       {{ __('Guardar') }}
                                   </button>
                               </div>
-                          </div>
-                        @else
-                          <div class="form-group row mb-0">
-                              <div class="col-md-6 offset-md-4">
+                          @else
+                              <div class="offset-md-1">
                                   <button type="submit" class="btn btn-primary">
                                       {{ __('Guardar') }}
                                   </button>
                               </div>
-                          </div>
-                        @endif
+                          @endif
+                        </div>
                     </form>
                 </div>
             </div>

@@ -50,6 +50,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/inmueble') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

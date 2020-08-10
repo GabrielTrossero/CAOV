@@ -63,23 +63,32 @@
         </tr>
       </table>
 
-      <div class="card-footer">
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/socio/show') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
 
-        <a style="text-decoration:none" href="{{ url('/socio/edit/'.$socio->id) }}">
-          <button type="button" class="btn btn-outline-warning" style="display:inline">
-            Editar Socio
-          </button>
-        </a>
-        <!-- POR EL MOMENTO NO USAMOS ESTE METODO
-        &nbsp;&nbsp;
-        <form action="{{url('/socio/delete')}}" method="post" style="display:inline">
-          {{ csrf_field() }}
-          <input type="hidden" name="id" value="{{ $socio->id }}">
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Eliminar Socio
-          </button>
-        </form>
-      -->
+        <div class="col-md-10 text-md-center">
+          <a style="text-decoration:none" href="{{ url('/socio/edit/'.$socio->id) }}">
+            <button type="button" class="btn btn-outline-warning" style="display:inline">
+              Editar Socio
+            </button>
+          </a>
+          <!-- POR EL MOMENTO NO USAMOS ESTE METODO
+          &nbsp;&nbsp;
+          <form action="{{url('/socio/delete')}}" method="post" style="display:inline">
+            {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $socio->id }}">
+            <button type="submit" class="btn btn-outline-danger" style="display:inline">
+              Eliminar Socio
+            </button>
+          </form>
+        -->
+        </div>
       </div>
 
     </div>

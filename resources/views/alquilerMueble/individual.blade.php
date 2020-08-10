@@ -39,38 +39,47 @@
         </tr>
       </table>
 
-      <div class="card-footer">
-
-        @if (!$reserva->numRecibo)
-          <a style="text-decoration:none" href="{{ url('/pagoalquiler/pagomueble/'.$reserva->id) }}">
-            <button type="button" class="btn btn-outline-primary" style="display:inline">
-              Pagar Alquiler
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/alquilermueble/show') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
             </button>
           </a>
-        @else
-          <form action="{{url('/pagoalquiler/pdf_alquiler_mueble/'.$reserva->id)}}" method="get" style="display:inline">
+        </div>
+
+        <div class="col-md-10 text-md-center">
+          @if (!$reserva->numRecibo)
+            <a style="text-decoration:none" href="{{ url('/pagoalquiler/pagomueble/'.$reserva->id) }}">
+              <button type="button" class="btn btn-outline-primary" style="display:inline">
+                Pagar Alquiler
+              </button>
+            </a>
+          @else
+            <form action="{{url('/pagoalquiler/pdf_alquiler_mueble/'.$reserva->id)}}" method="get" style="display:inline">
+              {{ csrf_field() }}
+              <button type="submit" class="btn btn-outline-danger" style="display:inline">
+                Generar PDF
+              </button>
+            </form>
+          @endif
+
+          &nbsp;&nbsp;
+          <a style="text-decoration:none" href="{{ url('/alquilermueble/edit/'.$reserva->id) }}">
+            <button type="button" class="btn btn-outline-warning" style="display:inline">
+              Editar Alquiler
+            </button>
+          </a>
+
+          &nbsp;&nbsp;
+          <form action="{{url('/alquilermueble/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Alquiler?');">
             {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $reserva->id }}">
             <button type="submit" class="btn btn-outline-danger" style="display:inline">
-              Generar PDF
+              Eliminar Alquiler
             </button>
           </form>
-        @endif
-
-        &nbsp;&nbsp;
-        <a style="text-decoration:none" href="{{ url('/alquilermueble/edit/'.$reserva->id) }}">
-          <button type="button" class="btn btn-outline-warning" style="display:inline">
-            Editar Alquiler
-          </button>
-        </a>
-
-        &nbsp;&nbsp;
-        <form action="{{url('/alquilermueble/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Alquiler?');">
-          {{ csrf_field() }}
-          <input type="hidden" name="id" value="{{ $reserva->id }}">
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Eliminar Alquiler
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   </div>

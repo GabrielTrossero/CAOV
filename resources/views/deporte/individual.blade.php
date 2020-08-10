@@ -15,22 +15,31 @@
         </tr>
       </table>
 
-      <div class="card-footer">
+      <div class="card-footer row">
+        <div>
+          <a style="text-decoration:none" href="{{ url('/deporte/show') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
 
-        <a style="text-decoration:none" href="{{ url('/deporte/edit/'.$deporte->id) }}">
-          <button type="button" class="btn btn-outline-warning" style="display:inline">
-            Editar Deporte
-          </button>
-        </a>
+        <div class="col-md-10 text-md-center">
+          <a style="text-decoration:none" href="{{ url('/deporte/edit/'.$deporte->id) }}">
+            <button type="button" class="btn btn-outline-warning" style="display:inline">
+              Editar Deporte
+            </button>
+          </a>
 
-        &nbsp;&nbsp;
-        <form action="{{url('/deporte/delete')}}" method="post" style="display:inline">
-          {{ csrf_field() }}
-          <input type="hidden" name="id" value="{{ $deporte->id }}">
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Eliminar Deporte
-          </button>
-        </form>
+          &nbsp;&nbsp;
+          <form action="{{url('/deporte/delete')}}" method="post" style="display:inline">
+            {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $deporte->id }}">
+            <button type="submit" class="btn btn-outline-danger" style="display:inline">
+              Eliminar Deporte
+            </button>
+          </form>
+        </div>
       </div>
 
     </div>

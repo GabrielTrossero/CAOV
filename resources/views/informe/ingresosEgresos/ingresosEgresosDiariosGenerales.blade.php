@@ -27,17 +27,26 @@
             @endforeach
           </tbody>
         </table>
-    </div>
   
-      <div class="card-footer">
-        <form action="{{url('/informe/pdf_ingresos_egresos_diarios')}}" method="get" style="display:inline">
-          {{ csrf_field() }}
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Generar PDF
-          </button>
-        </form>
+        <div class="card-footer row">
+          <div >
+            <a style="text-decoration:none" href="{{ url('/informe/ingresos_egresos') }}">
+              <button type="button" class="btn btn-secondary">
+                Volver
+              </button>
+            </a>
+          </div>
+
+          <div class="col-md-10 text-md-center">
+            <form action="{{url('/informe/pdf_ingresos_egresos_diarios')}}" method="get" style="display:inline">
+              {{ csrf_field() }}
+              <button type="submit" class="btn btn-outline-danger" style="display:inline">
+                Generar PDF
+              </button>
+            </form>
+          </div>
       </div>
-  
+    </div>
   </div>
  </div>
 

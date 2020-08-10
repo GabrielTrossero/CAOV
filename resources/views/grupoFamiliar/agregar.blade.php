@@ -89,7 +89,15 @@
                         </div>
                         <br>
                         <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-md-1 offset-md-4">
+                              <a style="text-decoration:none" href="{{ url('/grupofamiliar') }}">
+                                <button type="button" class="btn btn-secondary">
+                                  Volver
+                                </button>
+                              </a>
+                            </div>
+
+                            <div class="offset-md-1">
                                 <button type="submit" id="guardar-grupo" class="btn icono-editar-disabled" title="El grupo debe tener al menos 2 integrantes" disabled>
                                     {{ __('Guardar') }}
                                 </button>

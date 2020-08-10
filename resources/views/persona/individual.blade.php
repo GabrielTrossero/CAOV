@@ -26,8 +26,7 @@
       </table>
 
       <div class="card-footer row">
-
-        <div >
+        <div>
           <a style="text-decoration:none" href="{{ url('/persona/show') }}">
             <button type="button" class="btn btn-secondary">
               Volver

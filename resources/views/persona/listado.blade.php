@@ -32,7 +32,6 @@
       </table>
 
       <div class="card-footer row">
-
         <div >
           <a style="text-decoration:none" href="{{ url('/persona') }}">
             <button type="button" class="btn btn-secondary">
@@ -40,7 +39,6 @@
             </button>
           </a>
         </div>
-        
       </div>
     </div>
   </div>

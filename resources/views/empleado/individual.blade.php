@@ -31,39 +31,43 @@
         </tr>
       </table>
 
-      <div class="card-footer">
-
-        <a style="text-decoration:none" href="{{ url('/empleado/edit/'.$usuario->id) }}">
-          <button type="button" class="btn btn-outline-warning" style="display:inline">
-            Editar Empleado
-          </button>
-        </a>
-
-        &nbsp;&nbsp;
-        
-        @if ($usuario->activo)
-          <form action="{{url('/empleado/delete')}}" method="post" style="display:inline">
-            {{ csrf_field() }}
-            <input type="hidden" name="id" value="{{ $usuario->id }}">
-            <button type="submit" class="btn btn-outline-danger" style="display:inline">
-              Desactivar Empleado
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/empleado/show') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
             </button>
-          </form>
-        @else
-          <form action="{{url('/empleado/enable')}}" method="post" style="display:inline">
-            {{ csrf_field() }}
-            <input type="hidden" name="id" value="{{ $usuario->id }}">
-            <button type="submit" class="btn btn-outline-danger" style="display:inline">
-              Activar Empleado
+          </a>
+        </div>
+
+        <div class="col-md-10 text-md-center">
+          <a style="text-decoration:none" href="{{ url('/empleado/edit/'.$usuario->id) }}">
+            <button type="button" class="btn btn-outline-warning" style="display:inline">
+              Editar Empleado
             </button>
-          </form> 
-        @endif
+          </a>
 
-        
-        
-
+          &nbsp;&nbsp;
+          
+          @if ($usuario->activo)
+            <form action="{{url('/empleado/delete')}}" method="post" style="display:inline">
+              {{ csrf_field() }}
+              <input type="hidden" name="id" value="{{ $usuario->id }}">
+              <button type="submit" class="btn btn-outline-danger" style="display:inline">
+                Desactivar Empleado
+              </button>
+            </form>
+          @else
+            <form action="{{url('/empleado/enable')}}" method="post" style="display:inline">
+              {{ csrf_field() }}
+              <input type="hidden" name="id" value="{{ $usuario->id }}">
+              <button type="submit" class="btn btn-outline-danger" style="display:inline">
+                Activar Empleado
+              </button>
+            </form> 
+          @endif
+        </div>
       </div>
-
     </div>
   </div>
 </div>

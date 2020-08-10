@@ -17,22 +17,31 @@
         </tr>
       </table>
 
-      <div class="card-footer">
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/mueble/show') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
 
-        <a style="text-decoration:none" href="{{ url('/mueble/edit/'.$mueble->id) }}">
-          <button type="button" class="btn btn-outline-warning" style="display:inline">
-            Editar Mueble
-          </button>
-        </a>
+        <div class="col-md-10 text-md-center">
+          <a style="text-decoration:none" href="{{ url('/mueble/edit/'.$mueble->id) }}">
+            <button type="button" class="btn btn-outline-warning" style="display:inline">
+              Editar Mueble
+            </button>
+          </a>
 
-        &nbsp;&nbsp;
-        <form action="{{url('/mueble/delete')}}" method="post" style="display:inline">
-          {{ csrf_field() }}
-          <input type="hidden" name="id" value="{{ $mueble->id }}">
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Eliminar Mueble
-          </button>
-        </form>
+          &nbsp;&nbsp;
+          <form action="{{url('/mueble/delete')}}" method="post" style="display:inline">
+            {{ csrf_field() }}
+            <input type="hidden" name="id" value="{{ $mueble->id }}">
+            <button type="submit" class="btn btn-outline-danger" style="display:inline">
+              Eliminar Mueble
+            </button>
+          </form>
+        </div>
       </div>
 
     </div>

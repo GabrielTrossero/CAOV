@@ -81,6 +81,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!--tabla historica-->
@@ -144,6 +154,16 @@
           @endforeach
         </tbody>
       </table>
+
+      <div class="card-footer row">
+        <div >
+          <a style="text-decoration:none" href="{{ url('/cuota') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

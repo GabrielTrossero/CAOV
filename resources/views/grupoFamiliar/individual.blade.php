@@ -78,34 +78,43 @@
 
       </table>
 
-      <div class="card-footer">
+      <div class="card-footer row">
+        <div>
+          <a style="text-decoration:none" href="{{ url('/grupofamiliar/show') }}">
+            <button type="button" class="btn btn-secondary">
+              Volver
+            </button>
+          </a>
+        </div>
 
-        <a style="text-decoration:none" href="{{ url('/grupofamiliar/addMenor/'.$grupo->id) }}">
-          <button type="button" class="btn btn-outline-primary" style="display:inline">
-            Agregar Menor
-          </button>
-        </a>
+        <div class="col-md-10 text-md-center">
+          <a style="text-decoration:none" href="{{ url('/grupofamiliar/addMenor/'.$grupo->id) }}">
+            <button type="button" class="btn btn-outline-primary" style="display:inline">
+              Agregar Menor
+            </button>
+          </a>
 
-        @if (isset($grupo->pareja))
+          @if (isset($grupo->pareja))
+            &nbsp;&nbsp;
+            <form action="{{url('/grupofamiliar/cambiarRoles')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea intercambiar los roles Titular y Pareja?');">
+              {{ csrf_field() }}
+              <input type="hidden" name="id" value="{{ $grupo->id }}">
+              <button type="submit" class="btn btn-outline-secondary" title="Cambiar Titular por Pareja y viceversa" style="display:inline">
+                Intercambiar roles 
+              </button>
+            </form>
+          @endif
+          
+
           &nbsp;&nbsp;
-          <form action="{{url('/grupofamiliar/cambiarRoles')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea intercambiar los roles Titular y Pareja?');">
+          <form action="{{url('/grupofamiliar/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Grupo Familiar?');">
             {{ csrf_field() }}
             <input type="hidden" name="id" value="{{ $grupo->id }}">
-            <button type="submit" class="btn btn-outline-secondary" title="Cambiar Titular por Pareja y viceversa" style="display:inline">
-              Intercambiar roles 
+            <button type="submit" class="btn btn-outline-danger" style="display:inline">
+              Eliminar Grupo Familiar
             </button>
           </form>
-        @endif
-        
-
-        &nbsp;&nbsp;
-        <form action="{{url('/grupofamiliar/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Grupo Familiar?');">
-          {{ csrf_field() }}
-          <input type="hidden" name="id" value="{{ $grupo->id }}">
-          <button type="submit" class="btn btn-outline-danger" style="display:inline">
-            Eliminar Grupo Familiar
-          </button>
-        </form>
+        </div>
 
       </div>
 
