@@ -630,7 +630,7 @@ class GrupoFamiliarController extends Controller
         //valido si es mayor de edad
         if(($this->calculaEdad($pareja) < 18))
         {
-          return redirect()->back()->withInput()->with('error', 'La Pareja debe ser mayor de 18 años');
+          return redirect()->back()->withInput()->with('error', 'La Pareja debe ser mayor de 18 años.');
         }
 
         //tomo el grupo a actualizar
@@ -649,7 +649,7 @@ class GrupoFamiliarController extends Controller
         }
 
         //si el numero de pareja es distinto a la pareja actual y antes NO tenía pareja, se actualiza
-        elseif (($pareja->id != $grupo->pareja)&&($grupo->pareja == 0)){
+        elseif (($pareja->id != $grupo->pareja) && ($grupo->pareja == 0)){
           $grupo->pareja = $pareja->id;
           $pareja->idGrupoFamiliar = $grupo->id;
           $pareja->save();
@@ -663,8 +663,14 @@ class GrupoFamiliarController extends Controller
         //tomo el grupo a actualizar
         $grupo = GrupoFamiliar::find($request->id);
 
+        // valido si el grupo posee mmenos de 2 miembros
+        if(sizeof($grupo->socios) < 3)
+        {
+          return redirect()->back()->withInput()->with('error', 'El Grupo Familiar posee menos de 3 miembros actualmente.');
+        }
+
         //si el numero de pareja es distinto a la pareja actual, se actualiza
-        if (0 != $grupo->pareja){
+        if ($grupo->pareja != 0){
           $parejaViejo = Socio::find($grupo->pareja);
           $parejaViejo->idGrupoFamiliar = null;
           $parejaViejo->save();
@@ -791,11 +797,17 @@ class GrupoFamiliarController extends Controller
     //tomo el grupo familiar
     $grupo = GrupoFamiliar::find($socio->idGrupoFamiliar);
 
+    // valido si el grupo posee mmenos de 2 miembros
+    if(sizeof($grupo->socios) < 3)
+    {
+      return redirect()->back()->withInput()->with('errorEliminar', 'El Grupo Familiar posee menos de 3 miembros actualmente.');
+    }
+
     $socio->idGrupoFamiliar = null;
     $socio->save();
 
     //retorno la vista
-    return view('grupoFamiliar.individual', compact('grupo'));
+    return redirect()->action('GrupoFamiliarController@getShowId', $grupo->id);
   }
   
   /**
