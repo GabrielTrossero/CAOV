@@ -666,7 +666,7 @@ class GrupoFamiliarController extends Controller
         // valido si el grupo posee mmenos de 2 miembros
         if(sizeof($grupo->socios) < 3)
         {
-          return redirect()->back()->withInput()->with('error', 'El Grupo Familiar posee menos de 3 miembros actualmente.');
+          return redirect()->back()->withInput()->with('error', 'No se puede eliminar el integrante, el Grupo Familiar quedaría con un solo miembro.');
         }
 
         //si el numero de pareja es distinto a la pareja actual, se actualiza
@@ -800,7 +800,7 @@ class GrupoFamiliarController extends Controller
     // valido si el grupo posee mmenos de 2 miembros
     if(sizeof($grupo->socios) < 3)
     {
-      return redirect()->back()->withInput()->with('errorEliminar', 'El Grupo Familiar posee menos de 3 miembros actualmente.');
+      return redirect()->back()->withInput()->with('errorEliminar', 'No se puede eliminar el integrante, el Grupo Familiar quedaría con un solo miembro.');
     }
 
     $socio->idGrupoFamiliar = null;
