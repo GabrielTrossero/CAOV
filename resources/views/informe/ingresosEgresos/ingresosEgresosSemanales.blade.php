@@ -66,7 +66,7 @@
 
         <div class="card-footer row">
           <div >
-            <a style="text-decoration:none" href="{{ url('/informe/ingresos_egresos_semanales_generales') }}">
+            <a style="text-decoration:none" onclick="history.back()">
               <button type="button" class="btn btn-secondary">
                 Volver
               </button>

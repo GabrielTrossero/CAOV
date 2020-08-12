@@ -90,7 +90,7 @@
                         <br>
                         <div class="form-group row mb-0">
                             <div class="col-md-1 offset-md-4">
-                              <a style="text-decoration:none" href="{{ url('/grupofamiliar') }}">
+                              <a style="text-decoration:none" onclick="history.back()">
                                 <button type="button" class="btn btn-secondary">
                                   Volver
                                 </button>
