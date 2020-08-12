@@ -20,7 +20,7 @@
 
 <div class="col-md-8 backup" style="text-align: center">
   @if (\Session::has('backupExitoso'))
-    <div class="alert alert-danger">
+    <div class="alert alert-primary">
       {!! \Session::get('backupExitoso') !!}
     </div>
   @elseif (\Session::has('backupErroneo'))

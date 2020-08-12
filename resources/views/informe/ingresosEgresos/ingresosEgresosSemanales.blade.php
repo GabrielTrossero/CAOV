@@ -11,53 +11,53 @@
         <table id="idDataTable" class="table table-striped">
           <thead>
             <tr>
-              <th>Tipo</th>
-              <th>Numero de Recibo</th>
-              <th>Descripcion</th>
               <th>Fecha</th>
+              <th>Tipo</th>
               <th>Monto</th>
+              <th>Descripcion</th>
+              <th>Numero de Recibo</th>
             </tr>
           </thead>
           <tbody>
   
             @foreach ($movExtras as $movExtra)
               <tr>
+                <td>{{ date("d/m/Y", strtotime($movExtra->fecha)) }}</td>
                 @if ($movExtra->tipo == "1")
                   <td>{{ 'Ingreso' }}</td>
                 @elseif ($movExtra->tipo == "2")
                   <td>{{ 'Egreso' }}</td>
                 @endif
-                <td>{{ $movExtra->numRecibo }}</td>
-                <td>{{ $movExtra->descripcion }}</td>
-                <td>{{ date("d/m/Y", strtotime($movExtra->fecha)) }}</td>
                 <td>{{ '$'.$movExtra->monto }}</td>
+                <td>{{ $movExtra->descripcion }}</td>
+                <td>{{ $movExtra->numRecibo }}</td>
               </tr>
             @endforeach
             @foreach ($alquileresInmueblePagos as $alquilerInmueble)
               <tr>
-                <td>{{ 'Ingreso' }}</td>
-                <td>{{ $alquilerInmueble->numRecibo }}</td>
-                <td>{{ 'Alquileres de Inmuebles' }}</td>
                 <td>{{ date("d/m/Y", strtotime($alquilerInmueble->fechaSolicitud)) }}</td>
+                <td>{{ 'Ingreso' }}</td>
                 <td>{{ '$'.$alquilerInmueble->costoTotal }}</td>
+                <td>{{ 'Alquileres de Inmuebles' }}</td>
+                <td>{{ $alquilerInmueble->numRecibo }}</td>
               </tr>
             @endforeach
             @foreach ($alquileresMueblePagos as $alquilerMueble)
               <tr>
-                <td>{{ 'Ingreso' }}</td>
-                <td>{{ $alquilerMueble->numRecibo }}</td>
-                <td>{{ 'Alquileres de Muebles' }}</td>
                 <td>{{ date("d/m/Y", strtotime($alquilerMueble->fechaSolicitud)) }}</td>
+                <td>{{ 'Ingreso' }}</td>
                 <td>{{ '$'.$alquilerMueble->costoTotal }}</td>
+                <td>{{ 'Alquileres de Muebles' }}</td>
+                <td>{{ $alquilerMueble->numRecibo }}</td>
               </tr>
             @endforeach
             @foreach ($cuotasPagadas as $cuota)
               <tr>
-                <td>{{ 'Ingreso' }}</td>
-                <td>{{ '-' }}</td>
-                <td>{{ 'Cuota' }}</td>
                 <td>{{ date("d/m/Y", strtotime($cuota->fechaPago)) }}</td>
+                <td>{{ 'Ingreso' }}</td>
                 <td>{{ '$'.$cuota->montoTotal }}</td>
+                <td>{{ 'Cuota' }}</td>
+                <td>{{ '-' }}</td>
               </tr>
             @endforeach
   
