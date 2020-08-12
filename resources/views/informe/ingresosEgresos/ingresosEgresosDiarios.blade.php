@@ -12,9 +12,9 @@
           <thead>
             <tr>
               <th>Tipo</th>
-              <th>Numero de Recibo</th>
               <th>Descripcion</th>
               <th>Monto</th>
+              <th>Numero de Recibo</th>
             </tr>
           </thead>
           <tbody>
@@ -26,41 +26,39 @@
                 @elseif ($movExtra->tipo == "2")
                   <td>{{ 'Egreso' }}</td>
                 @endif
-                <td>{{ $movExtra->numRecibo }}</td>
                 <td>{{ $movExtra->descripcion }}</td>
                 @if ($movExtra->tipo == "1")
                   <td>{{ '$'.$movExtra->monto }}</td>
                 @elseif($movExtra->tipo == "2")
                   <td>{{ '- $'.$movExtra->monto }}</td>
                 @endif
-                
+                <td>{{ $movExtra->numRecibo }}</td>
               </tr>
             @endforeach
             @foreach ($alquileresInmueblePagos as $alquilerInmueble)
               <tr>
                 <td>{{ 'Ingreso' }}</td>
-                <td>{{ $alquilerInmueble->numRecibo }}</td>
                 <td>{{ 'Alquileres de Inmuebles' }}</td>
                 <td>{{ '$'.$alquilerInmueble->costoTotal }}</td>
+                <td>{{ $alquilerInmueble->numRecibo }}</td>
               </tr>
             @endforeach
             @foreach ($alquileresMueblePagos as $alquilerMueble)
               <tr>
                 <td>{{ 'Ingreso' }}</td>
-                <td>{{ $alquilerMueble->numRecibo }}</td>
                 <td>{{ 'Alquileres de Muebles' }}</td>
                 <td>{{ '$'.$alquilerMueble->costoTotal }}</td>
+                <td>{{ $alquilerMueble->numRecibo }}</td>
               </tr>
             @endforeach
             @foreach ($cuotasPagadas as $cuota)
               <tr>
                 <td>{{ 'Ingreso' }}</td>
-                <td>{{ '-' }}</td>
                 <td>{{ 'Cuota' }}</td>
                 <td>{{ '$'.$cuota->montoTotal }}</td>
+                <td>{{ '-' }}</td>
               </tr>
             @endforeach
-  
           </tbody>
         </table>
 
