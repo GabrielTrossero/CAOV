@@ -217,7 +217,6 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
         {
             Route::get('/', 'AdministradorController@index');
             Route::post('backup', 'AdministradorController@postBackup');
-            Route::get('ingresos', 'AdministradorController@getIngresos');
         });
 
         //Rutas de Deportes

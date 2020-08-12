@@ -36,47 +36,10 @@ class AdministradorController extends Controller
     $comparador = "Backup completed!";
 
     if(strpos($respuesta, $comparador)){
-      return redirect()->back()->with('backupExitoso', 'El BackUp se ha llevado a cabo con éxito!');
+      return redirect()->back()->with('backupExitoso', 'El Backup se ha llevado a cabo con éxito!');
     }
     else{
-      return redirect()->back()->with('backupErroneo', 'El BackUp NO se ha podido realizar con éxito.');
+      return redirect()->back()->with('backupErroneo', 'El Backup NO se ha podido realizar con éxito.');
     }
-  }
-
-  /**
-   * Show a list of Ingresos.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function getIngresos()
-  {
-    //tomo los ingresos de movimientos extra
-    $movimientos = MovExtras::all()->where('tipo', '1');
-
-    //tomo los pagos de cuotas
-    $cuotasPagadas = ComprobanteCuota::all()->where('fechaPago', '<>', null)->where('inhabilitada', false);
-    
-    foreach($cuotasPagadas as $cuotaPagada) {
-      $cuotaController = new CuotaController;
-
-      $interesPorIntegrantes = $cuotaController->montoInteresGrupoFamiliar($cuotaPagada);
-      $interesMesesAtrasados = $cuotaController->montoInteresAtraso($cuotaPagada);
-      $montoMensual = $cuotaPagada->montoCuota->montoMensual;
-
-      $cuotaPagada->montoTotal = $montoMensual + $interesPorIntegrantes + $interesMesesAtrasados;
-    }
-
-    //tomo los alquileres de inmuebles
-    $reservasInmueble = ReservaInmueble::all()->where('numRecibo', '<>', null);
-
-    //tomo los alquileres de muebles
-    $reservasMueble = ReservaMueble::all()->where('numRecibo', '<>', null);
-
-    return view('administrador.ingresos', compact(['movimientos',
-                                                   'cuotasPagadas',
-                                                   'reservasInmueble',
-                                                   'reservasMueble'
-                                                   ])
-                                                  );
   }
 }
