@@ -67,16 +67,16 @@
       <table class="table table-striped">
         <thead>
             <tr>
-                <th>Mes/Año</th>
-                <th>Monto Base</th>
-                <th>Tipo Socio (Cobrado)</th>
+              <th>Mes/Año</th>
+              <th>Tipo Socio (Cobrado)</th>
+              <th>Monto Base</th>
+              <th>Monto con Intereses</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($cuotasNoPagadas as $cuotaNoPagada)
+            @foreach ($socio->cuotasNoPagadas as $cuotaNoPagada)
             <tr>
               <td>{{date("m/Y", strtotime($cuotaNoPagada->fechaMesAnio))}}</td>
-              <td>{{ '$'.$cuotaNoPagada->montoCuota->montoMensual }}</td>
 
               @if ($cuotaNoPagada->montoCuota->tipo == 'c')
                 <td>{{ 'Cadete' }}</td>
@@ -85,9 +85,17 @@
               @elseif ($cuotaNoPagada->montoCuota->tipo == 'a')
                 <td>{{ 'Activo' }}</td>
               @endif
+
+              <td>{{ '$'.$cuotaNoPagada->montoCuota->montoMensual }}</td>
+
+              <td>{{ '$'.$cuotaNoPagada->montoDeuda }}</td>
             </tr>
             @endforeach
         </tbody>
       </table>
+
+      <div class="alert alert-danger" align="center">
+        {{ 'El monto total a pagar del socio es de $'. $socio->montoTotal .' hasta la fecha' }}
+      </div>
     </div>
 @endsection

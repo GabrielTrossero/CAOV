@@ -70,17 +70,16 @@
           <thead>
             <tr>
               <th>Mes/Año</th>
-              <th>Monto Base</th>
               <th>Tipo Socio (Cobrado)</th>
+              <th>Monto Base</th>
+              <th>Monto con Intereses</th>
               <th>Más Información</th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($cuotasNoPagadas as $cuotaNoPagada)
+            @foreach ($socio->cuotasNoPagadas as $cuotaNoPagada)
             <tr>
-
               <td>{{date("m/Y", strtotime($cuotaNoPagada->fechaMesAnio))}}</td>
-              <td>{{ '$'.$cuotaNoPagada->montoCuota->montoMensual }}</td>
 
               @if ($cuotaNoPagada->montoCuota->tipo == 'c')
                 <td>{{ 'Cadete' }}</td>
@@ -90,12 +89,20 @@
                 <td>{{ 'Activo' }}</td>
               @endif
 
+              <td>{{ '$'.$cuotaNoPagada->montoCuota->montoMensual }}</td>
+
+              <td>{{ '$'.$cuotaNoPagada->montoDeuda }}</td>
+
               <td><a href="{{ url('/cuota/show/'.$cuotaNoPagada->id) }}"> <i class="fas fa-plus"></i></a> </td>
             </tr>
             @endforeach
           </tbody>
 
       </table>
+
+      <div class="alert alert-danger" align="center">
+        {{ 'El monto total a pagar del socio es de $'. $socio->montoTotal .' hasta la fecha' }}
+      </div>
     
       <div class="card-footer row">
         <div >

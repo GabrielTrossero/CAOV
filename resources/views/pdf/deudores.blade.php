@@ -16,19 +16,21 @@
                 <th>Apellido</th>
                 <th>Nombres</th>
                 <th>Cuotas que adeuda</th>
+                <th>Monto que adeuda</th>
             </tr>
         </thead>
         <tbody>
 
-           @foreach ($cuotasNoPagadas as $cuotaNoPagada)
-              <tr>
-                <td>{{ $cuotaNoPagada->DNI }}</td>
-                <td>{{ $cuotaNoPagada->numSocio }}</td>
-                <td>{{ $cuotaNoPagada->apellido }}</td>
-                <td>{{ $cuotaNoPagada->nombres }}</td>
-                <td>{{ $cuotaNoPagada->count }}</td>
-              </tr>
-           @endforeach
+        @foreach ($socios as $socio)
+          <tr>
+            <td>{{ $socio->persona->DNI }}</td>
+            <td>{{ $socio->numSocio }}</td>
+            <td>{{ $socio->persona->apellido }}</td>
+            <td>{{ $socio->persona->nombres }}</td>
+            <td>{{ $socio->cantCuotas }}</td>
+            <td>{{ '$'.$socio->montoDeuda }}</td>
+          </tr>
+        @endforeach
 
         </tbody>
       </table>

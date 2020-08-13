@@ -16,21 +16,22 @@
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Cuotas que adeuda</th>
+            <th>Monto que adeuda</th>
             <th>Más Información</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($cuotasNoPagadas as $cuotaNoPagada)
-            <tr>
-              <td>{{ $cuotaNoPagada->DNI }}</td>
-              <td>{{ $cuotaNoPagada->numSocio }}</td>
-              <td>{{ $cuotaNoPagada->apellido }}</td>
-              <td>{{ $cuotaNoPagada->nombres }}</td>
-              <td>{{ $cuotaNoPagada->count }}</td>
-              <td><a href="{{ url('/informe/socio_deudor/'.$cuotaNoPagada->idSocio) }}"> <i class="fas fa-plus"></i></a> </td>
-            </tr> 
+          @foreach ($socios as $socio)
+              <tr>
+                <td>{{ $socio->persona->DNI }}</td>
+                <td>{{ $socio->numSocio }}</td>
+                <td>{{ $socio->persona->apellido }}</td>
+                <td>{{ $socio->persona->nombres }}</td>
+                <td>{{ $socio->cantCuotas }}</td>
+                <td>{{ '$'.$socio->montoDeuda }}</td>
+                <td><a href="{{ url('/informe/socio_deudor/'.$socio->id) }}"> <i class="fas fa-plus"></i></a> </td>
+              </tr>
           @endforeach
-          
         </tbody>
       </table>
     

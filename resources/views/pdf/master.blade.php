@@ -32,6 +32,7 @@
 
         <footer>
           <br><br>
+          <font size=2><b>Fecha de Generación: {{ Carbon\Carbon::now()->format('d/m/Y') }}</b></font>
           <hr>
           Los Jacarandaes 54 - Oro Verde - Entre Ríos (3101)
           <br>

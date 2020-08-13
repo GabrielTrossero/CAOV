@@ -29,21 +29,59 @@ class InformeController extends Controller
   }
 
   /**
+   * funcion que se utiliza en getDeudores() y pdfDeudores()
+   * @param  null
+   * @return App\Socio $socios
+   */
+  private function deudores()
+  {
+    //obtengo todos los socios
+    $socios = Socio::all();
+
+    //para llamar a las funciones que están en CuotaController
+    $cuotaController = new CuotaController;
+
+    //recorro socio y cada cuota
+    foreach ($socios as $socio) {
+      $cantCuotas = 0;
+      $montoDeuda = 0;
+      
+      foreach ($socio->comprobantesDeCuotas as $cuota) {
+        //cuento cuantas cuotas tiene sin pagar y sumo lo que debe hasta el mes actual
+        if (($cuota->fechaPago == null)&&($cuota->inhabilitada == false)) {
+          $cantCuotas++;
+
+          $cuota->fechaPago = Carbon::Now(); //le seteo la fecha actual para calcular el interes de atraso
+          $montoDeuda += $cuotaController->montoInteresAtraso($cuota);
+          $montoDeuda += $cuotaController->montoInteresGrupoFamiliar($cuota);
+          $montoDeuda += $cuota->montoCuota->montoMensual;
+        }
+      }
+      $socio->cantCuotas = $cantCuotas;
+      $socio->montoDeuda = $montoDeuda;
+    }
+
+    //funcion para filtrar y no eviarle los socios que no deben cuotas
+    $socios = $socios->filter(function ($value, $key) {
+      if ($value->cantCuotas != 0)
+        return true;
+      else false;
+    });
+
+    return $socios;
+  }
+
+  /**
    * Show a list of Socios Deudores.
    *
    * @return \Illuminate\Http\Response
    */
   public function getDeudores()
   {
-    $cuotasNoPagadas = ComprobanteCuota:: selectRaw('idSocio, numSocio, DNI, apellido, nombres, count(*) as count')
-                                          ->where('fechaPago', null)
-                                          ->where('inhabilitada', false)
-                                          ->join('socio','socio.id','=','comprobantecuota.idSocio')
-                                          ->join('persona','persona.id','=','socio.idPersona')
-                                          ->groupBy(DB::raw('idSocio, numSocio, DNI, apellido, nombres'))
-                                          ->get();
+    //llamo a la función deudores
+    $socios = $this->deudores();
 
-    return view('informe.sociosDeudores', compact('cuotasNoPagadas'));
+    return view('informe.sociosDeudores', compact('socios'));
   }
 
   /**
@@ -53,25 +91,20 @@ class InformeController extends Controller
    */
   public function pdfDeudores()
   {
-    $cuotasNoPagadas = ComprobanteCuota:: selectRaw('idSocio, numSocio, DNI, apellido, nombres, count(*) as count')
-                                          ->where('fechaPago', null)
-                                          ->where('inhabilitada', false)
-                                          ->join('socio','socio.id','=','comprobantecuota.idSocio')
-                                          ->join('persona','persona.id','=','socio.idPersona')
-                                          ->groupBy(DB::raw('idSocio, numSocio, DNI, apellido, nombres'))
-                                          ->get();
+    //llamo a la función deudores
+    $socios = $this->deudores();
 
-    $pdf = PDF::loadView('pdf.deudores', ['cuotasNoPagadas' => $cuotasNoPagadas]);
+    $pdf = PDF::loadView('pdf.deudores', ['socios' => $socios]);
 
     return $pdf->download('deudores.pdf');
   }
 
   /**
-   * Show detail of Socio Deudor.
-   *
-   * @return \Illuminate\Http\Response
+   * funcion que se utiliza en getSocioDeudor() y pdfSocioDeudor()
+   * @param  int
+   * @return App\Socio $socios
    */
-  public function getSocioDeudor($id)
+  private function deudor($id)
   {
     //tomo el socio
     $socio = Socio::find($id);
@@ -86,8 +119,39 @@ class InformeController extends Controller
                                          ->where('inhabilitada', false)
                                          ->where('idSocio', $id);
     
+    $montoTotal = 0;
+    foreach ($cuotasNoPagadas as $cuota) {
+      $cuota->fechaPago = Carbon::Now(); //le seteo la fecha actual para calcular el interes de atraso
 
-    return view('informe.socioDeudor', compact('socio', 'cuotasNoPagadas'));
+      //sumo lo que debe hasta el mes actual
+      $montoDeuda = 0;
+      $montoDeuda += $cuotaController->montoInteresAtraso($cuota);
+      $montoDeuda += $cuotaController->montoInteresGrupoFamiliar($cuota);
+      $montoDeuda += $cuota->montoCuota->montoMensual;
+      
+      $cuota->fechaPago = null; //le vuelvo a poner en null la fecha de pago
+      $cuota->montoDeuda = $montoDeuda; //le seteo el monto
+
+      $montoTotal += $montoDeuda; //sumo lo que debe entre todas las cuotas
+    }
+
+    $socio->cuotasNoPagadas = $cuotasNoPagadas;
+    $socio->montoTotal = $montoTotal;
+
+    return $socio;
+  }
+
+  /**
+   * Show detail of Socio Deudor.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function getSocioDeudor($id)
+  {
+    //llamo a la función deudor
+    $socio = $this->deudor($id);
+
+    return view('informe.socioDeudor', compact('socio'));
   }
 
   /**
@@ -97,20 +161,10 @@ class InformeController extends Controller
    */
   public function pdfSocioDeudor(Request $request)
   {
-    //tomo el socio
-    $socio = Socio::find($request->id);
+    ///llamo a la función deudor
+    $socio = $this->deudor($request->id);
 
-    $cuotaController = new CuotaController;
-
-    $socio->edad = $cuotaController->calculaEdad($socio);
-
-    //tomo las cuotas que debe
-    $cuotasNoPagadas = ComprobanteCuota::all()
-                                         ->where('fechaPago', null)
-                                         ->where('inhabilitada', false)
-                                         ->where('idSocio', $request->id);
-
-    $pdf = PDF::loadView('pdf.socioDeudor', ['socio' => $socio, 'cuotasNoPagadas' => $cuotasNoPagadas]);
+    $pdf = PDF::loadView('pdf.socioDeudor', ['socio' => $socio]);
 
     return $pdf->download('socio-deudor.pdf');
   }
