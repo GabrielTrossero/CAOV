@@ -13,16 +13,31 @@
         <thead>
             <tr>
               <th>Fecha (Año - Mes)</th>
+              <th>Ingresos</th>
+              <th>Egresos</th>
               <th>Balance</th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($totales as $mes => $valor)
-            <tr>
-              <td>{{ $mes }}</td>
-              <td>{{ '$'.$valor["total"] }}</td>
-            </tr>
-          @endforeach
+            @foreach ($montos->ingresos as $mes => $valor)
+              <tr>
+                <td>{{ $mes }}</td>
+
+                @if ($montos->ingresos[$mes] == 0)
+                    <td> - </td>
+                @else 
+                    <td>{{ '$'.$montos->ingresos[$mes] }}</td>
+                @endif
+
+                @if ($montos->egresos[$mes] == 0)
+                    <td> - </td>
+                @else 
+                    <td>{{ '$'.$montos->egresos[$mes] }}</td>
+                @endif
+
+                <td>{{ '$'. ($montos->ingresos[$mes] - $montos->egresos[$mes]) }}</td>
+              </tr>
+            @endforeach
           </tbody>
         </table>
       </div>

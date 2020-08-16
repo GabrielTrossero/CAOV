@@ -143,17 +143,17 @@ Route::group(['middleware' => ['auth', 'empleado', 'activo']], function()
 
             //ingresos/egresos diarios
             Route::get('ingresos_egresos_diarios_generales', 'InformeController@getIngresosEgresosDiariosGeneral');
-            Route::get('ingresos_egresos_diarios/{fecha}', 'InformeController@getIngresosEgresosDiarios');
+            Route::get('ingresos_egresos_diarios/{fecha}/{balance}', 'InformeController@getIngresosEgresosDiarios');
             Route::get('pdf_ingresos_egresos_diarios', 'InformeController@pdfIngresosEgresosDiarios');
 
             //ingresos/egresos semanales
             Route::get('ingresos_egresos_semanales_generales', 'InformeController@getIngresosEgresosSemanalesGeneral');
-            Route::get('ingresos_egresos_semanales/{semana}/{anio}', 'InformeController@getIngresosEgresosSemanales');
+            Route::get('ingresos_egresos_semanales/{semana}/{balance}', 'InformeController@getIngresosEgresosSemanales');
             Route::get('pdf_ingresos_egresos_semanales', 'InformeController@pdfIngresosEgresosSemanales');
 
             //ingresos/egresos mensuales
             Route::get('ingresos_egresos_mensuales_generales', 'InformeController@getIngresosEgresosMensualesGeneral');
-            Route::get('ingresos_egresos_mensuales/{mes}/{anio}', 'InformeController@getIngresosEgresosMensuales');
+            Route::get('ingresos_egresos_mensuales/{mes}/{balance}', 'InformeController@getIngresosEgresosMensuales');
             Route::get('pdf_ingresos_egresos_mensuales', 'InformeController@pdfIngresosEgresosMensuales');
 
             Route::get('pagos', 'InformeController@getPagos');

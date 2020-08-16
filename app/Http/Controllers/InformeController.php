@@ -291,18 +291,18 @@ class InformeController extends Controller
   private function variablesIngresosEgresos()
   {
     // Tomo los Registros (movimientos extra) con su total
-    $movExtras = MovExtras::select(DB::raw('fecha, sum(monto) as total, tipo'))
+    $movExtras = MovExtras::select(DB::raw('fecha, sum(monto) as montoTotal, tipo'))
                             ->groupBy('fecha', 'tipo')
                             ->get();
 
     // Tomo las reservas de Inmuebles con su total
-    $reservasInmueble = ReservaInmueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+    $reservasInmueble = ReservaInmueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as montoTotal, 'Ingreso' as tipo"))
                              ->where('numRecibo', '<>', null)
                              ->groupBy('fechaSolicitud')
                              ->get();
 
     // Tomo las reservas de Muebles con su total
-    $reservasMueble = ReservaMueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as total, 'Ingreso' as tipo"))
+    $reservasMueble = ReservaMueble::select(DB::raw("fechaSolicitud, sum(costoTotal) as montoTotal, 'Ingreso' as tipo"))
                              ->where('numRecibo', '<>', null)
                              ->groupBy('fechaSolicitud')
                              ->get();
@@ -337,48 +337,58 @@ class InformeController extends Controller
     //llamo a la función para obtener las variables a utilizar
     $variable = $this->variablesIngresosEgresos();
 
-    // Acumulo los Montos de las Cuotas Pagadas en un array asociativo con KEY fecha
-    $totales = array();
+    // Acumulo los montos de Ingresos y Egresos en arrays asociativos con KEY fecha
+    $ingresos = array();
+    $egresos = array();
 
-    // Inicializo los valores del array en 0 (cero)
+    // Inicializo los valores de los arrays en 0 (cero)
     foreach ($variable->movExtras as $movExtra) {
-      $totales[$movExtra->fecha] = 0;
+      $ingresos[$movExtra->fecha] = 0;
+      $egresos[$movExtra->fecha] = 0;
     }
 
     foreach ($variable->reservasInmueble as $reservaInmueble) {
-      $totales[$reservaInmueble->fechaSolicitud] = 0;
+      $ingresos[$reservaInmueble->fechaSolicitud] = 0;
+      $egresos[$reservaInmueble->fechaSolicitud] = 0;
     }
 
     foreach ($variable->reservasMueble as $reservaMueble) {
-      $totales[$reservaMueble->fechaSolicitud] = 0;
+      $ingresos[$reservaMueble->fechaSolicitud] = 0;
+      $egresos[$reservaMueble->fechaSolicitud] = 0;
     }
 
     foreach ($variable->cuotasPagadas as $cuotaPagada) {
-      $totales[$cuotaPagada->fechaPago] = 0;
+      $ingresos[$cuotaPagada->fechaPago] = 0;
+      $egresos[$cuotaPagada->fechaPago] = 0;
     }
 
-    // Acumulo los totales
+    // Acumulo los montos
     foreach ($variable->movExtras as $movExtra) {
       if($movExtra->tipo == 1) {
-        $totales[$movExtra->fecha] += $movExtra->total;
+        $ingresos[$movExtra->fecha] += $movExtra->montoTotal;
       } elseif ($movExtra->tipo == 2) {
-        $totales[$movExtra->fecha] -= $movExtra->total;
+        $egresos[$movExtra->fecha] += $movExtra->montoTotal;
       }
     }
 
     foreach ($variable->reservasInmueble as $reservaInmueble) {
-      $totales[$reservaInmueble->fechaSolicitud] += $reservaInmueble->total;
+      $ingresos[$reservaInmueble->fechaSolicitud] += $reservaInmueble->montoTotal;
     }
 
     foreach ($variable->reservasMueble as $reservaMueble) {
-      $totales[$reservaMueble->fechaSolicitud] += $reservaMueble->total;
+      $ingresos[$reservaMueble->fechaSolicitud] += $reservaMueble->montoTotal;
     }
 
     foreach ($variable->cuotasPagadas as $cuotaPagada) {
-      $totales[$cuotaPagada->fechaPago] += $cuotaPagada->montoTotal;
+      $ingresos[$cuotaPagada->fechaPago] += $cuotaPagada->montoTotal;
     }
 
-    return $totales;
+    //variable en la que voy a retornar todo
+    $montos = new \Illuminate\Database\Eloquent\Collection;
+    $montos->ingresos = $ingresos;
+    $montos->egresos = $egresos;
+
+    return $montos;
   }
 
   /**
@@ -389,9 +399,9 @@ class InformeController extends Controller
   public function getIngresosEgresosDiariosGeneral() 
   {
     //llamo a la función ingresosEgresosDiarios
-    $totales = $this->ingresosEgresosDiarios();
+    $montos = $this->ingresosEgresosDiarios();
 
-    return view('informe.ingresosEgresos.ingresosEgresosDiariosGenerales', compact('totales'));
+    return view('informe.ingresosEgresos.ingresosEgresosDiariosGenerales', compact('montos'));
   }
 
   /**
@@ -402,9 +412,12 @@ class InformeController extends Controller
   public function pdfIngresosEgresosDiarios()
   {
     //llamo a la función ingresosEgresosDiarios
-    $totales = $this->ingresosEgresosDiarios();
+    $montos = $this->ingresosEgresosDiarios();
 
-    $pdf = PDF::loadView('pdf.ingresosEgresosDiarios', ['totales' => $totales]);
+    // Ordeno por fecha acendente
+    ksort($montos->ingresos);
+
+    $pdf = PDF::loadView('pdf.ingresosEgresosDiarios', ['montos' => $montos]);
 
     return $pdf->download('ingresos-egresos-diarios.pdf');
   }
@@ -416,7 +429,7 @@ class InformeController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function getIngresosEgresosDiarios($fecha)
+  public function getIngresosEgresosDiarios($fecha, $balance)
   {
     //tomo los movimientos extra
     $movExtras = MovExtras::all();
@@ -463,7 +476,8 @@ class InformeController extends Controller
                                                                           'alquileresInmueblePagos',
                                                                           'alquileresMueblePagos',
                                                                           'cuotasPagadas',
-                                                                          'fecha'));
+                                                                          'fecha',
+                                                                          'balance'));
   }
 
   /**
@@ -476,10 +490,11 @@ class InformeController extends Controller
     //llamo a la función para obtener las variables a utilizar
     $variable = $this->variablesIngresosEgresos();
 
-    // Acumulo los Montos de las Cuotas Pagadas en un array asociativo con KEY fecha
-    $totales = array();
+    // Acumulo los montos de Ingresos y Egresos en arrays asociativos con KEY fecha
+    $ingresos = array();
+    $egresos = array();
 
-    // Inicializo los valores del array en 0 (cero)
+    // Inicializo los valores de los arrays en 0 (cero)
     foreach ($variable->movExtras as $movExtra) {
       $fecha = Carbon::parse($movExtra->fecha);
       $semana = $fecha->weekOfYear;
@@ -488,8 +503,9 @@ class InformeController extends Controller
       if ($semana < 10) {
         $semana = "0".$semana;
       }
-
-      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      
+      $ingresos[$anio." - ".$semana] = 0;
+      $egresos[$anio." - ".$semana] = 0;
     }
 
     foreach ($variable->reservasInmueble as $reservaInmueble) {
@@ -501,7 +517,8 @@ class InformeController extends Controller
         $semana = "0".$semana;
       }
 
-      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $ingresos[$anio." - ".$semana] = 0;
+      $egresos[$anio." - ".$semana] = 0;
     }
 
     foreach ($variable->reservasMueble as $reservaMueble) {
@@ -513,7 +530,8 @@ class InformeController extends Controller
         $semana = "0".$semana;
       }
 
-      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $ingresos[$anio." - ".$semana] = 0;
+      $egresos[$anio." - ".$semana] = 0;
     }
 
     foreach ($variable->cuotasPagadas as $cuotaPagada) {
@@ -525,10 +543,11 @@ class InformeController extends Controller
         $semana = "0".$semana;
       }
 
-      $totales[$anio." - ".$semana] = array("total" => 0, "semana" => $semana, "anio" => $anio);
+      $ingresos[$anio." - ".$semana] = 0;
+      $egresos[$anio." - ".$semana] = 0;
     }
 
-    // Acumulo los totales
+    // Acumulo los montos
     foreach ($variable->movExtras as $movExtra) {
       $fecha = Carbon::parse($movExtra->fecha);
       $semana = $fecha->weekOfYear;
@@ -539,9 +558,9 @@ class InformeController extends Controller
       }
 
       if($movExtra->tipo == 1) {
-        $totales[$anio." - ".$semana]["total"] += $movExtra->total;
+        $ingresos[$anio." - ".$semana] += $movExtra->montoTotal;
       } elseif ($movExtra->tipo == 2) {
-        $totales[$anio." - ".$semana]["total"] -= $movExtra->total;
+        $egresos[$anio." - ".$semana] += $movExtra->montoTotal;
       }
     }
 
@@ -554,7 +573,7 @@ class InformeController extends Controller
         $semana = "0".$semana;
       }
 
-      $totales[$anio." - ".$semana]["total"] += $reservaInmueble->total;
+      $ingresos[$anio." - ".$semana] += $reservaInmueble->montoTotal;
     }
 
     foreach ($variable->reservasMueble as $reservaMueble) {
@@ -566,7 +585,7 @@ class InformeController extends Controller
         $semana = "0".$semana;
       }
 
-      $totales[$anio." - ".$semana]["total"] += $reservaMueble->total;
+      $ingresos[$anio." - ".$semana] += $reservaMueble->montoTotal;
     }
 
     foreach ($variable->cuotasPagadas as $cuotaPagada) {
@@ -578,10 +597,15 @@ class InformeController extends Controller
         $semana = "0".$semana;
       }
 
-      $totales[$anio." - ".$semana]["total"] += $cuotaPagada->montoTotal;
+      $ingresos[$anio." - ".$semana] += $cuotaPagada->montoTotal;
     }
 
-    return $totales;
+    //variable en la que voy a retornar todo
+    $montos = new \Illuminate\Database\Eloquent\Collection;
+    $montos->ingresos = $ingresos;
+    $montos->egresos = $egresos;
+
+    return $montos;
   }
 
   /**
@@ -592,9 +616,9 @@ class InformeController extends Controller
   public function getIngresosEgresosSemanalesGeneral() 
   {
     //llamo a la función ingresosEgresosSemanales
-    $totales = $this->ingresosEgresosSemanales();
+    $montos = $this->ingresosEgresosSemanales();
 
-    return view('informe.ingresosEgresos.ingresosEgresosSemanalesGenerales', compact('totales'));
+    return view('informe.ingresosEgresos.ingresosEgresosSemanalesGenerales', compact('montos'));
   }
 
   /**
@@ -605,12 +629,12 @@ class InformeController extends Controller
   public function pdfIngresosEgresosSemanales()
   {
     //llamo a la función ingresosEgresosSemanales
-    $totales = $this->ingresosEgresosSemanales();
+    $montos = $this->ingresosEgresosSemanales();
 
-    // Ordeno por semana/anio descendiente
-    ksort($totales);
+    // Ordeno por semana/anio acendente
+    ksort($montos->ingresos);
 
-    $pdf = PDF::loadView('pdf.ingresosEgresosSemanales', ['totales' => $totales]);
+    $pdf = PDF::loadView('pdf.ingresosEgresosSemanales', ['montos' => $montos]);
 
     return $pdf->download('ingresos-egresos-semanales.pdf');
   }
@@ -623,10 +647,12 @@ class InformeController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function getIngresosEgresosSemanales($semana, $anio)
+  public function getIngresosEgresosSemanales($semana, $balance)
   {
-    $semana = intval($semana);
-    $anio = intval($anio);
+    //recibo la semana en formato "año - semana". Ej: (2020 - 02)
+    //entonces lo corto de la cadena y lo transformo a int
+    $anio = intval(substr($semana,0,4));
+    $semana = intval(substr($semana,7,9));
 
     //tomo los movimientos extra
     $movExtras = MovExtras::all();
@@ -691,7 +717,8 @@ class InformeController extends Controller
                                                                             'alquileresInmueblePagos',
                                                                             'alquileresMueblePagos',
                                                                             'cuotasPagadas',
-                                                                            'semanaAnio'));
+                                                                            'semanaAnio',
+                                                                            'balance'));
   }
 
   /**
@@ -704,10 +731,11 @@ class InformeController extends Controller
     //llamo a la función para obtener las variables a utilizar
     $variable = $this->variablesIngresosEgresos();
 
-    // Acumulo los Montos de las Cuotas Pagadas en un array asociativo con KEY fecha
-    $totales = array();
+    // Acumulo los montos de Ingresos y Egresos en arrays asociativos con KEY fecha
+    $ingresos = array();
+    $egresos = array();
 
-    // Inicializo los valores del array en 0 (cero)
+    // Inicializo los valores de los arrays en 0 (cero)
     foreach ($variable->movExtras as $movExtra) {
       $fecha = Carbon::parse($movExtra->fecha);
       $mes = $fecha->month;
@@ -717,7 +745,8 @@ class InformeController extends Controller
         $mes = "0".$mes;
       }
 
-      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $ingresos[$anio." - ".$mes] = 0;
+      $egresos[$anio." - ".$mes] = 0;
     }
 
     foreach ($variable->reservasInmueble as $reservaInmueble) {
@@ -729,7 +758,8 @@ class InformeController extends Controller
         $mes = "0".$mes;
       }
 
-      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $ingresos[$anio." - ".$mes] = 0;
+      $egresos[$anio." - ".$mes] = 0;
     }
 
     foreach ($variable->reservasMueble as $reservaMueble) {
@@ -741,7 +771,8 @@ class InformeController extends Controller
         $mes = "0".$mes;
       }
 
-      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $ingresos[$anio." - ".$mes] = 0;
+      $egresos[$anio." - ".$mes] = 0;
     }
 
     foreach ($variable->cuotasPagadas as $cuotaPagada) {
@@ -753,10 +784,11 @@ class InformeController extends Controller
         $mes = "0".$mes;
       }
 
-      $totales[$anio." - ".$mes] = array("total" => 0, "mes" => $mes, "anio" => $anio);
+      $ingresos[$anio." - ".$mes] = 0;
+      $egresos[$anio." - ".$mes] = 0;
     }
 
-    // Acumulo los totales
+    // Acumulo los montos
     foreach ($variable->movExtras as $movExtra) {
       $fecha = Carbon::parse($movExtra->fecha);
       $mes = $fecha->month;
@@ -767,9 +799,9 @@ class InformeController extends Controller
       }
 
       if($movExtra->tipo == 1) {
-        $totales[$anio." - ".$mes]["total"] += $movExtra->total;
+        $ingresos[$anio." - ".$mes] += $movExtra->montoTotal;
       } elseif ($movExtra->tipo == 2) {
-        $totales[$anio." - ".$mes]["total"] -= $movExtra->total;
+        $egresos[$anio." - ".$mes] += $movExtra->montoTotal;
       }
     }
 
@@ -782,7 +814,7 @@ class InformeController extends Controller
         $mes = "0".$mes;
       }
 
-      $totales[$anio." - ".$mes]["total"] += $reservaInmueble->total;
+      $ingresos[$anio." - ".$mes] += $reservaInmueble->montoTotal;
     }
 
     foreach ($variable->reservasMueble as $reservaMueble) {
@@ -794,7 +826,7 @@ class InformeController extends Controller
         $mes = "0".$mes;
       }
 
-      $totales[$anio." - ".$mes]["total"] += $reservaMueble->total;
+      $ingresos[$anio." - ".$mes] += $reservaMueble->montoTotal;
     }
 
     foreach ($variable->cuotasPagadas as $cuotaPagada) {
@@ -806,10 +838,15 @@ class InformeController extends Controller
         $mes = "0".$mes;
       }
 
-      $totales[$anio." - ".$mes]["total"] += $cuotaPagada->montoTotal;
+      $ingresos[$anio." - ".$mes] += $cuotaPagada->montoTotal;
     }
 
-    return $totales;
+    //variable en la que voy a retornar todo
+    $montos = new \Illuminate\Database\Eloquent\Collection;
+    $montos->ingresos = $ingresos;
+    $montos->egresos = $egresos;
+
+    return $montos;
   }
 
   /**
@@ -820,9 +857,9 @@ class InformeController extends Controller
   public function getIngresosEgresosMensualesGeneral()
   {
     //llamo a la función ingresosEgresosMensuales
-    $totales = $this->ingresosEgresosMensuales();
+    $montos = $this->ingresosEgresosMensuales();
 
-    return view('informe.ingresosEgresos.ingresosEgresosMensualesGenerales', compact('totales'));
+    return view('informe.ingresosEgresos.ingresosEgresosMensualesGenerales', compact('montos'));
   }
 
   /**
@@ -833,12 +870,12 @@ class InformeController extends Controller
   public function pdfIngresosEgresosMensuales()
   {
     //llamo a la función ingresosEgresosMensuales
-    $totales = $this->ingresosEgresosMensuales();
+    $montos = $this->ingresosEgresosMensuales();
 
-    // Ordeno por semana/anio descendiente
-    ksort($totales);
+    // Ordeno por mes/anio acendente
+    ksort($montos->ingresos);
 
-    $pdf = PDF::loadView('pdf.ingresosEgresosMensuales', ['totales' => $totales]);
+    $pdf = PDF::loadView('pdf.ingresosEgresosMensuales', ['montos' => $montos]);
 
     return $pdf->download('ingresos-egresos-mensuales.pdf');
   }
@@ -851,10 +888,12 @@ class InformeController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function getIngresosEgresosMensuales($mes, $anio)
+  public function getIngresosEgresosMensuales($mes, $balance)
   {
-    $mes = intval($mes);
-    $anio = intval($anio);
+    //recibo el mes en formato "año - mes". Ej: (2020 - 02)
+    //entonces lo corto de la cadena y lo transformo a int
+    $anio = intval(substr($mes,0,4));
+    $mes = intval(substr($mes,7,9));
 
     //tomo los movimientos extra
     $movExtras = MovExtras::all();
@@ -913,13 +952,18 @@ class InformeController extends Controller
       $cuotaPagada = $this->calculaMontoCuotaPagada($cuotaPagada);
     }
 
+    if ($mes < 10) {
+      $mes = "0".$mes;
+    }
+
     $mesAnio = $mes." - ".$anio;
 
     return view('informe.ingresosEgresos.ingresosEgresosMensuales', compact('movExtras', 
                                                                             'alquileresInmueblePagos',
                                                                             'alquileresMueblePagos',
                                                                             'cuotasPagadas',
-                                                                            'mesAnio'));
+                                                                            'mesAnio',
+                                                                            'balance'));
   }
 
   /**

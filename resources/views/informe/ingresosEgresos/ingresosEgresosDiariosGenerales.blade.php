@@ -12,17 +12,33 @@
           <thead>
             <tr>
               <th>Fecha</th>
+              <th>Ingresos</th>
+              <th>Egresos</th>
               <th>Balance</th>
               <th>Mas Información</th>
             </tr>
           </thead>
           <tbody>
   
-            @foreach ($totales as $fecha => $total)
+            @foreach ($montos->ingresos as $fecha => $valor)
               <tr>
                 <td>{{ date("d/m/Y", strtotime($fecha)) }}</td>
-                <td>{{ '$'.$total }}</td>
-                <td><a href="{{ url('/informe/ingresos_egresos_diarios/'.$fecha) }}"> <i class="fas fa-plus"></i></a> </td>
+
+                @if ($montos->ingresos[$fecha] == 0)
+                    <td> - </td>
+                @else 
+                    <td>{{ '$'.$montos->ingresos[$fecha] }}</td>
+                @endif
+
+                @if ($montos->egresos[$fecha] == 0)
+                    <td> - </td>
+                @else 
+                    <td>{{ '$'.$montos->egresos[$fecha] }}</td>
+                @endif
+
+                <td>{{ '$'. ($montos->ingresos[$fecha] - $montos->egresos[$fecha]) }}</td>
+                
+                <td><a href="{{ url('/informe/ingresos_egresos_diarios/'.$fecha.'/'.($montos->ingresos[$fecha] - $montos->egresos[$fecha])) }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
             @endforeach
           </tbody>

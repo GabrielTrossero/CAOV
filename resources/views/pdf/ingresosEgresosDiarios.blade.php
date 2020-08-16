@@ -13,15 +13,30 @@
         <thead>
             <tr>
               <th>Fecha</th>
+              <th>Ingresos</th>
+              <th>Egresos</th>
               <th>Balance</th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($totales as $fecha => $total)
-            <tr>
-              <td>{{ date("d/m/Y", strtotime($fecha)) }}</td>
-              <td>{{ '$'.$total }}</td>
-            </tr>
+          @foreach ($montos->ingresos as $fecha => $valor)
+              <tr>
+                <td>{{ date("d/m/Y", strtotime($fecha)) }}</td>
+
+                @if ($montos->ingresos[$fecha] == 0)
+                    <td> - </td>
+                @else 
+                    <td>{{ '$'.$montos->ingresos[$fecha] }}</td>
+                @endif
+
+                @if ($montos->egresos[$fecha] == 0)
+                    <td> - </td>
+                @else 
+                    <td>{{ '$'.$montos->egresos[$fecha] }}</td>
+                @endif
+
+                <td>{{ '$'. ($montos->ingresos[$fecha] - $montos->egresos[$fecha]) }}</td>
+              </tr>
           @endforeach
           </tbody>
         </table>

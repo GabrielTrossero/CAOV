@@ -64,6 +64,10 @@
           </tbody>
         </table>
 
+        <div class="alert alert-danger" align="center">
+          {{ 'El balance de la semana fue de $'. $balance }}
+        </div>
+
         <div class="card-footer row">
           <div >
             <a style="text-decoration:none" onclick="history.back()">

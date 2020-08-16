@@ -13,16 +13,31 @@
         <thead>
             <tr>
               <th>Fecha (Año - Semana)</th>
+              <th>Ingresos</th>
+              <th>Egresos</th>
               <th>Balance</th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($totales as $semana => $valor)
-            <tr>
-              <td>{{ $semana }}</td>
-              <td>{{ '$'.$valor["total"] }}</td>
-            </tr>
-          @endforeach
+          @foreach ($montos->ingresos as $semana => $valor)
+              <tr>
+                <td>{{ $semana }}</td>
+
+                @if ($montos->ingresos[$semana] == 0)
+                    <td> - </td>
+                @else 
+                    <td>{{ '$'.$montos->ingresos[$semana] }}</td>
+                @endif
+
+                @if ($montos->egresos[$semana] == 0)
+                    <td> - </td>
+                @else 
+                    <td>{{ '$'.$montos->egresos[$semana] }}</td>
+                @endif
+
+                <td>{{ '$'. ($montos->ingresos[$semana] - $montos->egresos[$semana]) }}</td>
+              </tr>
+            @endforeach
           </tbody>
         </table>
       </div>
