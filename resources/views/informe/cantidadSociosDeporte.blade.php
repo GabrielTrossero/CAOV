@@ -5,7 +5,7 @@
 <div class="cuadro" style="padding-top:25px;">
   <div class="card">
     <div class="card-header">
-      <label class="col-md-8 col-form-label"><b>Gráficas de Socios por Deporte</b></label>
+      <label class="col-md-8 col-form-label"><b>Estadísticas de Deportes</b></label>
     </div>
     <div class="card-body border" align="center">
       <div class="contenido-graficas">
