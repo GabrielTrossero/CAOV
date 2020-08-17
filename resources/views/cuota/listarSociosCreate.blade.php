@@ -22,8 +22,8 @@
       <table id="idDataTable" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI</th>
             <th>Número de Socio</th>
+            <th>DNI</th>
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Categoria</th>
@@ -36,8 +36,8 @@
             <!--para no mostrar los vitalicios y los que no son titulares-->
             @if (($socio->vitalicio == 'n') && ((!$socio->idGrupoFamiliar) || ($socio->id == $socio->grupoFamiliar->titular)))
               <tr>
-                <td>{{ $socio->persona->DNI }}</td>
                 <td>{{ $socio->numSocio }}</td>
+                <td>{{ $socio->persona->DNI }}</td>
                 <td>{{ $socio->persona->apellido }}</td>
                 <td>{{ $socio->persona->nombres }}</td>
 

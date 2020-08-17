@@ -45,6 +45,20 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('N° Socio') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{$socio->numSocio}}" disabled>
+
+                                @if ($errors->first('numSocio'))
+                                  <div class="alert alert-danger errorForm">
+                                    {{ $errors->first('numSocio') }}
+                                  </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
 
                             <label for="DNI" class="col-md-4 col-form-label text-md-right">{{ __('DNI') }}</label>
 
@@ -54,20 +68,6 @@
                                 @if ($errors->first('DNI'))
                                   <div class="alert alert-danger errorForm">
                                     {{ $errors->first('DNI') }}
-                                  </div>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('N° Socio') }}</label>
-
-                            <div class="col-md-6">
-                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{$socio->numSocio}}" disabled>
-
-                                @if ($errors->first('numSocio'))
-                                  <div class="alert alert-danger errorForm">
-                                    {{ $errors->first('numSocio') }}
                                   </div>
                                 @endif
                             </div>

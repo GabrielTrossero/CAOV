@@ -36,8 +36,8 @@ class InformeController extends Controller
    */
   private function deudores()
   {
-    //obtengo todos los socios
-    $socios = Socio::all();
+    //obtengo todos los socios y los ordeno por numSocio (para mostrarlos ordenados en el PDF)
+    $socios = Socio::orderBy('numSocio', 'ASC')->get();
 
     //para llamar a las funciones que están en CuotaController
     $cuotaController = new CuotaController;

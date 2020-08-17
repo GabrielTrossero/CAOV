@@ -9,8 +9,8 @@
       <table class="table">
         <thead>
           <tr>
-            <th>DNI</th>
             <th>Numero de Socio</th>
+            <th>DNI</th>
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Categoria (actual)</th>
@@ -22,8 +22,8 @@
 
         <tbody>
           <tr>
-            <td>{{ $socio->persona->DNI }}</td>
             <td>{{ $socio->numSocio }}</td>
+            <td>{{ $socio->persona->DNI }}</td>
             <td>{{ $socio->persona->apellido }}</td>
             <td>{{ $socio->persona->nombres }}</td>
 

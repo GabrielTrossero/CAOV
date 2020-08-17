@@ -12,8 +12,8 @@
             @if ($cuota->montoCuota->tipo == 'g')
               <th>Tipo</th>
             @endif
-            <th>DNI</th>
             <th>Número de Socio</th>
+            <th>DNI</th>
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Categoria (actual)</th>
@@ -27,8 +27,8 @@
             @if ($cuota->montoCuota->tipo == 'g')
               <td><p style="color:red;">{{ 'Titular' }}</p></td>
             @endif
-            <td>{{ $cuota->socio->persona->DNI }}</td>
             <td>{{ $cuota->socio->numSocio }}</td>
+            <td>{{ $cuota->socio->persona->DNI }}</td>
             <td>{{ $cuota->socio->persona->apellido }}</td>
             <td>{{ $cuota->socio->persona->nombres }}</td>
 
@@ -70,8 +70,8 @@
                 @else
                   <td>{{ 'Adherente Cadete' }}</td>
                 @endif
-                <td>{{ $adherente->persona->DNI }}</td>
                 <td>{{ $adherente->numSocio }}</td>
+                <td>{{ $adherente->persona->DNI }}</td>
                 <td>{{ $adherente->persona->apellido }}</td>
                 <td>{{ $adherente->persona->nombres }}</td>
 

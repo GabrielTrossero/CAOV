@@ -42,8 +42,8 @@
       <table id="idDataTable" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI Socio</th>
             <th>N° de Socio</th>
+            <th>DNI Socio</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -54,8 +54,8 @@
         <tbody>
           @foreach ($cuotasHistoricas as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)
@@ -97,8 +97,8 @@
       <table id="idDataTable2" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI Socio</th>
             <th>N° de Socio</th>
+            <th>DNI Socio</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -109,8 +109,8 @@
         <tbody>
           @foreach ($cuotasMes as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)
@@ -152,8 +152,8 @@
       <table id="idDataTable3" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI Socio</th>
             <th>N° de Socio</th>
+            <th>DNI Socio</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -164,8 +164,8 @@
         <tbody>
           @foreach ($cuotasImpagas as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)
@@ -207,8 +207,8 @@
       <table id="idDataTable4" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI Socio</th>
             <th>N° de Socio</th>
+            <th>DNI Socio</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -219,8 +219,8 @@
         <tbody>
           @foreach ($cuotasAtrasadas as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)
@@ -262,8 +262,8 @@
       <table id="idDataTable5" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI Socio</th>
             <th>N° de Socio</th>
+            <th>DNI Socio</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -274,8 +274,8 @@
         <tbody>
           @foreach ($cuotasInhabilitadas as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)
@@ -317,8 +317,8 @@
       <table id="idDataTable6" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI Socio</th>
             <th>N° de Socio</th>
+            <th>DNI Socio</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -329,8 +329,8 @@
         <tbody>
           @foreach ($cuotasPagadas as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)
@@ -372,8 +372,8 @@
       <table id="idDataTable7" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI Socio</th>
             <th>N° de Socio</th>
+            <th>DNI Socio</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -384,8 +384,8 @@
         <tbody>
           @foreach ($cuotasPagadasMes as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)
@@ -427,8 +427,8 @@
       <table id="idDataTable8" class="table table-striped">
         <thead>
           <tr>
-            <th>DNI Socio</th>
             <th>N° de Socio</th>
+            <th>DNI Socio</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -439,8 +439,8 @@
         <tbody>
           @foreach ($cuotasFueraDeTermino as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)

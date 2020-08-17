@@ -11,8 +11,8 @@
       <table id="idDataTable" class="table table-striped">
         <thead>
           <tr>
+            <th>Número de Socio</th>
             <th>DNI</th>
-            <th>Numero de Socio</th>
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Cuotas que adeuda</th>
@@ -23,8 +23,8 @@
         <tbody>
           @foreach ($socios as $socio)
               <tr>
-                <td>{{ $socio->persona->DNI }}</td>
                 <td>{{ $socio->numSocio }}</td>
+                <td>{{ $socio->persona->DNI }}</td>
                 <td>{{ $socio->persona->apellido }}</td>
                 <td>{{ $socio->persona->nombres }}</td>
                 <td>{{ $socio->cantCuotas }}</td>

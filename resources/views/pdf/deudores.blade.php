@@ -10,21 +10,21 @@
     <h4 align="center">Socios deudores</h4>
     <div class="tam_letra_x-small">
       <table class="table table-striped">
-            <tr>
-                <th>DNI</th>
-                <th>N° de Socio</th>
-                <th>Apellido</th>
-                <th>Nombres</th>
-                <th>Cuotas que adeuda</th>
-                <th>Monto que adeuda</th>
-            </tr>
+          <tr>
+            <th>N° de Socio</th>
+            <th>DNI</th>
+            <th>Apellido</th>
+            <th>Nombres</th>
+            <th>Cuotas que adeuda</th>
+            <th>Monto que adeuda</th>
+          </tr>
         </thead>
         <tbody>
 
         @foreach ($socios as $socio)
           <tr>
-            <td>{{ $socio->persona->DNI }}</td>
             <td>{{ $socio->numSocio }}</td>
+            <td>{{ $socio->persona->DNI }}</td>
             <td>{{ $socio->persona->apellido }}</td>
             <td>{{ $socio->persona->nombres }}</td>
             <td>{{ $socio->cantCuotas }}</td>

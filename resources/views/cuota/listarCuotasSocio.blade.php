@@ -9,8 +9,8 @@
       <div class="card-body border">
         <table class="table">
           <tr>
-            <th>DNI</th>
             <th>Número de Socio</th>
+            <th>DNI</th>
             <th>Apellido</th>
             <th>Nombres</th>
             <th>Categoria (actual)</th>
@@ -21,8 +21,8 @@
           </tr>
 
           <tr>
-            <td>{{ $socio->persona->DNI }}</td>
             <td>{{ $socio->numSocio }}</td>
+            <td>{{ $socio->persona->DNI }}</td>
             <td>{{ $socio->persona->apellido }}</td>
             <td>{{ $socio->persona->nombres }}</td>
 
@@ -72,8 +72,8 @@
 
         <table class="table">
           <tr>
-            <th>DNI Socio Titular</th>
             <th>N° de Socio Titular</th>
+            <th>DNI Socio Titular</th>
             <th>Mes/Año</th>
             <th>Estado Cuota</th>
             <th>Monto Base</th>
@@ -83,8 +83,8 @@
           </tr>
           @foreach ($cuotas as $cuota)
             <tr>
-              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{ $cuota->socio->numSocio }}</td>
+              <td>{{ $cuota->socio->persona->DNI ?? 'Socio eliminado' }}</td>
               <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
 
               @if ($cuota->inhabilitada)
