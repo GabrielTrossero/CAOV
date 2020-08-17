@@ -55,3 +55,21 @@ table{
 .tam_letra_x-small{/*para achicar el tamaño de letra a x-small*/
 	font-size: xx-small;
 }
+
+h4 {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container-img {
+  margin-bottom: 5%;
+}
+
+img {
+  display: block;
+  width: 75%;
+  clear: both;
+}
+
+.page-break {
+  page-break-after: always;
+}

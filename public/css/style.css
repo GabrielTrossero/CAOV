@@ -145,6 +145,22 @@ nav.mostrar{
 	padding-bottom: 90px;
 }
 
+.contenido-graficas {
+	display: inline-block;
+}
+
+.container-grafico-informe {
+	width: 50%;
+	display: block;
+	float: left;
+	align-items: center;
+	margin-bottom: 5%;
+}
+
+.grafico-informe {
+	width: 80%;
+}
+
 .table{
 	text-align: center;
 }

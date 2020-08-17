@@ -2,28 +2,39 @@
 
 @section('content')
 
-<div class="cuadro">
+<div class="cuadro" style="padding-top:25px;">
   <div class="card">
     <div class="card-header">
-      <label class="col-md-8 col-form-label"><b>Cantidad de Socios por Deporte</b></label>
+      <label class="col-md-8 col-form-label"><b>Gráficas de Socios por Deporte</b></label>
     </div>
-    <div class="card-body border">
-      <table class="table">
-        <tr>
-          <th>Deporte</th>
-          <th>Cantidad de Socios</th>
-        </tr>
-
-        @foreach ($deportes as $deporte)
-          <tr>
-            <td>{{ $deporte->nombre }}</td>
-            <td>{{ $deporte->cantidadSocios }}</td>
-          </tr>
-        @endforeach
-
-
-      </table>
-
+    <div class="card-body border" align="center">
+      <div class="contenido-graficas">
+        <div class="container-grafico-informe">
+          <b>Socios por Deporte</b>
+          <br>
+          <img class="grafico-informe" id="socios-por-deporte" src="https://quickchart.io/chart?c={{ $tortaSociosPorDeporte }}" alt="Socios por Deporte">
+        </div>
+        <div class="container-grafico-informe">
+          <b>Socios Activos por Deporte</b>
+          <br>
+          <img class="grafico-informe" id="activos-por-deporte" src="https://quickchart.io/chart?c={{ $tortaActivosPorDeporte }}" alt="Socios Activos por Deporte">
+        </div>
+        <div  class="container-grafico-informe">
+          <b>Socios Cadetes por Deporte</b>
+          <br>
+          <img class="grafico-informe" id="cadetes-por-deporte" src="https://quickchart.io/chart?c={{ $tortaCadetesPorDeporte }}" alt="Socios Cadetes por Deporte">
+        </div>
+        <div  class="container-grafico-informe">
+          <b>Socios con Grupo Familiar por Deporte</b>
+          <br>
+          <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $tortaSociosConGrupoPorDeporte }}" alt="Socios Con Grupo Familiar por Deporte">
+        </div>
+        <div  class="container-grafico-informe">
+          <b>Socios por cantidad de Deportes que practican</b>
+          <br>
+          <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $barraCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
+        </div>
+      </div>
       <div class="card-footer row">
         <div >
           <a style="text-decoration:none" onclick="history.back()">
