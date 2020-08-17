@@ -12,7 +12,8 @@ class Socio extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'fechaNac', 'idGrupoFamiliar', 'idPersona', 'numSocio', 'oficio', 'vitalicio', 'activo'
+        'fechaNac', 'idGrupoFamiliar', 'idPersona', 'numSocio', 'oficio', 'vitalicio', 'activo',
+        'fechaCreacion', 'fechaBaja'
     ];
 
     //relacion con deportes

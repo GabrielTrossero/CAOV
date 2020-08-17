@@ -387,6 +387,15 @@ class SocioController extends Controller
       }
 
 
+      //si el socio se pone como activo, pongo en null la fechaBaja
+      if ($request->activo == 1) {
+        $request->fechaBaja = null;
+      } 
+      else { //si se pone como inactivo, pongo como fechaBaja la actual
+        $request->fechaBaja = Carbon::now();
+      }
+
+
       Socio::where('id', $request->id)
             ->update([
               'fechaNac' => $request->fechaNac,
@@ -395,7 +404,8 @@ class SocioController extends Controller
               'numSocio' => $request->numSocio,
               'oficio' => $request->oficio,
               'vitalicio' => $request->vitalicio,
-              'activo' => $request->activo
+              'activo' => $request->activo,
+              'fechaBaja' => $request->fechaBaja
             ]);
 
 
