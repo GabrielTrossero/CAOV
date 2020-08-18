@@ -73,16 +73,114 @@ class InformeController extends Controller
   }
 
   /**
+   * retorna un objeto JSON de cantidad de socios por numero de cuotas que adeudan
+   * 
+   * @param Socio $socios
+   */
+  public function graficoTortaCantidadCuotasAdeudadasPorSocios($socios)
+  {
+    $tortaCantidadCuotasAdeudadas = $this->getObjetoParaGraficaDeTorta();
+    $tortaCantidadCuotasAdeudadas->data->datasets[0]->label = "Cantidad de Socios por Cuotas adeudadas";
+
+    foreach($socios as $socio){
+      if(!in_array($socio->cantCuotas, $tortaCantidadCuotasAdeudadas->data->labels)) {
+        $tortaCantidadCuotasAdeudadas->data->labels[] = $socio->cantCuotas." cuotas";
+        $tortaCantidadCuotasAdeudadas->data->datasets[0]->data[$socio->cantCuotas] = 0;
+      }
+
+      $tortaCantidadCuotasAdeudadas->data->datasets[0]->data[$socio->cantCuotas] += 1;
+    }
+
+    sort($tortaCantidadCuotasAdeudadas->data->labels);
+    ksort($tortaCantidadCuotasAdeudadas->data->datasets[0]->data);
+    $tortaCantidadCuotasAdeudadas->data->datasets[0]->data = array_values($tortaCantidadCuotasAdeudadas->data->datasets[0]->data);
+
+    return json_encode($tortaCantidadCuotasAdeudadas);
+  }
+
+  /**
+   * retorna un objeto genérico para graficos de torta por categoria
+   */
+  public function getObjetoParaGraficaDeTortaPorCategoria($objetoGraficaTorta)
+  {
+    $objetoGraficaTorta->data->labels = ["activos", "cadetes", "grupos familiares"];
+    $objetoGraficaTorta->data->datasets[0]->data["activos"] = 0;
+    $objetoGraficaTorta->data->datasets[0]->data["cadetes"] = 0;
+    $objetoGraficaTorta->data->datasets[0]->data["grupos familiares"] = 0;
+
+    return $objetoGraficaTorta;
+  }
+
+  /**
+   * retorna un objeto JSON de cantidad de cuotas que se adeudan por categoria
+   *
+   * @param Socio $socios
+   */
+  public function graficoTortaCantidadCuotasAdeudadasPorCategoria($socios)
+  {
+    $tortaCantidadCuotasAdeudadas = $this->getObjetoParaGraficaDeTorta();
+    $tortaCantidadCuotasAdeudadas = $this->getObjetoParaGraficaDeTortaPorCategoria($tortaCantidadCuotasAdeudadas);
+
+    $cuotaController = new CuotaController;
+
+    foreach ($socios as $socio) {
+      if (isset($socio->idGrupoFamiliar)) {
+        $tortaCantidadCuotasAdeudadas->data->datasets[0]->data["grupos familiares"] += $socio->cantCuotas;
+      } else if ($cuotaController->calculaEdad($socio) >= 18) {
+        $tortaCantidadCuotasAdeudadas->data->datasets[0]->data["activos"] += $socio->cantCuotas;
+      } else if ($cuotaController->calculaEdad($socio) < 18) {
+        $tortaCantidadCuotasAdeudadas->data->datasets[0]->data["cadetes"] += $socio->cantCuotas;
+      }
+    }
+
+    $tortaCantidadCuotasAdeudadas->data->datasets[0]->data = array_values($tortaCantidadCuotasAdeudadas->data->datasets[0]->data);
+
+    return json_encode($tortaCantidadCuotasAdeudadas);
+  }
+
+  /**
+   * retorna un objeto JSON del monto total adeudado por categoria
+   *
+   * @param Socio $socios
+   */
+  public function graficoTortaMontoTotalAdeudadoPorCategoria($socios)
+  {
+    $tortaTotalAdeudadoPorCategoria = $this->getObjetoParaGraficaDeTorta();
+    $tortaTotalAdeudadoPorCategoria = $this->getObjetoParaGraficaDeTortaPorCategoria($tortaTotalAdeudadoPorCategoria);
+
+    $cuotaController = new CuotaController;
+
+    foreach ($socios as $socio) {
+      if (isset($socio->idGrupoFamiliar)) {
+        $tortaTotalAdeudadoPorCategoria->data->datasets[0]->data["grupos familiares"] += $socio->montoDeuda;
+      } else if ($cuotaController->calculaEdad($socio) >= 18) {
+        $tortaTotalAdeudadoPorCategoria->data->datasets[0]->data["activos"] += $socio->montoDeuda;
+      } else if ($cuotaController->calculaEdad($socio) < 18) {
+        $tortaTotalAdeudadoPorCategoria->data->datasets[0]->data["cadetes"] += $socio->montoDeuda;
+      }
+    }
+
+    $tortaTotalAdeudadoPorCategoria->data->datasets[0]->data = array_values($tortaTotalAdeudadoPorCategoria->data->datasets[0]->data);
+
+    return json_encode($tortaTotalAdeudadoPorCategoria);
+  }
+
+  /**
    * Show a list of Socios Deudores.
    *
    * @return \Illuminate\Http\Response
    */
   public function getDeudores()
   {
-    //llamo a la función deudores
     $socios = $this->deudores();
-
-    return view('informe.sociosDeudores', compact('socios'));
+    $tortaCantidadCuotasAdeudadas = $this->graficoTortaCantidadCuotasAdeudadasPorSocios($socios);
+    $tortaCantidadCuotasAdeudadasCategoria = $this->graficoTortaCantidadCuotasAdeudadasPorCategoria($socios);
+    $tortaMontoTotalAdeudadoPorCategoria = $this->graficoTortaMontoTotalAdeudadoPorCategoria($socios);
+    
+    return view('informe.sociosDeudores', compact('socios',
+                                                  'tortaCantidadCuotasAdeudadas',
+                                                  'tortaCantidadCuotasAdeudadasCategoria',
+                                                  'tortaMontoTotalAdeudadoPorCategoria'));
   }
 
   /**
@@ -94,8 +192,14 @@ class InformeController extends Controller
   {
     //llamo a la función deudores
     $socios = $this->deudores();
+    $tortaCantidadCuotasAdeudadas = $this->graficoTortaCantidadCuotasAdeudadasPorSocios($socios);
+    $tortaCantidadCuotasAdeudadasCategoria = $this->graficoTortaCantidadCuotasAdeudadasPorCategoria($socios);
+    $tortaMontoTotalAdeudadoPorCategoria = $this->graficoTortaMontoTotalAdeudadoPorCategoria($socios);
 
-    $pdf = PDF::loadView('pdf.deudores', ['socios' => $socios]);
+    $pdf = PDF::loadView('pdf.deudores', ['socios' => $socios,
+                                          'tortaCantidadCuotasAdeudadas' => $tortaCantidadCuotasAdeudadas,
+                                          'tortaCantidadCuotasAdeudadasCategoria' => $tortaCantidadCuotasAdeudadasCategoria,
+                                          'tortaMontoTotalAdeudadoPorCategoria' => $tortaMontoTotalAdeudadoPorCategoria]);
 
     return $pdf->download('deudores.pdf');
   }
@@ -342,27 +446,27 @@ class InformeController extends Controller
    *
    * @return void
    */
-  public function graficoBarraCantidadDeportesPracticadosPorSocios($socios)
+  public function graficoTortaCantidadDeportesPracticadosPorSocios($socios)
   {
-    $barraCantidadDeportesPracticados = $this->getObjetoParaGraficaDeTorta();
+    $tortaCantidadDeportesPracticados = $this->getObjetoParaGraficaDeTorta();
 
-    $barraCantidadDeportesPracticados->data->datasets[0]->label = "Cantidad de Socios";
+    $tortaCantidadDeportesPracticados->data->datasets[0]->label = "Cantidad de Socios por Deportes Practicados";
 
     foreach ($socios as $socio) {
       $cantidadDeportes = sizeof($socio->deportes);
-      if(!in_array($cantidadDeportes, $barraCantidadDeportesPracticados->data->labels)) {
-        $barraCantidadDeportesPracticados->data->labels[] = $cantidadDeportes." deportes";
-        $barraCantidadDeportesPracticados->data->datasets[0]->data[$cantidadDeportes] = 0;
+      if(!in_array($cantidadDeportes, $tortaCantidadDeportesPracticados->data->labels)) {
+        $tortaCantidadDeportesPracticados->data->labels[] = $cantidadDeportes." deportes";
+        $tortaCantidadDeportesPracticados->data->datasets[0]->data[$cantidadDeportes] = 0;
       }
 
-      $barraCantidadDeportesPracticados->data->datasets[0]->data[$cantidadDeportes] += 1;
+      $tortaCantidadDeportesPracticados->data->datasets[0]->data[$cantidadDeportes] += 1;
     }
 
-    sort($barraCantidadDeportesPracticados->data->labels);
-    ksort($barraCantidadDeportesPracticados->data->datasets[0]->data);
-    $barraCantidadDeportesPracticados->data->datasets[0]->data = array_values($barraCantidadDeportesPracticados->data->datasets[0]->data);
+    sort($tortaCantidadDeportesPracticados->data->labels);
+    ksort($tortaCantidadDeportesPracticados->data->datasets[0]->data);
+    $tortaCantidadDeportesPracticados->data->datasets[0]->data = array_values($tortaCantidadDeportesPracticados->data->datasets[0]->data);
 
-    return json_encode($barraCantidadDeportesPracticados);
+    return json_encode($tortaCantidadDeportesPracticados);
   }
 
   /**
@@ -385,7 +489,7 @@ class InformeController extends Controller
     $tortaActivosPorDeporte = $this->graficoTortaActivosPorDeporte($deportes);
     $tortaCadetesPorDeporte = $this->graficoTortaCadetesPorDeporte($deportes);
     $tortaSociosConGrupoPorDeporte = $this->graficoTortaSociosConGrupoPorDeporte($deportes);
-    $barraCantidadDeportesPracticados = $this->graficoBarraCantidadDeportesPracticadosPorSocios($socios); 
+    $barraCantidadDeportesPracticados = $this->graficoTortaCantidadDeportesPracticadosPorSocios($socios); 
 
     //retorno la vista con la cantidad de socios por deporte
     return view('informe.cantidadSociosDeporte', compact(['tortaSociosPorDeporte',

@@ -2,6 +2,33 @@
 
 @section('content')
 
+<div class="cuadro" style="padding-top:25px; padding-bottom:15px;">
+  <div class="card">
+    <div class="card-header">
+      <label class="col-md-8 col-form-label"><b>Estadísticas de Socios Deudores</b></label>
+    </div>
+    <div class="card-body border" align="center">
+      <div class="contenido-graficas">
+        <div class="container-grafico-informe">
+          <b>Socios por cantidad de Cuotas que adeudan</b>
+          <br>
+          <img class="grafico-informe" id="socios-por-cantidad-cuotas-adeudadas" src="https://quickchart.io/chart?c={{ $tortaCantidadCuotasAdeudadas }}" alt="Socios por cantidad de Cuotas que adeudan">
+        </div>
+        <div class="container-grafico-informe">
+          <b>Cantidad de Cuotas adeudadas por Categoría</b>
+          <br>
+          <img class="grafico-informe" id="cuotas-adeudadas-por-categoria" src="https://quickchart.io/chart?c={{ $tortaCantidadCuotasAdeudadasCategoria }}" alt="Cantidad de Cuotas adeudadas por Categoría">
+        </div>
+        <div class="container-grafico-informe">
+          <b>Monto Total ($) adeudado por Categoría</b>
+          <br>
+          <img class="grafico-informe" id="monto-adeudado-por-categoria" src="https://quickchart.io/chart?c={{ $tortaMontoTotalAdeudadoPorCategoria }}" alt="Monto Total adeudado por Categoría">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="cuadro">
   <div class="card">
     <div class="card-header">
