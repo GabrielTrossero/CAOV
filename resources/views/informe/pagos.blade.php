@@ -2,6 +2,38 @@
 
 @section('content')
 
+<div class="cuadro" style="padding-top:25px; padding-bottom:15px;">
+  <div class="card">
+    <div class="card-header">
+      <label class="col-md-8 col-form-label"><b>Estadísticas de Pagos</b></label>
+    </div>
+    <div class="card-body border" align="center">
+      <div class="contenido-graficas">
+        <div class="container-grafico-informe">
+          <b>Monto Total ($) por tipo de Ingreso</b>
+          <br>
+          <img class="grafico-informe" id="monto-total-pagos" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngreso }}" alt="Monto Total por tipo de Ingreso">
+        </div>
+        <div class="container-grafico-informe">
+          <b>Monto Total ($) por tipo de Ingreso del Dia</b>
+          <br>
+          <img class="grafico-informe" id="monto-total-pagos-dia" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoHoy }}" alt="Monto Total por tipo de Ingreso del Dia">
+        </div>
+        <div class="container-grafico-informe">
+          <b>Monto Total ($) por tipo de Ingreso de la Semana</b>
+          <br>
+          <img class="grafico-informe" id="monto-total-pagos-semana" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoSemana }}" alt="Monto Total por tipo de Ingreso de la Semana">
+        </div>
+        <div class="container-grafico-informe">
+          <b>Monto Total ($) por tipo de Ingreso del Mes</b>
+          <br>
+          <img class="grafico-informe" id="monto-total-pagos-mes" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoMes }}" alt="Monto Total por tipo de Ingreso del Mes">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="cuadro">
   <div class="card">
     <div class="card-header">

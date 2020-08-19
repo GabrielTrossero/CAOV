@@ -1254,6 +1254,94 @@ class InformeController extends Controller
   }
 
   /**
+   * retorna un objeto para grafica de torta por tipos de ingresos en pagos
+   * 
+   * @return stdClass
+   */
+  public function getObjetoParaGraficaDeTortaPorTipoIngreso($objetoGraficaTorta)
+  {
+    $objetoGraficaTorta->data->labels = ["cuotas", "alquiler inmuebles", "alquiler muebles"];
+    $objetoGraficaTorta->data->datasets[0]->data["cuotas"] = 0;
+    $objetoGraficaTorta->data->datasets[0]->data["inmuebles"] = 0;
+    $objetoGraficaTorta->data->datasets[0]->data["muebles"] = 0;
+
+    return $objetoGraficaTorta;
+  }
+
+  /**
+   * retorna un objeto JSON del monto total pagado por tipo de ingreso
+   *
+   * @param ComprobanteCuota $cuotasPagadas
+   * @param ReservaInmueble $reservasInmueble
+   * @param ReservaMueble $reservasMueble
+   * @param Integer $filtro [0: todas las fechas, 1: hoy, 2: esta semana, 3: este mes]
+   * @return String
+   */
+  public function graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble, $filtro = 0)
+  {
+    $tortaMontoPagado = $this->getObjetoParaGraficaDeTorta();
+    $tortaMontoPagado = $this->getObjetoParaGraficaDeTortaPorTipoIngreso($tortaMontoPagado);
+
+    if ($filtro == 1) {
+      $cuotasPagadas = $cuotasPagadas->filter(function ($cuota){
+        return $this->fechaHoy()->format("Y-m-d") == $cuota->fechaPago;
+      });
+      $reservasInmueble = $reservasInmueble->filter(function ($reserva){
+        return $this->fechaHoy()->format("Y-m-d") == $reserva->fechaSolicitud;
+      });
+      $reservasMueble = $reservasMueble->filter(function ($reserva){
+        return $this->fechaHoy()->format("Y-m-d") == $reserva->fechaSolicitud;
+      });
+    } else if ($filtro == 2) {
+      $cuotasPagadas = $cuotasPagadas->filter(function ($cuota){
+        $fechaCuota = Carbon::parse($cuota->fechaPago);
+        return (($this->fechaHoy()->year == $fechaCuota->year) 
+                && ($this->fechaHoy()->weekOfYear == $fechaCuota->weekOfYear));
+      });
+      $reservasInmueble = $reservasInmueble->filter(function ($reserva){
+        $fechaReserva = Carbon::parse($reserva->fechaSolicitud);
+        return (($this->fechaHoy()->year == $fechaReserva->year) 
+                && ($this->fechaHoy()->weekOfYear == $fechaReserva->weekOfYear));
+      });
+      $reservasMueble = $reservasMueble->filter(function ($reserva){
+        $fechaReserva = Carbon::parse($reserva->fechaSolicitud);
+        return (($this->fechaHoy()->year == $fechaReserva->year) 
+                && ($this->fechaHoy()->weekOfYear == $fechaReserva->weekOfYear));
+      });
+    } else if ($filtro == 3) {
+      $cuotasPagadas = $cuotasPagadas->filter(function ($cuota){
+        $fechaCuota = Carbon::parse($cuota->fechaPago);
+        return (($this->fechaHoy()->year == $fechaCuota->year) 
+                && ($this->fechaHoy()->month == $fechaCuota->month));
+      });
+      $reservasInmueble = $reservasInmueble->filter(function ($reserva){
+        $fechaReserva = Carbon::parse($reserva->fechaSolicitud);
+        return (($this->fechaHoy()->year == $fechaReserva->year) 
+                && ($this->fechaHoy()->month == $fechaReserva->month));
+      });
+      $reservasMueble = $reservasMueble->filter(function ($reserva){
+        $fechaReserva = Carbon::parse($reserva->fechaSolicitud);
+        return (($this->fechaHoy()->year == $fechaReserva->year) 
+                && ($this->fechaHoy()->month == $fechaReserva->month));
+      });
+    }
+
+    foreach ($cuotasPagadas as $cuota) {
+      $tortaMontoPagado->data->datasets[0]->data["cuotas"] += $cuota->montoTotal;
+    }
+    foreach ($reservasInmueble as $reservaInmueble) {
+      $tortaMontoPagado->data->datasets[0]->data["inmuebles"] += $reservaInmueble->costoTotal;
+    }
+    foreach ($reservasMueble as $reservaMueble) {
+      $tortaMontoPagado->data->datasets[0]->data["muebles"] += $reservaMueble->costoTotal;
+    }
+
+    $tortaMontoPagado->data->datasets[0]->data = array_values($tortaMontoPagado->data->datasets[0]->data);
+
+    return json_encode($tortaMontoPagado);
+  }
+
+  /**
    * Show a list with Pagos.
    *
    * @return \Illuminate\Http\Response
@@ -1268,15 +1356,23 @@ class InformeController extends Controller
     }
 
     //tomo los alquileres de inmuebles
-    $reservasInmueble = ReservaInmueble::all()->where('numRecibo', '<>', null);
+    $reservasInmueble = ReservaInmueble::with("inmueble")->where('numRecibo', '<>', null)->get();
 
     //tomo los alquileres de muebles
-    $reservasMueble = ReservaMueble::all()->where('numRecibo', '<>', null);
+    $reservasMueble = ReservaMueble::with("mueble")->where('numRecibo', '<>', null)->get();
+
+    $tortaMontoPorTipoDeIngreso = $this->graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble);
+    $tortaMontoPorTipoDeIngresoHoy = $this->graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble, 1);
+    $tortaMontoPorTipoDeIngresoSemana = $this->graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble, 2);
+    $tortaMontoPorTipoDeIngresoMes = $this->graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble, 3);
 
     return view('informe.pagos', compact(['cuotasPagadas',
                                           'reservasInmueble',
-                                          'reservasMueble'
-                                          ]));
+                                          'reservasMueble',
+                                          'tortaMontoPorTipoDeIngreso',
+                                          'tortaMontoPorTipoDeIngresoHoy',
+                                          'tortaMontoPorTipoDeIngresoSemana',
+                                          'tortaMontoPorTipoDeIngresoMes']));
   }
 
   /**
@@ -1299,9 +1395,18 @@ class InformeController extends Controller
     //tomo los alquileres de muebles
     $reservasMueble = ReservaMueble::all()->where('numRecibo', '<>', null);
 
+    $tortaMontoPorTipoDeIngreso = $this->graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble);
+    $tortaMontoPorTipoDeIngresoHoy = $this->graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble, 1);
+    $tortaMontoPorTipoDeIngresoSemana = $this->graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble, 2);
+    $tortaMontoPorTipoDeIngresoMes = $this->graficoTortaMontoTotalPorTipoDeIngreso($cuotasPagadas, $reservasInmueble, $reservasMueble, 3);
+
     $pdf = PDF::loadView('pdf.pagos', ['cuotasPagadas' => $cuotasPagadas,
                                        'reservasInmueble' => $reservasInmueble,
-                                       'reservasMueble' => $reservasMueble]);
+                                       'reservasMueble' => $reservasMueble,
+                                       'tortaMontoPorTipoDeIngreso' => $tortaMontoPorTipoDeIngreso,
+                                       'tortaMontoPorTipoDeIngresoHoy' => $tortaMontoPorTipoDeIngresoHoy,
+                                       'tortaMontoPorTipoDeIngresoSemana' => $tortaMontoPorTipoDeIngresoSemana,
+                                       'tortaMontoPorTipoDeIngresoMes' => $tortaMontoPorTipoDeIngresoMes]);
 
     return $pdf->download('pagos.pdf');
   }

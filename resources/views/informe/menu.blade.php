@@ -11,7 +11,7 @@
   <br>
   <a href="{{ url('informe/ingresos_egresos') }}"><i class="icono3 fas fa-hand-holding-usd"></i> &nbsp; Ingresos/Egresos</a>
   <br>
-  <a href="{{ url('informe/pagos') }}"><i class="icono3 fas fa-money-check-alt"></i> &nbsp; Listar Pagos</a>
+  <a href="{{ url('informe/pagos') }}"><i class="icono3 fas fa-money-check-alt"></i> &nbsp; Estadísticas de Pagos</a>
 
 </div>
 
