@@ -16,6 +16,7 @@
               <th>Monto</th>
               <th>Descripcion</th>
               <th>Numero de Recibo</th>
+              <th>Más Información</th>
             </tr>
           </thead>
           <tbody>
@@ -31,6 +32,7 @@
                 <td>{{ '$'.$movExtra->monto }}</td>
                 <td>{{ $movExtra->descripcion }}</td>
                 <td>{{ $movExtra->numRecibo }}</td>
+                <td><a href="{{ url('/registro/show') }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
             @endforeach
             @foreach ($alquileresInmueblePagos as $alquilerInmueble)
@@ -40,6 +42,7 @@
                 <td>{{ '$'.$alquilerInmueble->costoTotal }}</td>
                 <td>{{ 'Alquileres de Inmuebles' }}</td>
                 <td>{{ $alquilerInmueble->numRecibo }}</td>
+                <td><a href="{{ url('/alquilerinmueble/show/'.$alquilerInmueble->id) }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
             @endforeach
             @foreach ($alquileresMueblePagos as $alquilerMueble)
@@ -49,6 +52,7 @@
                 <td>{{ '$'.$alquilerMueble->costoTotal }}</td>
                 <td>{{ 'Alquileres de Muebles' }}</td>
                 <td>{{ $alquilerMueble->numRecibo }}</td>
+                <td><a href="{{ url('/alquilermueble/show/'.$alquilerMueble->id) }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
             @endforeach
             @foreach ($cuotasPagadas as $cuota)
@@ -58,6 +62,7 @@
                 <td>{{ '$'.$cuota->montoTotal }}</td>
                 <td>{{ 'Cuota' }}</td>
                 <td>{{ '-' }}</td>
+                <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
             @endforeach
   
