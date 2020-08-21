@@ -310,6 +310,30 @@ class InformeController extends Controller
   }
 
   /**
+   * retorna un objeto genérico para graficos de linea
+   */
+  public function getObjetoParaGraficaDeLinea()
+  {
+    $objetoGraficaLinea = new stdClass;
+    $objetoGraficaLinea->type = "line";
+    $objetoGraficaLinea->data = new stdClass;
+    $objetoGraficaLinea->data->labels = array();
+    $objetoGraficaLinea->data->datasets = array();
+    $objetoGraficaLinea->data->datasets[0] = new stdClass;
+    $objetoGraficaLinea->data->datasets[0]->label = "Ingresos";
+    $objetoGraficaLinea->data->datasets[0]->data = array();
+    $objetoGraficaLinea->data->datasets[0]->fill = false;
+    $objetoGraficaLinea->data->datasets[0]->borderColor = 'blue';
+    $objetoGraficaLinea->data->datasets[1] = new stdClass;
+    $objetoGraficaLinea->data->datasets[1]->label = "Egresos";
+    $objetoGraficaLinea->data->datasets[1]->data = array();
+    $objetoGraficaLinea->data->datasets[1]->fill = false;
+    $objetoGraficaLinea->data->datasets[1]->borderColor = 'green';
+
+    return $objetoGraficaLinea;
+  }
+
+  /**
    * retorna un objeto genérico para graficos de torta
    */
   public function getObjetoParaGraficaDeTorta()
@@ -679,6 +703,42 @@ class InformeController extends Controller
   }
 
   /**
+   * retorna un objeto JSON para grafica de linea del balance diario (14 dias) de ingresos y egresos
+   *
+   * @param Collection $montos
+   * @return void
+   */
+  public function graficoLineaBalanceIngresosEgresosDiarios($montos)
+  {
+    $lineaBalanceDiario = $this->getObjetoParaGraficaDeLinea();
+    $fechaHoy = Carbon::now();
+    $fechaHoyMenosCatorceDias = Carbon::now()->subDays(14);
+
+    foreach($montos->ingresos as $fecha => $monto) {
+      if(Carbon::parse($fecha)->between($fechaHoyMenosCatorceDias, $fechaHoy)) {
+        if(!in_array($fecha, $lineaBalanceDiario->data->labels)) {
+          $lineaBalanceDiario->data->labels[] = date("d-m-Y", strtotime($fecha));
+          $lineaBalanceDiario->data->datasets[0]->data[$fecha] = 0;
+          $lineaBalanceDiario->data->datasets[1]->data[$fecha] = 0;
+        }
+
+        $lineaBalanceDiario->data->datasets[0]->data[$fecha] += $monto;
+      }
+    }
+
+    foreach($montos->egresos as $fecha => $monto) {
+      if(Carbon::parse($fecha)->between($fechaHoyMenosCatorceDias, $fechaHoy)) {
+        $lineaBalanceDiario->data->datasets[1]->data[$fecha] += $monto;
+      }
+    }
+
+    $lineaBalanceDiario->data->datasets[0]->data = array_values($lineaBalanceDiario->data->datasets[0]->data);
+    $lineaBalanceDiario->data->datasets[1]->data = array_values($lineaBalanceDiario->data->datasets[1]->data);
+
+    return json_encode($lineaBalanceDiario);
+  }
+
+  /**
    * Muestra el listado general de los Ingresos y Egresos Diarios con su Total
    * 
    * @return \Illuminate\Http\Response
@@ -687,8 +747,10 @@ class InformeController extends Controller
   {
     //llamo a la función ingresosEgresosDiarios
     $montos = $this->ingresosEgresosDiarios();
+    $lineaBalanceIngresosEgresosDiarios = $this->graficoLineaBalanceIngresosEgresosDiarios($montos);
 
-    return view('informe.ingresosEgresos.ingresosEgresosDiariosGenerales', compact('montos'));
+    return view('informe.ingresosEgresos.ingresosEgresosDiariosGenerales', compact('montos',
+                                                                                   'lineaBalanceIngresosEgresosDiarios'));
   }
 
   /**
@@ -704,7 +766,10 @@ class InformeController extends Controller
     // Ordeno por fecha acendente
     ksort($montos->ingresos);
 
-    $pdf = PDF::loadView('pdf.ingresosEgresosDiarios', ['montos' => $montos]);
+    $lineaBalanceIngresosEgresosDiarios =  $this->graficoLineaBalanceIngresosEgresosDiarios($montos);
+
+    $pdf = PDF::loadView('pdf.ingresosEgresosDiarios', ['montos' => $montos,
+                                                        'lineaBalanceIngresosEgresosDiarios' => $lineaBalanceIngresosEgresosDiarios]);
 
     return $pdf->download('ingresos-egresos-diarios.pdf');
   }
@@ -896,6 +961,52 @@ class InformeController extends Controller
   }
 
   /**
+   * retorna un objeto JSON con el balance de las ultimas 8 semanas de ingresos y egresos
+   *
+   * @param Collection $montos
+   * @return string
+   */
+  public function graficoLineaBalanceIngresosEgresosSemanales($montos)
+  {
+    ksort($montos->ingresos);
+    ksort($montos->egresos);
+    $lineaBalanceSemanal = $this->getObjetoParaGraficaDeLinea();
+    $fechaHoy = Carbon::now();
+    $fechaHoyMenosOchoSemanas = Carbon::now()->subWeeks(8);
+
+    foreach($montos->ingresos as $fecha => $monto) {
+      $anio = substr($fecha, 0, 4);
+      $semana = substr($fecha, 7, 2);
+      $fechaSemana = Carbon::parse($anio)->setISODate($anio, $semana);
+
+      if($fechaSemana->between($fechaHoyMenosOchoSemanas, $fechaHoy)) {
+        if(!in_array($fecha, $lineaBalanceSemanal->data->labels)) {
+          $lineaBalanceSemanal->data->labels[] = $fecha;
+          $lineaBalanceSemanal->data->datasets[0]->data[$fecha] = 0;
+          $lineaBalanceSemanal->data->datasets[1]->data[$fecha] = 0;
+        }
+
+        $lineaBalanceSemanal->data->datasets[0]->data[$fecha] += $monto;
+      }
+    }
+
+    foreach($montos->egresos as $fecha => $monto) {
+      $anio = substr($fecha, 0, 4);
+      $semana = substr($fecha, 7, 2);
+      $fechaSemana = Carbon::parse($anio)->setISODate($anio, $semana);
+
+      if($fechaSemana->between($fechaHoyMenosOchoSemanas, $fechaHoy)) {
+        $lineaBalanceSemanal->data->datasets[1]->data[$fecha] += $monto;
+      }
+    }
+
+    $lineaBalanceSemanal->data->datasets[0]->data = array_values($lineaBalanceSemanal->data->datasets[0]->data);
+    $lineaBalanceSemanal->data->datasets[1]->data = array_values($lineaBalanceSemanal->data->datasets[1]->data);
+    
+    return json_encode($lineaBalanceSemanal);
+  }
+
+  /**
    * Muestra el listado general de los Ingresos y Egresos Semanales con su Total
    * 
    * @return \Illuminate\Http\Response
@@ -904,8 +1015,10 @@ class InformeController extends Controller
   {
     //llamo a la función ingresosEgresosSemanales
     $montos = $this->ingresosEgresosSemanales();
-
-    return view('informe.ingresosEgresos.ingresosEgresosSemanalesGenerales', compact('montos'));
+    $lineaBalanceIngresosEgresosSemanales = $this->graficoLineaBalanceIngresosEgresosSemanales($montos);
+    
+    return view('informe.ingresosEgresos.ingresosEgresosSemanalesGenerales', compact('montos',
+                                                                                     'lineaBalanceIngresosEgresosSemanales'));
   }
 
   /**
@@ -917,11 +1030,13 @@ class InformeController extends Controller
   {
     //llamo a la función ingresosEgresosSemanales
     $montos = $this->ingresosEgresosSemanales();
+    $lineaBalanceIngresosEgresosSemanales = $this->graficoLineaBalanceIngresosEgresosSemanales($montos);
 
     // Ordeno por semana/anio acendente
     ksort($montos->ingresos);
 
-    $pdf = PDF::loadView('pdf.ingresosEgresosSemanales', ['montos' => $montos]);
+    $pdf = PDF::loadView('pdf.ingresosEgresosSemanales', ['montos' => $montos,
+                                                          'lineaBalanceIngresosEgresosSemanales' => $lineaBalanceIngresosEgresosSemanales]);
 
     return $pdf->download('ingresos-egresos-semanales.pdf');
   }
@@ -1137,6 +1252,53 @@ class InformeController extends Controller
   }
 
   /**
+   * retorna un objeto JSON con el balance de los ultimos 12 meses de ingresos y egresos
+   *
+   * @param Collection $montos
+   * @return string
+   */
+  public function graficoLineaBalanceIngresosEgresosMensuales($montos)
+  {
+    ksort($montos->ingresos);
+    ksort($montos->egresos);
+    $lineaBalanceMensual = $this->getObjetoParaGraficaDeLinea();
+    $fechaHoy = Carbon::now();
+    $fechaHoyMenosDoceMeses = Carbon::now()->subMonths(12);
+
+    foreach($montos->ingresos as $fecha => $monto) {
+      $anio = substr($fecha, 0, 4);
+      $mes = substr($fecha, 7, 2);
+      $fechaMes = Carbon::parse($anio."-".$mes);
+
+      if($fechaMes->between($fechaHoyMenosDoceMeses, $fechaHoy)) {
+        if(!in_array($fecha, $lineaBalanceMensual->data->labels)) {
+          $lineaBalanceMensual->data->labels[] = $fecha;
+          $lineaBalanceMensual->data->datasets[0]->data[$fecha] = 0;
+          $lineaBalanceMensual->data->datasets[1]->data[$fecha] = 0;
+        }
+
+        $lineaBalanceMensual->data->datasets[0]->data[$fecha] += $monto;
+      }
+    }
+
+    foreach($montos->egresos as $fecha => $monto) {
+      $anio = substr($fecha, 0, 4);
+      $mes = substr($fecha, 7, 2);
+      $fechaMes = Carbon::parse($anio."-".$mes);
+
+      if($fechaMes->between($fechaHoyMenosDoceMeses, $fechaHoy)) {
+        $lineaBalanceMensual->data->datasets[1]->data[$fecha] += $monto;
+      }
+    }
+    
+    $lineaBalanceMensual->data->datasets[0]->data = array_values($lineaBalanceMensual->data->datasets[0]->data);
+    $lineaBalanceMensual->data->datasets[1]->data = array_values($lineaBalanceMensual->data->datasets[1]->data);
+    
+    return json_encode($lineaBalanceMensual);
+  }
+
+
+  /**
    * Muestra el listado general de los Ingresos y Egresos Semanales con su Total
    * 
    * @return \Illuminate\Http\Response
@@ -1145,8 +1307,10 @@ class InformeController extends Controller
   {
     //llamo a la función ingresosEgresosMensuales
     $montos = $this->ingresosEgresosMensuales();
-
-    return view('informe.ingresosEgresos.ingresosEgresosMensualesGenerales', compact('montos'));
+    $lineaBalanceIngresosEgresosMensual = $this->graficoLineaBalanceIngresosEgresosMensuales($montos);
+    
+    return view('informe.ingresosEgresos.ingresosEgresosMensualesGenerales', compact('montos',
+                                                                                     'lineaBalanceIngresosEgresosMensual'));
   }
 
   /**
@@ -1158,11 +1322,13 @@ class InformeController extends Controller
   {
     //llamo a la función ingresosEgresosMensuales
     $montos = $this->ingresosEgresosMensuales();
+    $lineaBalanceIngresosEgresosMensual = $this->graficoLineaBalanceIngresosEgresosMensuales($montos);
 
     // Ordeno por mes/anio acendente
     ksort($montos->ingresos);
 
-    $pdf = PDF::loadView('pdf.ingresosEgresosMensuales', ['montos' => $montos]);
+    $pdf = PDF::loadView('pdf.ingresosEgresosMensuales', ['montos' => $montos,
+                                                          'lineaBalanceIngresosEgresosMensual' => $lineaBalanceIngresosEgresosMensual]);
 
     return $pdf->download('ingresos-egresos-mensuales.pdf');
   }

@@ -157,6 +157,14 @@ nav.mostrar{
 	margin-bottom: 5%;
 }
 
+.container-grafico-informe-ingresos-egresos {
+	width: 80%;
+	display: block;
+	float: left;
+	align-items: center;
+	margin-bottom: 5%;
+}
+
 .grafico-informe {
 	width: 80%;
 }

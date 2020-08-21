@@ -2,7 +2,24 @@
 
 @section('content')
 
-<div class="cuadro">
+<div class="cuadro" style="padding-top:25px;">
+  <div class="card">
+    <div class="card-header">
+      <label class="col-md-8 col-form-label"><b>Estadísticas de Ingresos y Egresos Mensuales</b></label>
+    </div>
+    <div class="card-body border" align="center">
+      <div class="contenido-graficas">
+        <div class="ccontainer-grafico-informe-ingresos-egresos">
+          <b>Balance de Ingresos y Egresos (últimos 12 meses)</b>
+          <br>
+          <img class="grafico-informe" id="balance-doce-meses" src="https://quickchart.io/chart?c={{ $lineaBalanceIngresosEgresosMensual }}" alt="Balance de Ingresos y Egresos (últimos 12 meses)">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cuadro" style="margin-top: -7%">
     <div class="card">
       <div class="card-header">
         <label class="col-md-8 col-form-label"><b>Listado de Ingresos/Egresos Mensuales Generales</b></label>

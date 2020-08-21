@@ -2,7 +2,24 @@
 
 @section('content')
 
-<div class="cuadro">
+<div class="cuadro" style="padding-top:25px;">
+  <div class="card">
+    <div class="card-header">
+      <label class="col-md-8 col-form-label"><b>Estadísticas de Ingresos y Egresos Semanales</b></label>
+    </div>
+    <div class="card-body border" align="center">
+      <div class="contenido-graficas">
+        <div class="ccontainer-grafico-informe-ingresos-egresos">
+          <b>Balance de Ingresos y Egresos (últimas 8 semanas)</b>
+          <br>
+          <img class="grafico-informe" id="balance-ocho-semanas" src="https://quickchart.io/chart?c={{ $lineaBalanceIngresosEgresosSemanales }}" alt="Balance de Ingresos y Egresos (últimas 8 semanas)">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cuadro" style="margin-top: -7%">
     <div class="card">
       <div class="card-header">
         <label class="col-md-8 col-form-label"><b>Listado de Ingresos/Egresos Semanales Generales</b></label>

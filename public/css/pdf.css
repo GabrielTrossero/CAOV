@@ -71,6 +71,10 @@ img {
   clear: both;
 }
 
+.balance {
+  width: 90% !important;
+}
+
 .page-break {
   page-break-after: always;
 }
