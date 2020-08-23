@@ -275,6 +275,128 @@ class InformeController extends Controller
   }
 
   /**
+   * retorna un objeto JSON para grafica de linea de socios nuevos y dados de baja del corriente mes
+   * 
+   * @param Socio[] $socios
+   * @return String
+   */
+  public function graficoLineaSociosNuevosYBajasMensual($socios)
+  {
+    $objetoGraficaLineaNuevosYBajas = $this->getObjetoParaGraficaDeLineaSociosNuevosYBajas();
+    $cuotaController = new CuotaController;
+    $fechaHoy = Carbon::now();
+
+    foreach ($socios as $socio) {
+      if (isset($socio->fechaBaja) && (Carbon::parse($socio->fechaBaja)->month == $fechaHoy->month)) {
+        $fechaBaja = Carbon::parse($socio->fechaBaja)->format("d-m-Y");
+        if (!in_array($fechaBaja, $objetoGraficaLineaNuevosYBajas->data->labels)) {
+          $objetoGraficaLineaNuevosYBajas->data->labels[] = date("d-m-Y", strtotime($fechaBaja));
+          $objetoGraficaLineaNuevosYBajas->data->datasets[0]->data[$fechaBaja] = 0;
+          $objetoGraficaLineaNuevosYBajas->data->datasets[1]->data[$fechaBaja] = 0;
+        }
+        
+        $objetoGraficaLineaNuevosYBajas->data->datasets[1]->data[$fechaBaja] += 1;
+      } else if (Carbon::parse($socio->fechaCreacion)->month == $fechaHoy->month) {
+        $fechaCreacion = Carbon::parse($socio->fechaCreacion)->format("d-m-Y");
+        if (!in_array($fechaCreacion, $objetoGraficaLineaNuevosYBajas->data->labels)) {
+          $objetoGraficaLineaNuevosYBajas->data->labels[] = date("d-m-Y", strtotime($fechaCreacion));
+          $objetoGraficaLineaNuevosYBajas->data->datasets[0]->data[$fechaCreacion] = 0;
+          $objetoGraficaLineaNuevosYBajas->data->datasets[1]->data[$fechaCreacion] = 0;
+        }
+        
+        $objetoGraficaLineaNuevosYBajas->data->datasets[0]->data[$fechaCreacion] += 1;
+      }
+    }
+    
+    sort($objetoGraficaLineaNuevosYBajas->data->labels);
+    ksort($objetoGraficaLineaNuevosYBajas->data->datasets[0]->data);
+    ksort($objetoGraficaLineaNuevosYBajas->data->datasets[1]->data);
+    $objetoGraficaLineaNuevosYBajas->data->datasets[0]->data = array_values($objetoGraficaLineaNuevosYBajas->data->datasets[0]->data);
+    $objetoGraficaLineaNuevosYBajas->data->datasets[1]->data = array_values($objetoGraficaLineaNuevosYBajas->data->datasets[1]->data);
+
+    return json_encode($objetoGraficaLineaNuevosYBajas);
+  }
+
+  /**
+   * retorna un objeto JSON de la cantidad de cadetes que pasan a activos 
+   *
+   * @param Socio $socios
+   * @return String
+   */
+  public function graficoBarraSociosCadetesPasanActivos($socios) 
+  {
+    $fechaHoy = Carbon::now();
+    $fechaHoyMenosDosAnios = Carbon::now()->subYears(2);
+    $fechaHoyMenosUnAnio = Carbon::now()->subYears(1);
+    $fechaHoyMasDosAnios = Carbon::now()->addYears(2);
+    $fechaHoyMasUnAnio = Carbon::now()->addYears(1);
+    $objetoGraficaBarraCadetes = $this->getObjetoParaGraficaDeBarra();
+    $objetoGraficaBarraCadetes->data->datasets[0]->label = "Cantidad de Cadetes";
+
+    $cuotaController = new CuotaController;
+
+    foreach ($socios as $socio) {
+      $fechaNacimiento = Carbon::parse($socio->fechaNac);
+      if ((($fechaHoyMenosDosAnios->year - $fechaNacimiento->year) == 18)
+        || (($fechaHoyMenosUnAnio->year - $fechaNacimiento->year) == 18)
+        || (($fechaHoy->year - $fechaNacimiento->year) == 18)
+        || (($fechaHoyMasUnAnio->year - $fechaNacimiento->year) == 18)
+        || (($fechaHoyMasDosAnios->year - $fechaNacimiento->year) == 18)) {
+          if (!in_array($fechaNacimiento->year + 18, $objetoGraficaBarraCadetes->data->labels)) {
+            $objetoGraficaBarraCadetes->data->labels[] = $fechaNacimiento->year + 18;
+            $objetoGraficaBarraCadetes->data->datasets[0]->data[$fechaNacimiento->year + 18] = 0;
+          }
+          $objetoGraficaBarraCadetes->data->datasets[0]->data[$fechaNacimiento->year + 18] += 1;
+      }
+    }
+
+    sort($objetoGraficaBarraCadetes->data->labels);
+    ksort($objetoGraficaBarraCadetes->data->datasets[0]->data);
+    $objetoGraficaBarraCadetes->data->datasets[0]->data = array_values($objetoGraficaBarraCadetes->data->datasets[0]->data);
+    
+    return json_encode($objetoGraficaBarraCadetes);
+  }
+
+  /**
+   * retorna un objeto JSON de la cantidad de socios nuevos y dados de baja del ultimo semestre
+   *
+   * @param Socio[] $socios
+   * @return String
+   */
+  public function graficoDonaSociosNuevosYBajasSemestral($socios)
+  {
+    $objetoGraficaDona = $this->getObjetoParaGraficaDeDona();
+    $fechaHoy = Carbon::now();
+    $fechaHoyMenosSeisMeses = Carbon::now()->subMonths(6);
+    $totalMovimientoDeSociosSeisMeses = 0;
+
+    foreach ($socios as $socio) {
+      $fechaCreacion = Carbon::parse($socio->fechaCreacion);
+      $fechaBaja = Carbon::parse($socio->fechaBaja);
+      if (isset($socio->fechaBaja) && $fechaBaja->between($fechaHoyMenosSeisMeses, $fechaHoy)) {
+        if (!in_array("Dados de Baja", $objetoGraficaDona->data->labels)) {
+          $objetoGraficaDona->data->labels[] = "Dados de Baja";
+          $objetoGraficaDona->data->datasets[0]->data["Dados de Baja"] = 0;
+        }
+        $objetoGraficaDona->data->datasets[0]->data["Dados de Baja"] += 1;
+        $totalMovimientoDeSociosSeisMeses += 1;
+      } else if ($fechaCreacion->between($fechaHoyMenosSeisMeses, $fechaHoy)){
+        if (!in_array("Nuevos", $objetoGraficaDona->data->labels)) {
+          $objetoGraficaDona->data->labels[] = "Nuevos";
+          $objetoGraficaDona->data->datasets[0]->data["Nuevos"] = 0;
+        }
+        $objetoGraficaDona->data->datasets[0]->data["Nuevos"] += 1;
+        $totalMovimientoDeSociosSeisMeses += 1;
+      }
+    }
+    
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[0]->text = "".$totalMovimientoDeSociosSeisMeses;
+    $objetoGraficaDona->data->datasets[0]->data = array_values($objetoGraficaDona->data->datasets[0]->data);
+    
+    return json_encode($objetoGraficaDona);
+  }
+
+  /**
    * Show the Cantidad de Socios.
    *
    * @return \Illuminate\Http\Response
@@ -282,13 +404,16 @@ class InformeController extends Controller
   public function getCantidadSocios()
   {
     //tomo todos los socios
-    $socios = Socio::all();
+    $socios = Socio::with('deportes')->get();
 
-    //calculo la cantidad de socios
-    $cantidadSocios = sizeof($socios);
-
+    $lineaSociosNuevosYBajas = $this->graficoLineaSociosNuevosYBajasMensual($socios);
+    $barraSociosCadetesPasanActivos = $this->graficoBarraSociosCadetesPasanActivos($socios);
+    $donaSociosNuevosYBajasUltimosSeisMeses = $this->graficoDonaSociosNuevosYBajasSemestral($socios);
+    
     //retorno la vista con la cantidad de socios
-    return view('informe.cantidadSocios', compact('cantidadSocios'));
+    return view('informe.cantidadSocios', compact('lineaSociosNuevosYBajas',
+                                                  'barraSociosCadetesPasanActivos',
+                                                  'donaSociosNuevosYBajasUltimosSeisMeses'));
   }
 
   /**
@@ -299,12 +424,15 @@ class InformeController extends Controller
   public function pdfCantidadSocios()
   {
     //tomo todos los socios
-    $socios = Socio::all();
+    $socios = Socio::with('deportes')->get();
 
-    //calculo la cantidad de socios
-    $cantidadSocios = sizeof($socios);
+    $lineaSociosNuevosYBajas = $this->graficoLineaSociosNuevosYBajasMensual($socios);
+    $barraSociosCadetesPasanActivos = $this->graficoBarraSociosCadetesPasanActivos($socios);
+    $donaSociosNuevosYBajasUltimosSeisMeses = $this->graficoDonaSociosNuevosYBajasSemestral($socios);
 
-    $pdf = PDF::loadView('pdf.cantidadSocios', ['cantidadSocios' => $cantidadSocios]);
+    $pdf = PDF::loadView('pdf.cantidadSocios', ['lineaSociosNuevosYBajas' => $lineaSociosNuevosYBajas,
+                                                'barraSociosCadetesPasanActivos' => $barraSociosCadetesPasanActivos,
+                                                'donaSociosNuevosYBajasUltimosSeisMeses' => $donaSociosNuevosYBajasUltimosSeisMeses]);
 
     return $pdf->download('cantidad-socios.pdf');
   }
@@ -320,17 +448,67 @@ class InformeController extends Controller
     $objetoGraficaLinea->data->labels = array();
     $objetoGraficaLinea->data->datasets = array();
     $objetoGraficaLinea->data->datasets[0] = new stdClass;
-    $objetoGraficaLinea->data->datasets[0]->label = "Ingresos";
     $objetoGraficaLinea->data->datasets[0]->data = array();
     $objetoGraficaLinea->data->datasets[0]->fill = false;
     $objetoGraficaLinea->data->datasets[0]->borderColor = 'blue';
     $objetoGraficaLinea->data->datasets[1] = new stdClass;
-    $objetoGraficaLinea->data->datasets[1]->label = "Egresos";
     $objetoGraficaLinea->data->datasets[1]->data = array();
     $objetoGraficaLinea->data->datasets[1]->fill = false;
     $objetoGraficaLinea->data->datasets[1]->borderColor = 'green';
 
     return $objetoGraficaLinea;
+  }
+
+  /**
+   * genera un objeto genérico para grafico de linea de Ingresos y Egresos
+   */
+  public function getObjetoParaGraficaDeLineaIngresosEgresos()
+  {
+    $objetoGraficaLinea = $this->getObjetoParaGraficaDeLinea();
+    $objetoGraficaLinea->data->datasets[0]->label = "Ingresos";
+    $objetoGraficaLinea->data->datasets[1]->label = "Egresos";
+
+    return $objetoGraficaLinea;
+  }
+
+  /**
+   * genera un objeto genérico para grafico de linea de Ingresos y Egresos
+   */
+  public function getObjetoParaGraficaDeLineaSociosNuevosYBajas()
+  {
+    $objetoGraficaLinea = $this->getObjetoParaGraficaDeLinea();
+    $objetoGraficaLinea->data->datasets[0]->label = "Nuevos";
+    $objetoGraficaLinea->data->datasets[1]->label = "Dados de Baja";
+
+    return $objetoGraficaLinea;
+  }
+
+  /**
+   * genera un objeto genérico para grafico de dona
+   */
+  public function getObjetoParaGraficaDeDona()
+  {
+    $objetoGraficaDona = new stdClass;
+    $objetoGraficaDona->type = "doughnut";
+    $objetoGraficaDona->data = new stdClass;
+    $objetoGraficaDona->data->labels = array();
+    $objetoGraficaDona->data->datasets = array();
+    $objetoGraficaDona->data->datasets[0] = new stdClass;
+    $objetoGraficaDona->data->datasets[0]->data = array();
+    $objetoGraficaDona->options = new stdClass;
+    $objetoGraficaDona->options->plugins = new stdClass;
+    $objetoGraficaDona->options->plugins->doughnutlabel = new stdClass;
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels = array();
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[0] = new stdClass;
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[0]->text = '0';
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[0]->font = new stdClass;
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[0]->font->size = 20;
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[1] = new stdClass;
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[1]->text = 'total';
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[1]->font = new stdClass;
+    $objetoGraficaDona->options->plugins->doughnutlabel->labels[1]->font->size = 15;
+
+    return $objetoGraficaDona;
   }
 
   /**
@@ -513,14 +691,14 @@ class InformeController extends Controller
     $tortaActivosPorDeporte = $this->graficoTortaActivosPorDeporte($deportes);
     $tortaCadetesPorDeporte = $this->graficoTortaCadetesPorDeporte($deportes);
     $tortaSociosConGrupoPorDeporte = $this->graficoTortaSociosConGrupoPorDeporte($deportes);
-    $barraCantidadDeportesPracticados = $this->graficoTortaCantidadDeportesPracticadosPorSocios($socios); 
+    $tortaCantidadDeportesPracticados = $this->graficoTortaCantidadDeportesPracticadosPorSocios($socios); 
 
     //retorno la vista con la cantidad de socios por deporte
     return view('informe.cantidadSociosDeporte', compact(['tortaSociosPorDeporte',
                                                           'tortaActivosPorDeporte',
                                                           'tortaCadetesPorDeporte',
                                                           'tortaSociosConGrupoPorDeporte',
-                                                          'barraCantidadDeportesPracticados']));
+                                                          'tortaCantidadDeportesPracticados']));
   }
 
   /**
@@ -543,13 +721,13 @@ class InformeController extends Controller
     $tortaActivosPorDeporte = $this->graficoTortaActivosPorDeporte($deportes);
     $tortaCadetesPorDeporte = $this->graficoTortaCadetesPorDeporte($deportes);
     $tortaSociosConGrupoPorDeporte = $this->graficoTortaSociosConGrupoPorDeporte($deportes);
-    $barraCantidadDeportesPracticados = $this->graficoBarraCantidadDeportesPracticadosPorSocios($socios);
+    $tortaCantidadDeportesPracticados = $this->graficoTortaCantidadDeportesPracticadosPorSocios($socios);
 
     $pdf = PDF::loadView('pdf.cantidadSociosDeporte', ['tortaSociosPorDeporte' => $tortaSociosPorDeporte,
                                                        'tortaActivosPorDeporte' => $tortaActivosPorDeporte,
                                                        'tortaCadetesPorDeporte' => $tortaCadetesPorDeporte,
                                                        'tortaSociosConGrupoPorDeporte' => $tortaSociosConGrupoPorDeporte,
-                                                       'barraCantidadDeportesPracticados' => $barraCantidadDeportesPracticados]);
+                                                       'tortaCantidadDeportesPracticados' => $tortaCantidadDeportesPracticados]);
 
     return $pdf->download('cantidad-socios-deporte.pdf');
   }
@@ -710,7 +888,7 @@ class InformeController extends Controller
    */
   public function graficoLineaBalanceIngresosEgresosDiarios($montos)
   {
-    $lineaBalanceDiario = $this->getObjetoParaGraficaDeLinea();
+    $lineaBalanceDiario = $this->getObjetoParaGraficaDeLineaIngresosEgresos();
     $fechaHoy = Carbon::now();
     $fechaHoyMenosCatorceDias = Carbon::now()->subDays(14);
 
@@ -970,7 +1148,7 @@ class InformeController extends Controller
   {
     ksort($montos->ingresos);
     ksort($montos->egresos);
-    $lineaBalanceSemanal = $this->getObjetoParaGraficaDeLinea();
+    $lineaBalanceSemanal = $this->getObjetoParaGraficaDeLineaIngresosEgresos();
     $fechaHoy = Carbon::now();
     $fechaHoyMenosOchoSemanas = Carbon::now()->subWeeks(8);
 
@@ -1261,7 +1439,7 @@ class InformeController extends Controller
   {
     ksort($montos->ingresos);
     ksort($montos->egresos);
-    $lineaBalanceMensual = $this->getObjetoParaGraficaDeLinea();
+    $lineaBalanceMensual = $this->getObjetoParaGraficaDeLineaIngresosEgresos();
     $fechaHoy = Carbon::now();
     $fechaHoyMenosDoceMeses = Carbon::now()->subMonths(12);
 

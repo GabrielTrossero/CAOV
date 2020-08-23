@@ -34,7 +34,7 @@
               <div class="container-img">
                 <h4>Socios por cantidad de Deportes que practican</h4>
                 <br>
-                <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $barraCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
+                <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $tortaCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
               </div>
         </div>
     </div>
