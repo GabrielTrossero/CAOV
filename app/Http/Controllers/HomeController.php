@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\InformeController;
 
 class HomeController extends Controller
 {
@@ -23,7 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('menu.home');
+        $informeController = new InformeController;
+
+        return $informeController->graficasParaHome();
     }
 
     /**

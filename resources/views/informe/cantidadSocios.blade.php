@@ -15,7 +15,7 @@
           <img class="grafico-informe" id="socios-nuevos-bajas" src="https://quickchart.io/chart?c={{ $lineaSociosNuevosYBajas }}" alt="Comparación Socios Nuevos y Dados de Baja en el mes">
         </div>
         <div class="container-grafico-informe">
-          <b>Cadetes que pasarán (o pasaron) a Activos</b>
+          <b>Transferencia de Cadetes a Activos</b>
           <br>
           <img class="grafico-informe" id="socios-cadetes-a-activos" src="https://quickchart.io/chart?c={{ $barraSociosCadetesPasanActivos }}" alt="Cadetes que pasarán (o pasaron) a Activos">
         </div>

@@ -438,6 +438,26 @@ class InformeController extends Controller
   }
 
   /**
+   * retorna graficas de linea de socios nuevos y dados de baja, de dona de nuevos/bajas de los 
+   * ultimos seis meses, y egresos/egresos mensuales
+   * 
+   * @return String
+   */
+  public function graficasParaHome()
+  {
+    $socios = Socio::with('deportes')->get();
+    $montos = $this->ingresosEgresosMensuales();
+
+    $lineaSociosNuevosYBajas = $this->graficoLineaSociosNuevosYBajasMensual($socios);
+    $donaSociosNuevosYBajasUltimosSeisMeses = $this->graficoDonaSociosNuevosYBajasSemestral($socios);
+    $lineaBalanceIngresosEgresosMensual = $this->graficoLineaBalanceIngresosEgresosMensuales($montos);
+
+    return view('menu.home', compact('lineaSociosNuevosYBajas',
+                                     'donaSociosNuevosYBajasUltimosSeisMeses',
+                                     'lineaBalanceIngresosEgresosMensual'));
+  }
+
+  /**
    * retorna un objeto genérico para graficos de linea
    */
   public function getObjetoParaGraficaDeLinea()
