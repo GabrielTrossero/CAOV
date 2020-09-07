@@ -13,28 +13,28 @@
               <div class="container-img">
                 <h4>Socios por Deporte</h4> 
                 <br>
-                <img class="grafico-informe" id="socios-por-deporte" src="https://quickchart.io/chart?c={{ $tortaSociosPorDeporte }}" alt="Socios por Deporte">
+                <img class="grafico-informe" id="socios-por-deporte" src="https://quickchart.io/chart?c={{ $barraSociosPorDeporte }}" alt="Socios por Deporte">
               </div>
               <div class="container-img">
                 <h4>Socios Activos por Deporte</h4>
                 <br>
-                <img class="grafico-informe" id="activos-por-deporte" src="https://quickchart.io/chart?c={{ $tortaActivosPorDeporte }}" alt="Socios Activos por Deporte">
+                <img class="grafico-informe" id="activos-por-deporte" src="https://quickchart.io/chart?c={{ $barraActivosPorDeporte }}" alt="Socios Activos por Deporte">
               </div>
               <div class="page-break"></div>
               <div class="container-img">
                 <h4>Socios Cadetes por Deporte</h4>
                 <br>
-                <img class="grafico-informe" id="cadetes-por-deporte" src="https://quickchart.io/chart?c={{ $tortaCadetesPorDeporte }}" alt="Socios Cadetes por Deporte">
+                <img class="grafico-informe" id="cadetes-por-deporte" src="https://quickchart.io/chart?c={{ $barraCadetesPorDeporte }}" alt="Socios Cadetes por Deporte">
               </div>
               <div class="container-img">
                 <h4>Socios con Grupo Familiar por Deporte</h4>
                 <br>
-                <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $tortaSociosConGrupoPorDeporte }}" alt="Socios Con Grupo Familiar por Deporte">
+                <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $barraSociosConGrupoPorDeporte }}" alt="Socios Con Grupo Familiar por Deporte">
               </div>
               <div class="container-img">
                 <h4>Socios por cantidad de Deportes que practican</h4>
                 <br>
-                <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $tortaCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
+                <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $barraCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
               </div>
         </div>
     </div>
