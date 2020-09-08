@@ -15,11 +15,6 @@
                 <br>
                 <img class="grafico-informe" id="socios-por-cantidad-cuotas-adeudadas" src="https://quickchart.io/chart?c={{ $tortaCantidadCuotasAdeudadas }}" alt="Socios por cantidad de Cuotas que adeudan">
               </div>
-              <div class="container-img">
-                <h4>Cantidad de Cuotas adeudadas por Categoría</h4>
-                <br>
-                <img class="grafico-informe" id="cuotas-adeudadas-por-categoria" src="https://quickchart.io/chart?c={{ $tortaCantidadCuotasAdeudadasCategoria }}" alt="Cantidad de Cuotas adeudadas por Categoría">
-              </div>
               <div class="page-break"></div>
               <div class="container-img">
                 <h4>Monto Total ($) adeudado por Categoría</h4>

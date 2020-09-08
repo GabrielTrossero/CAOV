@@ -174,12 +174,10 @@ class InformeController extends Controller
   {
     $socios = $this->deudores();
     $tortaCantidadCuotasAdeudadas = $this->graficoTortaCantidadCuotasAdeudadasPorSocios($socios);
-    $tortaCantidadCuotasAdeudadasCategoria = $this->graficoTortaCantidadCuotasAdeudadasPorCategoria($socios);
     $tortaMontoTotalAdeudadoPorCategoria = $this->graficoTortaMontoTotalAdeudadoPorCategoria($socios);
     
     return view('informe.sociosDeudores', compact('socios',
                                                   'tortaCantidadCuotasAdeudadas',
-                                                  'tortaCantidadCuotasAdeudadasCategoria',
                                                   'tortaMontoTotalAdeudadoPorCategoria'));
   }
 
@@ -193,12 +191,10 @@ class InformeController extends Controller
     //llamo a la función deudores
     $socios = $this->deudores();
     $tortaCantidadCuotasAdeudadas = $this->graficoTortaCantidadCuotasAdeudadasPorSocios($socios);
-    $tortaCantidadCuotasAdeudadasCategoria = $this->graficoTortaCantidadCuotasAdeudadasPorCategoria($socios);
     $tortaMontoTotalAdeudadoPorCategoria = $this->graficoTortaMontoTotalAdeudadoPorCategoria($socios);
 
     $pdf = PDF::loadView('pdf.deudores', ['socios' => $socios,
                                           'tortaCantidadCuotasAdeudadas' => $tortaCantidadCuotasAdeudadas,
-                                          'tortaCantidadCuotasAdeudadasCategoria' => $tortaCantidadCuotasAdeudadasCategoria,
                                           'tortaMontoTotalAdeudadoPorCategoria' => $tortaMontoTotalAdeudadoPorCategoria]);
 
     return $pdf->download('deudores.pdf');
