@@ -10,7 +10,7 @@
     <div class="container-img">
       <h2>Socios Nuevos y Dados de Baja en el mes</h2>
       <br>
-      <img class="balance" id="socios-nuevos-bajas" src="https://quickchart.io/chart?c={{ $lineaSociosNuevosYBajas }}" alt="Comparación Socios Nuevos y Dados de Baja en el mes">
+      <img class="balance" id="socios-nuevos-bajas" src="https://quickchart.io/chart?c={{ $barraSociosNuevosYBajas }}" alt="Comparación Socios Nuevos y Dados de Baja en el mes">
     </div>
     <div class="page-break"></div>
     <div class="container-img">

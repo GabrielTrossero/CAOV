@@ -276,41 +276,41 @@ class InformeController extends Controller
    * @param Socio[] $socios
    * @return String
    */
-  public function graficoLineaSociosNuevosYBajasMensual($socios)
+  public function graficoBarraSociosNuevosYBajasMensual($socios)
   {
-    $objetoGraficaLineaNuevosYBajas = $this->getObjetoParaGraficaDeLineaSociosNuevosYBajas();
+    $objetoGraficaBarraNuevosYBajas = $this->getObjetoParaGraficaDeBarraSociosNuevosYBajas();
     $cuotaController = new CuotaController;
     $fechaHoy = Carbon::now();
 
     foreach ($socios as $socio) {
       if (isset($socio->fechaBaja) && (Carbon::parse($socio->fechaBaja)->month == $fechaHoy->month)) {
         $fechaBaja = Carbon::parse($socio->fechaBaja)->format("d-m-Y");
-        if (!in_array($fechaBaja, $objetoGraficaLineaNuevosYBajas->data->labels)) {
-          $objetoGraficaLineaNuevosYBajas->data->labels[] = date("d-m-Y", strtotime($fechaBaja));
-          $objetoGraficaLineaNuevosYBajas->data->datasets[0]->data[$fechaBaja] = 0;
-          $objetoGraficaLineaNuevosYBajas->data->datasets[1]->data[$fechaBaja] = 0;
+        if (!in_array($fechaBaja, $objetoGraficaBarraNuevosYBajas->data->labels)) {
+          $objetoGraficaBarraNuevosYBajas->data->labels[] = date("d-m-Y", strtotime($fechaBaja));
+          $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data[$fechaBaja] = 0;
+          $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data[$fechaBaja] = 0;
         }
         
-        $objetoGraficaLineaNuevosYBajas->data->datasets[1]->data[$fechaBaja] += 1;
+        $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data[$fechaBaja] += 1;
       } else if (Carbon::parse($socio->fechaCreacion)->month == $fechaHoy->month) {
         $fechaCreacion = Carbon::parse($socio->fechaCreacion)->format("d-m-Y");
-        if (!in_array($fechaCreacion, $objetoGraficaLineaNuevosYBajas->data->labels)) {
-          $objetoGraficaLineaNuevosYBajas->data->labels[] = date("d-m-Y", strtotime($fechaCreacion));
-          $objetoGraficaLineaNuevosYBajas->data->datasets[0]->data[$fechaCreacion] = 0;
-          $objetoGraficaLineaNuevosYBajas->data->datasets[1]->data[$fechaCreacion] = 0;
+        if (!in_array($fechaCreacion, $objetoGraficaBarraNuevosYBajas->data->labels)) {
+          $objetoGraficaBarraNuevosYBajas->data->labels[] = date("d-m-Y", strtotime($fechaCreacion));
+          $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data[$fechaCreacion] = 0;
+          $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data[$fechaCreacion] = 0;
         }
         
-        $objetoGraficaLineaNuevosYBajas->data->datasets[0]->data[$fechaCreacion] += 1;
+        $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data[$fechaCreacion] += 1;
       }
     }
     
-    sort($objetoGraficaLineaNuevosYBajas->data->labels);
-    ksort($objetoGraficaLineaNuevosYBajas->data->datasets[0]->data);
-    ksort($objetoGraficaLineaNuevosYBajas->data->datasets[1]->data);
-    $objetoGraficaLineaNuevosYBajas->data->datasets[0]->data = array_values($objetoGraficaLineaNuevosYBajas->data->datasets[0]->data);
-    $objetoGraficaLineaNuevosYBajas->data->datasets[1]->data = array_values($objetoGraficaLineaNuevosYBajas->data->datasets[1]->data);
+    sort($objetoGraficaBarraNuevosYBajas->data->labels);
+    ksort($objetoGraficaBarraNuevosYBajas->data->datasets[0]->data);
+    ksort($objetoGraficaBarraNuevosYBajas->data->datasets[1]->data);
+    $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data = array_values($objetoGraficaBarraNuevosYBajas->data->datasets[0]->data);
+    $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data = array_values($objetoGraficaBarraNuevosYBajas->data->datasets[1]->data);
 
-    return json_encode($objetoGraficaLineaNuevosYBajas);
+    return json_encode($objetoGraficaBarraNuevosYBajas);
   }
 
   /**
@@ -402,12 +402,12 @@ class InformeController extends Controller
     //tomo todos los socios
     $socios = Socio::with('deportes')->get();
 
-    $lineaSociosNuevosYBajas = $this->graficoLineaSociosNuevosYBajasMensual($socios);
+    $barraSociosNuevosYBajas = $this->graficoBarraSociosNuevosYBajasMensual($socios);
     $barraSociosCadetesPasanActivos = $this->graficoBarraSociosCadetesPasanActivos($socios);
     $donaSociosNuevosYBajasUltimosSeisMeses = $this->graficoDonaSociosNuevosYBajasSemestral($socios);
     
     //retorno la vista con la cantidad de socios
-    return view('informe.cantidadSocios', compact('lineaSociosNuevosYBajas',
+    return view('informe.cantidadSocios', compact('barraSociosNuevosYBajas',
                                                   'barraSociosCadetesPasanActivos',
                                                   'donaSociosNuevosYBajasUltimosSeisMeses'));
   }
@@ -422,11 +422,11 @@ class InformeController extends Controller
     //tomo todos los socios
     $socios = Socio::with('deportes')->get();
 
-    $lineaSociosNuevosYBajas = $this->graficoLineaSociosNuevosYBajasMensual($socios);
+    $barraSociosNuevosYBajas = $this->graficoBarraSociosNuevosYBajasMensual($socios);
     $barraSociosCadetesPasanActivos = $this->graficoBarraSociosCadetesPasanActivos($socios);
     $donaSociosNuevosYBajasUltimosSeisMeses = $this->graficoDonaSociosNuevosYBajasSemestral($socios);
 
-    $pdf = PDF::loadView('pdf.cantidadSocios', ['lineaSociosNuevosYBajas' => $lineaSociosNuevosYBajas,
+    $pdf = PDF::loadView('pdf.cantidadSocios', ['barraSociosNuevosYBajas' => $barraSociosNuevosYBajas,
                                                 'barraSociosCadetesPasanActivos' => $barraSociosCadetesPasanActivos,
                                                 'donaSociosNuevosYBajasUltimosSeisMeses' => $donaSociosNuevosYBajasUltimosSeisMeses]);
 
@@ -444,11 +444,11 @@ class InformeController extends Controller
     $socios = Socio::with('deportes')->get();
     $montos = $this->ingresosEgresosMensuales();
 
-    $lineaSociosNuevosYBajas = $this->graficoLineaSociosNuevosYBajasMensual($socios);
+    $barraSociosNuevosYBajas = $this->graficoBarraSociosNuevosYBajasMensual($socios);
     $donaSociosNuevosYBajasUltimosSeisMeses = $this->graficoDonaSociosNuevosYBajasSemestral($socios);
     $lineaBalanceIngresosEgresosMensual = $this->graficoLineaBalanceIngresosEgresosMensuales($montos);
 
-    return view('menu.home', compact('lineaSociosNuevosYBajas',
+    return view('menu.home', compact('barraSociosNuevosYBajas',
                                      'donaSociosNuevosYBajasUltimosSeisMeses',
                                      'lineaBalanceIngresosEgresosMensual'));
   }
@@ -475,6 +475,25 @@ class InformeController extends Controller
     return $objetoGraficaLinea;
   }
 
+  public function getObjetoParaGraficaDeBarraDoble()
+  {
+    $objetoGraficaBarraDoble = new stdClass;
+    $objetoGraficaBarraDoble->type = "bar";
+    $objetoGraficaBarraDoble->data = new stdClass;
+    $objetoGraficaBarraDoble->data->labels = array();
+    $objetoGraficaBarraDoble->data->datasets = array();
+    $objetoGraficaBarraDoble->data->datasets[0] = new stdClass;
+    $objetoGraficaBarraDoble->data->datasets[0]->data = array();
+    $objetoGraficaBarraDoble->data->datasets[0]->fill = false;
+    $objetoGraficaBarraDoble->data->datasets[0]->borderColor = 'blue';
+    $objetoGraficaBarraDoble->data->datasets[1] = new stdClass;
+    $objetoGraficaBarraDoble->data->datasets[1]->data = array();
+    $objetoGraficaBarraDoble->data->datasets[1]->fill = false;
+    $objetoGraficaBarraDoble->data->datasets[1]->borderColor = 'green';
+
+    return $objetoGraficaBarraDoble;
+  }
+
   /**
    * genera un objeto genérico para grafico de linea de Ingresos y Egresos
    */
@@ -490,13 +509,13 @@ class InformeController extends Controller
   /**
    * genera un objeto genérico para grafico de linea de Ingresos y Egresos
    */
-  public function getObjetoParaGraficaDeLineaSociosNuevosYBajas()
+  public function getObjetoParaGraficaDeBarraSociosNuevosYBajas()
   {
-    $objetoGraficaLinea = $this->getObjetoParaGraficaDeLinea();
-    $objetoGraficaLinea->data->datasets[0]->label = "Nuevos";
-    $objetoGraficaLinea->data->datasets[1]->label = "Dados de Baja";
+    $objetoGraficaBarra = $this->getObjetoParaGraficaDeBarraDoble();
+    $objetoGraficaBarra->data->datasets[0]->label = "Nuevos";
+    $objetoGraficaBarra->data->datasets[1]->label = "Dados de Baja";
 
-    return $objetoGraficaLinea;
+    return $objetoGraficaBarra;
   }
 
   /**
