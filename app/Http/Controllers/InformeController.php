@@ -493,6 +493,7 @@ class InformeController extends Controller
     $objetoGraficaBarraDoble->options = new stdClass;
     $objetoGraficaBarraDoble->options->plugins = new stdClass;
     $objetoGraficaBarraDoble->options->plugins->datalabels = new stdClass;
+    $objetoGraficaBarraDoble->options->plugins->datalabels->color = "white";
     $objetoGraficaBarraDoble->options->plugins->datalabels->font = new stdClass;
     $objetoGraficaBarraDoble->options->plugins->datalabels->font->size = 18;
 
@@ -548,6 +549,7 @@ class InformeController extends Controller
     $objetoGraficaDona->options->plugins->doughnutlabel->labels[1]->font = new stdClass;
     $objetoGraficaDona->options->plugins->doughnutlabel->labels[1]->font->size = 15;
     $objetoGraficaDona->options->plugins->datalabels = new stdClass;
+    $objetoGraficaDona->options->plugins->datalabels->color = "white";
     $objetoGraficaDona->options->plugins->datalabels->font = new stdClass;
     $objetoGraficaDona->options->plugins->datalabels->font->size = 18;
 
@@ -569,6 +571,7 @@ class InformeController extends Controller
     $objetoGraficaTorta->options = new stdClass;
     $objetoGraficaTorta->options->plugins = new stdClass;
     $objetoGraficaTorta->options->plugins->datalabels = new stdClass;
+    $objetoGraficaTorta->options->plugins->datalabels->color = "white";
     $objetoGraficaTorta->options->plugins->datalabels->font = new stdClass;
     $objetoGraficaTorta->options->plugins->datalabels->font->size = 22;
 
@@ -590,6 +593,7 @@ class InformeController extends Controller
     $objetoGraficaBarra->options = new stdClass;
     $objetoGraficaBarra->options->plugins = new stdClass;
     $objetoGraficaBarra->options->plugins->datalabels = new stdClass;
+    $objetoGraficaBarra->options->plugins->datalabels->color = "white"; 
     $objetoGraficaBarra->options->plugins->datalabels->font = new stdClass;
     $objetoGraficaBarra->options->plugins->datalabels->font->size = 22;
 
