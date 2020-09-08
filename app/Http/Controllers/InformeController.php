@@ -490,6 +490,11 @@ class InformeController extends Controller
     $objetoGraficaBarraDoble->data->datasets[1]->data = array();
     $objetoGraficaBarraDoble->data->datasets[1]->fill = false;
     $objetoGraficaBarraDoble->data->datasets[1]->borderColor = 'green';
+    $objetoGraficaBarraDoble->options = new stdClass;
+    $objetoGraficaBarraDoble->options->plugins = new stdClass;
+    $objetoGraficaBarraDoble->options->plugins->datalabels = new stdClass;
+    $objetoGraficaBarraDoble->options->plugins->datalabels->font = new stdClass;
+    $objetoGraficaBarraDoble->options->plugins->datalabels->font->size = 18;
 
     return $objetoGraficaBarraDoble;
   }
@@ -542,6 +547,9 @@ class InformeController extends Controller
     $objetoGraficaDona->options->plugins->doughnutlabel->labels[1]->text = 'total';
     $objetoGraficaDona->options->plugins->doughnutlabel->labels[1]->font = new stdClass;
     $objetoGraficaDona->options->plugins->doughnutlabel->labels[1]->font->size = 15;
+    $objetoGraficaDona->options->plugins->datalabels = new stdClass;
+    $objetoGraficaDona->options->plugins->datalabels->font = new stdClass;
+    $objetoGraficaDona->options->plugins->datalabels->font->size = 18;
 
     return $objetoGraficaDona;
   }
@@ -558,6 +566,11 @@ class InformeController extends Controller
     $objetoGraficaTorta->data->datasets = array();
     $objetoGraficaTorta->data->datasets[0] = new stdClass;
     $objetoGraficaTorta->data->datasets[0]->data = array();
+    $objetoGraficaTorta->options = new stdClass;
+    $objetoGraficaTorta->options->plugins = new stdClass;
+    $objetoGraficaTorta->options->plugins->datalabels = new stdClass;
+    $objetoGraficaTorta->options->plugins->datalabels->font = new stdClass;
+    $objetoGraficaTorta->options->plugins->datalabels->font->size = 22;
 
     return $objetoGraficaTorta;
   }
@@ -574,6 +587,11 @@ class InformeController extends Controller
     $objetoGraficaBarra->data->datasets = array();
     $objetoGraficaBarra->data->datasets[0] = new stdClass;
     $objetoGraficaBarra->data->datasets[0]->data = array();
+    $objetoGraficaBarra->options = new stdClass;
+    $objetoGraficaBarra->options->plugins = new stdClass;
+    $objetoGraficaBarra->options->plugins->datalabels = new stdClass;
+    $objetoGraficaBarra->options->plugins->datalabels->font = new stdClass;
+    $objetoGraficaBarra->options->plugins->datalabels->font->size = 22;
 
     return $objetoGraficaBarra;
   }
