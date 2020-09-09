@@ -15,7 +15,7 @@
           <img class="grafico-informe" id="socios-por-deporte" src="https://quickchart.io/chart?c={{ $barraSociosPorDeporte }}" alt="Socios por Deporte">
         </div>
         <div class="container-grafico-informe">
-          <b>Socios Activos por Deporte</b>
+          <b>Socios Mayores por Deporte</b>
           <br>
           <img class="grafico-informe" id="activos-por-deporte" src="https://quickchart.io/chart?c={{ $barraActivosPorDeporte }}" alt="Socios Activos por Deporte">
         </div>
@@ -24,13 +24,8 @@
           <br>
           <img class="grafico-informe" id="cadetes-por-deporte" src="https://quickchart.io/chart?c={{ $barraCadetesPorDeporte }}" alt="Socios Cadetes por Deporte">
         </div>
-        <div  class="container-grafico-informe">
-          <b>Socios con Grupo Familiar por Deporte</b>
-          <br>
-          <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $barraSociosConGrupoPorDeporte }}" alt="Socios Con Grupo Familiar por Deporte">
-        </div>
-        <div  class="container-grafico-informe">
-          <b>Socios por cantidad de Deportes que practican</b>
+        <div class="container-grafico-informe">
+          <b>Socios por cantidad de Deportes practicados</b>
           <br>
           <img class="grafico-informe" id="socios-cantidad-por-deportes-practicados" src="https://quickchart.io/chart?c={{ $barraCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
         </div>

@@ -15,14 +15,16 @@
           <img class="grafico-informe" id="socios-nuevos-bajas" src="https://quickchart.io/chart?c={{ $barraSociosNuevosYBajas }}" alt="Comparación Socios Nuevos y Dados de Baja en el mes">
         </div>
         <div class="container-grafico-informe">
-          <b>Transferencia de Cadetes a Activos</b>
-          <br>
-          <img class="grafico-informe" id="socios-cadetes-a-activos" src="https://quickchart.io/chart?c={{ $barraSociosCadetesPasanActivos }}" alt="Cadetes que pasarán (o pasaron) a Activos">
-        </div>
-        <div class="container-grafico-informe">
-          <b>Movimiento de Socios de los últimos Seis meses</b>
+          <b>Movimiento de Socios de los últimos seis meses</b>
           <br>
           <img class="grafico-informe" id="movimiento-socios" src="https://quickchart.io/chart?c={{ $donaSociosNuevosYBajasUltimosSeisMeses }}" alt="Movimiento de Socios de los últimos Seis meses">
+        </div>
+        <div class="container-grafico-informe">
+          <b>Transferencia de Cadetes a Activos</b>
+          <br>
+          (considerando 2 años anteriores y posteriores)
+          <br>
+          <img class="grafico-informe" id="socios-cadetes-a-activos" src="https://quickchart.io/chart?c={{ $barraSociosCadetesPasanActivos }}" alt="Cadetes que pasarán (o pasaron) a Activos">
         </div>
       </div>
     </div>

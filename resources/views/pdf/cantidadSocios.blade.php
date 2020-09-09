@@ -14,12 +14,14 @@
     </div>
     <div class="page-break"></div>
     <div class="container-img">
-      <h2>Cadetes que pasarán (o pasaron) a Activos</h2>
+      <h2>Transferencia de Cadetes a Activos</h2>
+      <h2>(considerando 2 años anteriores y posteriores)</h2>
       <br>
       <img class="balance" id="socios-cadetes-a-activos" src="https://quickchart.io/chart?c={{ $barraSociosCadetesPasanActivos }}" alt="Cadetes que pasarán (o pasaron) a Activos">
     </div>
+    <div class="page-break"></div>
     <div class="container-img">
-      <h2>Movimiento de Socios de los últimos Seis meses</h2>
+      <h2>Movimiento de Socios de los últimos seis meses</h2>
       <br>
       <img class="balance" id="movimiento-socios" src="https://quickchart.io/chart?c={{ $donaSociosNuevosYBajasUltimosSeisMeses }}" alt="Movimiento de Socios de los últimos Seis meses">
     </div>
