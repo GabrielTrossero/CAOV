@@ -8,7 +8,7 @@
       <div class="card-body border" align="center">
         <div class="contenido-graficas">
           <div class="container-grafico-informe">
-            <b>Socios Nuevos y Dados de Baja en el mes</b>
+            <b>Socios Nuevos y Dados de Baja en los ultimos 12 meses</b>
             <br>
             <img class="grafico-informe" id="socios-nuevos-bajas" src="https://quickchart.io/chart?c={{ $barraSociosNuevosYBajas }}" alt="Comparación Socios Nuevos y Dados de Baja en el mes">
           </div>

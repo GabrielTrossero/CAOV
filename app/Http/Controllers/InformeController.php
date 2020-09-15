@@ -281,32 +281,29 @@ class InformeController extends Controller
     $objetoGraficaBarraNuevosYBajas = $this->getObjetoParaGraficaDeBarraSociosNuevosYBajas();
     $cuotaController = new CuotaController;
     $fechaHoy = Carbon::now();
+    $fechaHoyMenosUnAnio = Carbon::now()->subYears(1);
 
+    for($i = 11; $i >= 0; $i-=1) {
+      $fechaAux = Carbon::now()->subMonths($i);
+      $index = ($fechaAux->month < 10) ? "0".$fechaAux->month." - ".$fechaAux->year : $fechaAux->month." - ".$fechaAux->year;
+      $objetoGraficaBarraNuevosYBajas->data->labels[] = $index;
+      
+      $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data[$index] = 0;
+      $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data[$index] = 0;
+    }
+    
     foreach ($socios as $socio) {
-      if (isset($socio->fechaBaja) && (Carbon::parse($socio->fechaBaja)->month == $fechaHoy->month)) {
-        $fechaBaja = Carbon::parse($socio->fechaBaja)->format("d-m-Y");
-        if (!in_array($fechaBaja, $objetoGraficaBarraNuevosYBajas->data->labels)) {
-          $objetoGraficaBarraNuevosYBajas->data->labels[] = date("d-m-Y", strtotime($fechaBaja));
-          $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data[$fechaBaja] = 0;
-          $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data[$fechaBaja] = 0;
-        }
-        
-        $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data[$fechaBaja] += 1;
-      } else if (Carbon::parse($socio->fechaCreacion)->month == $fechaHoy->month) {
-        $fechaCreacion = Carbon::parse($socio->fechaCreacion)->format("d-m-Y");
-        if (!in_array($fechaCreacion, $objetoGraficaBarraNuevosYBajas->data->labels)) {
-          $objetoGraficaBarraNuevosYBajas->data->labels[] = date("d-m-Y", strtotime($fechaCreacion));
-          $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data[$fechaCreacion] = 0;
-          $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data[$fechaCreacion] = 0;
-        }
-        
-        $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data[$fechaCreacion] += 1;
+      if (isset($socio->fechaBaja) && (Carbon::parse($socio->fechaBaja)->between($fechaHoyMenosUnAnio, $fechaHoy))) {
+        $fechaBaja = Carbon::parse($socio->fechaBaja);
+        $index = ($fechaBaja->month < 10) ? "0".$fechaBaja->month." - ".$fechaBaja->year : $fechaBaja->month." - ".$fechaBaja->year;
+        $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data[$index] += 1;
+      } else if (Carbon::parse($socio->fechaCreacion)->between($fechaHoyMenosUnAnio, $fechaHoy)) {
+        $fechaCreacion = Carbon::parse($socio->fechaCreacion);
+        $index = ($fechaCreacion->month < 10) ? "0".$fechaCreacion->month." - ".$fechaCreacion->year : $fechaCreacion->month." - ".$fechaCreacion->year;
+        $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data[$index] += 1;
       }
     }
     
-    sort($objetoGraficaBarraNuevosYBajas->data->labels);
-    ksort($objetoGraficaBarraNuevosYBajas->data->datasets[0]->data);
-    ksort($objetoGraficaBarraNuevosYBajas->data->datasets[1]->data);
     $objetoGraficaBarraNuevosYBajas->data->datasets[0]->data = array_values($objetoGraficaBarraNuevosYBajas->data->datasets[0]->data);
     $objetoGraficaBarraNuevosYBajas->data->datasets[1]->data = array_values($objetoGraficaBarraNuevosYBajas->data->datasets[1]->data);
 
@@ -329,6 +326,11 @@ class InformeController extends Controller
     $objetoGraficaBarraCadetes = $this->getObjetoParaGraficaDeBarra();
     $objetoGraficaBarraCadetes->data->datasets[0]->label = "Cantidad de Cadetes";
 
+    for($i = $fechaHoyMenosDosAnios->year; $i <= $fechaHoyMasDosAnios->year; $i+=1) {
+      $objetoGraficaBarraCadetes->data->labels[] = $i;
+      $objetoGraficaBarraCadetes->data->datasets[0]->data[$i] = 0;
+    }
+
     $cuotaController = new CuotaController;
 
     foreach ($socios as $socio) {
@@ -338,16 +340,10 @@ class InformeController extends Controller
         || (($fechaHoy->year - $fechaNacimiento->year) == 18)
         || (($fechaHoyMasUnAnio->year - $fechaNacimiento->year) == 18)
         || (($fechaHoyMasDosAnios->year - $fechaNacimiento->year) == 18)) {
-          if (!in_array($fechaNacimiento->year + 18, $objetoGraficaBarraCadetes->data->labels)) {
-            $objetoGraficaBarraCadetes->data->labels[] = $fechaNacimiento->year + 18;
-            $objetoGraficaBarraCadetes->data->datasets[0]->data[$fechaNacimiento->year + 18] = 0;
-          }
           $objetoGraficaBarraCadetes->data->datasets[0]->data[$fechaNacimiento->year + 18] += 1;
       }
     }
 
-    sort($objetoGraficaBarraCadetes->data->labels);
-    ksort($objetoGraficaBarraCadetes->data->datasets[0]->data);
     $objetoGraficaBarraCadetes->data->datasets[0]->data = array_values($objetoGraficaBarraCadetes->data->datasets[0]->data);
     
     return json_encode($objetoGraficaBarraCadetes);
@@ -943,26 +939,28 @@ class InformeController extends Controller
   {
     $lineaBalanceDiario = $this->getObjetoParaGraficaDeLineaIngresosEgresos();
     $fechaHoy = Carbon::now();
-    $fechaHoyMenosCatorceDias = Carbon::now()->subDays(14);
+    $fechaHoyMenosUnMes = Carbon::now()->subDays(29);
+    $fechaInicio = Carbon::now()->subDays(29);
+
+    for($i = 29; $i >= 0; $i -= 1) {
+      $lineaBalanceDiario->data->labels[] = $fechaInicio->format("d-m-Y");
+      $lineaBalanceDiario->data->datasets[0]->data[$fechaInicio->format("d-m-Y")] = 0;
+      $lineaBalanceDiario->data->datasets[1]->data[$fechaInicio->format("d-m-Y")] = 0;
+      $fechaInicio->addDays(1);
+    }
 
     foreach($montos->ingresos as $fecha => $monto) {
-      if(Carbon::parse($fecha)->between($fechaHoyMenosCatorceDias, $fechaHoy)) {
-        if(!in_array($fecha, $lineaBalanceDiario->data->labels)) {
-          $lineaBalanceDiario->data->labels[] = date("d-m-Y", strtotime($fecha));
-          $lineaBalanceDiario->data->datasets[0]->data[$fecha] = 0;
-          $lineaBalanceDiario->data->datasets[1]->data[$fecha] = 0;
-        }
-
-        $lineaBalanceDiario->data->datasets[0]->data[$fecha] += $monto;
+      if(Carbon::parse($fecha)->between($fechaHoyMenosUnMes, $fechaHoy)) {
+        $lineaBalanceDiario->data->datasets[0]->data[Carbon::parse($fecha)->format("d-m-Y")] += $monto;
       }
     }
 
     foreach($montos->egresos as $fecha => $monto) {
-      if(Carbon::parse($fecha)->between($fechaHoyMenosCatorceDias, $fechaHoy)) {
-        $lineaBalanceDiario->data->datasets[1]->data[$fecha] += $monto;
+      if(Carbon::parse($fecha)->between($fechaHoyMenosUnMes, $fechaHoy)) {
+        $lineaBalanceDiario->data->datasets[1]->data[Carbon::parse($fecha)->format("d-m-Y")] += $monto;
       }
     }
-
+    
     $lineaBalanceDiario->data->datasets[0]->data = array_values($lineaBalanceDiario->data->datasets[0]->data);
     $lineaBalanceDiario->data->datasets[1]->data = array_values($lineaBalanceDiario->data->datasets[1]->data);
 
@@ -1192,7 +1190,7 @@ class InformeController extends Controller
   }
 
   /**
-   * retorna un objeto JSON con el balance de las ultimas 8 semanas de ingresos y egresos
+   * retorna un objeto JSON con el balance de las ultimas 24 semanas de ingresos y egresos
    *
    * @param Collection $montos
    * @return string
@@ -1203,21 +1201,23 @@ class InformeController extends Controller
     ksort($montos->egresos);
     $lineaBalanceSemanal = $this->getObjetoParaGraficaDeLineaIngresosEgresos();
     $fechaHoy = Carbon::now();
-    $fechaHoyMenosOchoSemanas = Carbon::now()->subWeeks(8);
+    $fechaHoyMenosVeintitresSemanas = Carbon::now()->subWeeks(23);
+    $fechaInicio = Carbon::now()->subWeeks(23);
+
+    for($i = 23; $i >= 0; $i -= 1) {
+      $lineaBalanceSemanal->data->labels[] = $fechaInicio->weekOfYear." - ".$fechaInicio->year;
+      $lineaBalanceSemanal->data->datasets[0]->data[$fechaInicio->weekOfYear." - ".$fechaInicio->year] = 0;
+      $lineaBalanceSemanal->data->datasets[1]->data[$fechaInicio->weekOfYear." - ".$fechaInicio->year] = 0;
+      $fechaInicio->addWeeks(1);
+    }
 
     foreach($montos->ingresos as $fecha => $monto) {
       $anio = substr($fecha, 0, 4);
       $semana = substr($fecha, 7, 2);
       $fechaSemana = Carbon::parse($anio)->setISODate($anio, $semana);
 
-      if($fechaSemana->between($fechaHoyMenosOchoSemanas, $fechaHoy)) {
-        if(!in_array($fecha, $lineaBalanceSemanal->data->labels)) {
-          $lineaBalanceSemanal->data->labels[] = $fecha;
-          $lineaBalanceSemanal->data->datasets[0]->data[$fecha] = 0;
-          $lineaBalanceSemanal->data->datasets[1]->data[$fecha] = 0;
-        }
-
-        $lineaBalanceSemanal->data->datasets[0]->data[$fecha] += $monto;
+      if($fechaSemana->between($fechaHoyMenosVeintitresSemanas, $fechaHoy)) {
+        $lineaBalanceSemanal->data->datasets[0]->data[$semana." - ".$anio] += $monto;
       }
     }
 
@@ -1226,8 +1226,8 @@ class InformeController extends Controller
       $semana = substr($fecha, 7, 2);
       $fechaSemana = Carbon::parse($anio)->setISODate($anio, $semana);
 
-      if($fechaSemana->between($fechaHoyMenosOchoSemanas, $fechaHoy)) {
-        $lineaBalanceSemanal->data->datasets[1]->data[$fecha] += $monto;
+      if($fechaSemana->between($fechaHoyMenosVeintitresSemanas, $fechaHoy)) {
+        $lineaBalanceSemanal->data->datasets[1]->data[$semana." - ".$anio] += $monto;
       }
     }
 
@@ -1494,21 +1494,24 @@ class InformeController extends Controller
     ksort($montos->egresos);
     $lineaBalanceMensual = $this->getObjetoParaGraficaDeLineaIngresosEgresos();
     $fechaHoy = Carbon::now();
-    $fechaHoyMenosDoceMeses = Carbon::now()->subMonths(12);
+    $fechaHoyMenosOnceMeses = Carbon::now()->subMonths(11);
+    $fechaInicio = Carbon::now()->subMonths(11);
 
+    for($i = 11; $i >= 0; $i -= 1) {
+      $index = ($fechaInicio->month < 10) ? "0".$fechaInicio->month." - ".$fechaInicio->year : $fechaInicio->month." - ".$fechaInicio->year;
+      $lineaBalanceMensual->data->labels[] = $index;
+      $lineaBalanceMensual->data->datasets[0]->data[$index] = 0;
+      $lineaBalanceMensual->data->datasets[1]->data[$index] = 0;
+      $fechaInicio->addMonths(1);
+    }
+    
     foreach($montos->ingresos as $fecha => $monto) {
       $anio = substr($fecha, 0, 4);
       $mes = substr($fecha, 7, 2);
       $fechaMes = Carbon::parse($anio."-".$mes);
 
-      if($fechaMes->between($fechaHoyMenosDoceMeses, $fechaHoy)) {
-        if(!in_array($fecha, $lineaBalanceMensual->data->labels)) {
-          $lineaBalanceMensual->data->labels[] = $fecha;
-          $lineaBalanceMensual->data->datasets[0]->data[$fecha] = 0;
-          $lineaBalanceMensual->data->datasets[1]->data[$fecha] = 0;
-        }
-
-        $lineaBalanceMensual->data->datasets[0]->data[$fecha] += $monto;
+      if($fechaMes->between($fechaHoyMenosOnceMeses, $fechaHoy)) {
+        $lineaBalanceMensual->data->datasets[0]->data[$mes." - ".$anio] += $monto;
       }
     }
 
@@ -1517,8 +1520,8 @@ class InformeController extends Controller
       $mes = substr($fecha, 7, 2);
       $fechaMes = Carbon::parse($anio."-".$mes);
 
-      if($fechaMes->between($fechaHoyMenosDoceMeses, $fechaHoy)) {
-        $lineaBalanceMensual->data->datasets[1]->data[$fecha] += $monto;
+      if($fechaMes->between($fechaHoyMenosOnceMeses, $fechaHoy)) {
+        $lineaBalanceMensual->data->datasets[1]->data[$mes." - ".$anio] += $monto;
       }
     }
     

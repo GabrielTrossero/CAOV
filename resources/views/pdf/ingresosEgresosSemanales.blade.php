@@ -12,7 +12,7 @@
     <div class="tam_letra_x-small">
           <div align="center">
               <div class="container-img">
-                <h4>Balance de Ingresos y Egresos (últimas 8 semanas)</h4> 
+                <h4>Balance de Ingresos y Egresos (últimas 24 semanas)</h4> 
                 <br>
                 <img class="balance" id="balance-ocho-semanas" src="https://quickchart.io/chart?c={{ $lineaBalanceIngresosEgresosSemanales }}" alt="Balance de Ingresos y Egresos (últimas 8 semanas)">
               </div>

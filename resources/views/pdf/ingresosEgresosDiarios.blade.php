@@ -12,7 +12,7 @@
     <div class="tam_letra_x-small">
           <div align="center">
               <div class="container-img">
-                <h4>Balance de Ingresos y Egresos (últimos 14 días)</h4> 
+                <h4>Balance de Ingresos y Egresos (últimos 30 días)</h4> 
                 <br>
                 <img class="balance" id="balance-catorce-dias" src="https://quickchart.io/chart?c={{ $lineaBalanceIngresosEgresosDiarios }}" alt="Balance de Ingresos y Egresos (últimos 14 días)">
               </div>
