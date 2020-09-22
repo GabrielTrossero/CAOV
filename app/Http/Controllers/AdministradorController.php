@@ -5,13 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Http\Controllers\CuotaController;
-
-use App\MovExtras;
-use App\ComprobanteCuota;
-use App\ReservaInmueble;
-use App\ReservaMueble;
-
 class AdministradorController extends Controller
 {
   /**
