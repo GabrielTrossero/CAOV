@@ -89,7 +89,7 @@
                             <label for="costoReserva" class="col-md-4 col-form-label text-md-right">{{ __('Costo de la Reserva') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costoReserva" id="costoReserva" class="form-control" value="{{ old('costoReserva') ?? $reservaInmueble->costoReserva }}" disabled>
+                                <input type="text" name="costoReserva" id="costoReserva" class="form-control" value="{{ '$ '. $reservaInmueble->costoReserva }}" disabled>
                             </div>
                         </div>
 
@@ -97,7 +97,7 @@
                             <label for="costoTotal" class="col-md-4 col-form-label text-md-right">{{ __('Costo Total') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costoTotal" id="costoTotal" class="form-control" value="{{ old('costoTotal') ?? $reservaInmueble->costoTotal }}" disabled>
+                                <input type="text" name="costoTotal" id="costoTotal" class="form-control" value="{{ '$ '. $reservaInmueble->costoTotal }}" disabled>
                             </div>
                         </div>
 
@@ -204,7 +204,7 @@
                             <div class="col-md-10">
 
                               <div class="alert alert-danger" align="center">
-                                {{ 'MONTO A PAGAR: $'. ($reservaInmueble->costoTotal - $reservaInmueble->costoReserva) }}
+                                {{ 'MONTO A PAGAR: $ '. ($reservaInmueble->costoTotal - $reservaInmueble->costoReserva) }}
                               </div>
                             </div>
                         </div>

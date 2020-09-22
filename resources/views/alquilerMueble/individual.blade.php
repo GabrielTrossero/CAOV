@@ -28,7 +28,7 @@
           <td>{{ $reserva->cantidad }}</td>
           <td>{{ date("d/m/Y H:i", strtotime($reserva->fechaHoraInicio)) }}</td>
           <td>{{ date("d/m/Y H:i", strtotime($reserva->fechaHoraFin)) }}</td>
-          <td>{{ "$". $reserva->costoTotal }}</td>
+          <td class="mismalinea">{{ "$ ". $reserva->costoTotal }}</td>
           @if($reserva->numRecibo)
             <td>{{ $reserva->numRecibo }}</td>
           @else
@@ -114,7 +114,7 @@
           <td>{{ $reservaRelacionada->cantidad }}</td>
           <td>{{ date("d/m/Y H:i", strtotime($reservaRelacionada->fechaHoraInicio)) }}</td>
           <td>{{ date("d/m/Y H:i", strtotime($reservaRelacionada->fechaHoraFin)) }}</td>
-          <td>{{ "$". $reservaRelacionada->costoTotal }}</td>
+          <td class="montos">{{ "$ ". $reservaRelacionada->costoTotal }}</td>
           <td>{{ $reservaRelacionada->numRecibo }}</td>
           <td>{{ $reservaRelacionada->medioDePago->nombre }}</td>
           <td>{{ $reservaRelacionada->observacion }}</td>
@@ -145,8 +145,8 @@
               <br>
             @endforeach
           </td>
-          <td>
-            {{ "$". $total }}
+          <td class="mismalinea">
+            {{ "$ ". $total }}
           </td>
         </tr>
       </table>

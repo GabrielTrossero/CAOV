@@ -74,10 +74,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="costo" class="col-md-4 col-form-label text-md-right">{{ __('Costo ($)') }}</label>
+                            <label for="costo" class="col-md-4 col-form-label text-md-right">{{ __('Costo') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="costo" id="costo" class="form-control" value="{{ $reserva->costoTotal }}" min="0" disabled>
+                                <input type="text" name="costo" id="costo" class="form-control" value="{{ '$ '. $reserva->costoTotal }}" min="0" disabled>
                             </div>
                         </div>
 
@@ -128,7 +128,7 @@
                             <div class="col-md-10">
 
                               <div class="alert alert-danger" align="center">
-                                {{ 'MONTO A PAGAR: $'. $reserva->costoTotal }}
+                                {{ 'MONTO A PAGAR: $ '. $reserva->costoTotal }}
                               </div>
                             </div>
                         </div>

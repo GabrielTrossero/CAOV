@@ -78,3 +78,9 @@ img {
 .page-break {
   page-break-after: always;
 }
+
+/* NO SE USA PORQUE NO SE VEN BIEN LAS COLUMNAS DE LA TABLA
+.montos{
+	text-align: right;
+	border-right: 40px solid transparent;
+}*/

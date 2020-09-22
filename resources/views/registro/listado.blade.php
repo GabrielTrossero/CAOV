@@ -35,7 +35,7 @@
               @elseif ($movimiento->tipo == "2")
                 <td>{{ 'Egreso' }}</td>
               @endif
-              <td>${{ $movimiento->monto }}</td>
+              <td class="montos">{{ '$ '. $movimiento->monto }}</td>
               <td>
                 <form action="{{url('/registro/delete')}}" method="post" style="display:inline" onsubmit="return confirm('¿Está seguro que desea eliminar el Registro?');">
                   {{ csrf_field() }}

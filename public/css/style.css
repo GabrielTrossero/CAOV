@@ -265,3 +265,16 @@ nav.mostrar{
 	background-color: #dc3545;
 	border-color: #7b4545;
 }
+
+
+/*para alinear los listados de montos a la derecha*/
+.montos{
+	text-align: right; /*alineo a la drecha*/
+	border-right: 40px solid transparent; /*para hacer espaciado, sino queda muy a la derecha*/
+	white-space: nowrap; /*para que esté todo en la misma linea*/
+}
+
+/*para que el "$" y el monto aparezcan en la misma linea*/
+.mismalinea{ 
+	white-space: nowrap;
+}

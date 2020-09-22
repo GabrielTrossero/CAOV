@@ -122,7 +122,7 @@
                             <label for="montoMensual" class="col-md-4 col-form-label text-md-right">{{ __('Monto Base') }}</label>
 
                             <div class="col-md-6">
-                                <input type="text" name="montoMensual" id="montoMensual" class="form-control" maxlength="75" valor="{{ '$'. $cuota->montoCuota->montoMensual }}" value="{{ '$'. $cuota->montoCuota->montoMensual }}" disabled>
+                                <input type="text" name="montoMensual" id="montoMensual" class="form-control" maxlength="75" valor="{{ '$ '. $cuota->montoCuota->montoMensual }}" value="{{ '$ '. $cuota->montoCuota->montoMensual }}" disabled>
                             </div>
                         </div>
 
@@ -161,9 +161,9 @@
                                 @if ($cuota->montoCuota->tipo == 'g')
                                   <!--si la cantidad de integrantes del grupo (al momento de generar la cuota) es mayor que la cantidad de integrantes del montoCuota más acutal-->
                                   @if ($cuota->cantidadIntegrantes > $cuota->montoCuota->cantidadIntegrantes)
-                                    <input type="text" name="interesGrupoFamiliar" id="interesGrupoFamiliar" class="form-control" maxlength="75" valor="{{ '$'. $cuota->montoInteresGrupoFamiliar ." (". ($cuota->cantidadIntegrantes - $cuota->montoCuota->cantidadIntegrantes) ." integrante/s cobrado/s)" }}" value="{{ '$'. $cuota->montoInteresGrupoFamiliar ." (". ($cuota->cantidadIntegrantes - $cuota->montoCuota->cantidadIntegrantes) ." integrante/s cobrado/s)" }}" disabled>
+                                    <input type="text" name="interesGrupoFamiliar" id="interesGrupoFamiliar" class="form-control" maxlength="75" valor="{{ '$ '. $cuota->montoInteresGrupoFamiliar ." (". ($cuota->cantidadIntegrantes - $cuota->montoCuota->cantidadIntegrantes) ." integrante/s cobrado/s)" }}" value="{{ '$ '. $cuota->montoInteresGrupoFamiliar ." (". ($cuota->cantidadIntegrantes - $cuota->montoCuota->cantidadIntegrantes) ." integrante/s cobrado/s)" }}" disabled>
                                   @else
-                                    <input type="text" name="interesGrupoFamiliar" id="interesGrupoFamiliar" class="form-control" maxlength="75" valor="{{ '$0' }}" value="{{ '$0' }}" disabled>
+                                    <input type="text" name="interesGrupoFamiliar" id="interesGrupoFamiliar" class="form-control" maxlength="75" valor="{{ '$ 0' }}" value="{{ '$ 0' }}" disabled>
                                   @endif
                                 @else
                                   <input type="text" name="interesGrupoFamiliar" id="interesGrupoFamiliar" class="form-control" maxlength="75" valor="{{ 'No pertenece a un grupo familiar' }}" value="{{ 'No pertenece a un grupo familiar' }}" disabled>

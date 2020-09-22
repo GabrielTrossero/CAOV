@@ -29,37 +29,40 @@
                 @elseif ($movExtra->tipo == "2")
                   <td>{{ 'Egreso' }}</td>
                 @endif
-                <td>{{ '$'.$movExtra->monto }}</td>
+                <td class="montos">{{ '$ '.$movExtra->monto }}</td>
                 <td>{{ $movExtra->descripcion }}</td>
                 <td>{{ $movExtra->numRecibo }}</td>
                 <td><a href="{{ url('/registro/show') }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
             @endforeach
+
             @foreach ($alquileresInmueblePagos as $alquilerInmueble)
               <tr>
                 <td>{{ date("d/m/Y", strtotime($alquilerInmueble->fechaSolicitud)) }}</td>
                 <td>{{ 'Ingreso' }}</td>
-                <td>{{ '$'.$alquilerInmueble->costoTotal }}</td>
+                <td class="montos">{{ '$ '.$alquilerInmueble->costoTotal }}</td>
                 <td>{{ 'Alquileres de Inmuebles' }}</td>
                 <td>{{ $alquilerInmueble->numRecibo }}</td>
                 <td><a href="{{ url('/alquilerinmueble/show/'.$alquilerInmueble->id) }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
             @endforeach
+
             @foreach ($alquileresMueblePagos as $alquilerMueble)
               <tr>
                 <td>{{ date("d/m/Y", strtotime($alquilerMueble->fechaSolicitud)) }}</td>
                 <td>{{ 'Ingreso' }}</td>
-                <td>{{ '$'.$alquilerMueble->costoTotal }}</td>
+                <td class="montos">{{ '$ '.$alquilerMueble->costoTotal }}</td>
                 <td>{{ 'Alquileres de Muebles' }}</td>
                 <td>{{ $alquilerMueble->numRecibo }}</td>
                 <td><a href="{{ url('/alquilermueble/show/'.$alquilerMueble->id) }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
             @endforeach
+
             @foreach ($cuotasPagadas as $cuota)
               <tr>
                 <td>{{ date("d/m/Y", strtotime($cuota->fechaPago)) }}</td>
                 <td>{{ 'Ingreso' }}</td>
-                <td>{{ '$'.$cuota->montoTotal }}</td>
+                <td class="montos">{{ '$ '.$cuota->montoTotal }}</td>
                 <td>{{ 'Cuota' }}</td>
                 <td>{{ '-' }}</td>
                 <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
@@ -70,7 +73,7 @@
         </table>
 
         <div class="alert alert-danger" align="center">
-          {{ 'El balance del mes fue de $'. $balance }}
+          {{ 'El balance del mes fue de $ '. $balance }}
         </div>
 
         <div class="card-footer row">

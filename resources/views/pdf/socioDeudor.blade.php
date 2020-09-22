@@ -86,16 +86,16 @@
                 <td>{{ 'Activo' }}</td>
               @endif
 
-              <td>{{ '$'.$cuotaNoPagada->montoCuota->montoMensual }}</td>
+              <td class="montos">{{ '$ '.$cuotaNoPagada->montoCuota->montoMensual }}</td>
 
-              <td>{{ '$'.$cuotaNoPagada->montoDeuda }}</td>
+              <td class="montos">{{ '$ '.$cuotaNoPagada->montoDeuda }}</td>
             </tr>
             @endforeach
         </tbody>
       </table>
 
       <div class="alert alert-danger" align="center">
-        {{ 'El monto total a pagar del socio es de $'. $socio->montoTotal .' hasta la fecha' }}
+        {{ 'El monto total a pagar del socio es de $ '. $socio->montoTotal .' hasta la fecha' }}
       </div>
     </div>
 @endsection

@@ -46,14 +46,16 @@
                   <td>Grupo Familiar</td>
               @endif
 
-              <td>{{ '$'.$montoCuota->montoMensual }}</td>
+              <td class="montos">{{ '$ '.$montoCuota->montoMensual }}</td>
+
               @if ($montoCuota->tipo == 'g')
-                <td>{{ '$'.$montoCuota->montoInteresGrupoFamiliar.' por mes, a partir del integrante N° '.$montoCuota->cantidadIntegrantes }}</td>
+            <td class="mismalinea">{{ '$ '.$montoCuota->montoInteresGrupoFamiliar.' por mes,'}} <div> {{ ' a partir del integrante N° '.$montoCuota->cantidadIntegrantes }}</div> </td>
               @else
                 <td>{{ '-' }}</td>
               @endif
 
-              <td>{{ '$'.$montoCuota->montoInteresMensual.' por mes, a partir del mes N° '.$montoCuota->cantidadMeses.' de atraso' }}</td>
+              <td class="mismalinea">{{ '$ '.$montoCuota->montoInteresMensual.' por mes,'}} <div> {{'a partir del mes N° '.$montoCuota->cantidadMeses.' de atraso' }} </div> </td>
+              
               <td>
                 @if (sizeof($montoCuota->comprobantesDeCuotas) == 0)
                   <a class="icono-editar-anchor" href="{{ url('/cuota/editMontoCuota/'.$montoCuota->id) }}">

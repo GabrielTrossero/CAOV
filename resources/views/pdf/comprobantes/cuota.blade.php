@@ -20,11 +20,11 @@
       <br>
       <li>Fecha de Pago: {{ date("d/m/Y", strtotime($comprobante->fechaPago)) }}</li>
       <br>
-      <li>Monto Base: ${{ $comprobante->montoMensual }}</li>
+      <li>Monto Base: $ {{ $comprobante->montoMensual }}</li>
       <br>
-      <li>Intereses: ${{ $comprobante->interesPorIntegrantes + $comprobante->interesMesesAtrasados }}</li>
+      <li>Intereses: $ {{ $comprobante->interesPorIntegrantes + $comprobante->interesMesesAtrasados }}</li>
       <br>
-      <li>Monto Total: ${{ $comprobante->montoTotal }}</li>
+      <li>Monto Total: $ {{ $comprobante->montoTotal }}</li>
     </ul>
 
 

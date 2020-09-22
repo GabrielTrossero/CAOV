@@ -50,7 +50,7 @@
                 <td>{{ $socio->persona->apellido }}</td>
                 <td>{{ $socio->persona->nombres }}</td>
                 <td>{{ $socio->cantCuotas }}</td>
-                <td>{{ '$'.$socio->montoDeuda }}</td>
+                <td class="montos">{{ '$ '.$socio->montoDeuda }}</td>
                 <td><a href="{{ url('/informe/socio_deudor/'.$socio->id) }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>
           @endforeach

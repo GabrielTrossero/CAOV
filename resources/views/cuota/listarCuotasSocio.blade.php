@@ -95,13 +95,13 @@
                 <td>{{ 'No Pagada' }}</td>
               @endif
 
-              <td>{{ '$'.$cuota->montoCuota->montoMensual }}</td>
+              <td class="montos">{{ '$ '.$cuota->montoCuota->montoMensual }}</td>
 
               @if ($cuota->fechaPago)
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
-                <td>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
+                <td class="montos">{{ '$ '. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
               @else
-                <td>{{ '-' }}</td>
+                <td class="montos">{{ '$ 0' }}</td>
               @endif
 
               @if ($cuota->montoCuota->tipo == 'c')

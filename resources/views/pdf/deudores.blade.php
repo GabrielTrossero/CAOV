@@ -45,7 +45,7 @@
             <td>{{ $socio->persona->apellido }}</td>
             <td>{{ $socio->persona->nombres }}</td>
             <td>{{ $socio->cantCuotas }}</td>
-            <td>{{ '$'.$socio->montoDeuda }}</td>
+            <td class="montos">{{ '$ '.$socio->montoDeuda }}</td>
           </tr>
         @endforeach
 

@@ -43,16 +43,12 @@
                 @if ($montos->ingresos[$mes] == 0)
                     <td> - </td>
                 @else 
-                    <td>{{ '$'.$montos->ingresos[$mes] }}</td>
+                    <td class="montos">{{ '$ '.$montos->ingresos[$mes] }}</td>
                 @endif
 
-                @if ($montos->egresos[$mes] == 0)
-                    <td> - </td>
-                @else 
-                    <td>{{ '$'.$montos->egresos[$mes] }}</td>
-                @endif
+                <td class="montos">{{ '$ '.$montos->egresos[$mes] }}</td>
 
-                <td>{{ '$'. ($montos->ingresos[$mes] - $montos->egresos[$mes]) }}</td>
+                <td class="montos">{{ '$ '. ($montos->ingresos[$mes] - $montos->egresos[$mes]) }}</td>
 
                 <td><a href="{{ url('/informe/ingresos_egresos_mensuales/'.$mes.'/'.($montos->ingresos[$mes] - $montos->egresos[$mes])) }}"> <i class="fas fa-plus"></i></a> </td>
 

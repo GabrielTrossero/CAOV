@@ -138,26 +138,27 @@
           @if ($cuota->inhabilitada)
             <td>{{ 'Inhabilitada' }}</td>
           @elseif ($cuota->fechaPago)
-          <td>{{ 'Pagada' }}</td>
+            <td>{{ 'Pagada' }}</td>
           @else
             <td>{{ 'No Pagada' }}</td>
           @endif
 
           <td>{{date("m/Y", strtotime($cuota->fechaMesAnio))}}</td> <!-- para mostrar solo mes/año -->
+
           @if ($cuota->fechaPago)
             <td>{{date("d/m/Y", strtotime($cuota->fechaPago))}}</td><!-- para mostrar en formato dia/mes/año -->
           @else
             <td>{{ '-' }}</td>
           @endif
 
-          <td>{{ '$'. $cuota->montoCuota->montoMensual }}</td>
+          <td class="mismalinea">{{ '$ '. $cuota->montoCuota->montoMensual }}</td>
 
           @if ($cuota->fechaPago)
             <!--si la cantidad de meses atrasados es mayor que la cantidad mínima de montoCuota (para que no quede negativo)-->
             @if ($cuota->mesesAtrasados > $cuota->montoCuota->cantidadMeses)
-              <td>{{ '$'. $cuota->montoInteresAtraso ." (". ($cuota->mesesAtrasados - $cuota->montoCuota->cantidadMeses) ." mes/es)" }}</td>
+              <td class="mismalinea">{{ '$ '. $cuota->montoInteresAtraso }} <div> {{"(". ($cuota->mesesAtrasados - $cuota->montoCuota->cantidadMeses) ." mes/es)" }} </div></td>
             @else
-              <td>{{ "$0" }}</td>
+              <td class="mismalinea">{{ "$ 0" }}</td>
             @endif
           @else
             <td>{{ 'Cuota no pagada' }}</td>
@@ -172,9 +173,9 @@
           @if ($cuota->montoCuota->tipo == 'g')
             <!--si la cantidad de integrantes registrada es mayor que la cantidad mínima de montoCuota (para que no quede negativo)-->
             @if ($cuota->cantidadIntegrantes > $cuota->montoCuota->cantidadIntegrantes)
-              <td>{{ '$'. $cuota->montoInteresGrupoFamiliar ." (". ($cuota->cantidadIntegrantes - $cuota->montoCuota->cantidadIntegrantes) ." integrante/s)" }}</td>
+              <td class="mismalinea">{{ '$ '. $cuota->montoInteresGrupoFamiliar }} <div> {{ "(". ($cuota->cantidadIntegrantes - $cuota->montoCuota->cantidadIntegrantes) ." integrante/s)" }} </div> </td>
             @else
-              <td>{{ "$0" }}</td>
+              <td class="mismalinea">{{ "$ 0" }}</td>
             @endif
           @else
             <td>{{ 'No pertenece a un grupo familiar' }}</td>
@@ -188,7 +189,7 @@
 
           @if ($cuota->fechaPago)
             <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
-            <th>{{ '$'. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</th>
+            <th class="mismalinea">{{ '$ '. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</th>
           @else
             <td>{{ '-' }}</td>
           @endif

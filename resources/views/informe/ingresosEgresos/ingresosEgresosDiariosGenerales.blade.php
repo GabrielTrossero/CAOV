@@ -41,19 +41,11 @@
               <tr>
                 <td>{{ date("d/m/Y", strtotime($fecha)) }}</td>
 
-                @if ($montos->ingresos[$fecha] == 0)
-                    <td> - </td>
-                @else 
-                    <td>{{ '$'.$montos->ingresos[$fecha] }}</td>
-                @endif
-
-                @if ($montos->egresos[$fecha] == 0)
-                    <td> - </td>
-                @else 
-                    <td>{{ '$'.$montos->egresos[$fecha] }}</td>
-                @endif
-
-                <td>{{ '$'. ($montos->ingresos[$fecha] - $montos->egresos[$fecha]) }}</td>
+                <td class="montos">{{ '$ '.$montos->ingresos[$fecha] }}</td>
+                
+                <td class="montos">{{ '$ '.$montos->egresos[$fecha] }}</td>
+                
+                <td class="montos">{{ '$ '. ($montos->ingresos[$fecha] - $montos->egresos[$fecha]) }}</td>
                 
                 <td><a href="{{ url('/informe/ingresos_egresos_diarios/'.$fecha.'/'.($montos->ingresos[$fecha] - $montos->egresos[$fecha])) }}"> <i class="fas fa-plus"></i></a> </td>
               </tr>

@@ -89,9 +89,9 @@
                 <td>{{ 'Activo' }}</td>
               @endif
 
-              <td>{{ '$'.$cuotaNoPagada->montoCuota->montoMensual }}</td>
+              <td class="montos">{{ '$ '.$cuotaNoPagada->montoCuota->montoMensual }}</td>
 
-              <td>{{ '$'.$cuotaNoPagada->montoDeuda }}</td>
+              <td class="montos">{{ '$ '.$cuotaNoPagada->montoDeuda }}</td>
 
               <td><a href="{{ url('/cuota/show/'.$cuotaNoPagada->id) }}"> <i class="fas fa-plus"></i></a> </td>
             </tr>
@@ -101,7 +101,7 @@
       </table>
 
       <div class="alert alert-danger" align="center">
-        {{ 'El monto total a pagar del socio es de $'. $socio->montoTotal .' hasta la fecha' }}
+        {{ 'El monto total a pagar del socio es de $ '. $socio->montoTotal .' hasta la fecha' }}
       </div>
     
       <div class="card-footer row">

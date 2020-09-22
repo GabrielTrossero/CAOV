@@ -37,19 +37,11 @@
               <tr>
                 <td>{{ $semana }}</td>
 
-                @if ($montos->ingresos[$semana] == 0)
-                    <td> - </td>
-                @else 
-                    <td>{{ '$'.$montos->ingresos[$semana] }}</td>
-                @endif
+                <td class="montos">{{ '$ '.$montos->ingresos[$semana] }}</td>
 
-                @if ($montos->egresos[$semana] == 0)
-                    <td> - </td>
-                @else 
-                    <td>{{ '$'.$montos->egresos[$semana] }}</td>
-                @endif
+                <td class="montos">{{ '$ '.$montos->egresos[$semana] }}</td>
 
-                <td>{{ '$'. ($montos->ingresos[$semana] - $montos->egresos[$semana]) }}</td>
+                <td class="montos">{{ '$ '. ($montos->ingresos[$semana] - $montos->egresos[$semana]) }}</td>
               </tr>
             @endforeach
           </tbody>

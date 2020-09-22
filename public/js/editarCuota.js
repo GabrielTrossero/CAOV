@@ -10,17 +10,17 @@ $(document).ready(function () {
   if (mesesAtrasados > cantMaxMeses){
     var montoInteres = $("#fechaPago").attr('interes'); //obtengo el valor que tiene el atributo interes del input id=fechaPago
     var montoPagar = (mesesAtrasados - cantMaxMeses) * montoInteres; //calculo el monto a pagar
-    $("#interesAtraso").val("$" + montoPagar + " (" + (mesesAtrasados - cantMaxMeses) + " mes/es cobrado/s)"); //inserto en el input id=interesAtraso
+    $("#interesAtraso").val("$ " + montoPagar + " (" + (mesesAtrasados - cantMaxMeses) + " mes/es cobrado/s)"); //inserto en el input id=interesAtraso
     $("#mesesAtraso").val(mesesAtrasados + " mes/es"); //inserto en el input id=mesesAtraso
     $("#valorAtraso").val(montoPagar);
   }
   else if (mesesAtrasados >= 0){
-    $("#interesAtraso").val("$0 (0 meses)");
+    $("#interesAtraso").val("$ 0 (0 meses)");
     $("#mesesAtraso").val(mesesAtrasados + " mes/es");
     $("#valorAtraso").val(0);
   }
   else {
-    $("#interesAtraso").val("$0 (0 meses)");
+    $("#interesAtraso").val("$ 0 (0 meses)");
     $("#mesesAtraso").val("0 meses");
     $("#valorAtraso").val(0);
   }
@@ -29,7 +29,7 @@ $(document).ready(function () {
   var valueAtraso = parseInt(jQuery('#valorAtraso').val(),10);
   var valueGrupoFamiliar = parseInt(jQuery('#valorGrupoFamiliar').val(),10);
   var valueMensual = parseInt(jQuery('#valorMensual').val(),10);
-  var total = ( "$" + (valueAtraso + valueGrupoFamiliar + valueMensual));
+  var total = ( "$ " + (valueAtraso + valueGrupoFamiliar + valueMensual));
 
   $("#montoTot").val(total); //inserto el valor seleccionado en el input "id=montoTotal"
 

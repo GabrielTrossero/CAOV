@@ -31,8 +31,8 @@
           <td>{{ date("d/m/Y H:i", strtotime($reservaInmueble->fechaHoraInicio)) }}</td>
           <td>{{ date("d/m/Y H:i", strtotime($reservaInmueble->fechaHoraFin)) }}</td>
           <td>{{ $reservaInmueble->observacion }}</td>
-          <td>{{ $reservaInmueble->costoReserva }}</td>
-          <td>{{ $reservaInmueble->costoTotal }}</td>
+          <td class="mismalinea">{{ '$ '.$reservaInmueble->costoReserva }}</td>
+          <td class="mismalinea">{{ '$ '.$reservaInmueble->costoTotal }}</td>
           <td>{{ $reservaInmueble->medioDePago->nombre }}</td>
           <td>{{ $reservaInmueble->tipoEvento }}</td>
           <td>{{ $reservaInmueble->cantAsistentes }}</td>

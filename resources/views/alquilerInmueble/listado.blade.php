@@ -28,8 +28,8 @@
               <td>{{ $reservaInmueble->inmueble->nombre }}</td>
               <td>{{ date("d/m/Y H:i", strtotime($reservaInmueble->fechaHoraInicio)) }}</td>
               <td>{{ date("d/m/Y H:i", strtotime($reservaInmueble->fechaHoraFin)) }}</td>
-              <td>{{ $reservaInmueble->costoReserva }}</td>
-              <td>{{ $reservaInmueble->costoTotal }}</td>
+              <td class="montos">{{ '$ '.$reservaInmueble->costoReserva }}</td>
+              <td class="montos">{{ '$ '.$reservaInmueble->costoTotal }}</td>
               @if ($reservaInmueble->numRecibo)
                 <td>{{ $reservaInmueble->numRecibo }}</td>
               @else

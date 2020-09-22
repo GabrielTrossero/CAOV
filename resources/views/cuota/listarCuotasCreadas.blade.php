@@ -50,10 +50,10 @@
                 <td>{{ 'No Pagada' }}</td>
               @endif
 
-              <td>{{ '$'.$cuota->montoCuota->montoMensual }}</td>
+              <td class="montos">{{ '$ '.$cuota->montoCuota->montoMensual }}</td>
 
 
-                <td>{{ '-' }}</td>
+              <td>{{ '-' }}</td>
 
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
             </tr>
