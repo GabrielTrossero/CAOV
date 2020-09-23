@@ -29,6 +29,11 @@
           <br>
           <img class="grafico-informe" id="socios-cantidad-por-deportes-practicados" src="https://quickchart.io/chart?c={{ $barraCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
         </div>
+        <div class="container-grafico-informe">
+          <b>Socios por Categoría</b>
+          <br>
+          <img class="grafico-informe" id="socios-categoria" src="https://quickchart.io/chart?c={{ $barraSociosPorCategoria }}" alt="Socios por Categoría">
+        </div>
       </div>
       <div class="card-footer row">
         <div >
