@@ -14,7 +14,7 @@
               <div class="container-img">
                 <h4>Balance de Ingresos y Egresos (últimos 30 días)</h4> 
                 <br>
-                <img class="balance" id="balance-catorce-dias" src="https://quickchart.io/chart?c={{ $lineaBalanceIngresosEgresosDiarios }}" alt="Balance de Ingresos y Egresos (últimos 14 días)">
+                <img class="balance" id="balance-catorce-dias" src="https://quickchart.io/chart?c={{ $barraBalanceIngresosEgresosDiarios }}" alt="Balance de Ingresos y Egresos (últimos 14 días)">
               </div>
           </div>
           <div class="page-break"></div>

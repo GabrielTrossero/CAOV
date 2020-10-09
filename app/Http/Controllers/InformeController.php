@@ -499,6 +499,19 @@ class InformeController extends Controller
   /**
    * genera un objeto genérico para grafico de linea de Ingresos y Egresos
    */
+  public function getObjetoParaGraficaDeBarraIngresosEgresos()
+  {
+    $objetoGraficaBarraDoble = $this->getObjetoParaGraficaDeBarraDoble();
+    $objetoGraficaBarraDoble->data->datasets[0]->label = "Ingresos";
+    $objetoGraficaBarraDoble->data->datasets[1]->label = "Egresos";
+    unset($objetoGraficaBarraDoble->options);
+
+    return $objetoGraficaBarraDoble;
+  }
+
+  /**
+   * genera un objeto genérico para grafico de linea de Ingresos y Egresos
+   */
   public function getObjetoParaGraficaDeLineaIngresosEgresos()
   {
     $objetoGraficaLinea = $this->getObjetoParaGraficaDeLinea();
@@ -979,36 +992,36 @@ class InformeController extends Controller
    * @param Collection $montos
    * @return void
    */
-  public function graficoLineaBalanceIngresosEgresosDiarios($montos)
+  public function graficoBarraBalanceIngresosEgresosDiarios($montos)
   {
-    $lineaBalanceDiario = $this->getObjetoParaGraficaDeLineaIngresosEgresos();
+    $barraBalanceDiario = $this->getObjetoParaGraficaDeBarraIngresosEgresos();
     $fechaHoy = Carbon::now();
     $fechaHoyMenosUnMes = Carbon::now()->subDays(29);
     $fechaInicio = Carbon::now()->subDays(29);
 
     for($i = 29; $i >= 0; $i -= 1) {
-      $lineaBalanceDiario->data->labels[] = $fechaInicio->format("d-m-Y");
-      $lineaBalanceDiario->data->datasets[0]->data[$fechaInicio->format("d-m-Y")] = 0;
-      $lineaBalanceDiario->data->datasets[1]->data[$fechaInicio->format("d-m-Y")] = 0;
+      $barraBalanceDiario->data->labels[] = $fechaInicio->format("d-m-Y");
+      $barraBalanceDiario->data->datasets[0]->data[$fechaInicio->format("d-m-Y")] = 0;
+      $barraBalanceDiario->data->datasets[1]->data[$fechaInicio->format("d-m-Y")] = 0;
       $fechaInicio->addDays(1);
     }
 
     foreach($montos->ingresos as $fecha => $monto) {
       if(Carbon::parse($fecha)->between($fechaHoyMenosUnMes, $fechaHoy)) {
-        $lineaBalanceDiario->data->datasets[0]->data[Carbon::parse($fecha)->format("d-m-Y")] += $monto;
+        $barraBalanceDiario->data->datasets[0]->data[Carbon::parse($fecha)->format("d-m-Y")] += $monto;
       }
     }
 
     foreach($montos->egresos as $fecha => $monto) {
       if(Carbon::parse($fecha)->between($fechaHoyMenosUnMes, $fechaHoy)) {
-        $lineaBalanceDiario->data->datasets[1]->data[Carbon::parse($fecha)->format("d-m-Y")] += $monto;
+        $barraBalanceDiario->data->datasets[1]->data[Carbon::parse($fecha)->format("d-m-Y")] += $monto;
       }
     }
     
-    $lineaBalanceDiario->data->datasets[0]->data = array_values($lineaBalanceDiario->data->datasets[0]->data);
-    $lineaBalanceDiario->data->datasets[1]->data = array_values($lineaBalanceDiario->data->datasets[1]->data);
+    $barraBalanceDiario->data->datasets[0]->data = array_values($barraBalanceDiario->data->datasets[0]->data);
+    $barraBalanceDiario->data->datasets[1]->data = array_values($barraBalanceDiario->data->datasets[1]->data);
 
-    return json_encode($lineaBalanceDiario);
+    return json_encode($barraBalanceDiario);
   }
 
   /**
@@ -1020,10 +1033,10 @@ class InformeController extends Controller
   {
     //llamo a la función ingresosEgresosDiarios
     $montos = $this->ingresosEgresosDiarios();
-    $lineaBalanceIngresosEgresosDiarios = $this->graficoLineaBalanceIngresosEgresosDiarios($montos);
+    $barraBalanceIngresosEgresosDiarios = $this->graficoBarraBalanceIngresosEgresosDiarios($montos);
 
     return view('informe.ingresosEgresos.ingresosEgresosDiariosGenerales', compact('montos',
-                                                                                   'lineaBalanceIngresosEgresosDiarios'));
+                                                                                   'barraBalanceIngresosEgresosDiarios'));
   }
 
   /**
@@ -1039,10 +1052,10 @@ class InformeController extends Controller
     // Ordeno por fecha acendente
     ksort($montos->ingresos);
 
-    $lineaBalanceIngresosEgresosDiarios =  $this->graficoLineaBalanceIngresosEgresosDiarios($montos);
+    $barraBalanceIngresosEgresosDiarios =  $this->graficoBarraBalanceIngresosEgresosDiarios($montos);
 
     $pdf = PDF::loadView('pdf.ingresosEgresosDiarios', ['montos' => $montos,
-                                                        'lineaBalanceIngresosEgresosDiarios' => $lineaBalanceIngresosEgresosDiarios]);
+                                                        'barraBalanceIngresosEgresosDiarios' => $barraBalanceIngresosEgresosDiarios]);
 
     return $pdf->download('ingresos-egresos-diarios.pdf');
   }

@@ -12,7 +12,7 @@
         <div class="ccontainer-grafico-informe-ingresos-egresos">
           <b>Balance de Ingresos y Egresos (últimos 30 días)</b>
           <br>
-          <img class="grafico-informe" id="balance-catorce-dias" src="https://quickchart.io/chart?c={{ $lineaBalanceIngresosEgresosDiarios }}" alt="Balance de Ingresos y Egresos (últimos 14 días)">
+          <img class="grafico-informe" id="balance-catorce-dias" src="https://quickchart.io/chart?c={{ $barraBalanceIngresosEgresosDiarios }}" alt="Balance de Ingresos y Egresos (últimos 14 días)">
         </div>
       </div>
     </div>
