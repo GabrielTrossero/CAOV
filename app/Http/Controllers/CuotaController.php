@@ -1048,7 +1048,7 @@ class CuotaController extends Controller
 
     //compruebo si hay una cuota en la que el socio esté como adherente y sea más actual que la obtenida anteriormente
     foreach ($socio->comprobantes as $comprobante) {
-      if ($comprobante->fechaMesAnio > $socio->fechaUltimoPago) {
+      if (($comprobante->fechaMesAnio > $socio->fechaUltimoPago) && ($comprobante->fechaPago != null)) {
         $socio->fechaUltimoPago = $comprobante->fechaMesAnio;
       }
     }
