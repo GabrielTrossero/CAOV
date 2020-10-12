@@ -8,6 +8,8 @@
 
     <br>
     <h4 align="center">Estadísticas de Deportes</h4>
+    <h4 style="font-size: 14px">Cantidad de socios menores: {{ $sociosMenores }}</h4>
+    <h4 style="font-size: 14px">Cantidad de socios mayores: {{ $sociosMayores }}</h4>
     <div class="tam_letra_x-small">
           <div align="center">
               <div class="container-img">
@@ -30,12 +32,6 @@
                 <h4>Socios por cantidad de Deportes practicados</h4>
                 <br>
                 <img class="grafico-informe" id="socios-grupo-por-deporte" src="https://quickchart.io/chart?c={{ $barraCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
-              </div>
-              <div class="page-break"></div>
-              <div class="container-img">
-                <h4>Socios por Categoría</h4>
-                <br>
-                <img class="grafico-informe" id="socios-categoria" src="https://quickchart.io/chart?c={{ $barraSociosPorCategoria }}" alt="Socios por Categoría">
               </div>
         </div>
     </div>

@@ -6,6 +6,9 @@
   <div class="card">
     <div class="card-header">
       <label class="col-md-8 col-form-label"><b>Estadísticas de Deportes</b></label>
+      <div align="center">
+        <label class="col-sm-8 col-form-label">Cantidad de socios menores: {{ $sociosMenores }} | Cantidad de socios mayores: {{ $sociosMayores }}</label>
+      </div>
     </div>
     <div class="card-body border" align="center">
       <div class="contenido-graficas">
@@ -28,11 +31,6 @@
           <b>Socios por cantidad de Deportes practicados</b>
           <br>
           <img class="grafico-informe" id="socios-cantidad-por-deportes-practicados" src="https://quickchart.io/chart?c={{ $barraCantidadDeportesPracticados }}" alt="Socios Con Grupo Familiar por Deporte">
-        </div>
-        <div class="container-grafico-informe">
-          <b>Socios por Categoría</b>
-          <br>
-          <img class="grafico-informe" id="socios-categoria" src="https://quickchart.io/chart?c={{ $barraSociosPorCategoria }}" alt="Socios por Categoría">
         </div>
       </div>
       <div class="card-footer row">

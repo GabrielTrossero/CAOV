@@ -610,17 +610,6 @@ class InformeController extends Controller
   }
 
   /**
-   * retorna un objeto para grafica de socios por categoria
-   */
-  public function getObjetoParaGraficaDeBarraSociosPorCategoria()
-  {
-    $objetoGraficaBarra = $this->getObjetoParaGraficaDeBarra();
-    $objetoGraficaBarra->data->labels = array("Cadetes", "Activos", "Grupo Familiar");
-    
-    return $objetoGraficaBarra;
-  }
-
-  /**
    * retorna un objeto JSON de cantidad de socios por deporte
    * 
    * @param Deporte $deportes
@@ -694,62 +683,6 @@ class InformeController extends Controller
   }
 
   /**
-   * retorna un objeto JSON de cantidad de socios con grupo familiar por deporte
-   *
-   * @return void
-   */
-  /*public function graficoBarraSociosConGrupoPorDeporte($deportes)
-  {
-    $barraSociosConGrupoPorDeporte = $this->getObjetoParaGraficaDeBarra();
-    $barraSociosConGrupoPorDeporte->data->datasets[0]->label = "Socios Con Grupo Familiar por Deporte";
-
-    $indexDeporte = 0;
-
-    foreach ($deportes as $deporte) {
-      $barraSociosConGrupoPorDeporte->data->labels[] = $deporte->nombre;
-      $barraSociosConGrupoPorDeporte->data->datasets[0]->data[$indexDeporte] = 0;
-      foreach ($deporte->socios as $socio) {
-        if (isset($socio->idGrupoFamiliar)) {
-         $barraSociosConGrupoPorDeporte->data->datasets[0]->data[$indexDeporte] += 1;
-        }
-      }
-      
-      $indexDeporte += 1;
-    }
-
-    return json_encode($barraSociosConGrupoPorDeporte);
-  }*/
-
-  /**
-   * retorna un objeto JSON de socios por categoria
-   */
-  public function graficoBarraSociosPorCategoria($socios) 
-  {
-    $barraSociosPorCategoria = $this->getObjetoParaGraficaDeBarraSociosPorCategoria();
-    $barraSociosPorCategoria->data->datasets[0]->label = "Socios por Categoría";
-    $barraSociosPorCategoria->data->datasets[0]->data["Cadetes"] = 0;
-    $barraSociosPorCategoria->data->datasets[0]->data["Activos"] = 0;
-    $barraSociosPorCategoria->data->datasets[0]->data["Grupo Familiar"] = 0;
-    $cuotaController = new CuotaController;
-
-    foreach ($socios as $socio) {
-      if (isset($socio->idGrupoFamiliar)) {
-        $barraSociosPorCategoria->data->datasets[0]->data["Grupo Familiar"] += 1;
-      } else {
-        if ($cuotaController->calculaEdad($socio) < 18) {
-          $barraSociosPorCategoria->data->datasets[0]->data["Cadetes"] += 1;
-        } else {
-          $barraSociosPorCategoria->data->datasets[0]->data["Activos"] += 1;
-        }
-      }
-    }
-
-    $barraSociosPorCategoria->data->datasets[0]->data = array_values($barraSociosPorCategoria->data->datasets[0]->data);
-    
-    return json_encode($barraSociosPorCategoria);
-  }
-
-  /**
    * retorna un objeto JSON de personas que practican X deportes
    *
    * @return void
@@ -793,18 +726,31 @@ class InformeController extends Controller
       $deporte->cantidadSocios = sizeof($deporte->socios);
     }
 
+    $sociosMayores = 0;
+    $sociosMenores = 0;
+
+    $cuotaController = new CuotaController;
+
+    foreach ($socios as $socio) {
+      if ($cuotaController->calculaEdad($socio) < 18) {
+        $sociosMenores += 1;
+      } else {
+        $sociosMayores += 1;
+      }
+    }
+
     $barraSociosPorDeporte = $this->graficoBarraSociosPorDeporte($deportes);
     $barraActivosPorDeporte = $this->graficoBarraActivosPorDeporte($deportes);
     $barraCadetesPorDeporte = $this->graficoBarraCadetesPorDeporte($deportes);
     $barraCantidadDeportesPracticados = $this->graficoBarraCantidadDeportesPracticadosPorSocios($socios);
-    $barraSociosPorCategoria = $this->graficoBarraSociosPorCategoria($socios); 
 
     //retorno la vista con la cantidad de socios por deporte
     return view('informe.cantidadSociosDeporte', compact(['barraSociosPorDeporte',
                                                           'barraActivosPorDeporte',
                                                           'barraCadetesPorDeporte',
                                                           'barraCantidadDeportesPracticados',
-                                                          'barraSociosPorCategoria']));
+                                                          'sociosMenores',
+                                                          'sociosMayores']));
   }
 
   /**
@@ -816,24 +762,37 @@ class InformeController extends Controller
   {
     //tomo todos los deportes
     $deportes = Deporte::with('socios')->get();
-    $socios = Socio::where('activo','<>',0)->with('deportes')->get();
+    $socios = Socio::where('activo', '<>', 0)->with('deportes')->get();
 
     //calculco la cantidad de socios de cada deporte
     foreach ($deportes as $deporte) {
       $deporte->cantidadSocios = sizeof($deporte->socios);
     }
 
+    $sociosMayores = 0;
+    $sociosMenores = 0;
+
+    $cuotaController = new CuotaController;
+
+    foreach ($socios as $socio) {
+      if ($cuotaController->calculaEdad($socio) < 18) {
+        $sociosMenores += 1;
+      } else {
+        $sociosMayores += 1;
+      }
+    }
+
     $barraSociosPorDeporte = $this->graficoBarraSociosPorDeporte($deportes);
     $barraActivosPorDeporte = $this->graficoBarraActivosPorDeporte($deportes);
     $barraCadetesPorDeporte = $this->graficoBarraCadetesPorDeporte($deportes);
     $barraCantidadDeportesPracticados = $this->graficoBarraCantidadDeportesPracticadosPorSocios($socios);
-    $barraSociosPorCategoria = $this->graficoBarraSociosPorCategoria($socios); 
 
     $pdf = PDF::loadView('pdf.cantidadSociosDeporte', ['barraSociosPorDeporte' => $barraSociosPorDeporte,
                                                        'barraActivosPorDeporte' => $barraActivosPorDeporte,
                                                        'barraCadetesPorDeporte' => $barraCadetesPorDeporte,
                                                        'barraCantidadDeportesPracticados' => $barraCantidadDeportesPracticados,
-                                                       'barraSociosPorCategoria' => $barraSociosPorCategoria]);
+                                                       'sociosMenores' => $sociosMenores,
+                                                       'sociosMayores' => $sociosMayores]);
 
     return $pdf->download('cantidad-socios-deporte.pdf');
   }
