@@ -15,8 +15,8 @@
             <th>Inmueble</th>
             <th>Fecha/Hora Inicio</th>
             <th>Fecha/Hora Finalización</th>
-            <th>Costo Reserva</th>
-            <th>Costo Total</th>
+            <th>Monto Reserva</th>
+            <th>Monto Total</th>
             <th>N° Recibo</th>
             <th>Más Información</th>
           </tr>

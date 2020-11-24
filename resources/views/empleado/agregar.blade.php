@@ -98,7 +98,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="idTipoUsuario" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Usuario *') }}</label>
+                            <label for="idTipoUsuario" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Usuario') }}</label>
 
                             <div class="col-md-6">
                                 <select name="idTipoUsuario" id="idTipoUsuario" class="form-control" required>

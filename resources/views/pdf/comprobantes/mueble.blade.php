@@ -26,7 +26,7 @@
         <br>
         <li>CANTIDAD ALQUILADA: {{ $recibo->cantidad }}</li>
         <br>
-        <li>COSTO DEL ALQUILER: $ {{ $recibo->costoTotal }}</li>
+        <li>MONTO DEL ALQUILER: $ {{ $recibo->costoTotal }}</li>
         <br>
         <li>OBSERVACION: {{ $recibo->observacion }}</li>
     </ul>

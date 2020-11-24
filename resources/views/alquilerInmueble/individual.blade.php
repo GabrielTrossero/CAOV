@@ -14,8 +14,8 @@
           <th>Fecha/Hora Inicio</th>
           <th>Fecha/Hora Finalización</th>
           <th>Observación</th>
-          <th>Costo Reserva</th>
-          <th>Costo Total</th>
+          <th>Monto Reserva</th>
+          <th>Monto Total</th>
           <th>Medio de Pago</th>
           <th>Tipo de Evento</th>
           <th>Cantiad Asistentes</th>

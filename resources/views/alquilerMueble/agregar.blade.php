@@ -115,7 +115,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="tipoMueble" class="col-md-4 col-form-label text-md-right">{{ __('Seleccione el Mueble *') }}</label>
+                            <label for="tipoMueble" class="col-md-4 col-form-label text-md-right">{{ __('Seleccione el Mueble') }}</label>
 
                             <div class="col-md-6">
                               <select name="tipoMueble" id="tipoMueble" class="form-control" required>
@@ -199,7 +199,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="costo" class="col-md-4 col-form-label text-md-right">{{ __('Costo *') }}</label>
+                            <label for="costo" class="col-md-4 col-form-label text-md-right">{{ __('Monto *') }}</label>
 
                             <div class="col-md-6">
                                 <input type="number" name="costo" id="costo" class="form-control" value="{{ old('costo') }}" min="0" required>
@@ -213,7 +213,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago *') }}</label>
+                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
 
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control" required>

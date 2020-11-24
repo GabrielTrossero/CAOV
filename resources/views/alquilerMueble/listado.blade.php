@@ -16,7 +16,7 @@
             <th>Mueble</th>
             <th>Desde</th>
             <th>Hasta</th>
-            <th>Costo Total</th>
+            <th>Monto Total</th>
             <th>N° Recibo</th>
             <th>Más Información</th>
           </tr>

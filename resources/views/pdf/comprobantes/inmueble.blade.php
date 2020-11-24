@@ -40,7 +40,7 @@
             <li>EL ACONTECIMIENTO SE ACOMPAÑA CON MUSICA (ADJUNTAR SADAIC Y ADICAPIF): No</li>
         @endif
         <br>
-        <li>COSTO DE ALQUILER DEL SALON: $ {{ $recibo->costoTotal }}</li>
+        <li>MONTO DE ALQUILER DEL SALON: $ {{ $recibo->costoTotal }}</li>
         <br>
         @if ($recibo->tieneReglamento)
             <li>SE ADJUNTO REGLAMENTO DEL SALON: Si</li>

@@ -13,7 +13,7 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="id" value="{{ $montoCuota->id }}">
                         <div class="form-group row">
-                            <label for="tipo" class="col-md-4 col-form-label text-md-right">{{ __('Tipo *') }}</label>
+                            <label for="tipo" class="col-md-4 col-form-label text-md-right">{{ __('Tipo') }}</label>
 
                             <div class="col-md-6">
                                 <select name="tipo" id="tipo" class="form-control">

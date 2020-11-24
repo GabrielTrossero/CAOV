@@ -83,7 +83,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="tipoRegistro" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Registro *') }}</label>
+                            <label for="tipoRegistro" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Registro') }}</label>
 
                             <div class="col-md-6">
                                 <select name="tipoRegistro" id="tipoRegistro" class="form-control" required>

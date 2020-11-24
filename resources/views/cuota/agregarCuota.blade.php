@@ -184,7 +184,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="estado" class="col-md-4 col-form-label text-md-right">{{ __('Estado *') }}</label>
+                            <label for="estado" class="col-md-4 col-form-label text-md-right">{{ __('Estado') }}</label>
 
                             <div class="col-md-6">
                               <select name="estado" id="estado" class="form-control">
@@ -215,7 +215,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago *(si es Pagada)') }}</label>
+                            <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
 
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control">

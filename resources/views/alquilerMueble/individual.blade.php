@@ -15,7 +15,7 @@
           <th>Cantidad</th>
           <th>Desde</th>
           <th>Hasta</th>
-          <th>Costo</th>
+          <th>Monto</th>
           <th>N° Recibo</th>
           <th>Medio de Pago</th>
           <th>Observación</th>
@@ -100,7 +100,7 @@
           <th>Cantidad</th>
           <th>Desde</th>
           <th>Hasta</th>
-          <th>Costo</th>
+          <th>Monto</th>
           <th>N° Recibo</th>
           <th>Medio de Pago</th>
           <th>Observación</th>
@@ -135,7 +135,7 @@
         <tr>
           <th>N° Recibo</th>
           <th>Mueble/Cantidad</th>
-          <th>Costo Total</th>
+          <th>Monto Total</th>
         </tr>
         <tr>
           <td>{{ $reserva->numRecibo }}</td>
