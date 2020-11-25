@@ -420,7 +420,6 @@ class AlquilerInmuebleController extends Controller
           //compruebo que el numRecibo no se repita
           $alquileresMueble = ReservaMueble::all();
           $alquileresInmueble = ReservaInmueble::all();
-          $registros = MovExtras::all();
 
           foreach ($alquileresMueble as $alquilerMueble) {
             if ($alquilerMueble->numRecibo == $request->numRecibo) {
@@ -431,12 +430,6 @@ class AlquilerInmuebleController extends Controller
           foreach ($alquileresInmueble as $alquilerInmueble) {
             if (($alquilerInmueble->numRecibo == $request->numRecibo) && ($alquilerInmueble->id != $request->id)) {
               return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Inmueble.');
-            }
-          }
-
-          foreach ($registros as $registro) {
-            if ($registro->numRecibo == $request->numRecibo) {
-              return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
             }
           }
         }

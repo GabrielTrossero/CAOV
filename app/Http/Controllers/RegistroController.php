@@ -48,19 +48,19 @@ class RegistroController extends Controller
     //determino los mensajes de error de validación
     $messages = [
       'numRecibo.required' => 'Es necesario ingresar un Número de Recibo.',
-      'numRecibo.max' => 'Ingrese un Numero de Recibo válido',
+      'numRecibo.max' => 'Ingrese un Numero de Recibo que tenga menos de 50 caracteres',
       'fecha.required' => 'Es necesario ingresar una Fecha',
       'monto.required' => 'Es necesario ingresa un Monto',
       'monto.regex' => 'Es necesario ingresar un Monto positivo mayor a 0 (cero)',
       'descripcion.required' => 'Es necesario ingresar una Descripcion',
-      'descripcion.max' => 'Ingrese una Descripcion de menos de 100 caracteres',
+      'descripcion.max' => 'Ingrese una Descripcion que tenga menos de 100 caracteres',
       'tipoRegistro.required' => 'Es necesario un Tipo de Registro',
       'tipoRegistro.in' => 'Ingrese un Tipo de Registro válido'
     ];
 
     //valido los datos ingresados
     $validacion = Validator::make($request->all(),[
-    'numRecibo' => 'required|max:11',
+    'numRecibo' => 'required|max:50',
     'fecha' => 'required',
     'monto' => 'required|regex:/^[1-9][0-9]+/|not_in:0',
     'descripcion' => 'required|max:100',
@@ -78,30 +78,6 @@ class RegistroController extends Controller
 
     if (!isset($validarUsuario)) {
       return redirect()->back()->withInput()->with('validarUsuario', 'Error en el Usuario.');
-    }
-
-
-    //compruebo que el numRecibo no se repita
-    $alquileresMueble = ReservaMueble::all();
-    $alquileresInmueble = ReservaInmueble::all();
-    $registros = MovExtras::all();
-
-    foreach ($alquileresMueble as $alquilerMueble) {
-      if ($alquilerMueble->numRecibo == $request->numRecibo) {
-        return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Mueble.');
-      }
-    }
-
-    foreach ($alquileresInmueble as $alquilerInmueble) {
-      if ($alquilerInmueble->numRecibo == $request->numRecibo) {
-        return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en un Alquiler de Inmueble.');
-      }
-    }
-
-    foreach ($registros as $registro) {
-      if ($registro->numRecibo == $request->numRecibo) {
-        return redirect()->back()->withInput()->with('validarNumRecibo', 'Error, dicho Número de Recibo ha sido usado en otro Registro.');
-      }
     }
 
 

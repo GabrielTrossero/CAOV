@@ -284,16 +284,10 @@
                                   <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ old('numRecibo') ?? $reserva->numRecibo }}" min="0">
                                 @endif
 
-                                @if ($errors->first('numRecibo'))
-                                  <div class="alert alert-danger errorForm">
-                                    {{ $errors->first('numRecibo') }}
-                                  </div>
-                                @endif
-
                                 @if (\Session::has('validarNumRecibo'))
                                   <div class="alert alert-danger errorForm">
                                     {!! \Session::get('validarNumRecibo') !!}
-                                  </div>>
+                                  </div>
                                 @endif
                             </div>
                         </div>

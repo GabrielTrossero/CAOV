@@ -357,12 +357,10 @@
                                 @else
                                   <input type="number" name="numRecibo" id="numRecibo" class="form-control" value="{{ old('numRecibo') ?? $reservaInmueble->numRecibo }}" min="0">
                                 @endif
-
-                                <span class="text-danger">{{$errors->first('numRecibo')}}</span>
-
+                                
                                 @if (\Session::has('validarNumRecibo'))
                                   <div class="alert alert-danger errorForm">
-                                    {{ $errors->first('validarNumRecibo') }}
+                                    {!! \Session::get('validarNumRecibo') !!}
                                   </div>
                                 @endif
                             </div>
