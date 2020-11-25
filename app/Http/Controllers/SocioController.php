@@ -46,8 +46,11 @@ class SocioController extends Controller
           else return false;
         });
 
+        //obtengo el último socio agregado para mostrar el siguiente numSocio recomendado
+        $socioMasReciente = Socio::orderBy('fechaCreacion', 'DESC')->first();
+
         //los envio a la vista del formulario
-        return view('socio.agregar', compact(['grupos','deportes', 'personas']));
+        return view('socio.agregar', compact(['grupos','deportes', 'personas', 'socioMasReciente']));
     }
 
     /**
@@ -60,17 +63,24 @@ class SocioController extends Controller
     public function createFromPersona($id)
     {
       $personaRetornada = Persona::find($id);
+
       $grupos = GrupoFamiliar::all();
+      
       $deportes = Deporte::all();
+      
       $personas = Persona::all();
+      
       $personas = $personas->filter(function ($value, $key) {
         if ($value->socio == null) {
           return true;
         }
         else return false;
       });
+
+      //obtengo el último socio agregado para mostrar el siguiente numSocio recomendado
+      $socioMasReciente = Socio::orderBy('fechaCreacion', 'DESC')->first();
       
-      return view('socio.agregar', compact('grupos', 'deportes', 'personas', 'personaRetornada'));
+      return view('socio.agregar', compact('grupos', 'deportes', 'personas', 'personaRetornada', 'socioMasReciente'));
     }
 
     /**
