@@ -214,6 +214,10 @@
                                   <div class="alert alert-danger errorForm">
                                     {{ $errors->first('activo') }}
                                   </div>
+                                @elseif (\Session::has('validarSocioParaInactivo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('validarSocioParaInactivo') !!}
+                                  </div>
                                 @endif
                             </div>
                         </div>

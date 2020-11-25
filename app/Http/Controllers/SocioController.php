@@ -396,6 +396,10 @@ class SocioController extends Controller
         }
       }
 
+      if (($request->idGrupoFamiliar != 0) && ($request->activo == 0)) {
+        return redirect()->back()->withInput()->with('validarSocioParaInactivo', 'Para poner el socio como Inactivo, también debe eliminarlo del Grupo Familiar.');
+      }
+
 
       //si el socio se pone como activo, pongo en null la fechaBaja
       if ($request->activo == 1) {
