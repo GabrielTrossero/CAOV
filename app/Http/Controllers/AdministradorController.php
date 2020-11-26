@@ -27,12 +27,15 @@ class AdministradorController extends Controller
     //ejecuto el script en shell para el backup de la BD solamente
     $respuesta = shell_exec("cd .. & php artisan backup:run --only-db");
     $comparador = "Backup completed!";
-
-    if(strpos($respuesta, $comparador)){
+    $success = false;
+    /*if(strpos($respuesta, $comparador)){
       return redirect()->back()->with('backupExitoso', 'El Backup se ha llevado a cabo con éxito!');
     }
     else{
       return redirect()->back()->with('backupErroneo', 'El Backup NO se ha podido realizar con éxito.');
-    }
+    }*/
+    $success = strpos($respuesta, $comparador) > 0;
+
+    return response()->json(['success' => $success]);
   }
 }
