@@ -35,6 +35,11 @@
                                     {{ $errors->first('titular') }}
                                   </div>
                                 @endif
+                                @if (\Session::has('titularInactivo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('titularInactivo') !!}
+                                  </div>
+                                @endif
                                 @if (\Session::has('error'))
                                   <div class="alert alert-danger errorForm">
                                     {!! \Session::get('error') !!}

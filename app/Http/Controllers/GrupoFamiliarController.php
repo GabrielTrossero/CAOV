@@ -172,6 +172,9 @@ class GrupoFamiliarController extends Controller
           if ($socio->idGrupoFamiliar) {
             return redirect()->back()->withInput()->with('errorAdherente', 'Alguno de los miembros ya pertenece a un Grupo Familiar.');
           }
+          if ($socio->activo == 0) {
+            return redirect()->back()->withInput()->with('cadeteInactivo', 'Uno o más cadetes que se intentan agregar se encuentran inactivos.');
+          }
         }
       }
 
@@ -179,6 +182,14 @@ class GrupoFamiliarController extends Controller
       if(($this->calculaEdad($titular) < 18) || (isset($pareja) && ($this->calculaEdad($pareja) < 18)))
       {
         return redirect()->back()->withInput()->with('error', 'Los socios Titular y Pareja deben ser mayores de 18 años');
+      }
+
+      //valido que el titular y la pareja estén como activos (los cadetes ya se controlaron)
+      if ($titular->activo == 0) {
+        return redirect()->back()->withInput()->with('titularInactivo', 'El socio Titular que intenta agregar se encuentra inactivo.');
+      }
+      elseif ($pareja->activo == 0) {
+        return redirect()->back()->withInput()->with('parejaInactivo', 'La Pareja que intenta agregar se encuentra inactivo.');
       }
 
 
@@ -350,6 +361,11 @@ class GrupoFamiliarController extends Controller
         return redirect()->back()->withInput()->with('error', 'El Titular debe ser mayor de 18 años');
       }
 
+      //valido que el titular esté activo
+      if ($titular->activo == 0) {
+        return redirect()->back()->withInput()->with('titularInactivo', 'El socio Titular que intenta agregar se encuentra inactivo.');
+      }
+
       //tomo el grupo a actualizar
       $grupo = GrupoFamiliar::find($request->id);
 
@@ -439,6 +455,11 @@ class GrupoFamiliarController extends Controller
         if(($this->calculaEdad($pareja) < 18))
         {
           return redirect()->back()->withInput()->with('error', 'La Pareja debe ser mayor de 18 años.');
+        }
+
+        //valido que la pareja esté activa
+        if ($pareja->activo == 0) {
+          return redirect()->back()->withInput()->with('parejaInactivo', 'La pareja que intenta agregar se encuentra inactiva.');
         }
 
         //tomo el grupo a actualizar
@@ -560,6 +581,11 @@ class GrupoFamiliarController extends Controller
           //valido que no pertenezcan a otro grupo
           if ($socio->idGrupoFamiliar) {
             return redirect()->back()->withInput()->with('error', 'Alguno de los miembros seleccionados ya pertenece a un Grupo Familiar.');
+          }
+
+          //valido que el cadete esté activo
+          if ($socio->activo == 0) {
+            return redirect()->back()->withInput()->with('cadeteInactivo', 'Uno o más cadetes que se intentan agregar se encuentran inactivos.');
           }
 
           //actualizo el socio

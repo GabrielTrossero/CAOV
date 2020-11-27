@@ -38,6 +38,11 @@
                                     {{ $errors->first('titular') }}
                                   </div>
                                 @endif
+                                @if (\Session::has('titularInactivo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('titularInactivo') !!}
+                                  </div>
+                                @endif
                                 @if (\Session::has('error'))
                                   <div class="alert alert-danger errorForm">
                                     {!! \Session::get('error') !!}
@@ -62,6 +67,11 @@
                                     {{ $errors->first('pareja') }}
                                   </div>
                                 @endif
+                                @if (\Session::has('parejaInactivo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('parejaInactivo') !!}
+                                  </div>
+                                @endif
                                 @if (\Session::has('errorPareja'))
                                   <div class="alert alert-danger errorForm">
                                     {!! \Session::get('errorPareja') !!}
@@ -83,6 +93,11 @@
                                 @if (\Session::has('errorAdherente'))
                                   <div class="alert alert-danger errorForm">
                                     {!! \Session::get('errorAdherente') !!}
+                                  </div>
+                                @endif
+                                @if (\Session::has('cadeteInactivo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('cadeteInactivo') !!}
                                   </div>
                                 @endif
                             </div>

@@ -30,6 +30,11 @@
                                     {{ $errors->first('menores') }}
                                   </div>
                                 @endif
+                                @if (\Session::has('cadeteInactivo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('cadeteInactivo') !!}
+                                  </div>
+                                @endif
                                 @if (\Session::has('error'))
                                   <div class="alert alert-danger errorForm">
                                     {!! \Session::get('error') !!}

@@ -36,6 +36,11 @@
                                     {{ $errors->first('pareja') }}
                                   </div>
                                 @endif
+                                @if (\Session::has('parejaInactivo'))
+                                  <div class="alert alert-danger errorForm">
+                                    {!! \Session::get('parejaInactivo') !!}
+                                  </div>
+                                @endif
                                 @if (\Session::has('error'))
                                   <div class="alert alert-danger errorForm">
                                     {!! \Session::get('error') !!}
