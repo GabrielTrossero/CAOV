@@ -29,7 +29,11 @@
                             <div class="col-md-6">
                                 <select name="titular" id="titular" class="form-control" required>
                                     @foreach ($sociosMayores as $socio)
-                                      <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                        @if ($socio->activo == 0)
+                                            <option value="{{ $socio->id }}" style="color:#FF0000">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                        @else
+                                            <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
 
@@ -58,7 +62,11 @@
                                 <select name="pareja" id="pareja" class="form-control">
                                   <option value="0">No posee Pareja</option>
                                   @foreach ($sociosMayores as $socio)
-                                    <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      @if ($socio->activo == 0)
+                                          <option value="{{ $socio->id }}" style="color:#FF0000">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      @else
+                                          <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      @endif
                                   @endforeach
                                 </select>
 
@@ -86,7 +94,11 @@
                             <div class="col-md-6">
                                 <select name="miembros[]" id="miembros" class="form-control" multiple>
                                   @foreach ($sociosMenores as $socio)
-                                    <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->apellido .", ". $socio->persona->nombres }}</option>
+                                      @if ($socio->activo == 0)
+                                          <option value="{{ $socio->id }}" style="color:#FF0000">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      @else
+                                          <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                      @endif
                                   @endforeach
                                 </select>
 

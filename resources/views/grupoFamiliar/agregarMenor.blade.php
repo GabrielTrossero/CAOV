@@ -21,7 +21,11 @@
                             <div class="col-md-6">
                                 <select name="menores[]" id="menores" class="form-control" multiple >
                                     @foreach ($sociosMenores as $socio)
-                                        <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                        @if ($socio->activo == 0)
+                                            <option value="{{ $socio->id }}" style="color:#FF0000">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                        @else
+                                            <option value="{{ $socio->id }}">{{ $socio->persona->DNI." - ".$socio->persona->nombres." ".$socio->persona->apellido }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
 

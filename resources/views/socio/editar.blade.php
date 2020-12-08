@@ -153,6 +153,12 @@
                                   {!! \Session::get('esSocioTitular') !!}
                                 </div>
                               @endif
+
+                              @if (\Session::has('validarSocioParaInactivo2'))
+                                <div class="alert alert-danger errorForm">
+                                  {!! \Session::get('validarSocioParaInactivo2') !!}
+                                </div>
+                              @endif
                             </div>
                         </div>
 

@@ -188,7 +188,7 @@ class GrupoFamiliarController extends Controller
       if ($titular->activo == 0) {
         return redirect()->back()->withInput()->with('titularInactivo', 'El socio Titular que intenta agregar se encuentra inactivo.');
       }
-      elseif ($pareja->activo == 0) {
+      elseif (($pareja != null) && ($pareja->activo == 0)) {
         return redirect()->back()->withInput()->with('parejaInactivo', 'La Pareja que intenta agregar se encuentra inactivo.');
       }
 
@@ -492,8 +492,8 @@ class GrupoFamiliarController extends Controller
         //tomo el grupo a actualizar
         $grupo = GrupoFamiliar::find($request->id);
 
-        // valido si el grupo posee mmenos de 2 miembros
-        if(sizeof($grupo->socios) < 3)
+        // valido si el grupo posee menos de 2 miembros
+        if((sizeof($grupo->socios) < 3) && ($grupo->pareja))
         {
           return redirect()->back()->withInput()->with('error', 'No se puede eliminar el integrante, el Grupo Familiar quedaría con un solo miembro.');
         }

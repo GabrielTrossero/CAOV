@@ -396,8 +396,11 @@ class SocioController extends Controller
         }
       }
 
-      if (($request->idGrupoFamiliar != 0) && ($request->activo == 0)) {
+      if (($request->idGrupoFamiliar != 0) && ($request->activo == 0) && ($socio->idGrupoFamiliar)) {
         return redirect()->back()->withInput()->with('validarSocioParaInactivo', 'Para poner el socio como Inactivo, también debe eliminarlo del Grupo Familiar.');
+      }
+      elseif (($request->idGrupoFamiliar != 0) && ($request->activo == 0) && (!$socio->idGrupoFamiliar)) {
+        return redirect()->back()->withInput()->with('validarSocioParaInactivo2', 'Para agregar el socio a un grupo familiar, también debe estar activo.');
       }
 
 
