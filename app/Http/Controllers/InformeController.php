@@ -281,7 +281,7 @@ class InformeController extends Controller
     $objetoGraficaBarraNuevosYBajas = $this->getObjetoParaGraficaDeBarraSociosNuevosYBajas();
     $cuotaController = new CuotaController;
     $fechaHoy = Carbon::now();
-    $fechaHoyMenosUnAnio = Carbon::now()->subYears(1);
+    $fechaHoyMenosUnAnio = Carbon::now()->subMonths(11);
 
     for($i = 11; $i >= 0; $i-=1) {
       $fechaAux = Carbon::now()->subMonths($i);
