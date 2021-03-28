@@ -1221,15 +1221,26 @@ class InformeController extends Controller
     $fechaInicio = Carbon::now()->subWeeks(23);
 
     for($i = 23; $i >= 0; $i -= 1) {
-      $lineaBalanceSemanal->data->labels[] = $fechaInicio->weekOfYear." - ".$fechaInicio->year;
-      $lineaBalanceSemanal->data->datasets[0]->data[$fechaInicio->weekOfYear." - ".$fechaInicio->year] = 0;
-      $lineaBalanceSemanal->data->datasets[1]->data[$fechaInicio->weekOfYear." - ".$fechaInicio->year] = 0;
+      $semana = $fechaInicio->weekOfYear;
+
+      if($fechaInicio->weekOfYear < 10) {
+        $semana = "0" + $semana;
+      }
+ 
+      $lineaBalanceSemanal->data->labels[] = $semana." - ".$fechaInicio->year;
+      $lineaBalanceSemanal->data->datasets[0]->data[$semana." - ".$fechaInicio->year] = 0;
+      $lineaBalanceSemanal->data->datasets[1]->data[$semana." - ".$fechaInicio->year] = 0;
       $fechaInicio->addWeeks(1);
     }
 
     foreach($montos->ingresos as $fecha => $monto) {
       $anio = substr($fecha, 0, 4);
       $semana = substr($fecha, 7, 2);
+
+      if(intval($semana) < 10) {
+        $semana = "0" + $semana;
+      }
+
       $fechaSemana = Carbon::parse($anio)->setISODate($anio, $semana);
 
       if($fechaSemana->between($fechaHoyMenosVeintitresSemanas, $fechaHoy)) {
@@ -1240,6 +1251,11 @@ class InformeController extends Controller
     foreach($montos->egresos as $fecha => $monto) {
       $anio = substr($fecha, 0, 4);
       $semana = substr($fecha, 7, 2);
+
+      if(intval($semana) < 10) {
+        $semana = "0" + $semana;
+      }
+      
       $fechaSemana = Carbon::parse($anio)->setISODate($anio, $semana);
 
       if($fechaSemana->between($fechaHoyMenosVeintitresSemanas, $fechaHoy)) {
