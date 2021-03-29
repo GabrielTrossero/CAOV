@@ -284,7 +284,12 @@ class InformeController extends Controller
     $fechaHoyMenosUnAnio = Carbon::now()->subMonths(11);
 
     for($i = 11; $i >= 0; $i-=1) {
-      $fechaAux = Carbon::now()->subMonths($i);
+      if(($fechaHoy->day == 29) && ($fechaHoy->month == 3) && ($i == 1)) {
+        $fechaAux = Carbon::now()->subDays(30);
+      } else {
+        $fechaAux = Carbon::now()->subMonths($i);
+      }
+
       $index = ($fechaAux->month < 10) ? "0".$fechaAux->month." - ".$fechaAux->year : $fechaAux->month." - ".$fechaAux->year;
       $objetoGraficaBarraNuevosYBajas->data->labels[] = $index;
       
@@ -1534,7 +1539,12 @@ class InformeController extends Controller
       $lineaBalanceMensual->data->labels[] = $index;
       $lineaBalanceMensual->data->datasets[0]->data[$index] = 0;
       $lineaBalanceMensual->data->datasets[1]->data[$index] = 0;
-      $fechaInicio->addMonths(1);
+
+      if(($fechaInicio->day == 29) && ($fechaInicio->month == 1)) {
+        $fechaInicio->addDays(10);
+      } else {
+        $fechaInicio->addMonths(1);
+      }
     }
     
     foreach($montos->ingresos as $fecha => $monto) {
