@@ -284,8 +284,8 @@ class InformeController extends Controller
     $fechaHoyMenosUnAnio = Carbon::now()->subMonths(11);
 
     for($i = 11; $i >= 0; $i-=1) {
-      if(($fechaHoy->day == 29) && ($fechaHoy->month == 3) && ($i == 1)) {
-        $fechaAux = Carbon::now()->subDays(30);
+      if(($fechaHoy->day >= 29) && ($fechaHoy->day <= 31) && ($fechaHoy->month == 3) && ($i == 1)) {
+        $fechaAux = Carbon::now()->subDays(33);
       } else {
         $fechaAux = Carbon::now()->subMonths($i);
       }
@@ -1540,7 +1540,7 @@ class InformeController extends Controller
       $lineaBalanceMensual->data->datasets[0]->data[$index] = 0;
       $lineaBalanceMensual->data->datasets[1]->data[$index] = 0;
 
-      if(($fechaInicio->day == 29) && ($fechaInicio->month == 1)) {
+      if(($fechaInicio->day >= 29) && ($fechaInicio->day <= 31) && ($fechaInicio->month == 1)) {
         $fechaInicio->addDays(10);
       } else {
         $fechaInicio->addMonths(1);
