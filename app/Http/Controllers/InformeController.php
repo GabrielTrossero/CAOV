@@ -1531,7 +1531,7 @@ class InformeController extends Controller
     ksort($montos->egresos);
     $lineaBalanceMensual = $this->getObjetoParaGraficaDeLineaIngresosEgresos();
     $fechaHoy = Carbon::now();
-    $fechaHoyMenosOnceMeses = Carbon::now()->subMonths(11);
+    $fechaHoyMenosOnceMeses = Carbon::now()->subMonths(11)->startOfMonth();
     $fechaInicio = Carbon::now()->subMonths(11);
 
     for($i = 11; $i >= 0; $i -= 1) {
