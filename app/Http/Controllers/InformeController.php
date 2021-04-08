@@ -431,7 +431,7 @@ class InformeController extends Controller
                                                 'barraSociosCadetesPasanActivos' => $barraSociosCadetesPasanActivos,
                                                 'donaSociosNuevosYBajasUltimosSeisMeses' => $donaSociosNuevosYBajasUltimosSeisMeses]);
 
-    return $pdf->download('cantidad-socios.pdf');
+    return $pdf->download('estadisticas-socios.pdf');
   }
 
   /**
