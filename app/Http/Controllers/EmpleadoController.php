@@ -69,7 +69,7 @@ class EmpleadoController extends Controller
           'password.min' => 'La Contraseña debe tener como mínimo 8 caracteres.',
           'password.max' => 'Ingrese una Contraseña válida.',
           'passwordRepeat.required' => 'Es necesario repetir la Contraseña.',
-          'passwordRepeat.same' => 'La Contraseñas no coinciden.',
+          'passwordRepeat.same' => 'Las Contraseñas no coinciden.',
           'passwordRepeat.min' => 'La Contraseña debe tener como mínimo 8 caracteres.',
           'passwordRepeat.max' => 'Ingrese una Contraseña válida.',
           'idTipoUsuario.required' => 'Es necesario seleccionar un Tipo de Usuario.'
