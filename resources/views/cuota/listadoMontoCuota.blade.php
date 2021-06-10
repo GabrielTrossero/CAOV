@@ -70,11 +70,11 @@
                   </form>
                 @else
                   <a class="icono-editar-anchor-disabled">
-                    <i class="fas fa-edit icono-editar-disabled" title="Acción no disponible"></i>
+                    <i class="fas fa-edit icono-editar-disabled" title="Acción no disponible, existen cuotas relacionadas a dicho Monto Cuota"></i>
                   </a>
                   <form style="display:inline">
                     <button class="icono-eliminar-disabled" type="submit" disabled>
-                      <i class="fas fa-trash" style="color: darkslategray;" title="Acción no disponible"></i>
+                      <i class="fas fa-trash" style="color: darkslategray;" title="Acción no disponible, existen cuotas relacionadas a dicho Monto Cuota"></i>
                     </button>
                   </form>
                 @endif
@@ -143,11 +143,11 @@
                   </form>
                 @else
                   <a class="icono-editar-anchor-disabled">
-                    <i class="fas fa-edit icono-editar-disabled" title="Tiene cuotas asociadas"></i>
+                    <i class="fas fa-edit icono-editar-disabled" title="Acción no disponible, existen cuotas relacionadas a dicho Monto Cuota"></i>
                   </a>
                   <form style="display:inline">
                     <button class="icono-eliminar-disabled" type="submit" disabled>
-                      <i class="fas fa-trash" style="color: darkslategray;" title="Acción no disponible"></i>
+                      <i class="fas fa-trash" style="color: darkslategray;" title="Acción no disponible, existen cuotas relacionadas a dicho Monto Cuota"></i>
                     </button>
                   </form>
                 @endif

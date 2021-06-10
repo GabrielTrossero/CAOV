@@ -32,7 +32,7 @@ class AdministradorController extends Controller
       return redirect()->back()->with('backupExitoso', 'El Backup se ha llevado a cabo con éxito!');
     }
     else{
-      return redirect()->back()->with('backupErroneo', 'El Backup NO se ha podido realizar con éxito.');
+      return redirect()->back()->with('backupErroneo', ' se ha podido realizar con éxito.');
     }*/
     $success = strpos($respuesta, $comparador) > 0;
 

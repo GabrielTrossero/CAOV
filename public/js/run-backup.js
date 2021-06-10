@@ -13,7 +13,7 @@ botonBackup.on("click", function (event) {
         .done(data => {
             let message = data.success 
                 ? "El Backup se ha llevado a cabo con éxito!"
-                : "El Backup NO se ha podido realizar con éxito.";
+                : "ERROR: no se ha podido realizar el Backup.";
             alert(message);
             mensajeBackup.hide();
             botonBackup.show();
