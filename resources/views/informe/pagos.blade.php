@@ -15,17 +15,17 @@
           <img class="grafico-informe" id="monto-total-pagos" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngreso }}" alt="Monto Total por tipo de Ingreso">
         </div>
         <div class="container-grafico-informe">
-          <b>Monto Total ($) por tipo de Ingreso del Dia</b>
+          <b>Monto Total ($) por tipo de Ingreso del Dia (últimas 24 hs)</b>
           <br>
           <img class="grafico-informe" id="monto-total-pagos-dia" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoHoy }}" alt="Monto Total por tipo de Ingreso del Dia">
         </div>
         <div class="container-grafico-informe">
-          <b>Monto Total ($) por tipo de Ingreso de la Semana</b>
+          <b>Monto Total ($) por tipo de Ingreso de la Semana (últimos 7 días)</b>
           <br>
           <img class="grafico-informe" id="monto-total-pagos-semana" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoSemana }}" alt="Monto Total por tipo de Ingreso de la Semana">
         </div>
         <div class="container-grafico-informe">
-          <b>Monto Total ($) por tipo de Ingreso del Mes</b>
+          <b>Monto Total ($) por tipo de Ingreso del Mes (últimos 30 días)</b>
           <br>
           <img class="grafico-informe" id="monto-total-pagos-mes" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoMes }}" alt="Monto Total por tipo de Ingreso del Mes">
         </div>
@@ -37,7 +37,7 @@
 <div class="cuadro">
   <div class="card">
     <div class="card-header">
-          <label class="col-md-8 col-form-label"><b>Listado de Pagos</b></label>
+          <label class="col-md-8 col-form-label"><b>Listado de Pagos Históricos</b></label>
     </div>
     <div class="card-body border">
       <table id="idDataTable" class="table table-striped">
