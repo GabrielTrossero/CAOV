@@ -15,18 +15,18 @@
                 <img class="grafico-informe" id="monto-total-pagos" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngreso }}" alt="Monto Total por tipo de Ingreso">
               </div>
               <div class="container-img">
-                <h4>Monto Total ($) por tipo de Ingreso del Dia</h4>
+                <h4>Monto Total ($) por tipo de Ingreso del Dia (últimas 24 hs)</h4>
                 <br>
                 <img class="grafico-informe" id="monto-total-pagos-dia" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoHoy }}" alt="Monto Total por tipo de Ingreso del Dia">
               </div>
               <div class="page-break"></div>
               <div class="container-img">
-                <h4>Monto Total ($) por tipo de Ingreso de la Semana</h4>
+                <h4>Monto Total ($) por tipo de Ingreso de la Semana (últimos 7 días)</h4>
                 <br>
                 <img class="grafico-informe" id="monto-total-pagos-semana" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoSemana }}" alt="Monto Total por tipo de Ingreso de la Semana">
               </div>
               <div class="container-img">
-                <h4>Monto Total ($) por tipo de Ingreso del Mes</h4>
+                <h4>Monto Total ($) por tipo de Ingreso del Mes (últimos 30 días)</h4>
                 <br>
                 <img class="grafico-informe" id="monto-total-pagos-mes" src="https://quickchart.io/chart?c={{ $tortaMontoPorTipoDeIngresoMes }}" alt="Monto Total por tipo de Ingreso del Mes">
               </div>
@@ -34,7 +34,7 @@
           </div>
     </div>
     <br>
-    <h4 align="center">Pagos</h4>
+    <h4 align="center">Pagos Históricos</h4>
     <div class="tam_letra_x-small">
       <table class="table table-striped">
           <thead>
