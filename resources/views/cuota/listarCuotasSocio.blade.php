@@ -69,7 +69,33 @@
   <div class="card">
     <div class="card-header">Listado de Cuotas</label></div>
     <div class="card-body border">
+    @if (!sizeof($cuotas))
+      <div class="alert alert-warning">
+        {{ 'El socio actual no tiene cuotas generadas.' }}
+      </div>
 
+      <table class="table">
+        <tr>
+          <th>N° de Socio Titular</th>
+          <th>DNI Socio Titular</th>
+          <th>Mes/Año</th>
+          <th>Estado Cuota</th>
+          <th>Monto Base</th>
+          <th>Monto Pagado</th>
+          <th>Tipo Socio (Cobrado)</th>
+        </tr>
+         <tr>
+           <td> - </td>
+           <td> - </td>
+           <td> - </td>
+           <td> - </td>
+          <td> - </td>
+           <td> - </td>
+          <td> - </td>
+         </tr>
+      </table>
+
+      @else
         <table class="table">
           <tr>
             <th>N° de Socio Titular</th>
@@ -95,13 +121,13 @@
                 <td>{{ 'No Pagada' }}</td>
               @endif
 
-              <td class="montos">{{ '$ '.$cuota->montoCuota->montoMensual }}</td>
+               <td class="montos">{{ '$ '.$cuota->montoCuota->montoMensual }}</td>
 
               @if ($cuota->fechaPago)
                 <!--suma del monto base + intereses por atraso + intereses cantidad integrantes -->
                 <td class="montos">{{ '$ '. ($cuota->montoCuota->montoMensual + $cuota->montoInteresAtraso + $cuota->montoInteresGrupoFamiliar) }}</td>
-              @else
-                <td class="montos">{{ '$ 0' }}</td>
+               @else
+                 <td class="montos">{{ '$ 0' }}</td>
               @endif
 
               @if ($cuota->montoCuota->tipo == 'c')
@@ -115,7 +141,8 @@
               <td><a href="{{ url('/cuota/show/'.$cuota->id) }}"> <i class="fas fa-plus"></i></a> </td>
             </tr>
           @endforeach
-      </table>
+        </table>
+      @endif
 
       <div class="card-footer row">
         <div >

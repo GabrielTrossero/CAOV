@@ -1044,7 +1044,12 @@ class CuotaController extends Controller
                                ->where('inhabilitada', false)->orderBy('fechaMesAnio', 'DESC')
                                ->where('fechaPago', '<>', null)->first();
 
-    $socio->fechaUltimoPago = $fecha['fechaMesAnio'];
+    if ($fecha) {
+        $socio->fechaUltimoPago = $fecha['fechaMesAnio'];
+    }
+    else {
+      $socio->fechaUltimoPago = null;
+    }
 
     //compruebo si hay una cuota en la que el socio esté como adherente y sea más actual que la obtenida anteriormente
     foreach ($socio->comprobantes as $comprobante) {
