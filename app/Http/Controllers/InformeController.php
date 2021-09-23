@@ -281,14 +281,10 @@ class InformeController extends Controller
     $objetoGraficaBarraNuevosYBajas = $this->getObjetoParaGraficaDeBarraSociosNuevosYBajas();
     $cuotaController = new CuotaController;
     $fechaHoy = Carbon::now();
-    $fechaHoyMenosUnAnio = Carbon::now()->subMonths(11);
+    $fechaHoyMenosUnAnio = Carbon::now()->subMonthsNoOverflow(11);
 
     for($i = 11; $i >= 0; $i-=1) {
-      if(($fechaHoy->day >= 29) && ($fechaHoy->day <= 31) && ($fechaHoy->month == 3) && ($i == 1)) {
-        $fechaAux = Carbon::now()->subDays(33);
-      } else {
-        $fechaAux = Carbon::now()->subMonths($i);
-      }
+      $fechaAux = Carbon::now()->subMonthsNoOverflow($i);
 
       $index = ($fechaAux->month < 10) ? "0".$fechaAux->month." - ".$fechaAux->year : $fechaAux->month." - ".$fechaAux->year;
       $objetoGraficaBarraNuevosYBajas->data->labels[] = $index;
