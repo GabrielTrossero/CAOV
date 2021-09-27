@@ -52,7 +52,11 @@
                             <label for="numSocio" class="col-md-4 col-form-label text-md-right">{{ __('Número de Socio *') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') }}" required placeholder="{{ 'Último N° de socio utilizado: '. $socioMasReciente->numSocio }}" >
+                                @if ($socioMasReciente)
+                                  <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') }}" required placeholder="{{ 'Último N° de socio utilizado: '. $socioMasReciente->numSocio }}" >
+                                @else
+                                  <input type="number" name="numSocio" id="numSocio" class="form-control" value="{{ old('numSocio') }}" required>
+                                @endif
 
                                 @if ($errors->first('numSocio'))
                                   <div class="alert alert-danger errorForm">

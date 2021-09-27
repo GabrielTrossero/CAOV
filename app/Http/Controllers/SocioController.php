@@ -46,8 +46,15 @@ class SocioController extends Controller
           else return false;
         });
 
-        //obtengo el último socio agregado para mostrar el siguiente numSocio recomendado
-        $socioMasReciente = Socio::orderBy('fechaCreacion', 'DESC')->first();
+        if (Socio::first()) {
+          //obtengo el último socio agregado para mostrar el siguiente numSocio recomendado
+          $socioMasReciente = Socio::orderBy('fechaCreacion', 'DESC')->first();
+        }
+        else {
+          //para cuando no hay socios cargados a la BD
+          $socioMasReciente = null;
+        }
+        
 
         //los envio a la vista del formulario
         return view('socio.agregar', compact(['grupos','deportes', 'personas', 'socioMasReciente']));
