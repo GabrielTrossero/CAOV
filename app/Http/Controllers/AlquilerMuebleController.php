@@ -126,7 +126,6 @@ class AlquilerMuebleController extends Controller
         'fechaHoraFin.required' => 'Es necesario ingresar una Fecha y Hora de Finalización.',
         'costo.required' => 'Es necesario ingresar el Costo.',
         'medioPago.required' => 'Es necesario ingresar un Medio de Pago',
-        'medioPago.in' => 'Seleccione un Medio de Pago válido.',
         'observacion.max' => 'La Observación no puede ser tan extensa'
       ];
 
@@ -139,7 +138,7 @@ class AlquilerMuebleController extends Controller
         'fechaHoraInicio' => 'required',
         'fechaHoraFin' => 'required',
         'costo' => 'required',
-        'medioPago' => 'required|in:1',
+        'medioPago' => 'required',
         'observacion' => 'max:100'
       ], $messages);
 
