@@ -73,8 +73,10 @@
                             <label for="medioPago" class="col-md-4 col-form-label text-md-right">{{ __('Medio de Pago') }}</label>
 
                             <div class="col-md-6">
-                                <select name="medioPago" id="medioPago" class="form-control">
-                                  <option value="1">Efectivo</option>
+                                <select name="medioPago" id="medioPago" class="form-control" required>
+                                  @foreach ($mediosDePago as $medioDePago)
+                                    <option value="{{ $medioDePago->id }}">{{ $medioDePago->nombre }}</option>
+                                  @endforeach
                                 </select>
 
                                 @if ($errors->first('medioPago'))

@@ -11,6 +11,7 @@ use App\ComprobanteCuota;
 use App\Socio;
 use App\SocioComprobante;
 use App\GrupoFamiliar;
+use App\MedioDePago;
 use Carbon\Carbon;
 use PDF;
 use Mail;
@@ -298,8 +299,11 @@ class CuotaController extends Controller
       $socio->cantidadIntegrantes = 0;
     }
 
+    //tomo los medios de pago
+    $mediosDePago = MedioDePago::all();
+
     //retorno el socio a la vista
-    return view('cuota.agregarCuota', compact('socio'));
+    return view('cuota.agregarCuota', compact('socio', 'mediosDePago'));
   }
 
 
@@ -603,8 +607,11 @@ class CuotaController extends Controller
     //le asigno a la cuota la cantidad de integrantes que tenía cuando se creo (adherentes + titular)
     $cuota->cantidadIntegrantes = $cuota->adherentes->count()+1;
 
+    //tomo los medios de pago
+    $mediosDePago = MedioDePago::all();
+
     //se los envio a la vista
-    return view('cuota.editar', ['cuota' => $cuota]);
+    return view('cuota.editar', compact('cuota', 'mediosDePago'));
   }
 
 
@@ -633,7 +640,6 @@ class CuotaController extends Controller
     $messages = [
       'fechaPago.required_if' => 'Es necesario ingresar una Fecha de Pago.',
       'medioPago.required_if' => 'Es necesario ingresar un Medio de Pago.',
-      'medioPago.in' => 'El Medio de Pago ingresado es incorrecto.',
       'pagada.required' => 'Es necesario especificar si la Cuota está pagada.',
       'pagada.in' => 'El campo es incorrecto'
     ];
@@ -641,7 +647,7 @@ class CuotaController extends Controller
     //valido los datos ingresados
     $validacion = Validator::make($request->all(), [
       'fechaPago' => 'required_if:pagada,==,s',
-      'medioPago' => 'required_if:pagada,==,s|in:1',
+      'medioPago' => 'required_if:pagada,==,s',
       'pagada' => 'required|in:s,n'
     ], $messages);
 
@@ -722,9 +728,12 @@ class CuotaController extends Controller
 
       //le asigno a la cuota la cantidad de integrantes que tenía cuando se creo (adherentes + titular)
       $cuota->cantidadIntegrantes = $cuota->adherentes->count()+1;
+      
+      //tomo los medios de pago
+      $mediosDePago = MedioDePago::all();
 
       //se lo envío a la vista
-      return view('cuota.ingresarPago', ['cuota' => $cuota]);
+      return view('cuota.ingresarPago', compact('cuota', 'mediosDePago'));
     }
 
 
@@ -753,14 +762,13 @@ class CuotaController extends Controller
       //mensajes de error que se mostraran por pantalla
       $messages = [
         'fechaPago.required' => 'Es necesario ingresar una Fecha de Pago.',
-        'medioPago.required' => 'Es necesario ingresar un Medio de Pago.',
-        'medioPago.in' => 'El Medio de Pago ingresado es incorrecto.'
+        'medioPago.required' => 'Es necesario ingresar un Medio de Pago.'
       ];
 
       //valido los datos ingresados
       $validacion = Validator::make($request->all(), [
         'fechaPago' => 'required',
-        'medioPago' => 'required|in:1'
+        'medioPago' => 'required'
       ], $messages);
 
       //si la validacion falla vuelvo hacia atras con los errores

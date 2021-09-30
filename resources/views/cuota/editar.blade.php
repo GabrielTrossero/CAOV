@@ -76,7 +76,14 @@
 
                             <div class="col-md-6">
                                 <select name="medioPago" id="medioPago" class="form-control" required>
-                                  <option value="1">Efectivo</option>
+                                  @foreach ($mediosDePago as $medioDePago)
+                                    @if ($medioDePago->id == $cuota->idMedioDePago)
+                                      <option value="{{ $medioDePago->id }}" selected>{{ $medioDePago->nombre }}</option>
+                                    @else
+                                      <option value="{{ $medioDePago->id }}">{{ $medioDePago->nombre }}</option>
+                                    @endif
+
+                                  @endforeach
                                 </select>
 
                                 @if ($errors->first('medioPago'))
