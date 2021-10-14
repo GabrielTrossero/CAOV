@@ -251,7 +251,6 @@ class AlquilerMuebleController extends Controller
 
     private function total($alquiler)
     {
-        //retorna al socio con su edad
         return $alquiler->costoTotal;
     }
 

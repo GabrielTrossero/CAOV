@@ -12,6 +12,7 @@ use App\Socio;
 use App\SocioComprobante;
 use App\GrupoFamiliar;
 use App\MedioDePago;
+use App\Traits\compruebaCadete;
 use Carbon\Carbon;
 use PDF;
 use Mail;
@@ -19,6 +20,9 @@ use App\Mail\SendMail;
 
 class CuotaController extends Controller
 {
+  //Importación de la clase compruebaCadete de Traits
+  use compruebaCadete;
+
   /**
    * Display a listing of the resource.
    *
@@ -258,13 +262,13 @@ class CuotaController extends Controller
     }
 
 
-    //recupero todas los socios
+    //recupero todos los socios
     $socios = Socio::all();
 
-    //le agrego a cada socio el último mes pagado
+    //le agrego a cada socio el último mes pagado y si es cadete
     foreach ($socios as $socio) {
       $socio = $this->ultimoMesPagado($socio);
-      $socio->edad = $this->calculaEdad($socio);
+      $socio->isCadete = $this->isCadete($socio->fechaNac);
     }
 
     return view('cuota.listarSociosCreate', compact('socios', 'integrantesEliminados', 'gruposEliminados'));
@@ -288,8 +292,8 @@ class CuotaController extends Controller
     //le agrego al socio los montoCuota de cada categoría
     $socio = $this->asignarMontos($socio);
 
-    //le agrego la edad
-    $socio->edad = $this->calculaEdad($socio);
+    //le agrego si es cadete
+    $socio->isCadete = $this->isCadete($socio->fechaNac);
 
     //para contar la cantidad integrantes de su grupo familiar (CANTIDAD ACTUAL, es el valor que va a tener despues $cuota->cantidadIntegrantes)
     if ($socio->idGrupoFamiliar) {
@@ -324,8 +328,8 @@ class CuotaController extends Controller
     $socio = $this->ultimoMesCuotaCreada($socio);
     //para saber si no pagó alguna cuota
     $socio = $this->hayCuotaNoPagada($socio);
-    //le agrego la edad
-    $socio->edad = $this->calculaEdad($socio);
+    //le agrego si es cadete
+    $socio->isCadete = $this->isCadete($socio->fechaNac);
 
     //para redirigir si el socio quiere generar un adelanto de pago y no pagó alguna cuota anterior
     if(($socio->cuotaNoPagada) && ($request->estado == 'pagada')){
@@ -343,7 +347,7 @@ class CuotaController extends Controller
     }
 
     //para redirigir si la fecha de pago es mayor que el mes actual, ya que no tiene sentido poner una fecha de pago futura en un adelanto
-    if (($fechaPago->month > $fechaMesAnio->month) && ($request->estado == 'pagada')) {
+    if (($fechaPago > $fechaMesAnio) && ($request->estado == 'pagada')) {
       return redirect()->back()->withInput()->with('validarFechaPago', 'ERROR: el mes de la fecha de pago no puede ser mayor que el mes de la cuota.');
     }
 
@@ -380,7 +384,7 @@ class CuotaController extends Controller
         $cuota->idMontoCuota = $monto['id'];
       }
     }
-    elseif ($socio->edad < 18){
+    elseif ($socio->isCadete){
       $monto = MontoCuota::select('id')->where('tipo', 'c')->orderBy('fechaCreacion', 'DESC')->first();
       $cuota->idMontoCuota = $monto['id'];
     }
@@ -565,13 +569,13 @@ class CuotaController extends Controller
     //busco la cuota
     $cuota = ComprobanteCuota::find($id);
 
-    //calculo la edad para despues mostrarlo en la vista
-    $cuota->socio->edad = $this->calculaEdad($cuota->socio);
+    //le agrego si es cadete
+    $cuota->socio->isCadete = $this->isCadete($cuota->socio->fechaNac);
 
-    //le asigno la edad a los adherentes (en caso de que la cuota sea grupofamiliar)
+    //le asigno si son cadetes (en caso de que la cuota sea grupofamiliar)
     if ($cuota->montoCuota->tipo == 'g'){
       foreach ($cuota->adherentes as $adherente){
-        $adherente->edad = $this->calculaEdad($adherente);
+        $adherente->isCadete = $this->isCadete($adherente->fechaNac);
         $adherente->pareja = $this->esPareja($adherente, $cuota);
       }
     }
@@ -834,7 +838,7 @@ class CuotaController extends Controller
       //le agrego a cada socio el último mes pagado
       foreach ($socios as $socio) {
         $socio = $this->ultimoMesPagado($socio);
-        $socio->edad = $this->calculaEdad($socio);
+        $socio->isCadete = $this->isCadete($socio->fechaNac);
       }
 
       //retorno los socios a la vista
@@ -876,7 +880,7 @@ class CuotaController extends Controller
 
       //envío el socio para mostrar su info
       $socio = Socio::find($id);
-      $socio->edad = $this->calculaEdad($socio); //le seteo la edad
+      $socio->isCadete = $this->isCadete($socio->fechaNac); //le seteo si es cadete
 
       //retorno las cuotas a la vista
       return view('cuota.listarCuotasSocio', compact('cuotas', 'socio'));
@@ -920,8 +924,8 @@ class CuotaController extends Controller
       $fechaActual = $fechaActual->toDateString();
 
       foreach ($socios as $socio) {
-        //le agrego la edad
-        $socio->edad = $this->calculaEdad($socio);
+        //le agrego si es cadete
+        $socio->isCadete = $this->isCadete($socio->fechaNac);
 
         //busco si el socio tiene una cuota creada este mes
         $cuotaEsteMes = ComprobanteCuota::where('idSocio', $socio->id)->where('fechaMesAnio', $fechaActual)->first();
@@ -973,7 +977,7 @@ class CuotaController extends Controller
               $cuotasCreadas = $cuotasCreadas->merge($cuotaRetornada); //almaceno la cuota en el array a retornar
             }
 
-            elseif ($socio->edad < 18){
+            elseif ($socio->isCadete){
               $monto = MontoCuota::select('id')->where('tipo', 'c')->orderBy('fechaCreacion', 'DESC')->first();
               $cuota->idMontoCuota = $monto['id'];
 
@@ -1002,22 +1006,6 @@ class CuotaController extends Controller
       //retorno las cuotas a la vista
       return view('cuota.listarCuotasCreadas', compact('cuotasCreadas', 'integrantesEliminados', 'gruposEliminados'));
     }
-
-
-
-  /**
-   * calcula la edad del socio ingresado por parametro
-   * @param  App\Socio $socio
-   * @return int
-   */
-  public function calculaEdad($socio)
-  {
-      // calcula la edad del socio segun su categoria
-      $edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
-
-      //retorna la edad del socio
-      return $edad;
-  }
 
 
 

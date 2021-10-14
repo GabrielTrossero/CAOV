@@ -45,7 +45,7 @@
                   <td>{{ 'Vitalicio' }}</td>
                 @elseif ($socio->idGrupoFamiliar)
                   <td>{{ 'Grupo Familiar' }}</td>
-                @elseif ($socio->edad < 18)
+                @elseif ($socio->isCadete)
                   <td>{{ 'Cadete' }}</td>
                 @else
                   <td>{{ 'Activo' }}</td>

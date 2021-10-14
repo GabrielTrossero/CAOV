@@ -11,10 +11,14 @@ use App\Deporte;
 use App\Socio;
 use App\SocioDeporte;
 use App\Persona;
+use App\Traits\compruebaCadete;
 use Carbon\Carbon;
 
 class SocioController extends Controller
 {
+    //Importación de la clase compruebaCadete de Traits
+    use compruebaCadete;
+
     /**
      * Display a listing of the resource.
      *
@@ -142,8 +146,7 @@ class SocioController extends Controller
                 return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Error al seleccionar un Grupo Familiar');
               }
               else {  //solo puedo agragar cadetes al grupo desde acá, asi que compruebo que sea cadete
-                $edad = Carbon::now()->year - Carbon::parse($request->fechaNac)->year;
-                if ($edad >= 18) {
+                if ($this->isCadete($request->fechaNac)) {
                   return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Solo se pueden agregar Cadetes desde esta pestaña. Para agregar una persona mayor a un grupo, dirigirse a Grupo Familiar luego de generar dicho Socio.');
                 }
               }
@@ -205,20 +208,6 @@ class SocioController extends Controller
     }
 
     /**
-     * calcula la edad del socio ingresado por parametro
-     * @param  App\Socio $socio
-     * @return App\Socio
-     */
-    private function calculaEdad($socio)
-    {
-        //asigna al atributo edad del socio su edad calculada a partir de su fecha de nacimiento
-        $socio->edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
-
-        //retorna al socio con su edad
-        return $socio;
-    }
-
-    /**
      * Display the resource list
      *
      * @return \Illuminate\Http\Response
@@ -228,9 +217,9 @@ class SocioController extends Controller
         //tomo todos los socios
         $socios = Socio::all();
 
-        //le agrego a cada socio su edad
+        //le agrego a cada socio si es cadete
         foreach ($socios as $socio) {
-          $socio = $this->calculaEdad($socio);
+          $socio->isCadete = $this->isCadete($socio->fechaNac);
         }
 
         //los envio a la vista
@@ -248,8 +237,8 @@ class SocioController extends Controller
         //busco el socio
         $socio = Socio::find($id);
 
-        //calculo la edad del socio
-        $socio = $this->calculaEdad($socio);
+        //le pongo al socio si es cadete
+        $socio->isCadete = $this->isCadete($socio->fechaNac);
 
         //se lo envío a la vista
         return view('socio.individual', ['socio' => $socio]);
@@ -351,8 +340,7 @@ class SocioController extends Controller
 
               if ($request->idGrupoFamiliar != $socio->idGrupoFamiliar) {  //si se quiere cambiar de grupo
                 //solo puedo agragar cadetes al grupo desde acá, asi que compruebo que sea cadete
-                $edad = Carbon::now()->year - Carbon::parse($request->fechaNac)->year;
-                if ($edad >= 18) {
+                if ($this->isCadete($request->fechaNac)) {
                   return redirect()->back()->withInput()->with('validarGrupoFamiliar', 'Solo se pueden agregar Cadetes desde esta pestaña. Para agregar una persona mayor a un grupo, dirigirse a Grupo Familiar.');
                 }
               }
