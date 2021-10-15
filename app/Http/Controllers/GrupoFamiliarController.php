@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\GrupoFamiliar;
 use App\Socio;
+use App\Traits\compruebaCadete;
 use Carbon\Carbon;
 
 class GrupoFamiliarController extends Controller
 {
+    //Importación de la clase compruebaCadete de Traits
+    use compruebaCadete;
+
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +39,7 @@ class GrupoFamiliarController extends Controller
       $eliminados = 0;
 
       foreach ($socios as $socio) {
-        if (($this->calculaEdad($socio) >= 18) && ($socio->id != $grupo->titular) && ($socio->id != $grupo->pareja)) {
+        if ((!$this->isCadete($socio->fechaNac)) && ($socio->id != $grupo->titular) && ($socio->id != $grupo->pareja)) {
           $socio->idGrupoFamiliar = null;
           $socio->save();
 
@@ -94,11 +98,11 @@ class GrupoFamiliarController extends Controller
 
       //filtro los socios mayores de edad
       $sociosMayores = $socios->filter(function ($socio){
-        return $this->calculaEdad($socio) >= 18;
+        return !$this->isCadete($socio->fechaNac);
       });
 
       $sociosMenores = $socios->filter(function ($socio){
-        return $this->calculaEdad($socio) < 18;
+        return $this->isCadete($socio->fechaNac);
       });
 
       return view('grupoFamiliar.agregar', compact('sociosMenores', 'sociosMayores', 'integrantesEliminados', 'gruposEliminados'));
@@ -166,7 +170,7 @@ class GrupoFamiliarController extends Controller
           $socio = Socio::find($miembro);
           
           //valido que sean menores de edad
-          if($this->calculaEdad($socio) >= 18){
+          if(!$this->isCadete($socio->fechaNac)){
             return redirect()->back()->withInput()->with('errorAdherente', 'Los Adherentes (cadetes) deben ser menores de edad.');
           }
           if ($socio->idGrupoFamiliar) {
@@ -179,9 +183,9 @@ class GrupoFamiliarController extends Controller
       }
 
       //valido si los socios titular y pareja son mayores de edad
-      if(($this->calculaEdad($titular) < 18) || (isset($pareja) && ($this->calculaEdad($pareja) < 18)))
+      if(($this->isCadete($titular->fechaNac)) || (isset($pareja) && ($this->isCadete($pareja->fechaNac))))
       {
-        return redirect()->back()->withInput()->with('error', 'Los socios Titular y Pareja deben ser mayores de 18 años');
+        return redirect()->back()->withInput()->with('error', 'Los socios Titular y Pareja deben ser mayores de edad');
       }
 
       //valido que el titular y la pareja estén como activos (los cadetes ya se controlaron)
@@ -277,20 +281,6 @@ class GrupoFamiliarController extends Controller
         return view('grupoFamiliar.individual', compact('grupo'));
     }
 
-    /**
-     * calcula la edad segun categoria del socio ingresado por parametro
-     * @param  App\Socio $socio
-     * @return int
-     */
-    private function calculaEdad($socio)
-    {
-        // calcula la edad del socio segun su categoria
-        $edad = Carbon::now()->year - Carbon::parse($socio->fechaNac)->year;
-
-        //retorna la edad del socio
-        return $edad;
-    }
-
   /**
    * Show the form for editing the specified resource.
    *
@@ -307,7 +297,7 @@ class GrupoFamiliarController extends Controller
 
       //tomo socios mayores de edad sin grupo para posible titular
       $sociosTitular = $sociosSinGrupo->filter(function ($socio){
-        return $this->calculaEdad($socio) >= 18;
+        return !$this->isCadete($socio->fechaNac);
       });
 
 
@@ -356,9 +346,9 @@ class GrupoFamiliarController extends Controller
       }
 
       //valido si es mayor de edad
-      if(($this->calculaEdad($titular) < 18))
+      if($this->isCadete($titular->fechaNac))
       {
-        return redirect()->back()->withInput()->with('error', 'El Titular debe ser mayor de 18 años');
+        return redirect()->back()->withInput()->with('error', 'El Titular debe ser mayor de edad');
       }
 
       //valido que el titular esté activo
@@ -401,7 +391,7 @@ class GrupoFamiliarController extends Controller
 
       //tomo socios mayores de edad sin grupo para posible pareja
       $sociosPareja = $sociosSinGrupo->filter(function ($socio){
-        return $this->calculaEdad($socio) >= 18;
+        return !$this->isCadete($socio->fechaNac);
       });
 
 
@@ -452,9 +442,9 @@ class GrupoFamiliarController extends Controller
         }
 
         //valido si es mayor de edad
-        if(($this->calculaEdad($pareja) < 18))
+        if($this->isCadete($pareja->fechaNac))
         {
-          return redirect()->back()->withInput()->with('error', 'La Pareja debe ser mayor de 18 años.');
+          return redirect()->back()->withInput()->with('error', 'La Pareja debe ser mayor de edad.');
         }
 
         //valido que la pareja esté activa
@@ -530,7 +520,7 @@ class GrupoFamiliarController extends Controller
 
       //filtros los socios sin grupo familiar menores de edad
       $sociosMenores = $sociosSinGrupo->filter(function ($socio){
-        return $this->calculaEdad($socio) < 18;
+        return $this->isCadete($socio->fechaNac);
       });
 
 
@@ -574,7 +564,7 @@ class GrupoFamiliarController extends Controller
           }
           
           //valido que sean menores de edad
-          if($this->calculaEdad($socio) >= 18){
+          if(!$this->isCadete($socio->fechaNac)){
             return redirect()->back()->withInput()->with('error', 'Los socios (cadetes) deben ser menores de edad.');
           }
 

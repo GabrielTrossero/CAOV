@@ -31,7 +31,7 @@
     <div class="card-body border" id="tablaHistorica">
       @if ($integrantesEliminados > 0)
         <div class="alert alert-warning">
-          {{ 'Atención: se han eliminado '. $integrantesEliminados .' cadete/s de diferentes grupos por cumplir 18 años y pasar a ser activo/s.' }}
+          {{ 'Atención: se han eliminado '. $integrantesEliminados .' cadete/s de diferentes grupos por cumplir años y pasar a ser activo/s.' }}
         </div>
       @endif
       @if ($gruposEliminados > 0)

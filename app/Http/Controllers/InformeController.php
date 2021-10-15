@@ -14,11 +14,15 @@ use App\MovExtras;
 use App\ReservaInmueble;
 use App\ReservaMueble;
 use App\ComprobanteCuota;
+use App\Traits\compruebaCadete;
 use PDF;
 use \stdClass;
 
 class InformeController extends Controller
 {
+  //Importación de la clase compruebaCadete de Traits
+  use compruebaCadete;
+
   /**
    * Show options on Informes y Estadisticas.
    *
@@ -121,14 +125,12 @@ class InformeController extends Controller
     $tortaCantidadCuotasAdeudadas = $this->getObjetoParaGraficaDeTorta();
     $tortaCantidadCuotasAdeudadas = $this->getObjetoParaGraficaDeTortaPorCategoria($tortaCantidadCuotasAdeudadas);
 
-    $cuotaController = new CuotaController;
-
     foreach ($socios as $socio) {
       if (isset($socio->idGrupoFamiliar)) {
         $tortaCantidadCuotasAdeudadas->data->datasets[0]->data["grupos familiares"] += $socio->cantCuotas;
-      } else if ($cuotaController->calculaEdad($socio) >= 18) {
+      } else if (!$this->isCadete($socio->fechaNac)) {
         $tortaCantidadCuotasAdeudadas->data->datasets[0]->data["activos"] += $socio->cantCuotas;
-      } else if ($cuotaController->calculaEdad($socio) < 18) {
+      } else if ($this->isCadete($socio->fechaNac)) {
         $tortaCantidadCuotasAdeudadas->data->datasets[0]->data["cadetes"] += $socio->cantCuotas;
       }
     }
@@ -148,14 +150,12 @@ class InformeController extends Controller
     $tortaTotalAdeudadoPorCategoria = $this->getObjetoParaGraficaDeTorta();
     $tortaTotalAdeudadoPorCategoria = $this->getObjetoParaGraficaDeTortaPorCategoria($tortaTotalAdeudadoPorCategoria);
 
-    $cuotaController = new CuotaController;
-
     foreach ($socios as $socio) {
       if (isset($socio->idGrupoFamiliar)) {
         $tortaTotalAdeudadoPorCategoria->data->datasets[0]->data["grupos familiares"] += $socio->montoDeuda;
-      } else if ($cuotaController->calculaEdad($socio) >= 18) {
+      } else if (!$this->isCadete($socio->fechaNac)) {
         $tortaTotalAdeudadoPorCategoria->data->datasets[0]->data["activos"] += $socio->montoDeuda;
-      } else if ($cuotaController->calculaEdad($socio) < 18) {
+      } else if ($this->isCadete($socio->fechaNac)) {
         $tortaTotalAdeudadoPorCategoria->data->datasets[0]->data["cadetes"] += $socio->montoDeuda;
       }
     }
@@ -212,7 +212,7 @@ class InformeController extends Controller
 
     $cuotaController = new CuotaController;
 
-    $socio->edad = $cuotaController->calculaEdad($socio);
+    $socio->isCadete = $this->isCadete($socio->fechaNac);
 
     //tomo las cuotas que debe
     $cuotasNoPagadas = ComprobanteCuota::all()
@@ -279,7 +279,6 @@ class InformeController extends Controller
   public function graficoBarraSociosNuevosYBajasMensual($socios)
   {
     $objetoGraficaBarraNuevosYBajas = $this->getObjetoParaGraficaDeBarraSociosNuevosYBajas();
-    $cuotaController = new CuotaController;
     $fechaHoy = Carbon::now();
     $fechaHoyMenosUnAnio = Carbon::now()->subMonthsNoOverflow(11);
 
@@ -331,8 +330,6 @@ class InformeController extends Controller
       $objetoGraficaBarraCadetes->data->labels[] = $i;
       $objetoGraficaBarraCadetes->data->datasets[0]->data[$i] = 0;
     }
-
-    $cuotaController = new CuotaController;
 
     foreach ($socios as $socio) {
       $fechaNacimiento = Carbon::parse($socio->fechaNac);
@@ -640,13 +637,12 @@ class InformeController extends Controller
     $barraActivosPorDeporte->data->datasets[0]->label = "Socios Mayores por Deporte";
 
     $indexDeporte = 0;
-    $cuotaController = new CuotaController;
 
     foreach ($deportes as $deporte) {
       $barraActivosPorDeporte->data->labels[] = $deporte->nombre;
       $barraActivosPorDeporte->data->datasets[0]->data[$indexDeporte] = 0;
       foreach ($deporte->socios as $socio) {
-        if ($cuotaController->calculaEdad($socio) >= 18) {
+        if (!$this->isCadete($socio->fechaNac)) {
           $barraActivosPorDeporte->data->datasets[0]->data[$indexDeporte] += 1;
         }
       }
@@ -667,13 +663,12 @@ class InformeController extends Controller
     $barraCadetesPorDeporte->data->datasets[0]->label = "Socios Cadetes por Deporte";
 
     $indexDeporte = 0;
-    $cuotaController = new CuotaController;
 
     foreach ($deportes as $deporte) {
       $barraCadetesPorDeporte->data->labels[] = $deporte->nombre;
       $barraCadetesPorDeporte->data->datasets[0]->data[$indexDeporte] = 0;
       foreach ($deporte->socios as $socio) {
-        if ($cuotaController->calculaEdad($socio) < 18) {
+        if ($this->isCadete($socio->fechaNac)) {
           $barraCadetesPorDeporte->data->datasets[0]->data[$indexDeporte] += 1;
         }
       }
@@ -730,10 +725,8 @@ class InformeController extends Controller
     $sociosMayores = 0;
     $sociosMenores = 0;
 
-    $cuotaController = new CuotaController;
-
     foreach ($socios as $socio) {
-      if ($cuotaController->calculaEdad($socio) < 18) {
+      if ($this->isCadete($socio->fechaNac)) {
         $sociosMenores += 1;
       } else {
         $sociosMayores += 1;
@@ -773,10 +766,8 @@ class InformeController extends Controller
     $sociosMayores = 0;
     $sociosMenores = 0;
 
-    $cuotaController = new CuotaController;
-
     foreach ($socios as $socio) {
-      if ($cuotaController->calculaEdad($socio) < 18) {
+      if ($this->isCadete($socio->fechaNac)) {
         $sociosMenores += 1;
       } else {
         $sociosMayores += 1;
